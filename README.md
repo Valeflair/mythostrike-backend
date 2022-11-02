@@ -3,4 +3,4 @@
 
 Discord (freiwilliges Medium zum Austausch und Fragen): https://discord.gg/fafxpAFBXT
 
-Fragen per Mail: joshua.ammermann@kit.edu, niklas.seng@student.kit.edu
+Fragen per Mail: tim.bittner@kit.edu, niklas.seng@student.kit.edu
