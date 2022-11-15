@@ -9,6 +9,6 @@ Fragen per Mail: tim.bittner@kit.edu, niklas.seng@student.kit.edu
 ---
 ## Treffen-Historie
 ### 15.11.2022
- - Zielsetzung:
- - Funktionalitäten:
- - Technologien:
+ - Zielsetzung: Ein großes Game mit Helden, Karten und "Identitätskampf"
+ - Funktionalitäten im Pflichtenheft festhalten!
+ - Technologien: React, Spring, MySQL/PostgreSQL/Maria
