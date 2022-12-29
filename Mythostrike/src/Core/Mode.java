@@ -13,7 +13,7 @@ public enum Mode {
     THREEVERSUSTHREE(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE}),
     FOURVERSUSFOUR(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE});
 
-    ArrayList<Identity> identities;
+    final ArrayList<Identity> identities;
 
     Mode(Identity[] identities){
         this.identities = new ArrayList<Identity>(Arrays.asList(identities));

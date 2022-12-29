@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Champion {
 
-    private static ArrayList<Champion> allChampion = new ArrayList<Champion>();
-    private String name;
-    private String picture;
-    private int maxHp;
-    private ArrayList<Skill> skills;
+    private static ArrayList<Champion> championPatterns = new ArrayList<Champion>();
+    private final String name;
+    private final String picture;
+    private final int maxHp;
+    private final ArrayList<Skill<?>> skills;
 
     public Champion(ChampionData data){
         name = data.getName();
@@ -17,12 +17,12 @@ public class Champion {
         skills = data.getSkills();
     }
 
-    public static ArrayList<Champion> getAllChampion() {
-        return allChampion;
+    public static ArrayList<Champion> getChampionPatterns() {
+        return championPatterns;
     }
 
-    public static void setAllChampion(ArrayList<Champion> allChampion) {
-        Champion.allChampion = allChampion;
+    public static void setChampionPatterns(ArrayList<Champion> championPatterns) {
+        Champion.championPatterns = championPatterns;
     }
 
     public String getName() {
@@ -37,7 +37,7 @@ public class Champion {
         return maxHp;
     }
 
-    public ArrayList<Skill> getSkills() {
+    public ArrayList<Skill<?>> getSkills() {
         return skills;
     }
 }

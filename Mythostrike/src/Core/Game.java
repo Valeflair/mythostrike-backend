@@ -29,6 +29,8 @@ public class Game {
 
     public void output(String output){
         System.out.println(output);
+        console += output;
+        console += "\n";
     }
 
     public GameController getGameController() {
@@ -62,4 +64,21 @@ public class Game {
     public Mode getMode() {
         return mode;
     }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setDrawDeck(CardDeck drawDeck) {
+        this.drawDeck = drawDeck;
+    }
+
+    public void setThrowDeck(CardDeck throwDeck) {
+        this.throwDeck = throwDeck;
+    }
+
+    public void setTableDeck(CardDeck tableDeck) {
+        this.tableDeck = tableDeck;
+    }
+
 }

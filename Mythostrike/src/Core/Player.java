@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
+    String name;
     Champion champion;
     int currentHp;
     int maxHp;
     Identity identity;
+    Phase phase;
     CardSpace handCards;
     CardSpace equipment;
     CardSpace delayedEffect;
     HashMap<CardData,Integer> restrict;
     HashMap<CardData,Boolean> immunity;
-    ArrayList<Skill> skills;
+    ArrayList<Skill<?>> skills;
     boolean isAlive;
     boolean isChained;
 
-    public Player(Identity identity){
-        this.identity = identity;
+    public Player(String name){
         restrict = new HashMap<CardData,Integer>();
         immunity = new HashMap<CardData,Boolean>();
         handCards = new CardSpace();
@@ -26,14 +27,23 @@ public class Player {
         delayedEffect = new CardSpace();
         isAlive = true;
         isChained = false;
-        skills = new ArrayList<Skill>();
+        skills = new ArrayList<Skill<?>>();
+        this.name = name;
+        Phase phase = Phase.NOTACTIVE;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public Champion getChampion() {
         return champion;
     }
 
-    public void setChampion(Champion champion) {
+    public void initialChampions(Champion champion) {
         this.champion = champion;
+        maxHp = champion.getMaxHp();
+        skills.addAll(champion.getSkills());
     }
 
     public int getCurrentHp() {
@@ -116,12 +126,26 @@ public class Player {
         isChained = chained;
     }
 
-    public Skill hasSkillByName(String skillName){
-        for (Skill skill:skills) {
+    public ArrayList<Skill<?>> getSkills() {
+        return skills;
+    }
+
+    public CardSpace getDelayedEffect() {
+        return delayedEffect;
+    }
+
+    public Skill<?> hasSkillByName(String skillName){
+        for (Skill<?> skill:skills) {
             if (skill.equals(skillName)){
                 return skill;
             }
         }
         return null;
+    }
+    public void setPhase(Phase phase){
+        this.phase = phase;
+    }
+    public Phase getPhase() {
+        return phase;
     }
 }

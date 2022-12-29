@@ -9,10 +9,10 @@ public enum CardData {
         }
     });
 
-    private String name;
-    private String description;
-    private CardType type;
-    private Function function;
+    private final String name;
+    private final String description;
+    private final CardType type;
+    private final Function<?,?> function;
 
    <T, R> CardData(String name, String description, CardType type, Function<T, R> function) {
         this.name = name;
@@ -33,7 +33,7 @@ public enum CardData {
         return type;
     }
 
-    public Function getFunction() {
+    public Function<?,?> getFunction() {
         return function;
     }
 }

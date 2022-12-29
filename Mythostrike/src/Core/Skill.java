@@ -6,21 +6,20 @@ import java.util.function.Function;
 
 
 
-public class Skill{
+public class Skill<T>{
     private String name;
     private String description;
     private boolean isActive;
-    private Function function;
+    private Function<?,?> function;
 
-    public Skill(String name, String description, boolean isActive, Function function) {
+    public Skill(String name, String description, Function<?,?> function) {
         this.name = name;
         this.description = description;
-        this.isActive = isActive;
         this.function = function;
     }
 
     public Skill(TriggerSkillData data){
-
+        this.name = data.getName();
     }
 
     public void run() throws InvocationTargetException, IllegalAccessException {
@@ -52,10 +51,14 @@ public class Skill{
         isActive = active;
     }
 
-    public boolean equals(Skill skill){
+    public boolean equals(Skill<?> skill){
         return this.name.equals(skill.getName());
     }
     public boolean equals(String name){
         return this.name.equals(name);
+    }
+
+    public Function<?, ?> getFunction() {
+        return function;
     }
 }
