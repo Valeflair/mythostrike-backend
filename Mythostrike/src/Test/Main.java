@@ -22,12 +22,22 @@ public class Main {
             System.out.println((ERROR_NOT_ALLOW_ARGUMENT_IN_MAIN));
             return;
         }
-        GameManager gameManager = new GameManager();
         InputConditions inputCondition = new InputConditions();
+        ArrayList<Player> players = new ArrayList<Player>();
+        Mode mode = Mode.ONEVERSUSONE;
+        Champion.getAllChampion().add(new Champion(ChampionData.ARES));
+    }
 
+    public static Card askForCard(Player player, CardSpace targetSpace, int min, int max, boolean optional, String reason){
         Scanner scanner = new Scanner(System.in);
         String input;
-        while (true) {
+        System.out.println("you have to pick "+min+"~"+max+"Card from Space:"+"reason:" + reason +"\n"+"CardSpace:");
+        displayCardList(targetSpace);
+
+    }
+    public static String readNext(InputConditions conditions) {
+        String input = "";
+        while (!conditions.match(input)) {
             System.out.println(inputCondition.getHint());
             try {
                 boolean invalid = false;
@@ -56,31 +66,21 @@ public class Main {
                 if (!invalid && ((inputConvert.length == inputCondition.getAmountNumber())
                         || inputCondition.getAmountNumber() < 0)
                         && (inputCondition.isAllowDuplicate() || !arrayHasDuplicate(inputConvert))) {
-                    gameManager.pushProgress(inputConvert);
+                    game.pushProgress(inputConvert);
                 }
             } catch (NumberFormatException ignored) {
                 /*do nothing literally*/
                 continue;
             }
         }
-        scanner.close();
-
     }
-
-    public void init(){
-        ArrayList<Player> players = new ArrayList<Player>();
-        Mode mode = Mode.ONEVERSUSONE;
-
-        Champion.getAllChampion().add(new Champion(ChampionData.ARES));
-    }
-    private static <T> boolean arrayHasDuplicate(T[] input) {
-        HashSet<T> checkSet = new HashSet<>();
-        for (T object : input) {
-            if (!checkSet.add(object)) {
-                return true;
-            }
+    public static void displayCardList(CardSpace cardSpace){
+        for (int i = 0; i < cardSpace.getCards().size(); i++){
+            System.out.print(i+"th Card:" + cardToString(cardSpace.getCards().get(i)));
         }
-        return false;
+        System.out.println();
     }
-
+    public static String cardToString(Card card){
+        return card.getName() + ":" +card.getSymbol() + card.getPoint();
+    }
 }

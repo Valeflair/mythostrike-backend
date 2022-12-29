@@ -79,6 +79,12 @@ package Test;
             return hint;
         }
 
+        public boolean match(String s){
+
+
+
+            return false;
+        }
 
     }
 

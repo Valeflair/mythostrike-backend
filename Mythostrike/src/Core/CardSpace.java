@@ -23,4 +23,7 @@ public class CardSpace {
     public int getSum(){
         return cards.size();
     }
+    public ArrayList<Card> getCards(){
+        return cards;
+    }
 }
