@@ -1,89 +1,40 @@
 package Events;
 
-import java.util.ArrayList;
-import java.util.function.Function;
+import Events.Observers.FunctionObserver;
 
-public enum Event {
-    //gives unkown
-    GAMESTART,
-    //gives Player
-    TURNSTART,
-    //gives Phase
-    PHASESTART,
-    //gives Phase
-    PHASEPROCEEDING,
-    //gives Phase
-    PHASEEND,
-    //gives PhaseChangeHandle
-    PHASECHANGING,
-    //gives PhaseChangeHandle
-    PHASESKIPPING,
+public class Event<T> {
+    private EventType type;
+    private Listener<T> listener;
 
-    //gives CardDrawHandle
-    DRAWCARDTURN,
-
-    //gives DamageHandle ( with negative damage )
-    BEFOREHPRECOVER,
-    AFTERHPRECOVER,
-    BEFOREHPLOST,
-    AFTERHPLOST,
-
-    HPCHANGED,
-    MAXHPCHANGED,
-
-    EVENTLOSESKILL,
-    EVENTNEEDSKILL,
-
-    BEFOREJUDGE,
-    AFTERJUDGE,
-
-    BEFORERACECARD,
-    BYRACECARD,
-    AFTERRACECARD,
-
-    CHAINSTATECHANGE,
-
-
-    CONFIRMDAMAGE,
-    DAMAGEFORSEEN,
-    DAMAGECAUSED,
-    DAMAGEINFLICTED,
-    BEFOREDAMAGEDONE,
-    DAMAGEDONE,
-    DAMAGE,
-    DAMAGED,
-    DAMAGECOMPLETE,
-
-    DYING,
-    ASKFORHEAL,
-    ASKFORHEALDONE,
-    DEATH,
-
-    ATTACKEFFECTED,
-    ATTACKPROCEED,
-    ATTACKHIT,
-    ATTACKMISSED,
-
-    CARDASKED,
-    CARDRESPONDED,
-    BEFORECARDSMOVE,
-
-    PRECARDUSED,
-    CARDUSED,
-    TARGETCONFIRMING,
-    TARGETCONFIRMED,
-
-    CARDEFFECT,
-    CARDEFFECTED,
-    AFTERCARDEFFECTED;
-
-    private final ArrayList<Function<?,?>> functionList = new ArrayList<>();
-
-    public void addFunction(Function<?,?> function){functionList.add(function);}
-
-    public void deleteFunction(Function<?,?> function){functionList.remove(function);}
-
-    public ArrayList<Function<?,?>> getFunctionList(){
-        return functionList;
+    public Event(EventType type){
+        this.type = type;
+        listener = new Listener<T>();
     }
+
+    public void addToListener(FunctionObserver<T> observer) {
+        listener.addListener(observer);
     }
+    public void removeFromListener(FunctionObserver<T> observer){
+        listener.removeListener(observer);
+    }
+
+    public void onEvent(T handle){
+        listener.trigger(handle);
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public Listener<T> getListener() {
+        return listener;
+    }
+
+    public void setListener(Listener<T> listener) {
+        this.listener = listener;
+    }
+}

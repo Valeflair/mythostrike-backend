@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Main {
 
+
     private static final String ERROR_UTILITY_CLASS_INSTANTIATION = "Utility class cannot be instantiated.";
     private static final String ERROR_NOT_ALLOW_ARGUMENT_IN_MAIN = "Error, Main class doesn't require any parameter!";
 
@@ -18,6 +19,9 @@ public class Main {
     private static final int EMPTY_VALUE = 0;
 
     public static void main(String[] args){
+
+        Runner runner = new Runner();
+        runner.run();
         if (args.length != 0) {
             System.out.println((ERROR_NOT_ALLOW_ARGUMENT_IN_MAIN));
             return;
@@ -27,7 +31,7 @@ public class Main {
          *-------------------------------test part--------------------------------
          *------------------------------------------------------------------------
          */
-        Mode mode = Mode.ONEVERSUSONE;
+        Mode mode = Mode.ONE_VERSUS_ONE;
 
         //initial players
         ArrayList<Player> players = new ArrayList<Player>();
@@ -42,6 +46,10 @@ public class Main {
         //set default champ cause singleton
         Champion.setChampionPatterns(champions);
 
+        //initial patternDeck
+        CardDeck pattern = new CardDeck();
+        CardDeck.setPatternDeck(pattern);
+
         //--------------------------------initialize---------------------------------
 
         Game game = new Game(players, mode);
@@ -49,7 +57,7 @@ public class Main {
         gc.gameStart();
     }
 
-    public static ArrayList<Card> askForCard(Player player, CardSpace targetSpace, int min, int max, boolean optional, String reason){
+    public static ArrayList<Card> askForCard(Player player, CardList targetSpace, int min, int max, boolean optional, String reason){
         outputPlayerIsOn(player);
         System.out.println(reason);
         System.out.println("you have to pick "+min+"~"+max+"Card from Space:"+"reason:" + reason +"\n"+"CardSpace:");
@@ -131,9 +139,9 @@ public class Main {
             }
         }
     }
-    private static void displayCardList(CardSpace cardSpace){
-        for (int i = 0; i < cardSpace.getCards().size(); i++){
-            System.out.print(i+"th Card:" + cardToString(cardSpace.getCards().get(i)));
+    private static void displayCardList(CardList cardList){
+        for (int i = 0; i < cardList.getCards().size(); i++){
+            System.out.print(i+"th Card:" + cardToString(cardList.getCards().get(i)));
         }
         System.out.println();
     }
@@ -148,5 +156,21 @@ public class Main {
             }
         }
         return false;
+    }
+    public static ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max, boolean optional, String reason) {
+        outputPlayerIsOn(player);
+        System.out.println("Players: ");
+        for (int i = 0; i < targetPlayers.size(); i++){
+            System.out.print(i + " : " + targetPlayers.get(i).getName() + ", ");
+        }
+        String hint = "You have to pick " + min + " ~ " + max + " Player(s) for " + reason;
+        InputConditions conditions = new InputConditions();
+        conditions.update(min,max,0,targetPlayers.size()-1,reason,false,optional);
+        Integer[] pick = readNext(conditions);
+        ArrayList<Player> pickPlayers = new ArrayList<>();
+        for (Integer index : pick){
+            pickPlayers.add(targetPlayers.get(index));
+        }
+        return pickPlayers;
     }
 }

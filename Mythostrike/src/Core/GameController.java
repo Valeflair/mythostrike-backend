@@ -1,20 +1,26 @@
 package Core;
 
-import Events.DamageHandle;
-import Events.DamageType;
-import Events.Event;
-import Events.PhaseChangeHandle;
+import Events.*;
+import Events.Handle.*;
 import Test.Main;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.function.Function;
 
 public class GameController {
+
+    //player has 3 champions to pick in game, godking has 5
     public static final int PICK_CHAMPION_COUNT = 3;
     public static final int PICK_CHAMPION_COUNT_GODKING = 5;
+    //player start up with 4 cards and draw 2 cards at each turn start
+    public static final int CARD_COUNT_START_UP = 4
+            ;
+    public static final int CARD_COUNT_TURN_START = 2;
+
+    private Event<PhaseHandle> phaseStart;
+    private Event<PhaseHandle> phaseProceeding;
+    private Event<DamageHandle> damaged;
+
     private Game game;
 
     //debug
@@ -26,6 +32,11 @@ public class GameController {
     public GameController(Game game){
         this.game = game;
     }
+
+    public Game getGame() {
+        return game;
+    }
+
     //----------------GameRun management----------------
     public void gameStart(){
         ArrayList<Player> players = game.getPlayers();
@@ -33,31 +44,35 @@ public class GameController {
         identityDistribution(players);
         championSelect(players);
 
+        //phase_start = new Event<PhaseHandle>(EventType.PHASE_START);
+        //phase_proceeding = new Event<PhaseHandle>(EventType.PHASE_PROCEEDING);
+
         game.output("Game Started, Player has following champions:");
         for(Player player: players) {
             game.output(player.getName()+" as Seat " + players.indexOf(player) + " has "+player.getChampion().getName() + "with skill:");
-            for(Skill<?> skill : player.getSkills()){
+            for(Skill skill : player.getSkills()){
                 game.output(skill.getName() +":"+skill.getDescription());
-                Class<?> skillClass = skill.getClass();
-                Type type=skillClass.getGenericSuperclass();
-                ParameterizedType pType=(ParameterizedType)type;
-                Class skillType=(Class) pType.getActualTypeArguments()[0];
-                System.out.println(skillType + "compare to" + Skill_Trigger.class);
-                if (skillType.equals(Skill_Trigger.class)){
-                    Skill_Trigger triggerSkill = (Skill_Trigger) skill;
-                    for (Event event : triggerSkill.getEvents()){
-                        event.addFunction(skill.getFunction());
-                    }
-                }
+
+                //@TODO : fix it with EventListener
+
             }
+
+            drawCard(new CardDrawHandle(this, null, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,game.getDrawDeck()));
+
         }
 
         game.setCurrentPlayer(players.get(0));
+        game.getCurrentPlayer().setPhase(Phase.ROUNDSTART);
         runPhases();
 
     }
     public Champion championSelect(Player player, ArrayList<Champion> championList){
         return Main.championSelect(player, championList);
+    }
+    private void initialGame(){
+        game.setDrawDeck(CardDeck.getPatternDeck());
+        game.setThrowDeck(new CardDeck());
+        game.setTableDeck(new CardDeck());
     }
     private void championSelect(ArrayList<Player> players) {
         ArrayList<Champion> championList = Champion.getChampionPatterns();
@@ -84,7 +99,7 @@ public class GameController {
     private void identityDistribution(ArrayList<Player> players) {
         Mode mode = game.getMode();
         //only shuffle in identitymode
-        if (game.getMode().equals(Mode.IDENTITYFOREIGHT) || game.getMode().equals(Mode.IDENTITYFORFIVE)){
+        if (game.getMode().equals(Mode.IDENTITY_FOR_EIGHT) || game.getMode().equals(Mode.IDENTITY_FOR_FIVE)){
             Collections.shuffle(players);
         }
         //player get its own identity
@@ -93,7 +108,7 @@ public class GameController {
         }
         //set godking into the first place
         if (!players.get(0).getIdentity().equals(Identity.GODKING) &&
-                (mode.equals(Mode.IDENTITYFORFIVE) || mode.equals(Mode.IDENTITYFOREIGHT))){
+                (mode.equals(Mode.IDENTITY_FOR_FIVE) || mode.equals(Mode.IDENTITY_FOR_EIGHT))){
             for (int i = 0; i < players.size(); i++){
                 if (players.get(i).getIdentity().equals(Identity.GODKING)){
                     Player godking = players.get(i);
@@ -108,81 +123,117 @@ public class GameController {
         Player player = game.getCurrentPlayer();
         Phase phase = player.getPhase();
         //debug
-        debug("Player " + player.getName() + "start his phase" + player.getPhase());
+        debug("Player " + player.getName() + " starts his phase " + player.getPhase());
 
 
         //activate events
+        //phase_start.onEvent(new PhaseHandle(this, null, "change phase", player, phase));
+        /*
+        EventType.PHASE_START.trigger(new PhaseHandle(this, null, "start of phase", player, phase));
+        EventType.PHASE_PROCEEDING.trigger(new PhaseHandle(this, null, "proceed of phase", player, phase));
 
-        for ( Function<?,?> function : Event.PHASESTART.getFunctionList()){
-            // TODO: ask how to cast it properly
-            Function<Phase,?> concretFunction = (Function<Phase,?>) function;
-            concretFunction.apply(phase);
-        }
-        for ( Function<?,?> function : Event.PHASEPROCEEDING.getFunctionList()){
-            // TODO: ask how to cast it properly
-            Function<Phase,?> concretFunction = (Function<Phase,?>) function;
-            concretFunction.apply(phase);
-        }
-        //TODO : fertig stellen
         //ROUNDSTART,DELAYEDEFFECT,DRAW,ACTIVETURN,DISCARD,FINISH,NOTACTIVE
+         */
         switch (phase) {
             case NOTACTIVE -> {
                 //go to next player
                 Player nextPlayer = game.getPlayers().get(game.getPlayers().indexOf(player) + 1);
                 game.setCurrentPlayer(nextPlayer);
-                changePhase(nextPlayer,Phase.ROUNDSTART);
+                changePhase(nextPlayer,Phase.ROUNDSTART,"change phase because he is the next player");
             }
             case ROUNDSTART -> {
+                /**
+                 * literally do nothing because it is the phase for player to do something before the delayed effect
+                 * happens
+                 */
 
             }
             case DELAYEDEFFECT -> {
-
+                /**
+                 * count if player has delayedEffect
+                 */
+                //TODO : implement delayed effect! and think how!!!
             }
 
             case DRAW -> {
 
+                drawCard(new CardDrawHandle(this,null,"draw 2 cards at turn start",player, CARD_COUNT_TURN_START, game.getDrawDeck()));
 
             }
             case ACTIVETURN -> {
-
-
+                //TODO : display all playable cards and ask player to chose
+                //TODO : check CardUse playable
             }
             case DISCARD -> {
-
+                //TODO : event for discardododododo
+                if (player.getHandCards().getSum() > player.getCurrentHp()){
+                    int drop = player.getHandCards().getSum() - player.getCurrentHp();
+                    askForDiscard(player, game.getThrowDeck(), drop, drop, false, "you have to drop " + drop + " Cards because of your HP");
+                }
             }
             case FINISH -> {
+                /**
+                 * finish do literally nothing except for skill invoke
+                 */
+                //TODO : event for finish
 
             }
         }
 
-        for ( Function<?,?> function : Event.PHASEEND.getFunctionList()){
-            // TODO: ask how to cast it properly
-            Function<Phase,?> concretFunction = (Function<Phase,?>) function;
-            concretFunction.apply(phase);
-        }
+        //EventType.PHASE_END.trigger(new PhaseHandle(this, null, "end of phase", player, phase));
 
         //go to next phase except NONACTIVE
         Phase[] phases = Phase.values();
         for (int i = 0; i < phases.length - 1; i++){
             if (phases[i].equals(phase)){
-                changePhase(player, phases[i+1]);
+                changePhase(player, phases[i+1],"proceed to next phase");
             }
         }
         //loop
         runPhases();
     }
-    private void changePhase(Player player, Phase phase){
-        PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(player, player.getPhase(), phase, this);
-        for (Function<?,?> function : Event.PHASECHANGING.getFunctionList()){
-            // TODO: ask how to cast it properly
-            Function<PhaseChangeHandle,?> concretFunction = (Function<PhaseChangeHandle,?>) function;
-            concretFunction.apply(phaseChangeHandle);
-        }
+    private void changePhase(Player player, Phase phase, String reason){
+        PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, null, reason, player, player.getPhase(), phase);
+        //EventType.PHASE_CHANGING.trigger(phaseChangeHandle);
+        player.setPhase(phase);
     }
     //----------------Card management----------------
+
+    public Card cloneCard(Card card){
+        return new Card (card.getData(),card.getSymbol(),card.getPoint());
+    }
+    //TODO : discuss if its necessary
+    public Card cloneCard(CardData data, CardSymbol symbol, int point){
+        return new Card (data, symbol, point);
+    }
+
+    public void swapDeck(){
+        CardDeck dummy = game.getDrawDeck();
+        game.setDrawDeck(game.getThrowDeck());
+        game.setThrowDeck(dummy);
+        game.getDrawDeck().shuffle();
+    }
+
+
     public Card judge(){
         //TODO:use judgeHandle instead judge
         return game.getDrawDeck().subtractCard();
+    }
+
+    public void drawCard(CardDrawHandle cardDrawHandle){
+
+        Player player = cardDrawHandle.getFrom();
+        int count = cardDrawHandle.getCount();
+        CardDeck drawDeck = cardDrawHandle.getDrawDeck();
+        //TODO : add CardDrawEvent
+        StringBuilder debug = new StringBuilder("Player " + player.getName() + " draws " + count + "card(s) because of " + cardDrawHandle.getReason() + ", they are :");
+        for (int i = 0; i < cardDrawHandle.getCount(); i++){
+            Card card = drawDeck.subtractCard();
+            player.getHandCards().addCard(card);
+            debug.append(card.getName()).append(",");
+        }
+        debug.delete(debug.length() - 1,debug.length() - 1);
+        debug(debug.toString());
     }
     public void throwCard(Player player, ArrayList<Card> cards, CardDeck throwDeck, String reason){
         //TODO : call event for CardMoveEvent
@@ -194,6 +245,13 @@ public class GameController {
         hint.deleteCharAt(hint.length());
         game.output(hint.toString());
     }
+    public void moveCard(CardMoveHandle cardMoveHandle){
+        //TODO : update CardMoveEvent
+    }
+    public void playerGetCardFromList(Player player, CardList cardList, String reason){
+
+    }
+
 
     //----------------Player management----------------
 
@@ -228,7 +286,7 @@ public class GameController {
         String hint = "do you want to active Skill" + skill.getName() + "?";
         return Main.askForConfirm(player, hint);
     }
-    public boolean askForDiscard(Player player, CardSpace targetSpace, int min, int max, boolean optional, String reason){
+    public boolean askForDiscard(Player player, CardList targetSpace, int min, int max, boolean optional, String reason){
         ArrayList<Card> cards = askForCard(player, targetSpace, min, max, optional, reason);
         if (cards.isEmpty()){
             return false;
@@ -237,8 +295,13 @@ public class GameController {
             return true;
         }
     }
-    public ArrayList<Card> askForCard(Player player, CardSpace targetSpace, int min, int max, boolean optional, String reason){
+    public ArrayList<Card> askForCard(Player player, CardList targetSpace, int min, int max, boolean optional, String reason){
         return Main.askForCard(player,targetSpace,min,max,optional,reason);
     }
+    public ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max, boolean optional, String reason){
+        return Main.askForChosePlayer( player, targetPlayers, min, max, optional, reason);
+    }
+
+
 
 }

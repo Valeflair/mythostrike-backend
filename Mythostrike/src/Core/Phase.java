@@ -1,5 +1,6 @@
 package Core;
 
+
 public enum Phase {
     ROUNDSTART,
     DELAYEDEFFECT,

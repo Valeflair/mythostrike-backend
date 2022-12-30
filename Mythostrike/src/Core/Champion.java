@@ -8,7 +8,7 @@ public class Champion {
     private final String name;
     private final String picture;
     private final int maxHp;
-    private final ArrayList<Skill<?>> skills;
+    private final ArrayList<Skill> skills;
 
     public Champion(ChampionData data){
         name = data.getName();
@@ -37,7 +37,7 @@ public class Champion {
         return maxHp;
     }
 
-    public ArrayList<Skill<?>> getSkills() {
+    public ArrayList<Skill> getSkills() {
         return skills;
     }
 }

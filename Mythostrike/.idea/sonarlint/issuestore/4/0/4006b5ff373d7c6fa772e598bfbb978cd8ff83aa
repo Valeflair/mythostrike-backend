@@ -1,0 +1,63 @@
+
+t
+java:S2293Q"YReplace the type specification in this constructor call with the diamond operator ("<>").(‚ä…ÿÿÿÿÿÿ
+c
+java:S1192~"HDefine a constant instead of duplicating this literal "Player " 4 times.(å¥Éºùÿÿÿÿ
+‚
+java:S1319E"lThe type of "championList" should be an interface such as "List" rather than the implementation "ArrayList".(ªÒÉ
+|
+java:S1319î"eThe type of "cards" should be an interface such as "List" rather than the implementation "ArrayList".(ƒ€Óø
+Œ
+java:S1319ª"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(æŠäÌÿÿÿÿÿ
+‡
+java:S1319­"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".( ò“˜
+„
+java:S1319­"mThe type of "targetPlayers" should be an interface such as "List" rather than the implementation "ArrayList".( ò“˜
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(´Ë
+
+java:S1186û"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(éÂ‰âıÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(•œª¦
+V	java:S125/"<This block of commented-out lines of code should be removed.(×®ÎÔøÿÿÿÿ
+H
+java:S11358"2Complete the task associated to this TODO comment.(Éê›–
+R	java:S125‚"<This block of commented-out lines of code should be removed.(åù×÷
+N
+java:S1135›"2Complete the task associated to this TODO comment.(à…‚şÿÿÿÿ
+8
+java:S6205"Remove this redundant block.(Æ«Œ•ıÿÿÿÿ
+I
+java:S1135¤"2Complete the task associated to this TODO comment.(Š‘ÛÀ
+I
+java:S1135¥"2Complete the task associated to this TODO comment.(”òõŸ
+I
+java:S1135¨"2Complete the task associated to this TODO comment.(îòœß
+I
+java:S1135²"2Complete the task associated to this TODO comment.(àè¶
+W	java:S125·"<This block of commented-out lines of code should be removed.(¶„Äüÿÿÿÿ
+a
+java:S1854Ä"ERemove this useless assignment to local variable "phaseChangeHandle".(²ùşªÿÿÿÿÿ
+R
+java:S1481Ä"6Remove this unused "phaseChangeHandle" local variable.(²ùşªÿÿÿÿÿ
+W	java:S125Å"<This block of commented-out lines of code should be removed.(ãìÌ‚øÿÿÿÿ
+I
+java:S1135Í"2Complete the task associated to this TODO comment.(òˆĞ¾
+H
+java:S1135Û"2Complete the task associated to this TODO comment.(ËÎù 
+N
+java:S1135ä"2Complete the task associated to this TODO comment.(†ùĞõüÿÿÿÿ
+S
+java:S1172î"<Remove these unused method parameters "throwDeck", "reason".(ƒ€Óø
+I
+java:S1135ï"2Complete the task associated to this TODO comment.(ìé´
+I
+java:S1135ù"2Complete the task associated to this TODO comment.(¡½¸ç
+N
+java:S1135ƒ"2Complete the task associated to this TODO comment.(‚­ïµüÿÿÿÿ
+I
+java:S1068".Remove this unused "phaseStart" private field.(‚âŠ¿øÿÿÿÿ
+N
+java:S1068"3Remove this unused "phaseProceeding" private field.(ÿğ¥íÿÿÿÿÿ
+F
+java:S1068"+Remove this unused "damaged" private field.(¿ÖÓ‰şÿÿÿÿ
+K
+java:S1144H"0Remove this unused private "initialGame" method.(®µ€¾úÿÿÿÿ

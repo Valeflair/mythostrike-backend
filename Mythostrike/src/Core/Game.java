@@ -1,6 +1,7 @@
 package Core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     /**
@@ -81,4 +82,9 @@ public class Game {
         this.tableDeck = tableDeck;
     }
 
+    public ArrayList<Player> getOtherPlayers(Player player) {
+        ArrayList<Player> otherPlayers = new ArrayList<Player>(players);
+        otherPlayers.remove(player);
+        return otherPlayers;
+    }
 }

@@ -15,7 +15,7 @@ public class Player {
     CardSpace delayedEffect;
     HashMap<CardData,Integer> restrict;
     HashMap<CardData,Boolean> immunity;
-    ArrayList<Skill<?>> skills;
+    ArrayList<Skill> skills;
     boolean isAlive;
     boolean isChained;
 
@@ -25,9 +25,11 @@ public class Player {
         handCards = new CardSpace();
         equipment = new CardSpace();
         delayedEffect = new CardSpace();
+        Card isNightmared;
+        Card weapon;
         isAlive = true;
         isChained = false;
-        skills = new ArrayList<Skill<?>>();
+        skills = new ArrayList<Skill>();
         this.name = name;
         Phase phase = Phase.NOTACTIVE;
     }
@@ -126,7 +128,7 @@ public class Player {
         isChained = chained;
     }
 
-    public ArrayList<Skill<?>> getSkills() {
+    public ArrayList<Skill> getSkills() {
         return skills;
     }
 
@@ -134,8 +136,8 @@ public class Player {
         return delayedEffect;
     }
 
-    public Skill<?> hasSkillByName(String skillName){
-        for (Skill<?> skill:skills) {
+    public Skill hasSkillByName(String skillName){
+        for (Skill skill:skills) {
             if (skill.equals(skillName)){
                 return skill;
             }

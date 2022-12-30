@@ -6,12 +6,12 @@ import java.util.Arrays;
 public enum Mode {
 
 
-    IDENTITYFORFIVE(new Identity[]{Identity.GODKING, Identity.GENERAL, Identity.REBEL, Identity.REBEL, Identity.RENEGADE}),
-    IDENTITYFOREIGHT(new Identity[]{Identity.GODKING, Identity.GENERAL, Identity.GENERAL, Identity.REBEL, Identity.REBEL, Identity.REBEL, Identity.REBEL, Identity.RENEGADE}),
-    ONEVERSUSONE(new Identity[]{Identity.TEAMRED,Identity.TEAMBLUE}),
-    TWOVERSUSTWO(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE}),
-    THREEVERSUSTHREE(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE}),
-    FOURVERSUSFOUR(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE});
+    IDENTITY_FOR_FIVE(new Identity[]{Identity.GODKING, Identity.GENERAL, Identity.REBEL, Identity.REBEL, Identity.RENEGADE}),
+    IDENTITY_FOR_EIGHT(new Identity[]{Identity.GODKING, Identity.GENERAL, Identity.GENERAL, Identity.REBEL, Identity.REBEL, Identity.REBEL, Identity.REBEL, Identity.RENEGADE}),
+    ONE_VERSUS_ONE(new Identity[]{Identity.TEAMRED,Identity.TEAMBLUE}),
+    TWO_VERSUS_TWO(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE}),
+    THREE_VERSUS_THREE(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE}),
+    FOUR_VERSUS_FOUR(new Identity[]{Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMRED,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE,Identity.TEAMBLUE});
 
     final ArrayList<Identity> identities;
 

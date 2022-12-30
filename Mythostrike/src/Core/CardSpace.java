@@ -2,8 +2,7 @@ package Core;
 
 import java.util.ArrayList;
 
-public class CardSpace {
-    ArrayList<Card> cards;
+public class CardSpace extends CardList {
 
     public CardSpace(){
         cards = new ArrayList<Card>();

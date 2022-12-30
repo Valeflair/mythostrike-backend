@@ -1,31 +1,24 @@
 package Core;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.function.Function;
+import java.util.EventListener;
 
 
-
-public class Skill<T>{
+public class Skill {
     private String name;
     private String description;
     private boolean isActive;
-    private Function<?,?> function;
+    private EventListener listener;
 
-    public Skill(String name, String description, Function<?,?> function) {
-        this.name = name;
-        this.description = description;
-        this.function = function;
-    }
-
-    public Skill(TriggerSkillData data){
+    public Skill(TriggerSkillData data) {
         this.name = data.getName();
+        this.description = data.getDescription();
+        this.isActive = data.isActive();
+        this.listener = data.getFunctionListener();
+
     }
 
-    public void run() throws InvocationTargetException, IllegalAccessException {
-        function.apply(null);
+    public void initialEvent(){
     }
-
 
     public String getName() {
         return name;
@@ -51,14 +44,14 @@ public class Skill<T>{
         isActive = active;
     }
 
-    public boolean equals(Skill<?> skill){
+    public boolean equals(Skill skill) {
         return this.name.equals(skill.getName());
     }
-    public boolean equals(String name){
+
+    public boolean equals(String name) {
         return this.name.equals(name);
     }
 
-    public Function<?, ?> getFunction() {
-        return function;
-    }
+
+
 }

@@ -1,31 +1,23 @@
 package Core;
 
-import Events.Event;
+import Events.Observers.FunctionObserver;
 
-import java.util.ArrayList;
-import java.util.function.Function;
+public class Skill_Trigger extends Skill {
+    FunctionObserver listener;
 
-public class Skill_Trigger extends Skill<Skill_Trigger> {
-    ArrayList<Event> events;
-
-    public Skill_Trigger(String name, String description, Function<?,?> function) {
-        super(name, description, function);
-    }
-
-    public Skill_Trigger(String name, String description, Function<?,?> function, ArrayList<Event> events) {
-        super(name, description, function);
-        this.events = events;
-    }
-
-    public Skill_Trigger(TriggerSkillData data) {
+    public Skill_Trigger(TriggerSkillData data){
         super(data);
+        listener = data.getFunctionListener();
     }
 
-    public ArrayList<Event> getEvents() {
-        return events;
+    public void initialEvent(){
     }
 
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
+    public FunctionObserver getListener() {
+        return listener;
+    }
+
+    public void setListener(FunctionObserver listener) {
+        this.listener = listener;
     }
 }
