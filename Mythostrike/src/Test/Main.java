@@ -1,6 +1,7 @@
 package Test;
 
-import Core.*;
+import core.*;
+import core.management.GameManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,8 +21,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        Runner runner = new Runner();
-        runner.run();
+
         if (args.length != 0) {
             System.out.println((ERROR_NOT_ALLOW_ARGUMENT_IN_MAIN));
             return;
@@ -49,12 +49,13 @@ public class Main {
         //initial patternDeck
         CardDeck pattern = new CardDeck();
         CardDeck.setPatternDeck(pattern);
+        pattern.addCard(new Card(CardData.ATTACK,CardSymbol.HEART,5));
 
         //--------------------------------initialize---------------------------------
 
-        Game game = new Game(players, mode);
-        GameController gc = game.getGameController();
-        gc.gameStart();
+
+        GameManager gameManager = new GameManager(players, mode);
+        gameManager.gameStart();
     }
 
     public static ArrayList<Card> askForCard(Player player, CardList targetSpace, int min, int max, boolean optional, String reason){
@@ -98,6 +99,22 @@ public class Main {
         conditions.update(1,1,0,1,"0 for no and 1 for yes",false, false);
         Integer[] pick = readNext(conditions);
         return pick[0] == 1;
+    }
+    public static ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max, boolean optional, String reason) {
+        outputPlayerIsOn(player);
+        System.out.println("Players: ");
+        for (int i = 0; i < targetPlayers.size(); i++){
+            System.out.print(i + " : " + targetPlayers.get(i).getName() + ", ");
+        }
+        String hint = "You have to pick " + min + " ~ " + max + " Player(s) for " + reason;
+        InputConditions conditions = new InputConditions();
+        conditions.update(min,max,0,targetPlayers.size()-1,reason,false,optional);
+        Integer[] pick = readNext(conditions);
+        ArrayList<Player> pickPlayers = new ArrayList<>();
+        for (Integer index : pick){
+            pickPlayers.add(targetPlayers.get(index));
+        }
+        return pickPlayers;
     }
 
 
@@ -157,20 +174,4 @@ public class Main {
         }
         return false;
     }
-    public static ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max, boolean optional, String reason) {
-        outputPlayerIsOn(player);
-        System.out.println("Players: ");
-        for (int i = 0; i < targetPlayers.size(); i++){
-            System.out.print(i + " : " + targetPlayers.get(i).getName() + ", ");
-        }
-        String hint = "You have to pick " + min + " ~ " + max + " Player(s) for " + reason;
-        InputConditions conditions = new InputConditions();
-        conditions.update(min,max,0,targetPlayers.size()-1,reason,false,optional);
-        Integer[] pick = readNext(conditions);
-        ArrayList<Player> pickPlayers = new ArrayList<>();
-        for (Integer index : pick){
-            pickPlayers.add(targetPlayers.get(index));
-        }
-        return pickPlayers;
     }
-}

@@ -17,10 +17,10 @@ Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | . | 32 | 1,297 | 75 | 370 | 1,742 |
-| Core | 18 | 772 | 54 | 206 | 1,032 |
-| Events | 12 | 349 | 6 | 126 | 481 |
-| Events\\Handle | 5 | 186 | 0 | 62 | 248 |
-| Events\\Listener | 4 | 49 | 0 | 27 | 76 |
+| core | 18 | 772 | 54 | 206 | 1,032 |
+| events | 12 | 349 | 6 | 126 | 481 |
+| events\\Handle | 5 | 186 | 0 | 62 | 248 |
+| events\\Listener | 4 | 49 | 0 | 27 | 76 |
 | Test | 2 | 176 | 15 | 38 | 229 |
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

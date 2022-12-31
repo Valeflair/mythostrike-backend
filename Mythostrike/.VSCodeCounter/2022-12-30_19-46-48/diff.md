@@ -17,10 +17,10 @@ Total : 18 files,  -30 codes, 5 comments, -1 blanks, all -26 lines
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | . | 18 | -30 | 5 | -1 | -26 |
-| Core | 6 | -24 | -5 | 3 | -26 |
-| Events | 11 | -18 | 9 | -4 | -13 |
-| Events\\Handle | 5 | -3 | 0 | 1 | -2 |
-| Events\\Listener | 3 | 12 | 0 | 5 | 17 |
+| core | 6 | -24 | -5 | 3 | -26 |
+| events | 11 | -18 | 9 | -4 | -13 |
+| events\\Handle | 5 | -3 | 0 | 1 | -2 |
+| events\\Listener | 3 | 12 | 0 | 5 | 17 |
 | Test | 1 | 12 | 1 | 0 | 13 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

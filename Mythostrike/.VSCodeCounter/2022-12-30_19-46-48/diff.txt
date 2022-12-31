@@ -14,10 +14,10 @@ Directories
 | path                                                                                                             | files      | code       | comment    | blank      | total      |
 +------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | .                                                                                                                |         18 |        -30 |          5 |         -1 |        -26 |
-| Core                                                                                                             |          6 |        -24 |         -5 |          3 |        -26 |
-| Events                                                                                                           |         11 |        -18 |          9 |         -4 |        -13 |
-| Events\Handle                                                                                                    |          5 |         -3 |          0 |          1 |         -2 |
-| Events\Listener                                                                                                  |          3 |         12 |          0 |          5 |         17 |
+| core                                                                                                             |          6 |        -24 |         -5 |          3 |        -26 |
+| events                                                                                                           |         11 |        -18 |          9 |         -4 |        -13 |
+| events\Handle                                                                                                    |          5 |         -3 |          0 |          1 |         -2 |
+| events\Listener                                                                                                  |          3 |         12 |          0 |          5 |         17 |
 | Test                                                                                                             |          1 |         12 |          1 |          0 |         13 |
 +------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
@@ -25,23 +25,23 @@ Files
 +------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
 | filename                                                                                                         | language | code       | comment    | blank      | total      |
 +------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\CardDeck.java                       | Java     |          7 |          0 |          0 |          7 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\GameController.java                 | Java     |        -21 |         -5 |          3 |        -23 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\Phase.java                          | Java     |          0 |          0 |          1 |          1 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\Skill.java                          | Java     |         -8 |          0 |          1 |         -7 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\Skill_Trigger.java                  | Java     |         -5 |          0 |         -2 |         -7 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Core\TriggerSkillData.java               | Java     |          3 |          0 |          0 |          3 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Event.java                        | Java     |        -15 |         -6 |         -6 |        -27 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\EventType.java                    | Java     |        -11 |         15 |         -4 |          0 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Handle\CardDrawHandle.java        | Java     |         -7 |          0 |         -2 |         -9 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Handle\CardMoveHandle.java        | Java     |        -28 |          0 |         -7 |        -35 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Handle\DamageHandle.java          | Java     |        -15 |          0 |         -3 |        -18 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Handle\EventHandle.java           | Java     |         29 |          0 |          7 |         36 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Handle\PhaseHandle.java           | Java     |         18 |          0 |          6 |         24 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Listener\EventDamageListener.java | Java     |          0 |          0 |          1 |          1 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Listener\EventPhaseListener.java  | Java     |          5 |          0 |          2 |          7 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\Listener\FunctionListener.java    | Java     |          7 |          0 |          2 |          9 |
-| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Events\PhaseChangeHandle.java            | Java     |         -1 |          0 |          0 |         -1 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardDeck.java                       | Java     |          7 |          0 |          0 |          7 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\GameController.java                 | Java     |        -21 |         -5 |          3 |        -23 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Phase.java                          | Java     |          0 |          0 |          1 |          1 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Skill.java                          | Java     |         -8 |          0 |          1 |         -7 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Skill_Trigger.java                  | Java     |         -5 |          0 |         -2 |         -7 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\TriggerSkillData.java               | Java     |          3 |          0 |          0 |          3 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Event.java                        | Java     |        -15 |         -6 |         -6 |        -27 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\EventType.java                    | Java     |        -11 |         15 |         -4 |          0 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Handle\CardDrawHandle.java        | Java     |         -7 |          0 |         -2 |         -9 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Handle\CardMoveHandle.java        | Java     |        -28 |          0 |         -7 |        -35 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Handle\DamageHandle.java          | Java     |        -15 |          0 |         -3 |        -18 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Handle\EventHandle.java           | Java     |         29 |          0 |          7 |         36 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Handle\PhaseHandle.java           | Java     |         18 |          0 |          6 |         24 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Listener\EventDamageListener.java | Java     |          0 |          0 |          1 |          1 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Listener\EventPhaseListener.java  | Java     |          5 |          0 |          2 |          7 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Listener\FunctionListener.java    | Java     |          7 |          0 |          2 |          9 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\PhaseChangeHandle.java            | Java     |         -1 |          0 |          0 |         -1 |
 | d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Test\Main.java                           | Java     |         12 |          1 |          0 |         13 |
 | Total                                                                                                            |          |        -30 |          5 |         -1 |        -26 |
 +------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

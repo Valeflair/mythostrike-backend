@@ -1,0 +1,25 @@
+
+n
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Â€É
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(•®ÞŽúÿÿÿÿ
+t
+java:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").(··ä‰ùÿÿÿÿ
+ƒ
+java:S1319c"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(·×ì†
+{
+java:S1319g"eThe type of "restrict" should be an interface such as "Map" rather than the implementation "HashMap".(´º´à
+ˆ
+java:S1319k"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(²€Æöûÿÿÿÿ
+{
+java:S1319o"eThe type of "immunity" should be an interface such as "Map" rather than the implementation "HashMap".(¦Œü°
+‡
+java:S1319ƒ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ë„éÏ
+L
+java:S1481"1Remove this unused "isNightmared" local variable.(ÌÜƒƒùÿÿÿÿ
+A
+java:S1481"+Remove this unused "weapon" local variable.(Òöü®
+O
+java:S1117""9Rename "phase" which hides the field declared at line 12.(õ¤Ô™
+@
+java:S1481""*Remove this unused "phase" local variable.(õ¤Ô™

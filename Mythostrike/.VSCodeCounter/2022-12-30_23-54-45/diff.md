@@ -17,11 +17,11 @@ Total : 22 files,  87 codes, 7 comments, 38 blanks, all 132 lines
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | . | 22 | 87 | 7 | 38 | 132 |
-| Core | 5 | 30 | 15 | 13 | 58 |
-| Events | 9 | 2 | -12 | 1 | -9 |
-| Events\\Handle | 1 | 20 | 0 | 7 | 27 |
-| Events\\Listener | 4 | -61 | 0 | -32 | -93 |
-| Events\\Observers | 1 | 15 | 0 | 9 | 24 |
+| core | 5 | 30 | 15 | 13 | 58 |
+| events | 9 | 2 | -12 | 1 | -9 |
+| events\\Handle | 1 | 20 | 0 | 7 | 27 |
+| events\\Listener | 4 | -61 | 0 | -32 | -93 |
+| events\\Observers | 1 | 15 | 0 | 9 | 24 |
 | Test | 8 | 55 | 4 | 24 | 83 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

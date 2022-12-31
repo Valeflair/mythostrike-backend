@@ -17,9 +17,9 @@ Total : 20 files,  114 codes, 12 comments, 55 blanks, all 181 lines
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | . | 20 | 114 | 12 | 55 | 181 |
-| Core | 5 | 16 | 15 | 10 | 41 |
-| Events | 15 | 98 | -3 | 45 | 140 |
-| Events\\Handle | 4 | 109 | 0 | 41 | 150 |
-| Events\\Listener | 4 | 49 | 0 | 27 | 76 |
+| core | 5 | 16 | 15 | 10 | 41 |
+| events | 15 | 98 | -3 | 45 | 140 |
+| events\\Handle | 4 | 109 | 0 | 41 | 150 |
+| events\\Listener | 4 | 49 | 0 | 27 | 76 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)
