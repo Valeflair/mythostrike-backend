@@ -1,6 +1,0 @@
-
-o
-java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(„ÙÊî
-’
-java:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(–¤Ïèùÿÿÿÿ8 ×ÚÆÖ0
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(´Ë
