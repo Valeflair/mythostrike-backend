@@ -22,6 +22,10 @@ public class Player {
     public Player(String name){
         restrict = new HashMap<CardData,Integer>();
         immunity = new HashMap<CardData,Boolean>();
+        for (CardData cardData : CardData.values()) {
+            restrict.put(cardData, 1000);
+            immunity.put(cardData, false);
+        }
         handCards = new CardSpace();
         equipment = new CardSpace();
         delayedEffect = new CardSpace();

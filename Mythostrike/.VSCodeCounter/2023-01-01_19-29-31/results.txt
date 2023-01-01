@@ -1,0 +1,69 @@
+Date : 2023-01-01 19:29:31
+Directory : d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src
+Total : 40 files,  1838 codes, 97 comments, 509 blanks, all 2444 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Java     |         40 |      1,838 |         97 |        509 |      2,444 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                        | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                           |         40 |      1,838 |         97 |        509 |      2,444 |
+| Test                                                                                                        |          2 |        208 |         16 |         48 |        272 |
+| core                                                                                                        |         22 |      1,138 |         65 |        289 |      1,492 |
+| core\management                                                                                             |          5 |        469 |         53 |        106 |        628 |
+| events                                                                                                      |         16 |        492 |         16 |        172 |        680 |
+| events\handle                                                                                               |         11 |        374 |          2 |        120 |        496 |
++-------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                    | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Test\InputConditions.java           | Java     |         46 |          6 |         17 |         69 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\Test\Main.java                      | Java     |        162 |         10 |         31 |        203 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Card.java                      | Java     |         51 |          0 |         14 |         65 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardData.java                  | Java     |        115 |          5 |         17 |        137 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardDeck.java                  | Java     |         14 |          0 |          5 |         19 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardList.java                  | Java     |         27 |          0 |          5 |         32 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardSpace.java                 | Java     |         24 |          0 |          5 |         29 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardSymbol.java                | Java     |         18 |          0 |          7 |         25 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\CardType.java                  | Java     |          8 |          0 |          3 |         11 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Champion.java                  | Java     |         33 |          0 |         11 |         44 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\ChampionData.java              | Java     |         40 |          0 |         14 |         54 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Game.java                      | Java     |         66 |          6 |         21 |         93 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Identity.java                  | Java     |          4 |          0 |          2 |          6 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Mode.java                      | Java     |         18 |          0 |          8 |         26 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Phase.java                     | Java     |         10 |          0 |          3 |         13 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Player.java                    | Java     |        124 |          0 |         30 |        154 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Skill.java                     | Java     |         40 |          0 |         18 |         58 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\Skill_Trigger.java             | Java     |         17 |          0 |          7 |         24 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\TriggerSkillData.java          | Java     |         60 |          1 |         13 |         74 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\management\CardManager.java    | Java     |         52 |          6 |          9 |         67 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\management\EventManager.java   | Java     |        176 |          0 |         41 |        217 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\management\GameController.java | Java     |         40 |          0 |          6 |         46 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\management\GameManager.java    | Java     |        174 |         44 |         41 |        259 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\core\management\PlayerManager.java  | Java     |         27 |          3 |          9 |         39 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Event.java                   | Java     |         30 |          0 |          9 |         39 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\EventType.java               | Java     |         45 |         14 |         20 |         79 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\FunctionObserver.java        | Java     |         12 |          0 |          8 |         20 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\Listener.java                | Java     |         16 |          0 |         11 |         27 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\PhaseChangeHandle.java       | Java     |         15 |          0 |          4 |         19 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\AttackHandle.java     | Java     |         65 |          0 |         19 |         84 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\CardAskHandle.java    | Java     |         67 |          2 |         18 |         87 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\CardDrawHandle.java   | Java     |         26 |          0 |          9 |         35 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\CardMoveHandle.java   | Java     |         40 |          0 |         11 |         51 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\CardUseHandle.java    | Java     |         41 |          0 |         13 |         54 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\DamageHandle.java     | Java     |         48 |          0 |         15 |         63 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\DamageType.java       | Java     |         11 |          0 |          5 |         16 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\EventHandle.java      | Java     |         40 |          0 |         17 |         57 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\PhaseHandle.java      | Java     |         18 |          0 |          6 |         24 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\PlayerAskHandle.java  | Java     |          9 |          0 |          3 |         12 |
+| d:\魔兽\Warcraft III Frozen Throne\Maps\羊皮纸\中世纪UI\Backend\Mythostrike\src\events\handle\PlayerHandle.java     | Java     |          9 |          0 |          4 |         13 |
+| Total                                                                                                       |          |      1,838 |         97 |        509 |      2,444 |
++-------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

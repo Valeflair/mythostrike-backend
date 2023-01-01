@@ -12,7 +12,7 @@ public class GameController {
     public GameController(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-    public boolean askForSkillInvoke(Player player, Skill skill){
+    public boolean askForSkillInvoke(Player player, Skill skill) {
         String hint = "do you want to active Skill" + skill.getName() + "?";
         return Main.askForConfirm(player, hint);
     }
@@ -21,21 +21,32 @@ public class GameController {
         int count = cardAskHandle.getAmount();
         String reason = cardAskHandle.getReason();
         boolean optional = cardAskHandle.isOptional();
-        CardList targetSpace = cardAskHandle.getTargetSpace();
-        ArrayList<Card> cards = askForCard(player, targetSpace, count, count, optional, reason);
+        CardSpace fromSpace = cardAskHandle.getFromSpace();
+        ArrayList<Card> cards = askForCard(player, fromSpace, count, count, optional, reason);
         if (cards.isEmpty()) {
             return false;
         } else {
-            gameManager.getCardManager().throwCard(player, cards, gameManager.getGame().getThrowDeck(), reason);
+            gameManager.getCardManager().throwCard(player, cards, fromSpace, cardAskHandle.getTargetList(), reason);
             return true;
         }
     }
-    public ArrayList<Card> askForCard (Player player, CardList targetSpace,int min, int max,
-        boolean optional, String reason){
-            return Main.askForCard(player, targetSpace, min, max, optional, reason);
+    public ArrayList<Card> askForCard (CardAskHandle cardAskHandle) {
+            Player player = cardAskHandle.getFrom();
+            CardSpace fromSpace = cardAskHandle.getFromSpace();
+            int amount = cardAskHandle.getAmount();
+            boolean optional = cardAskHandle.isOptional();
+            String reason = cardAskHandle.getReason();
+
+            ArrayList<Card> cards = Main.askForCard(player, fromSpace, amount, amount, optional, reason);
+            String hint = "cards picked:";
+            for (Card card : cards) {
+                hint += card.toString();
+            }
+            System.out.println(hint);
+            return cards;
         }
     public ArrayList<Player> askForChosePlayer (Player player, ArrayList < Player > targetPlayers,int min, int max,
-        boolean optional, String reason){
+        boolean optional, String reason) {
             return Main.askForChosePlayer(player, targetPlayers, min, max, optional, reason);
         }
     public boolean askForConfirm (Player player, String reason){

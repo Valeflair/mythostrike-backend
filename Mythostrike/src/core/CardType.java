@@ -1,5 +1,10 @@
 package core;
 
 public enum CardType {
-    BASICCARD,SKILLCARD,WEAPON,ARMOR,DELAYEDEFFECT
+    BASICCARD,
+    SKILLCARD,
+    WEAPON,
+    ARMOR,
+    DELAYEDEFFECT
+
 }

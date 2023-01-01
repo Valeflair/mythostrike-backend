@@ -26,7 +26,7 @@ public enum TriggerSkillData {
                     //TODO : use JudgeHandle instead of judge
                     Card judgeCard = gameManager.getCardManager().judge();
                     if (judgeCard.getSymbol() != CardSymbol.HEART) {
-                        CardAskHandle cardAskHandle = new CardAskHandle(damageHandle.getGameManager(), null, "drop 2 cards or you get 1 damage deal cause of revenge", dealer, null, 2, gameManager.getGame().getThrowDeck(), true);
+                        CardAskHandle cardAskHandle = new CardAskHandle(damageHandle.getGameManager(), null, "drop 2 cards or you get 1 damage deal cause of revenge", dealer, dealer.getHandCards() , null, 2, gameManager.getGame().getThrowDeck(), true);
                         if (!gameManager.getGameController().askForDiscard(cardAskHandle)) {
                             gameManager.getPlayerManager().applyDamage(new DamageHandle(gameManager, null, "cause of Revenge", victim, dealer, 1, DamageType.NORMAL));
 

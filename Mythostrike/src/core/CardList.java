@@ -2,7 +2,7 @@ package core;
 
 import java.util.ArrayList;
 
-public class CardList {
+public class CardList{
     protected ArrayList<Card> cards = new ArrayList<Card>();
 
     public void addCard(Card card){

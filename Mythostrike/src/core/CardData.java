@@ -18,6 +18,10 @@ public enum CardData {
                     targets.add(target);
                 }
             }
+            if(targets.isEmpty() || player.getRestrict().get(ATTACK) <= 0) {
+                System.out.println("Attackfalse");
+            }
+
             return !targets.isEmpty() && player.getRestrict().get(ATTACK) > 0 ;
         }
     }, new Function<CardUseHandle, Boolean>() {

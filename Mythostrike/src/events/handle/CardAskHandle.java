@@ -6,17 +6,19 @@ import core.management.GameManager;
 public class CardAskHandle extends EventHandle{
 
     CardData cardData;
+    CardSpace fromSpace;
     int amount;
     boolean responeded;
     boolean optional;
-    CardList targetSpace;
+    CardList targetList;
 
-    public CardAskHandle(GameManager gameManager, Card card, String reason, Player from, CardData cardData, int amount, CardList targetSpace, boolean optional) {
+    public CardAskHandle(GameManager gameManager, Card card, String reason, Player from, CardSpace fromSpace, CardData cardData, int amount, CardList targetList, boolean optional) {
         super(gameManager, card, reason, from);
         this.cardData = cardData;
         this.amount = amount;
-        this.targetSpace = targetSpace;
+        this.targetList = targetList;
         this.optional = optional;
+        this.fromSpace = fromSpace;
         responeded = false;
     }
 
@@ -32,6 +34,14 @@ public class CardAskHandle extends EventHandle{
             }
         }
         return count >= amount;
+    }
+
+    public CardSpace getFromSpace() {
+        return fromSpace;
+    }
+
+    public void setFromSpace(CardSpace fromSpace) {
+        this.fromSpace = fromSpace;
     }
 
     public CardData getCardData() {
@@ -66,11 +76,11 @@ public class CardAskHandle extends EventHandle{
         this.optional = optional;
     }
 
-    public CardList getTargetSpace() {
-        return targetSpace;
+    public CardList getTargetList() {
+        return targetList;
     }
 
     public void setTargetSpace(CardList targetSpace) {
-        this.targetSpace = targetSpace;
+        this.targetList = targetSpace;
     }
 }

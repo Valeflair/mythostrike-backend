@@ -15,6 +15,7 @@ public class Card {
         type = data.getType();
         this.symbol = symbol;
         this.point = point;
+        this.cardData = data;
     }
 
     public String getName() {
@@ -55,5 +56,9 @@ public class Card {
 
     public boolean isSame(String name){
         return name.equals(this.name);
+    }
+
+    public String toString() {
+        return name + "(" + symbol.getShort() + point + ")";
     }
 }

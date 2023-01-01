@@ -17,7 +17,7 @@ public class Main {
     private static final String COMMAND_QUIT = "quit";
     private static final String COMMAND_MULTIPLE_SPLIT = ",";
     private static final String COMMAND_EMPTY = "";
-    private static final int EMPTY_VALUE = 0;
+    private static final int EMPTY_VALUE = -1;
 
     public static void main(String[] args){
 
@@ -49,7 +49,18 @@ public class Main {
         //initial patternDeck
         CardDeck pattern = new CardDeck();
         CardDeck.setPatternDeck(pattern);
-        pattern.addCard(new Card(CardData.ATTACK,CardSymbol.HEART,5));
+        CardSymbol[] symbols = {CardSymbol.CLUB, CardSymbol.DIAMOND, CardSymbol.HEART, CardSymbol.SPADE};
+        for (int i = 0; i < 40; i++) {
+            pattern.addCard(new Card(CardData.ATTACK, symbols[i % 4], i % 13 + 1));
+            if (i % 2 == 0) {
+                pattern.addCard(new Card(CardData.DEFEND, symbols[(i / 2) % 4], (i / 2) % 13 + 1));
+            }
+        }
+        pattern.shuffle();
+        for (Card card : pattern.getCards()) {
+            System.out.print(card.getSymbol().toString() + card.getPoint() + card.getName() + ";");
+        }
+
 
         //--------------------------------initialize---------------------------------
 
@@ -58,7 +69,7 @@ public class Main {
         gameManager.gameStart();
     }
 
-    public static ArrayList<Card> askForCard(Player player, CardList targetSpace, int min, int max, boolean optional, String reason){
+    public static ArrayList<Card> askForCard(Player player, CardSpace fromSpace, int min, int max, boolean optional, String reason){
         outputPlayerIsOn(player);
         System.out.println(reason);
         System.out.println("you have to pick "+min+"~"+max+"Card from Space:"+"reason:" + reason +"\n"+"CardSpace:");
@@ -66,13 +77,13 @@ public class Main {
             System.out.println("you can ");
         }
 
-        displayCardList(targetSpace);
+        displayCardList(fromSpace);
         InputConditions conditions = new InputConditions();
-        conditions.update(min,max,0,targetSpace.getSum()-1,reason,false,optional);
+        conditions.update(min,max,0,fromSpace.getSum()-1,reason,false,optional);
         Integer[] pick = readNext(conditions);
         ArrayList<Card> cards = new ArrayList<Card>();
         for (int i = 0; i < pick.length; i++){
-            cards.add(targetSpace.getCards().get(pick[i]));
+            cards.add(fromSpace.getCards().get(pick[i]));
         }
         return cards;
     }
@@ -131,39 +142,55 @@ public class Main {
                 boolean invalid = false;
                 input = scanner.nextLine();
 
+                if(input.equals("") && conditions.isAllowEmpty()){
+                    return new Integer[0];
+                }
+
                 String[] inputSplit = input.split(COMMAND_MULTIPLE_SPLIT, -1);
                 Integer[] inputConvert = new Integer[inputSplit.length];
+
                 for (int i = 0; i < inputSplit.length; i++) {
                     if (conditions.isAllowEmpty() && input.equals(COMMAND_EMPTY)) {
                         inputConvert[i] = EMPTY_VALUE;
                     } else {
                         inputConvert[i] = Integer.parseInt(inputSplit[i]);
                     }
-                    if (inputConvert[i] > conditions.getRangeMax()
+
+                    if ((inputConvert[i] > conditions.getRangeMax()
                             || inputConvert[i] < conditions.getRangeMin()
-                            || (inputConvert[i] <= 0 && !inputSplit[i].equals(COMMAND_EMPTY))
-                            || (!conditions.isAllowEmpty() && inputSplit[i].equals(COMMAND_EMPTY))) {
+                            || (inputConvert[i] < 0 && !inputSplit[i].equals(COMMAND_EMPTY))
+                            || (!conditions.isAllowEmpty() && inputSplit[i].equals(COMMAND_EMPTY)))) {
+
                         invalid = true;
+                        System.out.println("err 2");
                     }
+
+
                 }
 
-                if (!invalid && ((inputConvert.length >= conditions.getAmountMin())
+                if (((inputConvert.length >= conditions.getAmountMin())
                         && inputConvert.length <= conditions.getAmountMax())
                         && (conditions.isAllowDuplicate() || !arrayHasDuplicate(inputConvert))) {
+
+                } else {
+                    invalid = true;
+                    System.out.println("err 2");
+                }
+                if(!invalid) {
                     return inputConvert;
                 }
             } catch (NumberFormatException ignored) {
             }
         }
     }
-    private static void displayCardList(CardList cardList){
-        for (int i = 0; i < cardList.getCards().size(); i++){
-            System.out.print(i+"th Card:" + cardToString(cardList.getCards().get(i)));
+    private static void displayCardList(CardList cardList) {
+        for (int i = 0; i < cardList.getCards().size(); i++) {
+            System.out.print(i + "th:" + cardToString(cardList.getCards().get(i)) + ",");
         }
         System.out.println();
     }
     private static String cardToString(Card card){
-        return card.getName() + ":" +card.getSymbol() + card.getPoint();
+        return card.getName() + "(" + card.getSymbol().getShort() + card.getPoint() + ")";
     }
     private static <T> boolean arrayHasDuplicate(T[] input) {
         HashSet<T> checkSet = new HashSet<>();

@@ -140,7 +140,7 @@ public class GameManager {
         switch (phase) {
             case NOTACTIVE -> {
                 //go to next player
-                Player nextPlayer = game.getPlayers().get(game.getPlayers().indexOf(player) + 1);
+                Player nextPlayer = game.getPlayers().get((game.getPlayers().indexOf(player) + 1) % game.getPlayers().size());
                 game.setCurrentPlayer(nextPlayer);
                 changePhase(nextPlayer,Phase.ROUNDSTART,"change phase because he is the next player");
             }
@@ -149,7 +149,7 @@ public class GameManager {
                  * literally do nothing because it is the phase for player to do something before the delayed effect
                  * happens
                  */
-
+                player.getRestrict().put(CardData.ATTACK, 1);
             }
             case DELAYEDEFFECT -> {
                 /**
@@ -160,18 +160,31 @@ public class GameManager {
 
             case DRAW -> {
 
-                cardManager.drawCard(new CardDrawHandle(this,null,"draw 2 cards at turn start",player, CARD_COUNT_TURN_START, game.getDrawDeck()));
+                cardManager.drawCard(new CardDrawHandle(this, null, "draw 2 cards at turn start",player, CARD_COUNT_TURN_START, game.getDrawDeck()));
 
             }
             case ACTIVETURN -> {
+                CardSpace handCards = player.getHandCards();
+                CardSpace playableCards = new CardSpace();
+
+                //add all playable cards into list
+                for (Card card : handCards.getCards()) {
+                    PlayerHandle playerHandle = new PlayerHandle(this, card, "can play card", player);
+                    if (card.getCardData().isPlayable(playerHandle)) {
+                        playableCards.addCard(card);
+                    }
+                }
+                askForPlayCard(player, playableCards);
+
+
                 //TODO : display all playable cards and ask player to chose
                 //TODO : check CardUse playable
             }
             case DISCARD -> {
                 //TODO : event for discardododododo
-                if (player.getHandCards().getSum() > player.getCurrentHp()){
+                if (player.getHandCards().getSum() > player.getCurrentHp()) {
                     int drop = player.getHandCards().getSum() - player.getCurrentHp();
-                    CardAskHandle cardAskHandle = new CardAskHandle(this, null, "you have to drop " + drop + " Cards because of your HP", player, null, drop, game.getThrowDeck(), false);
+                    CardAskHandle cardAskHandle = new CardAskHandle(this, null, "you have to drop " + drop + " Cards because of your HP", player, player.getHandCards(), null, drop, game.getThrowDeck(), false);
                     gameController.askForDiscard(cardAskHandle);
                 }
             }
@@ -196,10 +209,32 @@ public class GameManager {
         //loop
         runPhases();
     }
+    private void askForPlayCard(Player player, CardSpace playableCards) {
+        CardAskHandle cardAskHandle = new CardAskHandle(this, null, "Pick a card to play or nothing for end turn", player, playableCards , null, 1, game.getTableDeck(), true);
+        if (gameController.askForDiscard(cardAskHandle)) {
+            Card card = game.getTableDeck().getCards().get(0);
+            CardUseHandle cardUseHandle = new CardUseHandle(this, card, "plays in active", player, new ArrayList<>(), true);
+            card.getCardData().apply(cardUseHandle);
+            playableCards.getCards().remove(card);
+            cleanTable();
+            askForPlayCard(player, playableCards);
+        }
+    }
     private void changePhase(Player player, Phase phase, String reason){
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, null, reason, player, player.getPhase(), phase);
         //EventType.PHASE_CHANGING.trigger(phaseChangeHandle);
         player.setPhase(phase);
+    }
+    private void cleanTable() {
+        StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
+        CardDeck throwDeck = game.getThrowDeck();
+        CardDeck tableDeck = game.getTableDeck();
+        for (Card card : game.getTableDeck().getCards()) {
+            hint.append(card.toString());
+            tableDeck.getCards().remove(card);
+            throwDeck.getCards().add(card);
+        }
+        debug(hint.toString());
     }
 
     //---------------getter----------

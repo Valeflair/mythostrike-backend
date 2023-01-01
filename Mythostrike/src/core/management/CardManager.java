@@ -47,14 +47,16 @@ public class CardManager {
         debug.delete(debug.length() - 1,debug.length() - 1);
         gameManager.debug(debug.toString());
     }
-    public void throwCard(Player player, ArrayList<Card> cards, CardDeck throwDeck, String reason){
+    public void throwCard(Player player, ArrayList<Card> cards, CardSpace fromSpace, CardList throwList, String reason){
         //TODO : call event for CardMoveEvent
         StringBuilder hint = new StringBuilder("Player " + player + " has dropped ");
         for (Card card : cards){
             hint.append(card.getName()).append("(").append(card.getSymbol()).append(" ").append(card.getPoint()).append(")");
             hint.append(",");
+            fromSpace.getCards().remove(card);
+            throwList.addCard(card);
         }
-        hint.deleteCharAt(hint.length());
+        hint.deleteCharAt(hint.length() - 1);
         gameManager.getGame().output(hint.toString());
     }
     public void moveCard(CardMoveHandle cardMoveHandle){
