@@ -1,10 +1,14 @@
 package core;
 
+import skill.Skill;
+import skill.TriggerSkill;
+import skill.TriggerSkillData;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public enum ChampionData {
-    ACHILLES("Achilles",4,new ArrayList<Skill>(List.of(new Skill(TriggerSkillData.REVENGE))),"")
+    ACHILLES("Achilles",4,new ArrayList<Skill>(List.of(new TriggerSkill(TriggerSkillData.REVENGE))),"")
     ,KRATOS("Kratos",5,new ArrayList<Skill>(),"")
     ,TERPSICHORE("Terpsichore",3,new ArrayList<Skill>(),"")
     ,POSEIDON("Poseidon",3,new ArrayList<Skill>(),"")

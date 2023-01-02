@@ -1,11 +1,14 @@
-package core;
+package skill;
 
+import core.Card;
+import core.CardSymbol;
+import core.Player;
 import core.management.GameManager;
-import events.EventType;
-import events.handle.CardAskHandle;
-import events.handle.DamageHandle;
-import events.handle.DamageType;
-import events.FunctionObserver;
+import skill.events.EventType;
+import skill.events.handle.CardAskHandle;
+import skill.events.handle.DamageHandle;
+import skill.events.handle.DamageType;
+import skill.events.FunctionObserver;
 
 import java.util.List;
 import java.util.function.Function;
@@ -40,10 +43,10 @@ public enum TriggerSkillData {
     private final String name;
     private final String description;
     private final boolean isActive;
-    private final FunctionObserver functionListener;
+    private final FunctionObserver<?> functionListener;
     private final List<EventType> events;
 
-    TriggerSkillData(String name, String description, boolean isActive,List<EventType> events, FunctionObserver functionListener) {
+    TriggerSkillData(String name, String description, boolean isActive, List<EventType> events, FunctionObserver<?> functionListener) {
         this.name = name;
         this.description = description;
         this.isActive = isActive;
@@ -63,7 +66,7 @@ public enum TriggerSkillData {
         return isActive;
     }
 
-    public FunctionObserver getFunctionListener() {
+    public FunctionObserver<?> getFunctionListener() {
         return functionListener;
     }
 

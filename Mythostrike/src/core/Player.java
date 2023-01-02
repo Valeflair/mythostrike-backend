@@ -1,5 +1,7 @@
 package core;
 
+import skill.Skill;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

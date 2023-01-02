@@ -1,24 +1,26 @@
-package core;
-
-import java.util.EventListener;
+package skill;
 
 
-public class Skill {
+import core.management.EventManager;
+
+public abstract class Skill {
     private String name;
     private String description;
     private boolean isActive;
-    private EventListener listener;
 
     public Skill(TriggerSkillData data) {
         this.name = data.getName();
         this.description = data.getDescription();
         this.isActive = data.isActive();
-        this.listener = data.getFunctionListener();
-
     }
 
-    public void initialEvent(){
+    public Skill(String name, String description, boolean isActive) {
+        this.name = name;
+        this.description = description;
+        this.isActive = isActive;
     }
+
+    public abstract void initialEvent(EventManager eventManager);
 
     public String getName() {
         return name;

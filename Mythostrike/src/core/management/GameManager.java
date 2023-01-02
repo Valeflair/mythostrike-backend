@@ -2,8 +2,9 @@ package core.management;
 
 import core.*;
 import core.Player;
-import events.*;
-import events.handle.*;
+import skill.Skill;
+import skill.events.*;
+import skill.events.handle.*;
 import Test.Main;
 
 import java.util.ArrayList;
@@ -52,12 +53,10 @@ public class GameManager {
         //phase_proceeding = new Event<PhaseHandle>(EventType.PHASE_PROCEEDING);
 
         game.output("Game Started, Player has following champions:");
-        for(Player player: players) {
-            game.output(player.getName()+" as Seat " + players.indexOf(player) + " has "+player.getChampion().getName() + "with skill:");
-            for(Skill skill : player.getSkills()){
-                game.output(skill.getName() +":"+skill.getDescription());
-
-                //@TODO : fix it with EventListener
+        for (Player player: players) {
+            game.output(player.getName()+ " as Seat " + players.indexOf(player) + " has "+player.getChampion().getName() + "with skill:");
+            for (Skill skill : player.getSkills()){
+                game.output(skill.getName() + ":" + skill.getDescription());
 
             }
 
@@ -129,7 +128,7 @@ public class GameManager {
         debug("Player " + player.getName() + " starts his phase " + player.getPhase());
 
 
-        //activate events
+        //activate skill.events
         //phase_start.onEvent(new PhaseHandle(this, null, "change phase", player, phase));
         /*
         EventType.PHASE_START.trigger(new PhaseHandle(this, null, "start of phase", player, phase));
@@ -165,15 +164,9 @@ public class GameManager {
             }
             case ACTIVETURN -> {
                 CardSpace handCards = player.getHandCards();
-                CardSpace playableCards = new CardSpace();
-
                 //add all playable cards into list
-                for (Card card : handCards.getCards()) {
-                    PlayerHandle playerHandle = new PlayerHandle(this, card, "can play card", player);
-                    if (card.getCardData().isPlayable(playerHandle)) {
-                        playableCards.addCard(card);
-                    }
-                }
+                CardSpace playableCards = getPlayableCards(player);
+
                 askForPlayCard(player, playableCards);
 
 
@@ -210,15 +203,31 @@ public class GameManager {
         runPhases();
     }
     private void askForPlayCard(Player player, CardSpace playableCards) {
+
+
         CardAskHandle cardAskHandle = new CardAskHandle(this, null, "Pick a card to play or nothing for end turn", player, playableCards , null, 1, game.getTableDeck(), true);
         if (gameController.askForDiscard(cardAskHandle)) {
             Card card = game.getTableDeck().getCards().get(0);
             CardUseHandle cardUseHandle = new CardUseHandle(this, card, "plays in active", player, new ArrayList<>(), true);
-            card.getCardData().apply(cardUseHandle);
-            playableCards.getCards().remove(card);
-            cleanTable();
-            askForPlayCard(player, playableCards);
+            if (card.getCardData().apply(cardUseHandle)) {
+                cleanTable();
+                //reduce a number of restrict
+                player.getRestrict().put(card.getCardData(), player.getRestrict().get(card.getCardData()) - 1);
+            }
+            askForPlayCard(game.getCurrentPlayer(), getPlayableCards(game.getCurrentPlayer()));
         }
+    }
+
+
+    private CardSpace getPlayableCards(Player player){
+        CardSpace playableCards = new CardSpace();
+        for (Card card : player.getHandCards().getCards()) {
+            PlayerHandle playerHandle = new PlayerHandle(this, card, "can play card", player);
+            if (card.getCardData().isPlayable(playerHandle)) {
+                playableCards.addCard(card);
+            }
+        }
+        return playableCards;
     }
     private void changePhase(Player player, Phase phase, String reason){
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, null, reason, player, player.getPhase(), phase);
@@ -229,11 +238,12 @@ public class GameManager {
         StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
         CardDeck throwDeck = game.getThrowDeck();
         CardDeck tableDeck = game.getTableDeck();
-        for (Card card : game.getTableDeck().getCards()) {
-            hint.append(card.toString());
-            tableDeck.getCards().remove(card);
+        for (Card card : tableDeck.getCards()) {
+            hint.append(card.toString()).append(",");
+
             throwDeck.getCards().add(card);
         }
+        tableDeck.getCards().clear();
         debug(hint.toString());
     }
 

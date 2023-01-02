@@ -1,4 +1,4 @@
-package events.handle;
+package skill.events.handle;
 
 import core.*;
 import core.management.GameManager;

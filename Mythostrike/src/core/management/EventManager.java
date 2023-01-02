@@ -2,10 +2,14 @@ package core.management;
 
 import core.Game;
 import core.Player;
-import events.Event;
-import events.EventType;
-import events.handle.*;
-import events.PhaseChangeHandle;
+import skill.events.Event;
+import skill.events.EventType;
+import skill.events.handle.*;
+import skill.events.PhaseChangeHandle;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class EventManager {
 
@@ -43,6 +47,7 @@ public class EventManager {
     private Event<CardUseHandle> cardUsed;
     private Event<CardUseHandle> targetConfirming;
     private Event<CardUseHandle> targetConfirmed;
+    private List<Event<?>> events;
 
 
 
@@ -80,6 +85,10 @@ public class EventManager {
         cardUsed = new Event<>(EventType.CARD_USED);
         targetConfirming = new Event<>(EventType.TARGET_CONFIRMING);
         targetConfirmed = new Event<>(EventType.TARGET_CONFIRMED);
+        events = new ArrayList<>();
+        events.add(gameStart);
+        events.add(turnStart);
+        events.add(phaseStart);
     }
 
     public GameManager getGameManager() {
@@ -213,4 +222,14 @@ public class EventManager {
     public Event<CardUseHandle> getTargetConfirmed() {
         return targetConfirmed;
     }
+
+    public Event<?> getEvent(EventType type) {
+        for (Event<?> event : events) {
+            if (event.getType().equals(type)) {
+                return event;
+            }
+        }
+        return null;
+    }
+
 }

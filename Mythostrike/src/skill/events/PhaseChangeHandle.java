@@ -1,10 +1,10 @@
-package events;
+package skill.events;
 
 import core.Card;
 import core.management.GameManager;
 import core.Phase;
 import core.Player;
-import events.handle.EventHandle;
+import skill.events.handle.EventHandle;
 
 public class PhaseChangeHandle extends EventHandle {
     Phase before;

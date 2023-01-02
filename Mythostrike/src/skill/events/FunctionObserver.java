@@ -1,4 +1,4 @@
-package events;
+package skill.events;
 
 import java.util.EventListener;
 import java.util.function.Function;

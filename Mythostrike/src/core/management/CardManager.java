@@ -1,8 +1,8 @@
 package core.management;
 
 import core.*;
-import events.handle.CardDrawHandle;
-import events.handle.CardMoveHandle;
+import skill.events.handle.CardDrawHandle;
+import skill.events.handle.CardMoveHandle;
 
 import java.util.ArrayList;
 

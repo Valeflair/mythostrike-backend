@@ -2,6 +2,7 @@ package Test;
 
 import core.*;
 import core.management.GameManager;
+import skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ public class Main {
     private static final String COMMAND_EMPTY = "";
     private static final int EMPTY_VALUE = -1;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
 
         if (args.length != 0) {
@@ -57,9 +58,7 @@ public class Main {
             }
         }
         pattern.shuffle();
-        for (Card card : pattern.getCards()) {
-            System.out.print(card.getSymbol().toString() + card.getPoint() + card.getName() + ";");
-        }
+
 
 
         //--------------------------------initialize---------------------------------

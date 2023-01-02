@@ -1,4 +1,4 @@
-package events;
+package skill.events;
 
 public enum EventType {
     //Function<Game,boolean>

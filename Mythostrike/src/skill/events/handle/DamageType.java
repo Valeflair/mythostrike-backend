@@ -1,4 +1,4 @@
-package events.handle;
+package skill.events.handle;
 
 public enum DamageType {
     NORMAL("normal"),FIRE("fire"),THUNDER("thunder");
