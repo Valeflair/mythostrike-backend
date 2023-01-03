@@ -10,8 +10,8 @@ public class PhaseChangeHandle extends EventHandle {
     Phase before;
     Phase after;
 
-    public PhaseChangeHandle(GameManager gameController, Card card, String reason, Player from, Phase before, Phase after) {
-        super(gameController, card, reason, from);
+    public PhaseChangeHandle(GameManager gameController, String reason, Player from, Phase before, Phase after) {
+        super(gameController, null, reason, from);
         this.before = before;
         this.after = after;
     }

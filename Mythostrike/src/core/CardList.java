@@ -3,7 +3,12 @@ package core;
 import java.util.ArrayList;
 
 public class CardList{
-    protected ArrayList<Card> cards = new ArrayList<Card>();
+    protected ArrayList<Card> cards;
+
+    public CardList(){cards = new ArrayList<>();}
+    public CardList(ArrayList<Card> cards){
+        cards = new ArrayList<>(cards);
+    }
 
     public void addCard(Card card){
         cards.add(card);

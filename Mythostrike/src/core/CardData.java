@@ -44,19 +44,20 @@ public enum CardData {
             }
             cardUseHandle.setCardUseConfirmed(true);
             for (Player target : pickTarget) {
-                AttackHandle attackHandle = new AttackHandle(gameManager, cardUseHandle.getCard(), "", player, target, null, 0);
+                AttackHandle attackHandle = new AttackHandle(gameManager, cardUseHandle.getCard(), "", player, target, 0);
                 gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_EFFECTED, attackHandle);
-                if (!attackHandle.isPrevented()) {
-                    gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
-                    CardAskHandle cardAskHandle = attackHandle.getDefendAskHandle();
-                    if (gameManager.getGameController().askForDiscard(cardAskHandle)) {
-                        attackHandle.setPrevented(true);
-                    } else {
-                        attackHandle.setPrevented(false);
-                        DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "attack damaged", player, target, 1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
-                        attackHandle.setDamageHandle(damageHandle);
-                        gameManager.getPlayerManager().applyDamage(damageHandle);
-                    }
+                if (attackHandle.isPrevented()) {
+                    return true;
+                }
+                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
+                CardAskHandle cardAskHandle = attackHandle.getDefendAskHandle();
+                if (gameManager.getGameController().askForDiscard(cardAskHandle)) {
+                    attackHandle.setPrevented(true);
+                } else {
+                    attackHandle.setPrevented(false);
+                    DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "attack damaged", player, target, 1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
+                    attackHandle.setDamageHandle(damageHandle);
+                    gameManager.getPlayerManager().applyDamage(damageHandle);
                 }
             }
             return true;

@@ -8,7 +8,6 @@ public abstract class EventHandle {
 
 
     private GameManager gameManager;
-
     private Card card;
     private String reason;
     private Player from;

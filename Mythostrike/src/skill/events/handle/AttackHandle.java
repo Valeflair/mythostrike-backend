@@ -15,10 +15,10 @@ public class AttackHandle extends EventHandle{
     int targetCount;
     DamageHandle damageHandle;
 
-    public AttackHandle(GameManager gameManager, Card card, String reason, Player from, Player to, Card defend, int extraDamage) {
+    public AttackHandle(GameManager gameManager, Card card, String reason, Player from, Player to, int extraDamage) {
         super(gameManager, card, reason, from);
         this.to = to;
-        this.defend = defend;
+        this.defend = null;
         this.extraDamage = extraDamage;
         isPrevented = false;
         defendAskHandle = new CardAskHandle(gameManager, card, "you get attacked, drop a defend or you get damage", to, to.getHandCards(), CardData.DEFEND, 1, gameManager.getGame().getTableDeck(), true);

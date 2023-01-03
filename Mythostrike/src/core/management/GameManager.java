@@ -230,7 +230,7 @@ public class GameManager {
         return playableCards;
     }
     private void changePhase(Player player, Phase phase, String reason){
-        PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, null, reason, player, player.getPhase(), phase);
+        PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, reason, player, player.getPhase(), phase);
         //EventType.PHASE_CHANGING.trigger(phaseChangeHandle);
         player.setPhase(phase);
     }

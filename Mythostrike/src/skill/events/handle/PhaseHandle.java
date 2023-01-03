@@ -8,8 +8,8 @@ import core.Player;
 public class PhaseHandle extends EventHandle{
     private Phase phase;
 
-    public PhaseHandle(GameManager gameController, Card card, String reason, Player from, Phase phase) {
-        super(gameController, card, reason, from);
+    public PhaseHandle(GameManager gameManager, String reason, Player from, Phase phase) {
+        super(gameManager, null, reason, from);
         this.phase = phase;
     }
 
