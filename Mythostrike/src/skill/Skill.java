@@ -3,24 +3,24 @@ package skill;
 
 import core.management.EventManager;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public abstract class Skill {
     private String name;
     private String description;
     private boolean isActive;
+    private Function<EventManager, Boolean> register;
 
-    public Skill(TriggerSkillData data) {
-        this.name = data.getName();
-        this.description = data.getDescription();
-        this.isActive = data.isActive();
-    }
-
-    public Skill(String name, String description, boolean isActive) {
+    public Skill(String name, String description, boolean isActive, Function<EventManager, Boolean> register) {
         this.name = name;
         this.description = description;
         this.isActive = isActive;
+        this.register = register;
     }
-
-    public abstract void initialEvent(EventManager eventManager);
+    public boolean init(EventManager eventManager) {
+        return register.apply(eventManager);
+    }
 
     public String getName() {
         return name;

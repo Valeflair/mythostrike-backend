@@ -3,27 +3,28 @@ package core;
 import skill.Skill;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Champion {
 
-    private static ArrayList<Champion> championPatterns = new ArrayList<Champion>();
+    private static List<Champion> championPatterns;
     private final String name;
     private final String picture;
     private final int maxHp;
-    private final ArrayList<Skill> skills;
+    private final List<Skill> skills;
 
-    public Champion(ChampionData data){
-        name = data.getName();
-        picture = data.getPicture();
-        maxHp = data.getMaxHp();
-        skills = data.getSkills();
+    public Champion(String name, String picture, int maxHp, List<Skill> skills) {
+        this.name = name;
+        this.picture = picture;
+        this.maxHp = maxHp;
+        this.skills = skills;
     }
 
-    public static ArrayList<Champion> getChampionPatterns() {
+    public static List<Champion> getChampionPatterns() {
         return championPatterns;
     }
 
-    public static void setChampionPatterns(ArrayList<Champion> championPatterns) {
+    public static void setChampionPatterns(List<Champion> championPatterns) {
         Champion.championPatterns = championPatterns;
     }
 
@@ -39,7 +40,7 @@ public class Champion {
         return maxHp;
     }
 
-    public ArrayList<Skill> getSkills() {
+    public List<Skill> getSkills() {
         return skills;
     }
 }

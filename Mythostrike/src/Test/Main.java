@@ -1,11 +1,13 @@
 package Test;
 
 import core.*;
+import core.Initialization.ChampionInitialize;
 import core.management.GameManager;
 import skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -39,11 +41,17 @@ public class Main {
         players.add(new Player("Jack"));
         players.add(new Player("Minh"));
 
+        GameManager gameManager = new GameManager(players, mode);
+
         //intial champs
-        ArrayList<Champion> champions = new ArrayList<Champion>();
+        List<Champion> champions = ChampionInitialize.initialize(gameManager.getEventManager());
+        /*
+        List<Champion> champions = new ArrayList<Champion>();
         for (ChampionData data: ChampionData.values()) {
             champions.add(new Champion(data));
         }
+         */
+
         //set default champ cause singleton
         Champion.setChampionPatterns(champions);
 
@@ -58,14 +66,13 @@ public class Main {
             }
         }
         pattern.shuffle();
-
+        gameManager.gameStart();
 
 
         //--------------------------------initialize---------------------------------
 
 
-        GameManager gameManager = new GameManager(players, mode);
-        gameManager.gameStart();
+
     }
 
     public static ArrayList<Card> askForCard(Player player, CardSpace fromSpace, int min, int max, boolean optional, String reason){

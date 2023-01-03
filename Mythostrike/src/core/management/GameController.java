@@ -35,21 +35,15 @@ public class GameController {
     }
     public ArrayList<Card> askForCard(CardAskHandle cardAskHandle) {
         Player player = cardAskHandle.getFrom();
-
         int amount = cardAskHandle.getAmount();
         boolean optional = cardAskHandle.isOptional();
         String reason = cardAskHandle.getReason();
         CardSpace fromSpace = new CardSpace();
-
         for (Card card : cardAskHandle.getFromSpace().getCards()) {
             if (cardAskHandle.getCardData() == null || card.isSame(cardAskHandle.getCardData())) {
                 fromSpace.addCard(card);
             }
         }
-
-
-
-
         ArrayList<Card> cards = Main.askForCard(player, fromSpace, amount, amount, optional, reason);
         String hint = "cards picked:";
         for (Card card : cards) {

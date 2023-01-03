@@ -142,13 +142,16 @@ public class Player {
         return delayedEffect;
     }
 
-    public Skill hasSkillByName(String skillName){
+    public Skill hasSkillByName(String skillName) {
         for (Skill skill:skills) {
-            if (skill.equals(skillName)){
+            if (skill.equals(skillName)) {
                 return skill;
             }
         }
         return null;
+    }
+    public boolean hasSkill(Skill skill) {
+        return skills.contains(skill);
     }
     public void setPhase(Phase phase){
         this.phase = phase;

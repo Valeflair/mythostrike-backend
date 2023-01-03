@@ -2,15 +2,16 @@ package core;
 
 import core.management.GameManager;
 import skill.events.handle.*;
+import skill.events.type.EventTypeAttack;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
 
 public enum CardData {
-    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASICCARD, new Function<skill.events.handle.PlayerHandle, Boolean>() {
+    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASICCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
         @Override
-        public Boolean apply(skill.events.handle.PlayerHandle handle) {
+        public Boolean apply(CardUseHandle handle) {
             Player player = handle.getFrom();
             ArrayList<Player> targets = new ArrayList<>();
             for (Player target : handle.getGameManager().getGame().getOtherPlayers(player)) {
@@ -19,7 +20,7 @@ public enum CardData {
                 }
             }
 
-            return !targets.isEmpty() && player.getRestrict().get(ATTACK) > 0 ;
+            return !targets.isEmpty() && player.getRestrict().get(ATTACK) > 0;
         }
     }, new Function<CardUseHandle, Boolean>() {
         @Override
@@ -44,9 +45,9 @@ public enum CardData {
             cardUseHandle.setCardUseConfirmed(true);
             for (Player target : pickTarget) {
                 AttackHandle attackHandle = new AttackHandle(gameManager, cardUseHandle.getCard(), "", player, target, null, 0);
-                gameManager.getEventManager().getAttackEffected().onEvent(attackHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_EFFECTED, attackHandle);
                 if (!attackHandle.isPrevented()) {
-                    gameManager.getEventManager().getAttackProceed().onEvent(attackHandle);
+                    gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
                     CardAskHandle cardAskHandle = attackHandle.getDefendAskHandle();
                     if (gameManager.getGameController().askForDiscard(cardAskHandle)) {
                         attackHandle.setPrevented(true);
@@ -60,23 +61,20 @@ public enum CardData {
             }
             return true;
         }
-    })
-    , DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASICCARD, Constant.conditionAlwaysFalse, Constant.functionDoNothing)
-    ;
+    }))
+    ,DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASICCARD, new Effect<>(false, false));
 
 
     private final String name;
     private final String description;
     private final CardType type;
-    private final Function<skill.events.handle.PlayerHandle, Boolean> condition;
-    private final Function<CardUseHandle, Boolean> function;
+    private Effect<CardUseHandle> effect;
 
-    CardData(String name, String description, CardType type, Function<skill.events.handle.PlayerHandle, Boolean> condition, Function<CardUseHandle, Boolean> function) {
+    CardData(String name, String description, CardType type, Effect<CardUseHandle> effect) {
         this.name = name;
         this.description = description;
         this.type = type;
-        this.condition = condition;
-        this.function = function;
+        this.effect = effect;
     }
 
     public String getName() {
@@ -91,44 +89,12 @@ public enum CardData {
         return type;
     }
 
-    public Function<CardUseHandle,Boolean> getFunction() {
-        return function;
+    public boolean isPlayable(CardUseHandle cardUseHandle) {
+        return effect.checkCondition(cardUseHandle);
     }
 
-    public boolean isPlayable(PlayerHandle playerHandle){
-
-        return condition.apply(playerHandle);
+    public boolean apply(CardUseHandle cardUseHandle) {
+        return effect.effect(cardUseHandle);
     }
 
-    public boolean apply(CardUseHandle cardUseHandle){
-       return function.apply(cardUseHandle);
-    }
-
-    /**
-     * needed to use a constant in the declaration of enum values.
-     */
-    private static class Constant{
-        public static final Function<PlayerHandle, Boolean> conditionAlwaysTrue = new Function<PlayerHandle, Boolean>() {
-            @Override
-            public Boolean apply(PlayerHandle player) {
-                return true;
-            }
-        };
-        public static final Function<PlayerHandle, Boolean> conditionAlwaysFalse = new Function<PlayerHandle, Boolean>() {
-            @Override
-            public Boolean apply(PlayerHandle player) {
-                return false;
-            }
-        };
-        public static final Function<CardUseHandle, Boolean> functionDoNothing = new Function<CardUseHandle, Boolean>() {
-            @Override
-            public Boolean apply(CardUseHandle cardUseHandle) {
-                if(!cardUseHandle.getGameManager().getGameController().askForConfirm(cardUseHandle.getFrom(), "confirm your card use of " + cardUseHandle.getCard().getName())){
-                    return false;
-                }
-                cardUseHandle.setCardUseConfirmed(true);
-                return true;
-            }
-        };
-    }
 }

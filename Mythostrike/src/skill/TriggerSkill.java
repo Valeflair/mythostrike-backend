@@ -1,53 +1,27 @@
 package skill;
 
-import core.Game;
-import core.Player;
+import core.Effect;
 import core.management.EventManager;
-import skill.events.Event;
-import skill.events.EventType;
-import skill.events.FunctionObserver;
-import skill.events.handle.PlayerHandle;
+import skill.events.handle.EventHandle;
+import skill.events.type.EventType;
 
-import java.lang.reflect.Type;
-import java.util.List;
+import java.util.function.Function;
 
-public class TriggerSkill<T> extends Skill {
-    private final FunctionObserver<?> functionListener;
-    private final List<EventType> events;
+public class TriggerSkill<T extends EventHandle, R extends EventType> extends Skill {
+    private final Effect<T> effect;
+    private final R eventType;
 
-
-    public TriggerSkill(TriggerSkillData data) {
-        super(data);
-        this.functionListener = data.getFunctionListener();
-        this.events = data.getEvents();
+    public TriggerSkill(String name, String description, boolean isActive, Function<EventManager, Boolean> register, Effect<T> effect, R eventType) {
+        super(name, description, isActive, register);
+        this.effect = effect;
+        this.eventType = eventType;
     }
 
-
-    public TriggerSkill(TriggerSkillData data, FunctionObserver<T> functionListener, List<EventType> events) {
-        super(data);
-        this.functionListener = functionListener;
-        this.events = events;
+    public Effect<T> getEffect() {
+        return effect;
     }
 
-    public TriggerSkill(String name, String description, boolean isActive, FunctionObserver<T> functionListener, List<EventType> events) {
-        super(name, description, isActive);
-        this.functionListener = functionListener;
-        this.events = events;
-    }
-
-    @Override
-    public void initialEvent(EventManager eventManager) {
-        for (EventType eventType : events) {
-            eventManager.getEvent(eventType);
-        }
-
-    }
-
-
-    public void initial(EventManager eventManager) {
-
-        for (EventType eventType : events) {
-            //TODO
-        }
+    public R getEventType() {
+        return eventType;
     }
 }

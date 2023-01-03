@@ -2,6 +2,7 @@ package core.management;
 
 import skill.events.handle.DamageHandle;
 import skill.events.handle.DamageType;
+import skill.events.type.EventTypeDamage;
 
 public class PlayerManager {
 
@@ -23,16 +24,17 @@ public class PlayerManager {
     DAMAGED,
     DAMAGE_COMPLETE,
          */
-            gameManager.getEventManager().getConfirmDamage().onEvent(damageHandle);
-            gameManager.getEventManager().getDamageForeseen().onEvent(damageHandle);
-            gameManager.getEventManager().getDamageCaused().onEvent(damageHandle);
+            gameManager.getEventManager().triggerEvent(EventTypeDamage.CONFIRM_DAMAGE, damageHandle);
+            gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_FORESEEN, damageHandle);
+            gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_CAUSED, damageHandle);
+
 
 
 
             if (!damageHandle.isPrevented()) {
-                gameManager.getEventManager().getDamageInflicted().onEvent(damageHandle);
-                gameManager.getEventManager().getBeforeDamageDone().onEvent(damageHandle);
-                gameManager.getEventManager().getDamageDone().onEvent(damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_INFLICTED, damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.BEFORE_DAMAGE_DONE, damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_DONE, damageHandle);
                 //reduce hp
                 damageHandle.getTo().setCurrentHp(damageHandle.getTo().getCurrentHp() - damageHandle.getDamage());
 
@@ -45,9 +47,9 @@ public class PlayerManager {
                 hint += " damage to Player " + damageHandle.getTo().getName();
                 hint += ", ouch! And he has now " + damageHandle.getTo().getCurrentHp() + " HP.";
                 gameManager.getGame().output(hint);
-                gameManager.getEventManager().getDamage().onEvent(damageHandle);
-                gameManager.getEventManager().getDamaged().onEvent(damageHandle);
-                gameManager.getEventManager().getDamageComplete().onEvent(damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE, damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGED, damageHandle);
+                gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_COMPLETE, damageHandle);
             }
 
         } else {

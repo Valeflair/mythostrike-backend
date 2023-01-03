@@ -3,12 +3,12 @@ package core.management;
 import core.*;
 import core.Player;
 import skill.Skill;
-import skill.events.*;
 import skill.events.handle.*;
 import Test.Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class GameManager {
 
@@ -55,9 +55,9 @@ public class GameManager {
         game.output("Game Started, Player has following champions:");
         for (Player player: players) {
             game.output(player.getName()+ " as Seat " + players.indexOf(player) + " has "+player.getChampion().getName() + "with skill:");
-            for (Skill skill : player.getSkills()){
+            for (Skill skill : player.getSkills()) {
                 game.output(skill.getName() + ":" + skill.getDescription());
-
+                skill.init(eventManager);
             }
 
             cardManager.drawCard(new CardDrawHandle(this, null, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,game.getDrawDeck()));
@@ -78,7 +78,7 @@ public class GameManager {
         game.setTableDeck(new CardDeck());
     }
     private void championSelect(ArrayList<Player> players) {
-        ArrayList<Champion> championList = Champion.getChampionPatterns();
+        List<Champion> championList = Champion.getChampionPatterns();
         for (Player player : players) {
 
             ArrayList<Champion> list = new ArrayList<Champion>();
@@ -219,11 +219,11 @@ public class GameManager {
     }
 
 
-    private CardSpace getPlayableCards(Player player){
+    private CardSpace getPlayableCards(Player player) {
         CardSpace playableCards = new CardSpace();
         for (Card card : player.getHandCards().getCards()) {
-            PlayerHandle playerHandle = new PlayerHandle(this, card, "can play card", player);
-            if (card.getCardData().isPlayable(playerHandle)) {
+            CardUseHandle cardUseHandle = new CardUseHandle(this, card, "check if card is playable", player, player, true );
+            if (card.getCardData().isPlayable(cardUseHandle)) {
                 playableCards.addCard(card);
             }
         }
