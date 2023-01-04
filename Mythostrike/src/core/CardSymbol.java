@@ -6,7 +6,7 @@ public enum CardSymbol {
     CLUB("Club"),
     HEART("Heart"),
     SPADE("Spade"),
-    NOSYMBOL("NoSymbol");
+    NO_SYMBOL("NoSymbol");
 
     private String name;
 
