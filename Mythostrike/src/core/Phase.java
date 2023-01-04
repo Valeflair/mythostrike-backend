@@ -2,11 +2,11 @@ package core;
 
 
 public enum Phase {
-    ROUNDSTART,
-    DELAYEDEFFECT,
+    ROUND_START,
+    DELAYED_EFFECTS,
     DRAW,
-    ACTIVETURN,
+    ACTIVE_TURN,
     DISCARD,
     FINISH,
-    NOTACTIVE
+    NOT_ACTIVE;
 }
