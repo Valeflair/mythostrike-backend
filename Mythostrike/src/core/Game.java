@@ -14,7 +14,6 @@ public class Game {
      */
     public static final int DRAWCARDCOUNT = 4;
     private GameManager gameManager;
-    private Player currentPlayer;
     private String console;
     private final ArrayList<Player> players;
     private CardDeck drawDeck;
@@ -41,7 +40,7 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return players.get(0);
     }
 
     public String getConsole() {
@@ -68,9 +67,6 @@ public class Game {
         return mode;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
     public void setDrawDeck(CardDeck drawDeck) {
         this.drawDeck = drawDeck;

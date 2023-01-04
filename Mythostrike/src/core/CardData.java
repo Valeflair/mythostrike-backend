@@ -62,9 +62,36 @@ public enum CardData {
             }
             return true;
         }
+    })),
+    DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASICCARD, new Effect<>(false, false)),
+    BLESS_OF_HECATE("Bless of Hecate", "draw 2 cards", CardType.SKILLCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
+        @Override
+        public Boolean apply(CardUseHandle cardUseHandle) {
+            return cardUseHandle.getFrom().getRestrict().get(BLESS_OF_HECATE) > 0;
+        }
+    }, new Function<CardUseHandle, Boolean>() {
+        @Override
+        public Boolean apply(CardUseHandle cardUseHandle) {
+            cardUseHandle.getGameManager().getCardManager().drawCard(new CardDrawHandle(cardUseHandle.getGameManager(), null, "uses bless of hecate, draw 2 cards", cardUseHandle.getFrom(), 2, cardUseHandle.getGameManager().getGame().getDrawDeck()));
+            cardUseHandle.setCardUseConfirmed(true);
+            return true;
+        }
+    })),
+    GOLDEN_APPLE("Golden Apple", "everyone in game heals 1 hp", CardType.SKILLCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
+        @Override
+        public Boolean apply(CardUseHandle cardUseHandle) {
+            return cardUseHandle.getFrom().getRestrict().get(GOLDEN_APPLE) > 0;
+        }
+    }, new Function<CardUseHandle, Boolean>() {
+        @Override
+        public Boolean apply(CardUseHandle cardUseHandle) {
+            for (Player player : cardUseHandle.getGameManager().getGame().getPlayers()){
+                cardUseHandle.getGameManager().getPlayerManager().applyDamage(new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "heals 1 hp by getting golden apple", cardUseHandle.getFrom(), player, -1, DamageType.NORMAL));
+            }
+            return true;
+        }
     }))
-    ,DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASICCARD, new Effect<>(false, false));
-
+    ;
 
     private final String name;
     private final String description;

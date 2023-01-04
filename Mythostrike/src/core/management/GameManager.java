@@ -63,10 +63,11 @@ public class GameManager {
             cardManager.drawCard(new CardDrawHandle(this, null, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,game.getDrawDeck()));
 
         }
-
-        game.setCurrentPlayer(players.get(0));
         game.getCurrentPlayer().setPhase(Phase.ROUNDSTART);
-        runPhases();
+        //TODO : while game.getfinish()
+        while (true) {
+            runPhases();
+        }
 
     }
     public Champion championSelect(Player player, ArrayList<Champion> championList){
@@ -108,6 +109,7 @@ public class GameManager {
         //player get its own identity
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setIdentity(mode.getIdentities().get(i));
+            debug("player " + players.get(i).getName() + " has identity " + mode.getIdentities().get(i));
         }
         //set godking into the first place
         if (!players.get(0).getIdentity().equals(Identity.GODKING) &&
@@ -139,8 +141,10 @@ public class GameManager {
         switch (phase) {
             case NOTACTIVE -> {
                 //go to next player
-                Player nextPlayer = game.getPlayers().get((game.getPlayers().indexOf(player) + 1) % game.getPlayers().size());
-                game.setCurrentPlayer(nextPlayer);
+                game.getPlayers().remove(player);
+                game.getPlayers().add(player);
+                //Player nextPlayer = game.getPlayers().get((game.getPlayers().indexOf(player) + 1) % game.getPlayers().size());
+                Player nextPlayer = game.getPlayers().get(0);
                 changePhase(nextPlayer,Phase.ROUNDSTART,"change phase because he is the next player");
             }
             case ROUNDSTART -> {
@@ -199,8 +203,7 @@ public class GameManager {
                 changePhase(player, phases[i+1],"proceed to next phase");
             }
         }
-        //loop
-        runPhases();
+
     }
     private void askForPlayCard(Player player, CardSpace playableCards) {
 
