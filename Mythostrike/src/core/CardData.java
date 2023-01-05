@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 
 public enum CardData {
-    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASICCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
+    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASIC, new Effect<>(new Function<CardUseHandle, Boolean>() {
         @Override
         public Boolean apply(CardUseHandle handle) {
             Player player = handle.getFrom();
@@ -63,8 +63,8 @@ public enum CardData {
             return true;
         }
     })),
-    DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASICCARD, new Effect<>(false, false)),
-    BLESS_OF_HECATE("Bless of Hecate", "draw 2 cards", CardType.SKILLCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
+    DEFEND("Defend", "use when you are getting Attack, prevent the damage of Attack", CardType.BASIC, new Effect<>(false, false)),
+    BLESS_OF_HECATE("Bless of Hecate", "draw 2 cards", CardType.SKILL, new Effect<>(new Function<CardUseHandle, Boolean>() {
         @Override
         public Boolean apply(CardUseHandle cardUseHandle) {
             return cardUseHandle.getFrom().getRestrict().get(BLESS_OF_HECATE) > 0;
@@ -77,7 +77,7 @@ public enum CardData {
             return true;
         }
     })),
-    GOLDEN_APPLE("Golden Apple", "everyone in game heals 1 hp", CardType.SKILLCARD, new Effect<>(new Function<CardUseHandle, Boolean>() {
+    GOLDEN_APPLE("Golden Apple", "everyone in game heals 1 hp", CardType.SKILL, new Effect<>(new Function<CardUseHandle, Boolean>() {
         @Override
         public Boolean apply(CardUseHandle cardUseHandle) {
             return cardUseHandle.getFrom().getRestrict().get(GOLDEN_APPLE) > 0;

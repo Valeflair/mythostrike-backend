@@ -6,5 +6,4 @@ public enum CardType {
     WEAPON,
     ARMOR,
     DELAYED_EFFECT
-
 }

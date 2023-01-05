@@ -37,7 +37,7 @@ public class Player {
         isChained = false;
         skills = new ArrayList<Skill>();
         this.name = name;
-        Phase phase = Phase.NOTACTIVE;
+        Phase phase = Phase.NOT_ACTIVE;
     }
 
     public String getName() {

@@ -63,7 +63,7 @@ public class GameManager {
             cardManager.drawCard(new CardDrawHandle(this, null, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,game.getDrawDeck()));
 
         }
-        game.getCurrentPlayer().setPhase(Phase.ROUNDSTART);
+        game.getCurrentPlayer().setPhase(Phase.ROUND_START);
         //TODO : while game.getfinish()
         while (true) {
             runPhases();
@@ -139,22 +139,22 @@ public class GameManager {
         //ROUNDSTART,DELAYEDEFFECT,DRAW,ACTIVETURN,DISCARD,FINISH,NOTACTIVE
          */
         switch (phase) {
-            case NOTACTIVE -> {
+            case NOT_ACTIVE -> {
                 //go to next player
                 game.getPlayers().remove(player);
                 game.getPlayers().add(player);
                 //Player nextPlayer = game.getPlayers().get((game.getPlayers().indexOf(player) + 1) % game.getPlayers().size());
                 Player nextPlayer = game.getPlayers().get(0);
-                changePhase(nextPlayer,Phase.ROUNDSTART,"change phase because he is the next player");
+                changePhase(nextPlayer,Phase.ROUND_START,"change phase because he is the next player");
             }
-            case ROUNDSTART -> {
+            case ROUND_START -> {
                 /**
                  * literally do nothing because it is the phase for player to do something before the delayed effect
                  * happens
                  */
                 player.getRestrict().put(CardData.ATTACK, 1);
             }
-            case DELAYEDEFFECT -> {
+            case DELAYED_EFFECTS -> {
                 /**
                  * count if player has delayedEffect
                  */
@@ -166,7 +166,7 @@ public class GameManager {
                 cardManager.drawCard(new CardDrawHandle(this, null, "draw 2 cards at turn start",player, CARD_COUNT_TURN_START, game.getDrawDeck()));
 
             }
-            case ACTIVETURN -> {
+            case ACTIVE_TURN -> {
                 CardSpace handCards = player.getHandCards();
                 //add all playable cards into list
                 CardSpace playableCards = getPlayableCards(player);
@@ -213,10 +213,14 @@ public class GameManager {
             Card card = game.getTableDeck().getCards().get(0);
             CardUseHandle cardUseHandle = new CardUseHandle(this, card, "plays in active", player, new ArrayList<>(), true);
             if (card.getCardData().apply(cardUseHandle)) {
+                if (cardUseHandle.isCardUseConfirmed()) {
+                    player.getHandCards().getCards().remove(cardUseHandle.getCard());
+                }
                 cleanTable();
                 //reduce a number of restrict
                 player.getRestrict().put(card.getCardData(), player.getRestrict().get(card.getCardData()) - 1);
             }
+
             askForPlayCard(game.getCurrentPlayer(), getPlayableCards(game.getCurrentPlayer()));
         }
     }
