@@ -1,8 +1,8 @@
 package core.Initialization;
 
-import core.Champion;
-import core.management.EventManager;
-import skill.Skill;
+import core.game.Champion;
+import core.game.management.EventManager;
+import core.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.List;

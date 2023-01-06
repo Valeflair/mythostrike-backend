@@ -1,9 +1,12 @@
 package Test;
 
-import core.*;
 import core.Initialization.ChampionInitialize;
-import core.management.GameManager;
-import skill.Skill;
+import core.card.*;
+import core.game.Champion;
+import core.game.Mode;
+import core.game.Player;
+import core.game.management.GameManager;
+import core.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +48,8 @@ public class Main {
         players.add(new Player("Babokiller"));
 
         GameManager gameManager = new GameManager(players, mode);
+
+
 
         //intial champs
         List<Champion> champions = ChampionInitialize.initialize(gameManager.getEventManager());
