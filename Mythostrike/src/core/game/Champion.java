@@ -8,13 +8,11 @@ public class Champion {
 
     private static List<Champion> championPatterns;
     private final String name;
-    private final String picture;
     private final int maxHp;
     private final List<Skill> skills;
 
-    public Champion(String name, String picture, int maxHp, List<Skill> skills) {
+    public Champion(String name, int maxHp, List<Skill> skills) {
         this.name = name;
-        this.picture = picture;
         this.maxHp = maxHp;
         this.skills = skills;
     }
@@ -31,9 +29,6 @@ public class Champion {
         return name;
     }
 
-    public String getPicture() {
-        return picture;
-    }
 
     public int getMaxHp() {
         return maxHp;

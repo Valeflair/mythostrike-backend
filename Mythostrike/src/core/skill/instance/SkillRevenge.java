@@ -15,13 +15,12 @@ import core.skill.events.type.EventTypeDamage;
 import java.util.function.Function;
 
 public class SkillRevenge extends Skill {
-    private static final String name = "Revenge";
+    public static final String name = "Revenge";
     private static final String description = "when you get damage, you can judge a card, if its not red, dealer has to drop a card or get 1 damage by you";
 
     private static final boolean isActive = false;
 
-    private static final Function<DamageHandle, Boolean> condition = damageHandle ->
-            damageHandle.getTo().hasSkillByName("revenge") != null;
+    private static final Function<DamageHandle, Boolean> condition = damageHandle -> true;
     private static final Function<DamageHandle, Boolean> function = damageHandle -> {
         Player victim = damageHandle.getTo();
         Player dealer = damageHandle.getFrom();
@@ -64,7 +63,7 @@ public class SkillRevenge extends Skill {
     };
 
     public SkillRevenge() {
-        super(name, description, isActive);
+        super(name, description, isActive, effect);
     }
 
 

@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 
 public enum CardData {
-    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASIC, new Effect<>(new Function<CardUseHandle, Boolean>() {
+    ATTACK("Attack", "pick a player, he has to play defend or get 1 damage", CardType.BASIC,    new Effect<>(new Function<CardUseHandle, Boolean>() {
         @Override
         public Boolean apply(CardUseHandle handle) {
             Player player = handle.getFrom();

@@ -1,6 +1,5 @@
 package Test;
 
-import core.Initialization.ChampionInitialize;
 import core.card.*;
 import core.game.Champion;
 import core.game.Mode;

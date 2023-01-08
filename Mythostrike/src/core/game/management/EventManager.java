@@ -60,6 +60,9 @@ public class EventManager {
 
     }
     public void registerEvent(EventTypeDamage eventType, Effect<DamageHandle> effect) {
+        mapDamageHandle.get(effect.getEventType()).add(effect);
+
+
         if (!mapDamageHandle.get(eventType).contains(effect)) {
             mapDamageHandle.get(eventType).add(effect);
         }
@@ -70,6 +73,7 @@ public class EventManager {
         }
     }
     public void registerEvent(EventTypePhaseChange eventType, Effect<PhaseChangeHandle> effect) {
+
         if (!mapPhaseChangeHandle.get(eventType).contains(effect)) {
             mapPhaseChangeHandle.get(eventType).add(effect);
         }

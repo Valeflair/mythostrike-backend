@@ -3,22 +3,19 @@ package core.skill;
 
 import core.game.Effect;
 import core.game.management.EventManager;
-import core.skill.events.handle.EventHandle;
-import core.skill.events.type.EventType;
 import core.skill.events.handle.*;
-import jdk.jfr.Event;
 
-import java.util.function.Function;
-
-public abstract class Skill {
+public class Skill {
     private final String name;
     private final String description;
     private final boolean isActive;
+    private final Effect<?> effect;
 
-    public Skill(String name, String description, boolean isActive) {
+    public Skill(String name, String description, boolean isActive, Effect<?> effect) {
         this.name = name;
         this.description = description;
         this.isActive = isActive;
+        this.effect = effect;
     }
 
     public boolean register(EventManager eventManager) {return false;}
@@ -58,7 +55,6 @@ public abstract class Skill {
     public String getDescription() {
         return description;
     }
-
     public boolean isActive() {
         return isActive;
     }

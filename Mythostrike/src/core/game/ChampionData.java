@@ -1,8 +1,11 @@
 package core.game;
 
 import core.skill.Skill;
+import core.skill.events.handle.CardAskHandle;
+import core.skill.events.handle.DamageHandle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public enum ChampionData {
 
@@ -21,6 +24,12 @@ public enum ChampionData {
         this.maxHp = maxHp;
         this.skills = skills;
         this.picture = picture;
+        List<Effect<?>> effects = new ArrayList<>();
+        effects.add(new Effect<DamageHandle>());
+        effects.add(new Effect<CardAskHandle>());
+        for (Effect<?> effect : effects) {
+
+        }
     }
 
     public String getName() {
