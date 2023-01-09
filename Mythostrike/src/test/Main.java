@@ -1,7 +1,8 @@
-package Test;
+package test;
 
 import core.*;
 import core.Initialization.ChampionInitialize;
+import core.activity.Card;
 import core.management.GameManager;
 import skill.Skill;
 

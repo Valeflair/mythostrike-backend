@@ -1,6 +1,6 @@
 package skill.events.handle;
 
-import core.Card;
+import core.activity.Card;
 import core.CardDeck;
 import core.management.GameManager;
 import core.Player;

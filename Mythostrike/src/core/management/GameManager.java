@@ -2,9 +2,10 @@ package core.management;
 
 import core.*;
 import core.Player;
+import core.activity.Card;
 import skill.Skill;
 import skill.events.handle.*;
-import Test.Main;
+import test.Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +82,7 @@ public class GameManager {
         List<Champion> championList = Champion.getChampionPatterns();
         for (Player player : players) {
 
-            ArrayList<Champion> list = new ArrayList<Champion>();
+            ArrayList<Champion> list = new ArrayList<>();
             //ask player to pick champion
             int championCount = PICK_CHAMPION_COUNT;
             if (player.getIdentity().equals(Identity.GODKING)) {

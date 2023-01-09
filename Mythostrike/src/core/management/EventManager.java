@@ -3,6 +3,7 @@ package core.management;
 import core.Effect;
 import core.Game;
 import core.Player;
+import core.activity.PassiveSkill;
 import skill.events.type.*;
 import skill.events.handle.*;
 import skill.events.handle.PhaseChangeHandle;
@@ -16,17 +17,23 @@ public class EventManager {
 
     private GameManager gameManager;
 
-    private HashMap<EventTypeDamage, ArrayList<Effect<DamageHandle>>> mapDamageHandle;
-    private HashMap<EventTypePhase, ArrayList<Effect<PhaseHandle>>> mapPhaseHandle;
-    private HashMap<EventTypePhaseChange, ArrayList<Effect<PhaseChangeHandle>>> mapPhaseChangeHandle;
-    private HashMap<EventTypeCardUse, ArrayList<Effect<CardUseHandle>>> mapCardUseHandle;
-    private HashMap<EventTypeCardDraw, ArrayList<Effect<CardDrawHandle>>> mapCardDrawHandle;
-    private HashMap<EventTypeCardAsk, ArrayList<Effect<CardAskHandle>>> mapCardAskHandle;
-    private HashMap<EventTypeCardMove, ArrayList<Effect<CardMoveHandle>>> mapCardMoveHandle;
-    private HashMap<EventTypeAttack, ArrayList<Effect<AttackHandle>>> mapAttackHandle;
+    private HashMap<EventTypeDamage, List<PassiveSkill>> mapDamageHandle;
+    private HashMap<EventTypePhase, List<PassiveSkill>> mapPhaseHandle;
+    private HashMap<EventTypePhaseChange, List<PassiveSkill>> mapPhaseChangeHandle;
+    private HashMap<EventTypeCardUse, List<PassiveSkill>> mapCardUseHandle;
+    private HashMap<EventTypeCardDraw, List<PassiveSkill>> mapCardDrawHandle;
+    private HashMap<EventTypeCardAsk, List<PassiveSkill>> mapCardAskHandle;
+    private HashMap<EventTypeCardMove,List<PassiveSkill>> mapCardMoveHandle;
+    private HashMap<EventTypeAttack, List<PassiveSkill>> mapAttackHandle;
+
+
+
+
+
 
     public EventManager(GameManager gameManager) {
         this.gameManager = gameManager;
+
 
         mapDamageHandle = new HashMap<>();
         for (EventTypeDamage eventType : EventTypeDamage.values()) {
@@ -63,104 +70,58 @@ public class EventManager {
 
 
     }
-    public void registerEvent(EventTypeDamage eventType, Effect<DamageHandle> effect) {
-        if (!mapDamageHandle.get(eventType).contains(effect)) {
-            mapDamageHandle.get(eventType).add(effect);
-        }
+
+    public void registerEvent(EventTypeDamage type, PassiveSkill passiveSkill) {
+        mapDamageHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypePhase eventType, Effect<PhaseHandle> effect) {
-        if (!mapPhaseHandle.get(eventType).contains(effect)) {
-            mapPhaseHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypePhase type, PassiveSkill passiveSkill) {
+        mapPhaseHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypePhaseChange eventType, Effect<PhaseChangeHandle> effect) {
-        if (!mapPhaseChangeHandle.get(eventType).contains(effect)) {
-            mapPhaseChangeHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypePhaseChange type, PassiveSkill passiveSkill) {
+        mapPhaseChangeHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypeCardUse eventType, Effect<CardUseHandle> effect) {
-        if (!mapCardUseHandle.get(eventType).contains(effect)) {
-            mapCardUseHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypeCardUse type, PassiveSkill passiveSkill) {
+        mapCardUseHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypeCardDraw eventType, Effect<CardDrawHandle> effect) {
-        if (!mapCardDrawHandle.get(eventType).contains(effect)) {
-            mapCardDrawHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypeCardAsk type, PassiveSkill passiveSkill) {
+        mapCardAskHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypeCardAsk eventType, Effect<CardAskHandle> effect) {
-        if (!mapCardAskHandle.get(eventType).contains(effect)) {
-            mapCardAskHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypeCardMove type, PassiveSkill passiveSkill) {
+        mapCardMoveHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypeCardMove eventType, Effect<CardMoveHandle> effect) {
-        if (!mapCardMoveHandle.get(eventType).contains(effect)) {
-            mapCardMoveHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypeCardDraw type, PassiveSkill passiveSkill) {
+        mapCardDrawHandle.get(type).add(passiveSkill);
     }
-    public void registerEvent(EventTypeAttack eventType, Effect<AttackHandle> effect) {
-        if (!mapAttackHandle.get(eventType).contains(effect)) {
-            mapAttackHandle.get(eventType).add(effect);
-        }
+    public void registerEvent(EventTypeAttack type, PassiveSkill passiveSkill) {
+        mapAttackHandle.get(type).add(passiveSkill);
     }
+
+
 
     public void triggerEvent(EventTypeDamage type, DamageHandle handle) {
-        for (Effect<DamageHandle> effect : mapDamageHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapDamageHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypePhase type, PhaseHandle handle) {
-        for (Effect<PhaseHandle> effect : mapPhaseHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapPhaseHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypePhaseChange type, PhaseChangeHandle handle) {
-        for (Effect<PhaseChangeHandle> effect : mapPhaseChangeHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapPhaseChangeHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypeCardUse type, CardUseHandle handle) {
-        for (Effect<CardUseHandle> effect : mapCardUseHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapCardUseHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypeCardDraw type, CardDrawHandle handle) {
-        for (Effect<CardDrawHandle> effect : mapCardDrawHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapCardDrawHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypeCardAsk type, CardAskHandle handle) {
-        for (Effect<CardAskHandle> effect : mapCardAskHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapCardAskHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypeCardMove type, CardMoveHandle handle) {
-        for (Effect<CardMoveHandle> effect : mapCardMoveHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapCardMoveHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
     public void triggerEvent(EventTypeAttack type, AttackHandle handle) {
-        for (Effect<AttackHandle> effect : mapAttackHandle.get(type)) {
-            if (effect.checkCondition(handle)) {
-                effect.effect(handle);
-            }
-        }
+        mapAttackHandle.get(type).forEach(PassiveSkill -> { if (PassiveSkill.checkCondition(handle)) { PassiveSkill.activate(); } });
     }
-
 
 
     public GameManager getGameManager() {

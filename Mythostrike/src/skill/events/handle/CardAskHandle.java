@@ -1,6 +1,7 @@
 package skill.events.handle;
 
 import core.*;
+import core.activity.Card;
 import core.management.GameManager;
 
 public class CardAskHandle extends EventHandle{

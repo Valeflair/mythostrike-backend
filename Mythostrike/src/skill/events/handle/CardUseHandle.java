@@ -1,18 +1,19 @@
 package skill.events.handle;
 
-import core.Card;
+import core.activity.Card;
 import core.management.GameManager;
 import core.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardUseHandle extends EventHandle{
 
-    ArrayList<Player> to;
+    List<Player> to;
     boolean isHandCard;
     boolean cardUseConfirmed;
 
-    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, ArrayList<Player> to, boolean isHandCard) {
+    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, List<Player> to, boolean isHandCard) {
         super(gameManager, card, reason, from);
         this.to = to;
         this.isHandCard = isHandCard;
@@ -21,17 +22,17 @@ public class CardUseHandle extends EventHandle{
 
     public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, Player to, boolean isHandCard) {
         super(gameManager, card, reason, from);
-        this.to = new ArrayList<Player>();
+        this.to = new ArrayList<>();
         this.to.add(to);
         this.isHandCard = isHandCard;
         cardUseConfirmed = false;
     }
 
-    public ArrayList<Player> getTo() {
+    public List<Player> getTo() {
         return to;
     }
 
-    public void setTo(ArrayList<Player> to) {
+    public void setTo(List<Player> to) {
         this.to = to;
     }
 

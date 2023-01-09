@@ -1,44 +1,74 @@
 package core;
 
-import skill.Skill;
+import core.activity.ActiveSkill;
+import core.activity.PassiveSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Player {
-    String name;
-    Champion champion;
-    int currentHp;
-    int maxHp;
-    Identity identity;
-    Phase phase;
-    CardSpace handCards;
-    CardSpace equipment;
-    CardSpace delayedEffect;
-    HashMap<CardData,Integer> restrict;
-    HashMap<CardData,Boolean> immunity;
-    ArrayList<Skill> skills;
-    boolean isAlive;
-    boolean isChained;
+    public static final HashMap<String, Integer> DEFAULT_RESTRICT = new HashMap<>();
+    public static final HashMap<String, Boolean> DEFAULT_IMMUNITY = new HashMap<>();
 
-    public Player(String name){
-        restrict = new HashMap<CardData,Integer>();
-        immunity = new HashMap<CardData,Boolean>();
-        for (CardData cardData : CardData.values()) {
-            restrict.put(cardData, 1000);
-            immunity.put(cardData, false);
-        }
+    private String name;
+    private Champion champion;
+    private int currentHp;
+    private int maxHp;
+    private Identity identity;
+    private CardSpace handCards;
+    private CardSpace equipment;
+    private CardSpace delayedEffect;
+    private HashMap<String,Integer> permanentRestrict;
+    private HashMap<String,Boolean> permanentImmunity;
+    private HashMap<String,Integer> restrict;
+    private HashMap<String,Boolean> immunity;
+    private List<ActiveSkill> activeSkills;
+    private List<PassiveSkill> passiveSkills;
+    private boolean isAlive;
+
+    public Player(String name) {
+        permanentRestrict = new HashMap<String, Integer>(DEFAULT_RESTRICT);
+        permanentImmunity = new HashMap<String, Boolean>(DEFAULT_IMMUNITY);
+        resetRestrict();
+        resetImmunity();
         handCards = new CardSpace();
         equipment = new CardSpace();
         delayedEffect = new CardSpace();
-        Card isNightmared;
-        Card weapon;
         isAlive = true;
-        isChained = false;
-        skills = new ArrayList<Skill>();
+        activeSkills = new ArrayList<>();
+        passiveSkills = new ArrayList<>();
         this.name = name;
-        Phase phase = Phase.NOTACTIVE;
     }
+
+    public void setChampion(Champion champion) {
+        this.champion = champion;
+    }
+
+    public void increaseCurrentHp(int value) {
+        currentHp += value;
+    }
+    public void decreaseCurrentHp(int value) {
+        currentHp -= value;
+    }
+    public void resetRestrict() { restrict = new HashMap<>(permanentRestrict); }
+    public void resetImmunity() { immunity = new HashMap<>(permanentImmunity); }
+    public boolean isRestricted(String cardName) {
+        return restrict.get(cardName) <= 0;
+    }
+    public boolean isImmune(String cardName) { return immunity.get(cardName); }
+    public void decreaseUseTime(String cardName) { restrict.put(cardName, restrict.get(cardName) - 1); }
+
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public void setIdentity(Identity identity) {
+        this.identity = identity;
+    }
+
+
 
     public String getName() {
         return name;
@@ -48,115 +78,46 @@ public class Player {
         return champion;
     }
 
-    public void initialChampions(Champion champion) {
-        this.champion = champion;
-        maxHp = champion.getMaxHp();
-        skills.addAll(champion.getSkills());
-    }
-
     public int getCurrentHp() {
         return currentHp;
-    }
-
-    public void setCurrentHp(int currentHp) {
-        this.currentHp = currentHp;
     }
 
     public int getMaxHp() {
         return maxHp;
     }
 
-    public void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
-    }
-
     public Identity getIdentity() {
         return identity;
-    }
-
-    public void setIdentity(Identity identity) {
-        this.identity = identity;
     }
 
     public CardSpace getHandCards() {
         return handCards;
     }
 
-    public void setHandCards(CardSpace handCards) {
-        this.handCards = handCards;
-    }
-
     public CardSpace getEquipment() {
         return equipment;
-    }
-
-    public void setEquipment(CardSpace equipment) {
-        this.equipment = equipment;
-    }
-
-    public CardSpace getDelayEffect() {
-        return delayedEffect;
-    }
-
-    public void setDelayEffect(CardSpace delayedEffect) {
-        this.delayedEffect = delayedEffect;
-    }
-
-    public HashMap<CardData, Integer> getRestrict() {
-        return restrict;
-    }
-
-    public void setRestrict(HashMap<CardData, Integer> restrict) {
-        this.restrict = restrict;
-    }
-
-    public HashMap<CardData, Boolean> getImmunity() {
-        return immunity;
-    }
-
-    public void setImmunity(HashMap<CardData, Boolean> immunity) {
-        this.immunity = immunity;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public boolean isChained() {
-        return isChained;
-    }
-
-    public void setChained(boolean chained) {
-        isChained = chained;
-    }
-
-    public ArrayList<Skill> getSkills() {
-        return skills;
     }
 
     public CardSpace getDelayedEffect() {
         return delayedEffect;
     }
 
-    public Skill hasSkillByName(String skillName) {
-        for (Skill skill:skills) {
-            if (skill.equals(skillName)) {
-                return skill;
-            }
-        }
-        return null;
+    public List<ActiveSkill> getActiveSkills() {
+        return activeSkills;
     }
-    public boolean hasSkill(Skill skill) {
-        return skills.contains(skill);
+
+    public List<PassiveSkill> getPassiveSkills() {
+        return passiveSkills;
     }
-    public void setPhase(Phase phase){
-        this.phase = phase;
+
+    public boolean isAlive() {
+        return isAlive;
     }
-    public Phase getPhase() {
-        return phase;
+    public HashMap<String, Integer> getPermanentRestrict() {
+        return permanentRestrict;
+    }
+
+    public HashMap<String, Boolean> getPermanentImmunity() {
+        return permanentImmunity;
     }
 }

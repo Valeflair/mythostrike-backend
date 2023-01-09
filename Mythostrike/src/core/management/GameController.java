@@ -1,9 +1,10 @@
 package core.management;
 
 import core.*;
+import core.activity.Card;
 import skill.Skill;
 import skill.events.handle.CardAskHandle;
-import Test.Main;
+import test.Main;
 
 import java.util.ArrayList;
 

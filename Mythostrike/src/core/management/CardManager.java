@@ -1,6 +1,7 @@
 package core.management;
 
 import core.*;
+import core.activity.Card;
 import skill.events.handle.CardDrawHandle;
 import skill.events.handle.CardMoveHandle;
 
