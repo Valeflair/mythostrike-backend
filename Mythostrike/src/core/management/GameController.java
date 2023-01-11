@@ -14,10 +14,12 @@ public class GameController {
     public GameController(GameManager gameManager) {
         this.gameManager = gameManager;
     }
+
     public boolean askForSkillInvoke(Player player, Skill skill) {
         String hint = "do you want to active Skill" + skill.getName() + "?";
         return Main.askForConfirm(player, hint);
     }
+
     public boolean askForDiscard(CardAskHandle cardAskHandle) {
         Player player = cardAskHandle.getFrom();
         int count = cardAskHandle.getAmount();
@@ -34,6 +36,7 @@ public class GameController {
             return true;
         }
     }
+
     public ArrayList<Card> askForCard(CardAskHandle cardAskHandle) {
         Player player = cardAskHandle.getFrom();
         int amount = cardAskHandle.getAmount();
@@ -52,13 +55,16 @@ public class GameController {
         }
         System.out.println(hint);
         return cards;
-        }
-    public ArrayList<Player> askForChosePlayer (Player player, ArrayList < Player > targetPlayers,int min, int max,
-        boolean optional, String reason) {
-            return Main.askForChosePlayer(player, targetPlayers, min, max, optional, reason);
-        }
-    public boolean askForConfirm (Player player, String reason){
-            return Main.askForConfirm(player, reason);
-        }
+    }
+
+    public ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max,
+                                               boolean optional, String reason) {
+        return Main.askForChosePlayer(player, targetPlayers, min, max, optional, reason);
+    }
+
+
+    public boolean askForConfirm (Player player, String reason) {
+        return Main.askForConfirm(player, reason);
+    }
 }
 

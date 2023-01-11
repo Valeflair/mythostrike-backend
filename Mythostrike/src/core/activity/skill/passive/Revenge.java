@@ -24,17 +24,18 @@ public class Revenge extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
-        return damageHandle.getTo().equals(getPlayer());
+        return damageHandle.getTo().hasSkill("Revenge");
     }
 
     @Override
     public void clickedConfirmButton(boolean confirm) {
-        if (confirm) { activate(); }
+        if (confirm) { use(); }
     }
 
     @Override
     public void activate() {
-
-
+        //activate skill?
+        hightlightConfirmButton(confirm);
     }
+
 }

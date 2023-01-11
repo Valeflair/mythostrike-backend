@@ -159,8 +159,9 @@ public class GameManager {
             }
 
             case DRAW -> {
-
+                //eventmanager.triggerEvent(PhaseStart, PhaseHandle)
                 cardManager.drawCard(new CardDrawHandle(this, null, "draw 2 cards at turn start",player, CARD_COUNT_TURN_START, game.getDrawDeck()));
+                //eventmanager.triggerEvent(PhaseStart)
 
             }
             case ACTIVETURN -> {
