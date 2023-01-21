@@ -35,19 +35,14 @@ public class Main {
          *-------------------------------test part--------------------------------
          *------------------------------------------------------------------------
          */
-        Mode mode = Mode.IDENTITY_FOR_FIVE;
+        Mode mode = Mode.ONE_VERSUS_ONE;
 
         //initial players
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<Player>();
         players.add(new Player("Jack"));
         players.add(new Player("Minh"));
-        players.add(new Player("Laito"));
-        players.add(new Player("Fuhara"));
-        players.add(new Player("Babokiller"));
 
         GameManager gameManager = new GameManager(players, mode);
-
-
 
         //intial champs
         List<Champion> champions = ChampionInitialize.initialize(gameManager.getEventManager());
@@ -65,27 +60,12 @@ public class Main {
         CardDeck pattern = new CardDeck();
         CardDeck.setPatternDeck(pattern);
         CardSymbol[] symbols = {CardSymbol.CLUB, CardSymbol.DIAMOND, CardSymbol.HEART, CardSymbol.SPADE};
-
-        //atk
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < 40; i++) {
             pattern.addCard(new Card(CardData.ATTACK, symbols[i % 4], i % 13 + 1));
             if (i % 2 == 0) {
-
+                pattern.addCard(new Card(CardData.DEFEND, symbols[(i / 2) % 4], (i / 2) % 13 + 1));
             }
         }
-        //def
-        for (int i = 0; i < 10; i++) {
-            pattern.addCard(new Card(CardData.DEFEND, symbols[i % 4], i % 13 + 1));
-        }
-        //bless
-        for (int i = 7; i < 10; i++) {
-            pattern.addCard(new Card(CardData.BLESS_OF_HECATE, symbols[i % 4], i % 13 + 1));
-        }
-        //golden apple
-        for (int i = 8; i < 10; i++) {
-            pattern.addCard(new Card(CardData.GOLDEN_APPLE, symbols[i % 4], i % 13 + 1));
-        }
-
         pattern.shuffle();
         gameManager.gameStart();
 
