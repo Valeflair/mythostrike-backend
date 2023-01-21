@@ -1,11 +1,10 @@
-package Test;
+package test;
 
-import core.card.*;
-import core.game.Champion;
-import core.game.Mode;
-import core.game.Player;
-import core.game.management.GameManager;
-import core.skill.Skill;
+import core.*;
+import core.Initialization.ChampionInitialize;
+import core.activity.Card;
+import core.management.GameManager;
+import skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;

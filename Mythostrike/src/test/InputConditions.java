@@ -1,4 +1,4 @@
-package Test;
+package test;
     /**
      * the collection of set containing the information, representing which kind of inputs are allowed
      *

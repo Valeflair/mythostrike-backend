@@ -1,5 +1,7 @@
 package core.card;
 
+import core.activity.Card;
+
 import java.util.ArrayList;
 
 public class CardSpace extends CardList {
