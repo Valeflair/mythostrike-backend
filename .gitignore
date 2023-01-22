@@ -24,6 +24,11 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
+HELP.md
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 ##############################
 ## Gradle
 ##############################
@@ -72,6 +77,11 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 ##############################
 ## Visual Studio Code
 ##############################
@@ -87,3 +97,12 @@ nb-configuration.xml
 ## Special
 ##############################
 .VSCodeCounter
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
