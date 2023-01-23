@@ -8,7 +8,6 @@ import java.security.Principal;
 @RestController
 public class AuthentificationController {
 
-
     @GetMapping
     public String home(Principal principal) {
         return "Hello, " + principal.getName();
