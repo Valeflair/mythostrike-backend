@@ -1,12 +1,17 @@
-package core.activity.skill.card;
+package com.mythostrike.model.game.core.activity.skill.card;
 
-import core.CardSymbol;
-import core.CardType;
-import core.Player;
-import core.activity.Card;
-import core.management.GameManager;
-import skill.events.handle.*;
-import skill.events.type.EventTypeAttack;
+
+import com.mythostrike.model.game.core.CardSymbol;
+import com.mythostrike.model.game.core.CardType;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.skill.events.handle.AttackHandle;
+import com.mythostrike.model.game.skill.events.handle.CardAskHandle;
+import com.mythostrike.model.game.skill.events.handle.CardUseHandle;
+import com.mythostrike.model.game.skill.events.handle.DamageHandle;
+import com.mythostrike.model.game.skill.events.handle.DamageType;
+import com.mythostrike.model.game.skill.events.type.EventTypeAttack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +92,9 @@ public class Attack extends Card {
                 attackHandle.setPrevented(true);
             } else {
                 attackHandle.setPrevented(false);
-                DamageHandle damageHandle = new DamageHandle(handle.getGameManager(), handle.getCard(), "attack damaged", player, target, 1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
+                DamageHandle damageHandle =
+                    new DamageHandle(handle.getGameManager(), handle.getCard(), "attack damaged", player, target,
+                        1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
                 attackHandle.setDamageHandle(damageHandle);
                 gameManager.getPlayerManager().applyDamage(damageHandle);
             }

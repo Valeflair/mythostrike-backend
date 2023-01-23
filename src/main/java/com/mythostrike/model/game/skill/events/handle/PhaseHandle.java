@@ -1,10 +1,11 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.management.GameManager;
-import core.Phase;
-import core.Player;
 
-public class PhaseHandle extends EventHandle{
+import com.mythostrike.model.game.core.Phase;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.management.GameManager;
+
+public class PhaseHandle extends EventHandle {
     private Phase phase;
 
     public PhaseHandle(GameManager gameManager, String reason, Player from, Phase phase) {

@@ -1,8 +1,9 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.management.GameManager;
-import core.Player;
+
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
 
 public abstract class EventHandle {
 
@@ -43,11 +44,12 @@ public abstract class EventHandle {
         this.from = from;
     }
 
-    public void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager;
-    }
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
 

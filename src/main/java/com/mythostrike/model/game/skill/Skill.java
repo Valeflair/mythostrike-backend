@@ -1,10 +1,8 @@
-package skill;
+package com.mythostrike.model.game.skill;
 
-
-import core.management.EventManager;
+import com.mythostrike.model.game.core.management.EventManager;
 
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public abstract class Skill {
     private String name;
@@ -18,6 +16,7 @@ public abstract class Skill {
         this.isActive = isActive;
         this.register = register;
     }
+
     public boolean init(EventManager eventManager) {
         return register.apply(eventManager);
     }
@@ -41,7 +40,6 @@ public abstract class Skill {
     public boolean equals(String name) {
         return this.name.equals(name);
     }
-
 
 
 }

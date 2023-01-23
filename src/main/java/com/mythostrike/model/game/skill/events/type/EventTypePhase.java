@@ -1,6 +1,6 @@
-package skill.events.type;
+package com.mythostrike.model.game.skill.events.type;
 
-public enum EventTypePhase implements EventType{
+public enum EventTypePhase implements EventType {
     PHASE_START,
     PHASE_PROCEEDING,
     PHASE_END

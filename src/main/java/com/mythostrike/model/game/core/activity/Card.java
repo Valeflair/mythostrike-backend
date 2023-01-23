@@ -1,8 +1,8 @@
-package core.activity;
+package com.mythostrike.model.game.core.activity;
 
-import core.CardData;
-import core.CardSymbol;
-import core.CardType;
+
+import com.mythostrike.model.game.core.CardSymbol;
+import com.mythostrike.model.game.core.CardType;
 
 public abstract class Card extends Activity {
 

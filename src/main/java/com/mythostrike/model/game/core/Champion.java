@@ -1,8 +1,7 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import skill.Skill;
+import com.mythostrike.model.game.skill.Skill;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Champion {

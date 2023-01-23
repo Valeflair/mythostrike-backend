@@ -1,17 +1,19 @@
-package core.management;
+package com.mythostrike.model.game.core.management;
 
-import skill.events.handle.DamageHandle;
-import skill.events.handle.DamageType;
-import skill.events.type.EventTypeDamage;
+
+import com.mythostrike.model.game.skill.events.handle.DamageHandle;
+import com.mythostrike.model.game.skill.events.handle.DamageType;
+import com.mythostrike.model.game.skill.events.type.EventTypeDamage;
 
 public class PlayerManager {
 
     private GameManager gameManager;
 
-    public PlayerManager(GameManager gameManager){
+    public PlayerManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-    public void applyDamage(DamageHandle damageHandle){
+
+    public void applyDamage(DamageHandle damageHandle) {
         if (damageHandle.getDamage() > 0) {
                     /*
     CONFIRM_DAMAGE,
@@ -27,8 +29,6 @@ public class PlayerManager {
             gameManager.getEventManager().triggerEvent(EventTypeDamage.CONFIRM_DAMAGE, damageHandle);
             gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_FORESEEN, damageHandle);
             gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_CAUSED, damageHandle);
-
-
 
 
             if (!damageHandle.isPrevented()) {

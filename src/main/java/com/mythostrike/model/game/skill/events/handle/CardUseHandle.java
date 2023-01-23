@@ -1,26 +1,28 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.management.GameManager;
-import core.Player;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardUseHandle extends EventHandle{
+public class CardUseHandle extends EventHandle {
 
     List<Player> to;
     boolean isHandCard;
     boolean cardUseConfirmed;
 
-    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, List<Player> to, boolean isHandCard) {
+    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, List<Player> to,
+                         boolean isHandCard) {
         super(gameManager, card, reason, from);
         this.to = to;
         this.isHandCard = isHandCard;
         cardUseConfirmed = false;
     }
 
-    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, Player to, boolean isHandCard) {
+    public CardUseHandle(GameManager gameManager, Card card, String reason, Player from, Player to,
+                         boolean isHandCard) {
         super(gameManager, card, reason, from);
         this.to = new ArrayList<>();
         this.to.add(to);

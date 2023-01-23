@@ -1,9 +1,8 @@
-package core.activity;
+package com.mythostrike.model.game.core.activity;
 
 
-import core.Player;
-import core.management.EventManager;
-
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.management.EventManager;
 
 public abstract class PassiveSkill extends Activity {
 
@@ -14,7 +13,10 @@ public abstract class PassiveSkill extends Activity {
         this.player = player;
     }
 
-    public Player getPlayer() { return player; }
+    public Player getPlayer() {
+        return player;
+    }
 
-    public void register(EventManager eventManager) { }
+    public void register(EventManager eventManager) {
+    }
 }

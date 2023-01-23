@@ -1,8 +1,6 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import skill.events.handle.CardUseHandle;
-import skill.events.handle.EventHandle;
-import skill.events.handle.PlayerHandle;
+import com.mythostrike.model.game.skill.events.handle.EventHandle;
 
 import java.util.function.Function;
 
@@ -69,6 +67,7 @@ public class Effect<T extends EventHandle> {
     public Boolean checkCondition(T handle) {
         return condition.apply(handle);
     }
+
     public Boolean effect(T handle) {
         return function.apply(handle);
     }

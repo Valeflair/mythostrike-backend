@@ -1,15 +1,15 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
 public enum DamageType {
-    NORMAL("normal"),FIRE("fire"),THUNDER("thunder");
+    NORMAL("normal"), FIRE("fire"), THUNDER("thunder");
 
     private final String name;
 
-    DamageType(String name){
+    DamageType(String name) {
         this.name = name;
-    };
+    }
 
-    public String toString(){
+    public String toString() {
         return name;
     }
 }

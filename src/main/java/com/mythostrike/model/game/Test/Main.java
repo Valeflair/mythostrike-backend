@@ -1,10 +1,17 @@
-package test;
+package com.mythostrike.model.game.Test;
 
-import core.*;
-import core.Initialization.ChampionInitialize;
-import core.activity.Card;
-import core.management.GameManager;
-import skill.Skill;
+import com.mythostrike.model.game.core.CardData;
+import com.mythostrike.model.game.core.CardDeck;
+import com.mythostrike.model.game.core.CardList;
+import com.mythostrike.model.game.core.CardSpace;
+import com.mythostrike.model.game.core.CardSymbol;
+import com.mythostrike.model.game.core.Champion;
+import com.mythostrike.model.game.core.Initialization.ChampionInitialize;
+import com.mythostrike.model.game.core.Mode;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,73 +80,78 @@ public class Main {
         //--------------------------------initialize---------------------------------
 
 
-
     }
 
-    public static ArrayList<Card> askForCard(Player player, CardSpace fromSpace, int min, int max, boolean optional, String reason){
+    public static ArrayList<Card> askForCard(Player player, CardSpace fromSpace, int min, int max, boolean optional,
+                                             String reason) {
         outputPlayerIsOn(player);
         System.out.println(reason);
-        System.out.println("you have to pick "+min+"~"+max+"Card from Space:"+"reason:" + reason +"\n"+"CardSpace:");
-        if (optional){
+        System.out.println(
+            "you have to pick " + min + "~" + max + "Card from Space:" + "reason:" + reason + "\n" + "CardSpace:");
+        if (optional) {
             System.out.println("you can ");
         }
 
         displayCardList(fromSpace);
         InputConditions conditions = new InputConditions();
-        conditions.update(min,max,0,fromSpace.getSum()-1,reason,false,optional);
+        conditions.update(min, max, 0, fromSpace.getSum() - 1, reason, false, optional);
         Integer[] pick = readNext(conditions);
         ArrayList<Card> cards = new ArrayList<Card>();
-        for (int i = 0; i < pick.length; i++){
+        for (int i = 0; i < pick.length; i++) {
             cards.add(fromSpace.getCards().get(pick[i]));
         }
         return cards;
     }
-    public static Champion championSelect(Player player, ArrayList<Champion> championList){
+
+    public static Champion championSelect(Player player, ArrayList<Champion> championList) {
         outputPlayerIsOn(player);
-        for (int i = 0; i < championList.size() ; i++){
+        for (int i = 0; i < championList.size(); i++) {
             Champion champion = championList.get(i);
-            System.out.print("Champ"+i+":"+ champion.getName()+", Skills:");
-            for (Skill skill : champion.getSkills()){
-                System.out.print("," + skill.getName()+":"+skill.getDescription());
+            System.out.print("Champ" + i + ":" + champion.getName() + ", Skills:");
+            for (Skill skill : champion.getSkills()) {
+                System.out.print("," + skill.getName() + ":" + skill.getDescription());
             }
             System.out.println();
         }
         InputConditions conditions = new InputConditions();
-        conditions.update(1,1,0,championList.size()-1,"Select your champion",false,false);
+        conditions.update(1, 1, 0, championList.size() - 1, "Select your champion", false, false);
         Integer[] pick = readNext(conditions);
 
         return championList.get(pick[0]);
     }
-    public static boolean askForConfirm(Player player, String reason){
+
+    public static boolean askForConfirm(Player player, String reason) {
         outputPlayerIsOn(player);
         System.out.println(reason);
         InputConditions conditions = new InputConditions();
-        conditions.update(1,1,0,1,"0 for no and 1 for yes",false, false);
+        conditions.update(1, 1, 0, 1, "0 for no and 1 for yes", false, false);
         Integer[] pick = readNext(conditions);
         return pick[0] == 1;
     }
-    public static ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max, boolean optional, String reason) {
+
+    public static ArrayList<Player> askForChosePlayer(Player player, ArrayList<Player> targetPlayers, int min, int max,
+                                                      boolean optional, String reason) {
         outputPlayerIsOn(player);
         System.out.println("Players: ");
-        for (int i = 0; i < targetPlayers.size(); i++){
+        for (int i = 0; i < targetPlayers.size(); i++) {
             System.out.print(i + " : " + targetPlayers.get(i).getName() + ", ");
         }
         String hint = "You have to pick " + min + " ~ " + max + " Player(s) for " + reason;
         InputConditions conditions = new InputConditions();
-        conditions.update(min,max,0,targetPlayers.size()-1,reason,false,optional);
+        conditions.update(min, max, 0, targetPlayers.size() - 1, reason, false, optional);
         Integer[] pick = readNext(conditions);
         ArrayList<Player> pickPlayers = new ArrayList<>();
-        for (Integer index : pick){
+        for (Integer index : pick) {
             pickPlayers.add(targetPlayers.get(index));
         }
         return pickPlayers;
     }
 
 
-
-    private static void outputPlayerIsOn(Player player){
+    private static void outputPlayerIsOn(Player player) {
         System.out.println("--------Player:" + player.getName() + " on Action--------");
     }
+
     private static Integer[] readNext(InputConditions conditions) {
         Scanner scanner = new Scanner(System.in);
         String input = "";
@@ -149,7 +161,7 @@ public class Main {
                 boolean invalid = false;
                 input = scanner.nextLine();
 
-                if(input.equals("") && conditions.isAllowEmpty()){
+                if (input.equals("") && conditions.isAllowEmpty()) {
                     return new Integer[0];
                 }
 
@@ -164,9 +176,9 @@ public class Main {
                     }
 
                     if ((inputConvert[i] > conditions.getRangeMax()
-                            || inputConvert[i] < conditions.getRangeMin()
-                            || (inputConvert[i] < 0 && !inputSplit[i].equals(COMMAND_EMPTY))
-                            || (!conditions.isAllowEmpty() && inputSplit[i].equals(COMMAND_EMPTY)))) {
+                        || inputConvert[i] < conditions.getRangeMin()
+                        || (inputConvert[i] < 0 && !inputSplit[i].equals(COMMAND_EMPTY))
+                        || (!conditions.isAllowEmpty() && inputSplit[i].equals(COMMAND_EMPTY)))) {
 
                         invalid = true;
                         System.out.println("err 2");
@@ -176,29 +188,32 @@ public class Main {
                 }
 
                 if (((inputConvert.length >= conditions.getAmountMin())
-                        && inputConvert.length <= conditions.getAmountMax())
-                        && (conditions.isAllowDuplicate() || !arrayHasDuplicate(inputConvert))) {
+                    && inputConvert.length <= conditions.getAmountMax())
+                    && (conditions.isAllowDuplicate() || !arrayHasDuplicate(inputConvert))) {
 
                 } else {
                     invalid = true;
                     System.out.println("err 2");
                 }
-                if(!invalid) {
+                if (!invalid) {
                     return inputConvert;
                 }
             } catch (NumberFormatException ignored) {
             }
         }
     }
+
     private static void displayCardList(CardList cardList) {
         for (int i = 0; i < cardList.getCards().size(); i++) {
             System.out.print(i + "th:" + cardToString(cardList.getCards().get(i)) + ",");
         }
         System.out.println();
     }
-    private static String cardToString(Card card){
+
+    private static String cardToString(Card card) {
         return card.getName() + "(" + card.getSymbol().getShort() + card.getPoint() + ")";
     }
+
     private static <T> boolean arrayHasDuplicate(T[] input) {
         HashSet<T> checkSet = new HashSet<>();
         for (T object : input) {
@@ -208,4 +223,4 @@ public class Main {
         }
         return false;
     }
-    }
+}

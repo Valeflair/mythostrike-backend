@@ -1,11 +1,12 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.CardData;
-import core.management.GameManager;
-import core.Player;
 
-public class AttackHandle extends EventHandle{
+import com.mythostrike.model.game.core.CardData;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
+
+public class AttackHandle extends EventHandle {
 
     Player to;
     Card defend;
@@ -21,7 +22,8 @@ public class AttackHandle extends EventHandle{
         this.defend = null;
         this.extraDamage = extraDamage;
         isPrevented = false;
-        defendAskHandle = new CardAskHandle(gameManager, card, "you get attacked, drop a defend or you get damage", to, to.getHandCards(), CardData.DEFEND, 1, gameManager.getGame().getTableDeck(), true);
+        defendAskHandle = new CardAskHandle(gameManager, card, "you get attacked, drop a defend or you get damage", to,
+            to.getHandCards(), CardData.DEFEND, 1, gameManager.getGame().getTableDeck(), true);
         targetCount = 1;
     }
 

@@ -1,4 +1,4 @@
-package core;
+package com.mythostrike.model.game.core;
 
 public enum CardSymbol {
 
@@ -19,6 +19,6 @@ public enum CardSymbol {
     }
 
     public String getShort() {
-        return name.substring(0,1);
+        return name.substring(0, 1);
     }
 }

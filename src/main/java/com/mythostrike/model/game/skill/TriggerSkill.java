@@ -1,9 +1,9 @@
-package skill;
+package com.mythostrike.model.game.skill;
 
-import core.Effect;
-import core.management.EventManager;
-import skill.events.handle.EventHandle;
-import skill.events.type.EventType;
+import com.mythostrike.model.game.core.Effect;
+import com.mythostrike.model.game.core.management.EventManager;
+import com.mythostrike.model.game.skill.events.handle.EventHandle;
+import com.mythostrike.model.game.skill.events.type.EventType;
 
 import java.util.function.Function;
 
@@ -11,7 +11,8 @@ public class TriggerSkill<T extends EventHandle, R extends EventType> extends Sk
     private final Effect<T> effect;
     private final R eventType;
 
-    public TriggerSkill(String name, String description, boolean isActive, Function<EventManager, Boolean> register, Effect<T> effect, R eventType) {
+    public TriggerSkill(String name, String description, boolean isActive, Function<EventManager, Boolean> register,
+                        Effect<T> effect, R eventType) {
         super(name, description, isActive, register);
         this.effect = effect;
         this.eventType = eventType;

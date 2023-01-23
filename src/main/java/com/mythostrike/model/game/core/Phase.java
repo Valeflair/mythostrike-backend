@@ -1,4 +1,4 @@
-package core;
+package com.mythostrike.model.game.core;
 
 
 public enum Phase {

@@ -1,4 +1,4 @@
-package skill.events.type;
+package com.mythostrike.model.game.skill.events.type;
 
 
 public enum EventTypeAttack implements EventType {

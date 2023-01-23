@@ -1,6 +1,7 @@
-package core.activity.skill.active;
+package com.mythostrike.model.game.core.activity.skill.active;
 
-import core.activity.ActiveSkill;
+
+import com.mythostrike.model.game.core.activity.ActiveSkill;
 
 public class Warrior extends ActiveSkill {
 

@@ -1,10 +1,14 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.*;
-import core.activity.Card;
-import core.management.GameManager;
 
-public class CardAskHandle extends EventHandle{
+import com.mythostrike.model.game.core.CardData;
+import com.mythostrike.model.game.core.CardList;
+import com.mythostrike.model.game.core.CardSpace;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
+
+public class CardAskHandle extends EventHandle {
 
     CardData cardData;
     CardSpace fromSpace;
@@ -13,7 +17,8 @@ public class CardAskHandle extends EventHandle{
     boolean optional;
     CardList targetList;
 
-    public CardAskHandle(GameManager gameManager, Card card, String reason, Player from, CardSpace fromSpace, CardData cardData, int amount, CardList targetList, boolean optional) {
+    public CardAskHandle(GameManager gameManager, Card card, String reason, Player from, CardSpace fromSpace,
+                         CardData cardData, int amount, CardList targetList, boolean optional) {
         super(gameManager, card, reason, from);
         this.cardData = cardData;
         this.amount = amount;

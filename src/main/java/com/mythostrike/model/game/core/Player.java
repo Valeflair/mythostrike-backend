@@ -1,7 +1,8 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import core.activity.ActiveSkill;
-import core.activity.PassiveSkill;
+
+import com.mythostrike.model.game.core.activity.ActiveSkill;
+import com.mythostrike.model.game.core.activity.PassiveSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +20,10 @@ public class Player {
     private CardSpace handCards;
     private CardSpace equipment;
     private CardSpace delayedEffect;
-    private HashMap<String,Integer> permanentRestrict;
-    private HashMap<String,Boolean> permanentImmunity;
-    private HashMap<String,Integer> restrict;
-    private HashMap<String,Boolean> immunity;
+    private HashMap<String, Integer> permanentRestrict;
+    private HashMap<String, Boolean> permanentImmunity;
+    private HashMap<String, Integer> restrict;
+    private HashMap<String, Boolean> immunity;
     private List<ActiveSkill> activeSkills;
     private List<PassiveSkill> passiveSkills;
     private boolean isAlive;
@@ -48,16 +49,30 @@ public class Player {
     public void increaseCurrentHp(int value) {
         currentHp += value;
     }
+
     public void decreaseCurrentHp(int value) {
         currentHp -= value;
     }
-    public void resetRestrict() { restrict = new HashMap<>(permanentRestrict); }
-    public void resetImmunity() { immunity = new HashMap<>(permanentImmunity); }
+
+    public void resetRestrict() {
+        restrict = new HashMap<>(permanentRestrict);
+    }
+
+    public void resetImmunity() {
+        immunity = new HashMap<>(permanentImmunity);
+    }
+
     public boolean isRestricted(String cardName) {
         return restrict.get(cardName) <= 0;
     }
-    public boolean isImmune(String cardName) { return immunity.get(cardName); }
-    public void decreaseUseTime(String cardName) { restrict.put(cardName, restrict.get(cardName) - 1); }
+
+    public boolean isImmune(String cardName) {
+        return immunity.get(cardName);
+    }
+
+    public void decreaseUseTime(String cardName) {
+        restrict.put(cardName, restrict.get(cardName) - 1);
+    }
 
 
     public void setMaxHp(int maxHp) {
@@ -67,7 +82,6 @@ public class Player {
     public void setIdentity(Identity identity) {
         this.identity = identity;
     }
-
 
 
     public String getName() {
@@ -113,6 +127,7 @@ public class Player {
     public boolean isAlive() {
         return isAlive;
     }
+
     public HashMap<String, Integer> getPermanentRestrict() {
         return permanentRestrict;
     }

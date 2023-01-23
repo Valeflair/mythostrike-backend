@@ -1,9 +1,9 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.management.GameManager;
-import core.Player;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.management.GameManager;
 
-public class PlayerHandle extends EventHandle{
+public class PlayerHandle extends EventHandle {
 
     public PlayerHandle(GameManager gameManager, String reason, Player from) {
         super(gameManager, null, reason, from);

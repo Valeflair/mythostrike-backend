@@ -1,13 +1,10 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import skill.Skill;
-import skill.TriggerSkill;
+import com.mythostrike.model.game.skill.Skill;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public enum ChampionData {
-
 
 
     ;
@@ -41,11 +38,11 @@ public enum ChampionData {
         return picture;
     }
 
-    public void addSkill(Skill skill){
+    public void addSkill(Skill skill) {
         skills.add(skill);
     }
 
-    public void detachSkill(Skill skill){
+    public void detachSkill(Skill skill) {
         skills.remove(skill);
     }
 }

@@ -1,9 +1,9 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.management.GameManager;
-import core.Player;
 
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
 
 public class DamageHandle extends EventHandle {
     private Player to;
@@ -11,7 +11,8 @@ public class DamageHandle extends EventHandle {
     private boolean isPrevented;
     private DamageType damageType;
 
-    public DamageHandle(GameManager gameController, Card card, String reason, Player from, Player to, int damage, DamageType damageType) {
+    public DamageHandle(GameManager gameController, Card card, String reason, Player from, Player to, int damage,
+                        DamageType damageType) {
         super(gameController, card, reason, from);
         this.to = to;
         this.damage = damage;

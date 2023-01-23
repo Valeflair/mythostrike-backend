@@ -1,30 +1,34 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import core.activity.Card;
+import com.mythostrike.model.game.core.activity.Card;
 
 import java.util.ArrayList;
 
 public class CardSpace extends CardList {
 
-    public CardSpace(){
+    public CardSpace() {
         cards = new ArrayList<Card>();
     }
 
-    public void addCard(Card card){
+    public void addCard(Card card) {
         cards.add(card);
     }
-    public void subtractCard(Card card){
+
+    public void subtractCard(Card card) {
         cards.remove(card);
     }
-    public Card subtractCard(int index){
+
+    public Card subtractCard(int index) {
         Card card = cards.get(index);
         cards.remove(card);
         return card;
     }
-    public int getSum(){
+
+    public int getSum() {
         return cards.size();
     }
-    public ArrayList<Card> getCards(){
+
+    public ArrayList<Card> getCards() {
         return cards;
     }
 }

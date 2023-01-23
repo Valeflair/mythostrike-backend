@@ -1,6 +1,6 @@
-package core;
+package com.mythostrike.model.game.core;
 
-import core.management.GameManager;
+import com.mythostrike.model.game.core.management.GameManager;
 
 import java.util.ArrayList;
 
@@ -23,14 +23,13 @@ public class Game {
     private Mode mode;
 
 
-
-    public Game(ArrayList<Player> players, Mode mode, GameManager gameManager){
+    public Game(ArrayList<Player> players, Mode mode, GameManager gameManager) {
         this.players = players;
         this.mode = mode;
         this.gameManager = gameManager;
     }
 
-    public void output(String output){
+    public void output(String output) {
         System.out.println(output);
         console += output;
         console += "\n";

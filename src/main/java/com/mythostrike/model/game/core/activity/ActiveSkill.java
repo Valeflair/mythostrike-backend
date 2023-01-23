@@ -1,4 +1,4 @@
-package core.activity;
+package com.mythostrike.model.game.core.activity;
 
 public abstract class ActiveSkill extends Activity {
 

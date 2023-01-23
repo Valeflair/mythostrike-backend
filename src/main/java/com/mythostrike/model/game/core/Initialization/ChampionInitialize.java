@@ -1,8 +1,8 @@
-package core.Initialization;
+package com.mythostrike.model.game.core.Initialization;
 
-import core.Champion;
-import core.management.EventManager;
-import skill.Skill;
+import com.mythostrike.model.game.core.Champion;
+import com.mythostrike.model.game.core.management.EventManager;
+import com.mythostrike.model.game.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.List;

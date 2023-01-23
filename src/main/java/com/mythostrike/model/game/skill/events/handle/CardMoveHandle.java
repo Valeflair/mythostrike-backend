@@ -1,26 +1,29 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.CardList;
-import core.management.GameManager;
-import core.Player;
+
+import com.mythostrike.model.game.core.CardList;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
 
 public class CardMoveHandle extends EventHandle {
     Player to;
     CardList fromList;
     CardList toList;
 
-    public CardMoveHandle(GameManager gameController, Card card, String reason, Player from, Player to, CardList fromList, CardList toList) {
+    public CardMoveHandle(GameManager gameController, Card card, String reason, Player from, Player to,
+                          CardList fromList, CardList toList) {
         super(gameController, card, reason, from);
         this.to = to;
         this.fromList = fromList;
         this.toList = toList;
     }
 
-    public boolean isPlayerFromRelevant(){
+    public boolean isPlayerFromRelevant() {
         return super.getFrom() == null;
     }
-    public boolean isPlayerToRelevant(){
+
+    public boolean isPlayerToRelevant() {
         return to == null;
     }
 

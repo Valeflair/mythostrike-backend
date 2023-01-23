@@ -1,10 +1,11 @@
-package core.management;
+package com.mythostrike.model.game.core.management;
 
-import core.*;
-import core.activity.Card;
-import skill.Skill;
-import skill.events.handle.CardAskHandle;
-import test.Main;
+import com.mythostrike.model.game.Test.Main;
+import com.mythostrike.model.game.core.CardSpace;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.skill.Skill;
+import com.mythostrike.model.game.skill.events.handle.CardAskHandle;
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class GameController {
     }
 
 
-    public boolean askForConfirm (Player player, String reason) {
+    public boolean askForConfirm(Player player, String reason) {
         return Main.askForConfirm(player, reason);
     }
 }

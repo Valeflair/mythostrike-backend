@@ -1,16 +1,18 @@
-package skill.events.handle;
+package com.mythostrike.model.game.skill.events.handle;
 
-import core.activity.Card;
-import core.CardDeck;
-import core.management.GameManager;
-import core.Player;
+
+import com.mythostrike.model.game.core.CardDeck;
+import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.management.GameManager;
 
 public class CardDrawHandle extends EventHandle {
     int count;
     CardDeck drawDeck;
 
 
-    public CardDrawHandle(GameManager gameController, Card card, String reason, Player from, int count, CardDeck drawDeck) {
+    public CardDrawHandle(GameManager gameController, Card card, String reason, Player from, int count,
+                          CardDeck drawDeck) {
         super(gameController, card, reason, from);
         this.count = count;
         this.drawDeck = drawDeck;
