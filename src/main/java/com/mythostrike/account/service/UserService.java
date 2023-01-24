@@ -2,6 +2,8 @@ package com.mythostrike.account.service;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.repository.UserRepository;
+import com.mythostrike.controller.request.AuthRequest;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,26 +27,25 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
     }
 
-    public void createUser(String username, String password) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new RuntimeException("Username already used.");
+    public void createUser(AuthRequest request) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            throw new EntityExistsException("Username already used.");
         }
-
-        userRepository.save(new User(username, passwordEncoder.encode(password)));
+        userRepository.save(new User(request.username(), passwordEncoder.encode(request.password())));
     }
 
-    public boolean areCredentialsValid(String username, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+    public boolean areCredentialsValid(AuthRequest request) {
+        Optional<User> optionalUser = userRepository.findByUsername(request.username());
         if (optionalUser.isEmpty()) {
             return false;
         }
-        User user = optionalUser.get();
-        return user.getPassword().equals(passwordEncoder.encode(password));
+        return passwordEncoder.matches(request.password(), optionalUser.get().getPassword());
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
+            User user = getUser(username);
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 Collections.emptyList());
         } catch (EntityNotFoundException e) {

@@ -34,8 +34,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)  // maybe change
-            .authorizeRequests(auth -> auth
-                //.antMatchers("/login").permitAll()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/users/register").permitAll()
+                .requestMatchers("/users").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
