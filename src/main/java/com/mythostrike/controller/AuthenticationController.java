@@ -30,7 +30,6 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest request) {
-        System.out.println("test");
         log.debug("register request: '{}'", request.username());
         try {
             userService.createUser(request);
@@ -48,7 +47,6 @@ public class AuthenticationController {
             log.debug("Token requested for user: '{}'", request.username());
             return ResponseEntity.ok(tokenService.generateToken(request));
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password!");
     }
 

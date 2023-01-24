@@ -39,8 +39,7 @@ public class UserService implements UserDetailsService {
         if (optionalUser.isEmpty()) {
             return false;
         }
-        User user = optionalUser.get();
-        return user.getPassword().equals(passwordEncoder.encode(request.password()));
+        return passwordEncoder.matches(request.password(), optionalUser.get().getPassword());
     }
 
     @Override
