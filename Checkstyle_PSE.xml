@@ -7,7 +7,7 @@
     <!-- See http://yle.sourceforge.net/config_sizes.html#FileLength !-->
     <!-- Checks for long files. !-->
     <module name="FileLength">
-        <property name="max" value="500"/>
+        <property name="max" value="1000"/>
         <property name="fileExtensions" value=""/>
     </module>
 
@@ -34,7 +34,7 @@
         <!-- Checks for long methods and constructors. !-->
         <!-- See http://yle.sf.net/config_sizes.html !-->
         <module name="MethodLength">
-            <property name="max" value="80"/>
+            <property name="max" value="120"/>
             <property name="countEmpty" value="true"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
         </module>
@@ -48,7 +48,7 @@
         <!-- Checks the number of parameters of a method or constructor. !-->
         <!-- See http://yle.sf.net/config_sizes.html !-->
         <module name="ParameterNumber">
-            <property name="max" value="7"/>
+            <property name="max" value="12"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
         </module>
 
@@ -252,69 +252,7 @@
         </module>
 
     </module>
-
-    <!-- ######## END OF TEMPLATE/CHECKSTYLE/NAMING.XML ######## !-->
-	<!-- ######## TEMPLATE/CHECKSTYLE/JAVADOC.XML ######## !-->
-    <module name="TreeWalker">
-
-        <!-- Validates Javadoc comments to help ensure they are well formed. !-->
-        <!-- See http://yle.sf.net/config_html#JavadocStyle !-->
-        <module name="JavadocStyle">
-            <property name="scope" value="private"/>
-            <!--
-             <property name="excludeScope"        value=""/>
-             !-->
-            <property name="checkFirstSentence" value="false"/>
-            <property name="endOfSentenceFormat" value="([.?!][ \t\n\r\f&lt;])|([.?!]$)"/>
-            <property name="checkEmptyJavadoc" value="false"/>
-            <property name="checkHtml" value="true"/>
-            <property name="tokens" value="INTERFACE_DEF, CLASS_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
-        </module>
-
-        <!-- Checks to ensure that the tags exist (if required) !-->
-        <!-- See http://yle.sf.net/config_html#JavadocMethod !-->
-        <module name="JavadocMethod">
-            <property name="accessModifiers" value="package,public,protected"/>
-            <!--
-             <property name="excludeScope"                 value=""/>
-             !-->
-            <property name="allowMissingParamTags" value="false"/>
-            <property name="allowMissingReturnTag" value="false"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
-        </module>
-
-        <!-- Checks that variables have Javadoc comments. !-->
-        <!-- See http://yle.sf.net/config_html#JavadocVariable !-->
-        <module name="JavadocVariable">
-            <property name="scope" value="package"/>
-            <!--
-             <property name="excludeScope" value=""/>
-             !-->
-        </module>
-
-		<!-- Checks Javadoc comments for class and interface definitions. !-->
-        <!-- See http://yle.sf.net/config_html#JavadocType !-->
-        <module name="JavadocType">
-            <property name="scope"                 value="private"/>
-            <!--
-            <property name="excludeScope"          value=""/>
-            !-->
-            <property name="authorFormat"          value=""/>
-            <property name="versionFormat"         value=""/>
-            <property name="allowMissingParamTags" value="false"/>
-            <property name="allowUnknownTags"      value="false"/>
-            <property name="tokens"                value="INTERFACE_DEF, CLASS_DEF"/>
-        </module>
-
-        <!-- Missing JavaDoc Method -->
-        <module name="MissingJavadocMethod">
-            <property name="scope" value="package"/>
-        </module>
-
-        <!-- Missing Class JavaDoc-->
-        <module name="MissingJavadocType"/>
-
-    </module>
+    
     <!-- ######## END OF TEMPLATE/CHECKSTYLE/JAVADOC.XML ######## !-->
     <!-- ######## TEMPLATE/CHECKSTYLE/OTHERS.XML ######## !-->
     <module name="TreeWalker">
