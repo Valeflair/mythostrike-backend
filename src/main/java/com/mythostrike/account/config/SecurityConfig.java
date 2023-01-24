@@ -35,7 +35,9 @@ public class SecurityConfig {
         return http
             .csrf(AbstractHttpConfigurer::disable)  // maybe change
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/users/register").permitAll()
+                .requestMatchers("/users").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

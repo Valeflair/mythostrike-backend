@@ -8,6 +8,7 @@ class MythostrikeBackendApplicationTests {
 
     @Test
     void contextLoads() {
+        
     }
 
 }

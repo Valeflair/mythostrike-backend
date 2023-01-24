@@ -1,6 +1,9 @@
 package com.mythostrike.account.service;
 
+import com.mythostrike.controller.request.AuthRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -16,16 +19,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TokenService {
 
+    private static final int EXPIRATION_IN_DAYS = 30;
     private final JwtEncoder encoder;
 
-    public String generateToken(Authentication authentication) {
+    private final AuthenticationManager authenticationManager;
+
+    public String generateToken(AuthRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+
         Instant now = Instant.now();
         String scope = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
         JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
-            .expiresAt(now.plus(30, ChronoUnit.DAYS))
+            .expiresAt(now.plus(EXPIRATION_IN_DAYS, ChronoUnit.DAYS))
             .subject(authentication.getName())
             .claim("scope", scope)
             .build();
