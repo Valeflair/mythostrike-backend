@@ -1,6 +1,6 @@
 package com.mythostrike.account.service;
 
-import com.mythostrike.controller.request.AuthRequest;
+import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +24,7 @@ public class TokenService {
 
     private final AuthenticationManager authenticationManager;
 
-    public String generateToken(AuthRequest request) {
+    public String generateToken(UserAuthRequest request) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
