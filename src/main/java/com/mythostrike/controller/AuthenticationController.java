@@ -3,7 +3,8 @@ package com.mythostrike.controller;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.TokenService;
 import com.mythostrike.account.service.UserService;
-import com.mythostrike.controller.request.AuthRequest;
+import com.mythostrike.controller.message.authentication.UserAuthRequest;
+import com.mythostrike.controller.message.authentication.UserAuthResponse;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -29,25 +31,27 @@ public class AuthenticationController {
     private final TokenService tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<UserAuthResponse> register(@RequestBody UserAuthRequest request) {
         log.debug("register request: '{}'", request.username());
         try {
             userService.createUser(request);
         } catch (EntityExistsException e) {
-            return ResponseEntity.status(409).body("Username already used!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already used!");
         }
 
-        return ResponseEntity.status(201).body(tokenService.generateToken(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new UserAuthResponse(tokenService.generateToken(request)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<UserAuthResponse> login(@RequestBody UserAuthRequest request) {
         log.debug("login request: '{}'", request.username());
         if (userService.areCredentialsValid(request)) {
             log.debug("Token requested for user: '{}'", request.username());
-            return ResponseEntity.ok(tokenService.generateToken(request));
+            return ResponseEntity.ok(new UserAuthResponse(tokenService.generateToken(request)));
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password!");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username or password!");
     }
 
 
@@ -58,7 +62,8 @@ public class AuthenticationController {
         try {
             user = userService.getUser(principal.getName());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            log.error("user not found: '{}'", principal.getName());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }
         return ResponseEntity.ok(user);
     }

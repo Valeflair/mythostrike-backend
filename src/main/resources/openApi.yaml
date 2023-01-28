@@ -1,386 +1,410 @@
+---
 openapi: 3.0.0
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/TOXOGE9785_1/Mythostrike/1.0.0
 info:
-  version: 1.0.0
   title: Mythostrike
   description: The API for the Web Game Mythostrike
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/TOXOGE9785_1/Mythostrike/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8080
+  description: SwaggerHub API Auto Mocking
+security:
+- bearerAuth:
+  - user
 tags:
-  - name: Ressources 
-    description: All Game Data
-  - name: Users
-    description: Authentification of Users
-  - name: Lobby
-    description: Control the Lobby
-  - name: Game
-    description: In-Game moves
+- name: Ressources
+  description: All Game Data
+- name: Users
+  description: Authentification of Users
+- name: Lobby
+  description: Control the Lobby
+- name: Game
+  description: In-Game moves
 paths:
   /ressources/cards:
     get:
       tags:
-        - Ressources
-      operationId: getCards
+      - Ressources
       summary: All Cards
       description: Get a list of all game cards
+      operationId: getCards
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            cards:
+            application/json:
               schema:
                 $ref: '#/components/schemas/CardList'
+      security:
+      - {}
   /ressources/modes:
     get:
-        tags:
-          - Ressources
-        operationId: getGameModes
-        summary: All game modes
-        description: Get a list of all game modes
-        responses:
-          '200':
-            description: OK
-            content:
-              modes:
-                schema:
-                  $ref: '#/components/schemas/ModeList'
+      tags:
+      - Ressources
+      summary: All game modes
+      description: Get a list of all game modes
+      operationId: getGameModes
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeList'
+      security:
+      - {}
   /ressources/champions:
     get:
-        tags:
-          - Ressources
-        operationId: getChampions
-        summary: All champions
-        description: Get a list of all game champions
-        responses:
-          '200':
-            description: OK
-            content:
-              champions:
-                schema:
-                  $ref: '#/components/schemas/ChampionList'
+      tags:
+      - Ressources
+      summary: All champions
+      description: Get a list of all game champions
+      operationId: getChampions
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChampionList'
+      security:
+      - {}
   /users/register:
     post:
-        tags:
-          - Users
-        operationId: register
-        summary: User registration
-        description: Request for user registration
-        requestBody:
+      tags:
+      - Users
+      summary: User registration
+      description: Request for user registration
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthRequest'
+      responses:
+        "201":
+          description: successfully registered user
           content:
-            userRegistrationData:
+            application/json:
               schema:
-                $ref: '#/components/schemas/UserRegistrationRequest'
-        responses:
-          '201':
-            description: successfully registered user
-            content:
-              string:
-                schema:
-                  $ref: '#/components/schemas/UserLoginResponse'
-          '409':
-            description: user already exists
+                $ref: '#/components/schemas/UserAuthResponse'
+        "409":
+          description: user already exists
+      security:
+      - {}
   /users/data:
     post:
       tags:
-        - Users
-      operationId: getUserData
+      - Users
       summary: User data
       description: Request for user data from the system
-      security:
-        - bearerAuth: [user]
+      operationId: getUserData
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            userdata:
+            application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+      security:
+      - bearerAuth:
+        - user
   /users/login:
     post:
       tags:
-        - Users
-      operationId: login
+      - Users
       summary: User login
       description: Request for user login
+      operationId: login
       requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserLoginRequest'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthRequest'
       responses:
-        '200':
+        "200":
           description: OK
           content:
-            string:
-                schema:
-                  $ref: '#/components/schemas/UserLoginResponse'
-        '401':
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+        "401":
           description: Wrong username or password
-    
+      security:
+      - {}
   /lobbies:
     get:
-        tags:
-          - Lobby
-        operationId: getLobbyOverview
-        summary: All lobbies
-        description: Get a list of lobbies with details
-        responses:
-          '200':
-            description: Lobby overview
-            content:
-              lobbies:
-                schema:
-                  $ref: '#/components/schemas/LobbyList'
-    post:
-        tags:
-          - Lobby
-        operationId: createLobby
-        summary: Create lobby
-        description: Request to create a new lobby
-        security:
-          - bearerAuth: [user]
-        requestBody:
+      tags:
+      - Lobby
+      summary: All lobbies
+      description: Get a list of lobbies with details
+      operationId: getLobbyOverview
+      responses:
+        "200":
+          description: Lobby overview
           content:
-            createLobbyRequest:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ModeId'
-        responses:
-          '201':
-            description: Successfully created lobby
-            content:
-              integer:
-                schema:
-                  $ref: '#/components/schemas/LobbyId'
-    
+                $ref: '#/components/schemas/LobbyList'
+      security:
+      - {}
+    post:
+      tags:
+      - Lobby
+      summary: Create lobby
+      description: Request to create a new lobby
+      operationId: createLobby
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLobbyRequest'
+      responses:
+        "201":
+          description: Successfully created lobby
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LobbyId'
+      security:
+      - bearerAuth:
+        - user
   /lobbies/join:
     post:
-        tags:
-          - Lobby
-        operationId: joinLobby
-        summary: Join lobby
-        description: Request to join a lobby
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LobbyId'
-        responses:
-          '200':
-            description: Successfully joined lobby
-          '400':
-            description: Lobby already full
-          '404':
-            description: Lobby does not exist
+      tags:
+      - Lobby
+      summary: Join lobby
+      description: Request to join a lobby
+      operationId: joinLobby
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LobbyId'
+      responses:
+        "200":
+          description: Successfully joined lobby
+        "400":
+          description: Lobby already full
+        "404":
+          description: Lobby does not exist
+      security:
+      - bearerAuth:
+        - user
   /lobbies/leave:
     post:
-        tags:
-          - Lobby
-        operationId: leaveLobby
-        summary: Leave lobby
-        description: Request to leave the lobby
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LobbyId'
-        responses:
-          '200':
-            description: Successfully left the lobby
+      tags:
+      - Lobby
+      summary: Leave lobby
+      description: Request to leave the lobby
+      operationId: leaveLobby
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LobbyId'
+      responses:
+        "200":
+          description: Successfully left the lobby
+      security:
+      - bearerAuth:
+        - user
   /lobbies/mode:
     put:
-        tags:
-          - Lobby
-        operationId: changeGameMode
-        summary: Change game mode
-        description: Request to change the game mode in the lobby
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChangeModeRequest'
-        responses:
-          '200':
-            description: Successfully updated game mode
+      tags:
+      - Lobby
+      summary: Change game mode
+      description: Request to change the game mode in the lobby
+      operationId: changeGameMode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeModeRequest'
+      responses:
+        "200":
+          description: Successfully updated game mode
+      security:
+      - bearerAuth:
+        - user
   /lobbies/seats:
     put:
-        tags:
-          - Lobby
-        operationId: changeSeat
-        summary: Change seat
-        description: Request to change the seat in the lobby
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChangeSeatRequest'
-        responses:
-          '200':
-            description: Successfully updated game mode
-          '400':
-            description: Seat is not empty
+      tags:
+      - Lobby
+      summary: Change seat
+      description: Request to change the seat in the lobby
+      operationId: changeSeat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSeatRequest'
+      responses:
+        "200":
+          description: Successfully updated game mode
+        "400":
+          description: Seat is not empty
+      security:
+      - bearerAuth:
+        - user
   /lobbies/start:
     post:
-        tags:
-          - Lobby
-        operationId: startGame
-        summary: Start game
-        description: Request to start the game
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LobbyId'
-        responses:
-          '201':
-            description: Game started
-          '400':
-            description: Not enough players
+      tags:
+      - Lobby
+      summary: Start game
+      description: Request to start the game
+      operationId: startGame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LobbyId'
+      responses:
+        "201":
+          description: Game started
+        "400":
+          description: Not enough players
+      security:
+      - bearerAuth:
+        - user
   /lobbies/bot:
     post:
-        tags:
-          - Lobby
-        operationId: addBot
-        summary: Add bot
-        description: Request to add a bot
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LobbyId'
-        responses:
-          '200':
-            description: Successfully added bot
-          '400':
-            description: Lobby is full
+      tags:
+      - Lobby
+      summary: Add bot
+      description: Request to add a bot
+      operationId: addBot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LobbyId'
+      responses:
+        "200":
+          description: Successfully added bot
+        "400":
+          description: Lobby is full
+      security:
+      - bearerAuth:
+        - user
   /games/play/champion:
     post:
-        tags:
-          - Game
-        operationId: selectedChampion
-        summary: Select champion
-        description: Request to use the selected champion for the game
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SelectChampionRequest'
-        responses:
-          '200':
-            description: Successfully selected the champion
+      tags:
+      - Game
+      summary: Select champion
+      description: Request to use the selected champion for the game
+      operationId: selectedChampion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectChampionRequest'
+      responses:
+        "200":
+          description: Successfully selected the champion
+      security:
+      - bearerAuth:
+        - user
   /games/play/cards:
     post:
-        tags:
-          - Game
-        operationId: playedCards
-        summary: Play cards
-        description: Request to use the selected card(s)
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlayCardsRequest'
-        responses:
-          '200':
-            description: OK
+      tags:
+      - Game
+      summary: Play cards
+      description: Request to use the selected card(s)
+      operationId: playedCards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayCardsRequest'
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth:
+        - user
   /games/play/targets:
     post:
-        tags:
-          - Game
-        operationId: selectedTargets
-        summary: Select targets
-        description: Request to use the selected card(s) on the selected opponent(s).
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SelectTargetsRequest'
-        responses:
-          '200':
-            description: OK
+      tags:
+      - Game
+      summary: Select targets
+      description: Request to use the selected card(s) on the selected opponent(s).
+      operationId: selectedTargets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectTargetsRequest'
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth:
+        - user
   /games/play/discard:
     post:
-        tags:
-          - Game
-        operationId: discardedCards
-        summary: Discard cards
-        description: Request to discard hand cards before the turn ended
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            cards:
-              schema:
-                $ref: '#/components/schemas/DiscardCardsRequest'
-        responses:
-          '200':
-            description: OK
-          '400':
-            description: Too many or too less cards are selected
+      tags:
+      - Game
+      summary: Discard cards
+      description: Request to discard hand cards before the turn ended
+      operationId: discardedCards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscardCardsRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Too many or too less cards are selected
+      security:
+      - bearerAuth:
+        - user
   /games/play/skills:
     post:
-        tags:
-          - Game
-        operationId: usedSkills
-        summary: Use skills
-        description: Request to use the selected skill from the champion
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlaySkillRequest'
-        responses:
-          '200':
-            description: OK
+      tags:
+      - Game
+      summary: Use skills
+      description: Request to use the selected skill from the champion
+      operationId: usedSkills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaySkillRequest'
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth:
+        - user
   /games/play/end:
     post:
-        tags:
-          - Game
-        operationId: endTurn
-        summary: End turn
-        description: Request to end the turn
-        security:
-          - bearerAuth: [user]
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LobbyId'
-        responses:
-          '200':
-            description: OK
-          '400':
-            description: Player is in action
+      tags:
+      - Game
+      summary: End turn
+      description: Request to end the turn
+      operationId: endTurn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LobbyId'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Player is in action
+      security:
+      - bearerAuth:
+        - user
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   schemas:
     CardList:
       type: array
-      items: 
+      items:
         $ref: '#/components/schemas/Card'
     DiscardCardsRequest:
       type: object
@@ -391,12 +415,12 @@ components:
           example: 5313
         CardIdList:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/CardId'
     Card:
       type: object
       properties:
-        cardId:
+        id:
           type: integer
           format: int32
           example: 1
@@ -406,10 +430,10 @@ components:
         description:
           type: string
           example: Pick a player and put...
-        cardSymbol:
+        symbol:
           type: string
           example: Heart
-        cardNumber:
+        value:
           type: integer
           format: int32
           example: 3
@@ -417,14 +441,17 @@ components:
           type: string
           example: Basic
     CardId:
-      type: integer
-      format: int32
-      example: 1
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
     ModeList:
       type: array
-      items: 
-        $ref: '#/components/schemas/GameMode'
-    GameMode:
+      items:
+        $ref: '#/components/schemas/Mode'
+    Mode:
       type: object
       properties:
         id:
@@ -437,17 +464,17 @@ components:
         description:
           type: string
           example: In this game mode you can...
-        minPlayer:
+        minPlayerCount:
           type: integer
           format: int32
           example: 3
-        maxPlayer:
+        maxPlayerCount:
           type: integer
           format: int32
           example: 6
     ChampionList:
       type: array
-      items: 
+      items:
         $ref: '#/components/schemas/Champion'
     Champion:
       type: object
@@ -459,7 +486,7 @@ components:
         name:
           type: string
           example: Apollo
-        life:
+        maxHp:
           type: integer
           format: int32
           example: 4
@@ -471,18 +498,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PassiveSkill'
-    UserRegistrationRequest:
+    Username:
       type: object
       properties:
         username:
           type: string
-          example: Eason123
-        password:
-          type: string
-          example: BestPW123
-    Username:
-      type: string
-      example: Hyumin281
+          example: Hyumin281
     UserInfo:
       type: object
       properties:
@@ -493,7 +514,7 @@ components:
           type: integer
           format: int32
           example: 333
-        rankpoints:
+        rankPoints:
           type: integer
           format: int32
           example: 48
@@ -501,7 +522,7 @@ components:
           type: integer
           format: int32
           example: 2
-    UserLoginRequest:
+    UserAuthRequest:
       type: object
       properties:
         username:
@@ -510,27 +531,30 @@ components:
         password:
           type: string
           example: BestPW123
-    UserLoginResponse:
-      type: string
-      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    UserAuthResponse:
+      type: object
+      properties:
+        jwtToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
     LobbyList:
       type: array
       items:
-            $ref: '#/components/schemas/Lobby'
+        $ref: '#/components/schemas/Lobby'
     Lobby:
       type: object
       properties:
-        lobbyId:
+        id:
           type: integer
           format: int32
           example: 2
-        lobbyLeader:
+        owner:
           type: string
           example: Hyuman123
         status:
           type: string
           example: active
-        gameMode:
+        mode:
           type: string
           example: FFA
         numberPlayers:
@@ -538,35 +562,41 @@ components:
           format: int32
           example: 5
     LobbyId:
-      type: integer
-      format: int32
-      example: 728491
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 728491
     ChangeModeRequest:
       type: object
       properties:
+        lobbyId:
+          type: integer
+          format: int32
+          example: 5313
         newModeId:
           type: integer
           format: int32
           example: 5
+    ChangeSeatRequest:
+      type: object
+      properties:
         lobbyId:
           type: integer
           format: int32
           example: 5313
-    ChangeSeatRequest:
-      type: object
-      properties:
         newSeatId:
           type: integer
           format: int32
           example: 5
-        lobbyId:
+    CreateLobbyRequest:
+      type: object
+      properties:
+        id:
           type: integer
           format: int32
-          example: 5313
-    ModeId:
-      type: integer
-      format: int32
-      example: 3
+          example: 3
     PlayCardsRequest:
       type: object
       properties:
@@ -629,10 +659,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Username'
-    Targets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Username'
-security:
-  - bearerAuth:
-    - user
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

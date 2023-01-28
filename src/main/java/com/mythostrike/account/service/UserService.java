@@ -2,7 +2,7 @@ package com.mythostrike.account.service;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.repository.UserRepository;
-import com.mythostrike.controller.request.AuthRequest;
+import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
     }
 
-    public void createUser(AuthRequest request) {
+    public void createUser(UserAuthRequest request) {
         if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new EntityExistsException("Username already used.");
         }
         userRepository.save(new User(request.username(), passwordEncoder.encode(request.password())));
     }
 
-    public boolean areCredentialsValid(AuthRequest request) {
+    public boolean areCredentialsValid(UserAuthRequest request) {
         Optional<User> optionalUser = userRepository.findByUsername(request.username());
         if (optionalUser.isEmpty()) {
             return false;

@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 public class User {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @NotNull
