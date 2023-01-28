@@ -1,8 +1,6 @@
 package com.mythostrike.controller;
 
-import com.mythostrike.account.repository.User;
 import com.mythostrike.controller.message.lobby.*;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,16 +28,16 @@ public class LobbyController {
     }
 
     @PostMapping
-    public ResponseEntity<LobbyRequest> create(Principal principal, @RequestBody CreateLobbyRequest request) {
+    public ResponseEntity<LobbyIdRequest> create(Principal principal, @RequestBody CreateLobbyRequest request) {
         log.debug("create lobby request from '{}' with  mode '{}", principal.getName(), request.modeId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new LobbyRequest(728491));
+                .body(new LobbyIdRequest(728491));
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Void> join(Principal principal, @RequestBody LobbyRequest request) {
+    public ResponseEntity<Void> join(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("join lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
@@ -47,7 +45,7 @@ public class LobbyController {
     }
 
     @PostMapping("/leave")
-    public ResponseEntity<Void> leave(Principal principal, @RequestBody LobbyRequest request) {
+    public ResponseEntity<Void> leave(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("leave lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
@@ -73,7 +71,7 @@ public class LobbyController {
     }
 
     @PostMapping("/bot")
-    public ResponseEntity<Void> addBot(Principal principal, @RequestBody LobbyRequest request) {
+    public ResponseEntity<Void> addBot(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("add bot to '{}' request from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
@@ -81,7 +79,7 @@ public class LobbyController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity<Void> start(Principal principal, @RequestBody LobbyRequest request) {
+    public ResponseEntity<Void> start(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("start game '{}' request from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
