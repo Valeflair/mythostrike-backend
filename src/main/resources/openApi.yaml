@@ -448,11 +448,11 @@ components:
         description:
           type: string
           example: In this game mode you can...
-        minPlayerCount:
+        minPlayer:
           type: integer
           format: int32
           example: 3
-        maxPlayerCount:
+        maxPlayer:
           type: integer
           format: int32
           example: 6
