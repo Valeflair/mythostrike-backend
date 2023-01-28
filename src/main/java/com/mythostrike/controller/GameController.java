@@ -33,7 +33,6 @@ public class GameController {
                 .status(HttpStatus.OK).build();
     }
 
-    //TODO: openApi noch anpassen
     @PostMapping("/targets")
     public ResponseEntity<Void> useCard(Principal principal, @RequestBody UseCardRequest request) {
         log.debug("use card '{}' on '{}' request in '{}' from '{}'", request.cardId(), request.targets(),
