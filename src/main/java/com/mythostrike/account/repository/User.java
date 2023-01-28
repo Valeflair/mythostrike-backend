@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -26,4 +25,10 @@ public class User {
     @NotNull
     @JsonIgnore
     private String password;
+
+    private int rankPoints;
+
+    private int drachma;
+
+    private int avatarNumber;
 }
