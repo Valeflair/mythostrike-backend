@@ -1,7 +1,6 @@
 package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 
