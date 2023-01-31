@@ -15,8 +15,8 @@ public enum ModeData {
         "Free for all is a mode where everyone is against everyone. "
             + "There is no team, no alliance, no mercy. "
             + "Only the strongest will survive.",
-        List.of(Identity.NOT_SET, Identity.NOT_SET, Identity.NOT_SET, Identity.NOT_SET, Identity.NOT_SET,
-            Identity.NOT_SET, Identity.NOT_SET, Identity.NOT_SET)),
+        List.of(Identity.NONE, Identity.NONE, Identity.NONE, Identity.NONE, Identity.NONE,
+            Identity.NONE, Identity.NONE, Identity.NONE)),
 
     ONE_VS_ONE("1 vs. 1", 2, 2,
         "1 vs 1 is a duel of fates. No interference, just a show of simple skills and luck."
@@ -62,7 +62,7 @@ public enum ModeData {
             + "You can be a God King, a General, a Rebel or a Renegade."
             + "The God King is the most powerful player and is the only one with an public identity."
             + "All other identities are secret and shouldn't be disclosed. "
-            + "The Generals have to protect the God King from the Rebels who want to kill the God King. "
+            + "The Generals have to protect the God King from the Rebels who want to kill him. "
             + "And maybe also the Renegade in the Dark is coming for the God King, because he wants to be a solo star "
             + "by surviving alone.";
 

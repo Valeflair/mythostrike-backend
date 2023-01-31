@@ -14,7 +14,7 @@ public enum Identity {
     GENERAL("General", true, false),
     REBEL("Rebel", true, false),
     RENEGADE("Renegade", true, true),
-    NOT_SET("not set", false, true);
+    NONE("none", false, true);
 
     @Getter
     private final String name;
@@ -50,9 +50,13 @@ public enum Identity {
         this.playerNeedsToBeAlive = playerNeedsToBeAlive;
     }
 
-
     //TODO: Implement this method
     /*public boolean hasWon(Player player , GameManager gameManager) {
 
     }*/
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

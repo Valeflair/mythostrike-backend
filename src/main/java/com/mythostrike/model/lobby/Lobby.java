@@ -45,12 +45,16 @@ public class Lobby {
         if (seats[seatId].getPlayer() != null) {
             return false;
         }
+        //check if user is in the lobby and remove him
+        if (!removeUser(user)) {
+            return false;
+        }
 
         seats[seatId].setPlayer(new Player(user));
         return true;
     }
 
-    public boolean removePlayer(User user) {
+    public boolean removeUser(User user) {
         for (int i = 0; i < MAX_PLAYERS; i++) {
             //check if in which seat the user is
             if (seats[i].getPlayer() != null && seats[i].getPlayer().getUsername().equals(user.getUsername())) {
@@ -97,6 +101,7 @@ public class Lobby {
 
     public boolean createGame() {
         //TODO: complete this method
+        //TODO: randomize identites if Identity mode --> not the God King
         if (isFull()) {
             status = LobbyStatus.GAME_RUNNING;
             return true;
