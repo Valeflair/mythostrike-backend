@@ -32,7 +32,7 @@ public enum ModeData {
         List.of(Identity.TEAM_RED, Identity.TEAM_RED, Identity.TEAM_RED, Identity.TEAM_BLUE,
             Identity.TEAM_BLUE, Identity.TEAM_BLUE)),
 
-    FOUR_VS_FOUR("4 vs. 4", 8, 8, "Team fight with 3 players per team."
+    FOUR_VS_FOUR("4 vs. 4", 8, 8, "Team fight with 4 players per team."
         + TEAM_FIGHT_DESCRIPTION,
         List.of(Identity.TEAM_RED, Identity.TEAM_RED, Identity.TEAM_RED, Identity.TEAM_RED,
             Identity.TEAM_BLUE, Identity.TEAM_BLUE, Identity.TEAM_BLUE, Identity.TEAM_BLUE)),

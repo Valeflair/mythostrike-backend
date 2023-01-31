@@ -2,7 +2,6 @@ package com.mythostrike.controller;
 
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
-import com.mythostrike.model.lobby.Seat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,17 +19,17 @@ import java.util.Map;
 public class ResourceController {
 
     @GetMapping("/cards")
-    public ResponseEntity<Map<String, Seat>> getCards() {
+    public ResponseEntity<Void> getCards() {
         log.debug("getCards request");
         //TODO:
         //return ResponseEntity.ok(list);
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/modes")
     public ResponseEntity<List<Mode>> getModes() {
         log.debug("getModes request");
-        return ResponseEntity.ok(ModeList.getModeList().getAllModes());
+        return ResponseEntity.ok(ModeList.getModeList().getModes());
     }
 
     @GetMapping("/champions")

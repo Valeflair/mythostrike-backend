@@ -9,5 +9,4 @@ public record Mode(int id, String name, String description, int minPlayer, int m
         this(id, data.getName(), data.getDescription(), data.getMinPlayer(),
             data.getMaxPlayer(), data.getIdentityList());
     }
-
 }

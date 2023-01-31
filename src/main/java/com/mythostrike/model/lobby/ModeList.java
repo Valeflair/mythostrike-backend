@@ -27,7 +27,7 @@ public final class ModeList {
         return instance;
     }
 
-    public List<Mode> getAllModes() {
+    public List<Mode> getModes() {
         return Collections.unmodifiableList(modes);
     }
 

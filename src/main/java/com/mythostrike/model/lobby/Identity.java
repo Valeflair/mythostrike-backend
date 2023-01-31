@@ -7,7 +7,6 @@ import java.util.List;
 
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-@Getter
 public enum Identity {
     TEAM_RED("Team Red", false, true),
     TEAM_BLUE("Team Blue", false, true),
@@ -17,7 +16,9 @@ public enum Identity {
     RENEGADE("Renegade", true, true),
     NOT_SET("not set", false, true);
 
+    @Getter
     private final String name;
+    @Getter
     private final boolean incognito;
     private final boolean playerNeedsToBeAlive;
     private List<Identity> hasToSurvive;
