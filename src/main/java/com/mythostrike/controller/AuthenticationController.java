@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,13 +34,13 @@ public class AuthenticationController {
         log.debug("register request: '{}'", request.username());
         try {
             userService.createUser(request);
-        } catch (EntityExistsException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already used!");
+        } catch (EntityExistsException exception) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already used!", exception);
         }
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new UserAuthResponse(tokenService.generateToken(request)));
+            .status(HttpStatus.CREATED)
+            .body(new UserAuthResponse(tokenService.generateToken(request)));
     }
 
     @PostMapping("/login")
@@ -61,15 +60,10 @@ public class AuthenticationController {
         User user;
         try {
             user = userService.getUser(principal.getName());
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException exception) {
             log.error("user not found: '{}'", principal.getName());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!", exception);
         }
         return ResponseEntity.ok(user);
-    }
-
-    @GetMapping
-    public String home() {
-        return "Hello, ";
     }
 }
