@@ -1,11 +1,7 @@
 package com.mythostrike.account.repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -32,4 +28,20 @@ public class User {
     private int drachma;
 
     private int avatarNumber;
+
+    public boolean changeDrachma(int amount) {
+        if (this.drachma + amount < 0) {
+            return false;
+        }
+        this.drachma += amount;
+        return true;
+    }
+
+    public boolean changeRankPoints(int amount) {
+        if (this.rankPoints + amount < 0) {
+            return false;
+        }
+        this.rankPoints += amount;
+        return true;
+    }
 }
