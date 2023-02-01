@@ -1,5 +1,6 @@
 package com.mythostrike.controller;
 
+import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ import java.util.List;
 @Slf4j
 public class ResourceController {
 
+    private final ModeList modeList = ModeList.getModeList();
+
     @GetMapping("/cards")
     public ResponseEntity<Void> getCards() {
         log.debug("getCards request");
@@ -29,13 +32,12 @@ public class ResourceController {
     @GetMapping("/modes")
     public ResponseEntity<List<Mode>> getModes() {
         log.debug("getModes request");
-        return ResponseEntity.ok(ModeList.getModeList().getModes());
+        return ResponseEntity.ok(modeList.getModes());
     }
 
     @GetMapping("/champions")
-    public ResponseEntity<Void> getChampions() {
+    public ResponseEntity<List<LobbyOverview>> getChampions() {
         log.debug("getChampions request");
-        //TODO:
         //return ResponseEntity.ok(list);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

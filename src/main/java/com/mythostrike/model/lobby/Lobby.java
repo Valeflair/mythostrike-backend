@@ -14,7 +14,7 @@ public class Lobby {
     private Player owner;
     private LobbyStatus status;
     private Seat[] seats;
-    private int numberOfPlayers;
+    private int numberPlayers;
 
 
     public Lobby(int id, Mode mode, User owner) {
@@ -23,7 +23,7 @@ public class Lobby {
         this.owner = new Player(owner);
         this.status = LobbyStatus.OPEN;
 
-        this.numberOfPlayers = 1;
+        this.numberPlayers = 1;
         //initialize seats array
         this.seats = new Seat[MAX_PLAYERS];
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -33,7 +33,7 @@ public class Lobby {
     }
 
     public boolean isFull() {
-        return numberOfPlayers == mode.maxPlayer();
+        return numberPlayers == mode.maxPlayer();
     }
 
     public boolean changeSeat(int seatId, User user) {
@@ -64,10 +64,10 @@ public class Lobby {
                 if (user.getUsername().equals(owner.getUsername())) {
                     selectNewOwner();
                 }
-                numberOfPlayers--;
+                numberPlayers--;
 
                 //if the lobby is empty, close it
-                if (numberOfPlayers == 0) {
+                if (numberPlayers == 0) {
                     status = LobbyStatus.CLOSED;
                 }
                 return true;
@@ -92,7 +92,7 @@ public class Lobby {
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (seats[i].getPlayer() == null) {
                 seats[i].setPlayer(new Player(user));
-                numberOfPlayers++;
+                numberPlayers++;
                 return true;
             }
         }

@@ -35,6 +35,9 @@ public final class ModeList {
     }
 
     public Mode getMode(int id) {
+        if (id < 0 || id >= modes.size()) {
+            throw new IllegalArgumentException(String.format("The id %d is not valid.", id));
+        }
         return modes.get(id);
     }
 }
