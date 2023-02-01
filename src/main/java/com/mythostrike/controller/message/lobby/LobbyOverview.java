@@ -2,11 +2,11 @@ package com.mythostrike.controller.message.lobby;
 
 import com.mythostrike.model.lobby.Lobby;
 
-public record LobbyOverview(int id, String owner, String status, String mode, int numberPlayers) {
+public record LobbyOverview(int id, String owner, String status, String mode, int numberPlayers, int maxPlayers) {
 
     public LobbyOverview(Lobby lobby) {
         this(lobby.getId(), lobby.getOwner().getUsername(), lobby.getStatus().toString(), lobby.getMode().name(),
-            lobby.getNumberPlayers());
+            lobby.getNumberPlayers(), lobby.getMode().maxPlayer());
     }
 
 }
