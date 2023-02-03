@@ -1,5 +1,6 @@
 package com.mythostrike.model.lobby;
 
+import com.mythostrike.model.exception.IllegalInputException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -34,9 +35,9 @@ public final class ModeList {
         return Collections.unmodifiableList(modes);
     }
 
-    public Mode getMode(int id) {
+    public Mode getMode(int id) throws IllegalInputException {
         if (id < 0 || id >= modes.size()) {
-            throw new IllegalArgumentException(String.format("The id %d is not valid.", id));
+            throw new IllegalInputException(String.format("The id %d is not valid.", id));
         }
         return modes.get(id);
     }

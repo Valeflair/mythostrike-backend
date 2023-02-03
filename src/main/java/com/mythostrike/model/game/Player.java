@@ -1,4 +1,4 @@
-package com.mythostrike.model.lobby;
+package com.mythostrike.model.game;
 
 import com.mythostrike.account.repository.User;
 import lombok.Getter;

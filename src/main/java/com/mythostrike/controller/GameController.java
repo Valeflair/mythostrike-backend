@@ -2,6 +2,7 @@ package com.mythostrike.controller;
 
 import com.mythostrike.controller.message.game.*;
 import com.mythostrike.controller.message.lobby.*;
+import com.mythostrike.model.game.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,5 +69,23 @@ public class GameController {
         return ResponseEntity
                 .status(HttpStatus.OK).build();
     }
-}
 
+    public void selectChampionFrom(ChampionSelectionMessage message) {
+
+    }
+
+    public void highlight(HighlightMessage message) {
+
+    }
+
+    public void updateGame(CardMoveMessage message) {
+
+    }
+
+    public void updateGame(CardMoveMessage message, List<Player> players) {
+
+    }
+
+
+
+}

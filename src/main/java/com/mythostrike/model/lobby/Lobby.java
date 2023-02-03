@@ -1,6 +1,8 @@
 package com.mythostrike.model.lobby;
 
 import com.mythostrike.account.repository.User;
+import com.mythostrike.model.exception.IllegalInputException;
+import com.mythostrike.model.game.Player;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +11,10 @@ public class Lobby {
     private static final int MAX_PLAYERS = 8;
 
     private final int id;
-    @Setter
     private Mode mode;
     private Player owner;
     private LobbyStatus status;
-    private Seat[] seats;
+    private final Seat[] seats;
     private int numberPlayers;
 
 
@@ -33,24 +34,26 @@ public class Lobby {
     }
 
     public boolean isFull() {
-        return numberPlayers == mode.maxPlayer();
+        return numberPlayers >= mode.maxPlayer();
     }
 
-    public boolean changeSeat(int seatId, User user) {
-        //check if seatId is valid
-        if (seatId < 0 || seatId >= MAX_PLAYERS) {
+    public boolean addUser(User user) throws IllegalInputException {
+        if (isFull()) {
             return false;
         }
-        //check if seat is already taken
-        if (seats[seatId].getPlayer() != null) {
-            return false;
+        //check if user is already in the lobby
+        for (Seat seat : seats) {
+            if (seat.getPlayer() != null && seat.getPlayer().getUsername().equals(user.getUsername())) {
+                throw new IllegalInputException("user is already in the lobby");
+            }
         }
-        //check if user is in the lobby and remove him
-        if (!removeUser(user)) {
-            return false;
+        for (Seat seat: seats) {
+            if (seat.getPlayer() == null) {
+                seat.setPlayer(new Player(user));
+                numberPlayers++;
+            }
         }
-
-        seats[seatId].setPlayer(new Player(user));
+        updateModeStatus();
         return true;
     }
 
@@ -70,6 +73,7 @@ public class Lobby {
                 if (numberPlayers == 0) {
                     status = LobbyStatus.CLOSED;
                 }
+                updateModeStatus();
                 return true;
             }
         }
@@ -85,24 +89,71 @@ public class Lobby {
         }
     }
 
-    public boolean addUser(User user) {
+    private void updateModeStatus() {
+        if (numberPlayers >= mode.maxPlayer()) {
+            status = LobbyStatus.FULL;
+        } else {
+            status = LobbyStatus.OPEN;
+        }
+    }
+
+    public boolean addBot(User user) throws IllegalInputException {
+        if (!user.getUsername().equals(owner.getUsername())) {
+            throw new IllegalInputException("user is not the owner");
+        }
         if (isFull()) {
             return false;
         }
+        //TODO: echten Bot erstellen
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (seats[i].getPlayer() == null) {
-                seats[i].setPlayer(new Player(user));
+                seats[i].setPlayer(new Player("Bot" + i));
                 numberPlayers++;
+                updateModeStatus();
                 return true;
             }
         }
         return false;
     }
 
-    public boolean createGame() {
+    public boolean changeSeat(int seatId, User user) throws IllegalInputException {
+        //check if seatId is valid
+        if (seatId < 0 || seatId >= MAX_PLAYERS) {
+            throw new IllegalInputException("seatId is not in bounds");
+        }
+        //check if seat is already taken
+        if (seats[seatId].getPlayer() != null) {
+            return false;
+        }
+        //check if user is in the lobby and remove him
+        if (!removeUser(user)) {
+            throw new IllegalInputException("user is not in lobby");
+        }
+
+        seats[seatId].setPlayer(new Player(user));
+        return true;
+    }
+
+    public void changeMode(Mode mode, User user) throws IllegalInputException {
+        if (!user.getUsername().equals(owner.getUsername())) {
+            throw new IllegalInputException("user is not the owner");
+        }
+        //TODO: mit game != null abfrage ersetzen
+        if (status != LobbyStatus.OPEN && status != LobbyStatus.FULL) {
+            throw new IllegalInputException("lobby is not in Lobby Screen");
+        }
+        updateModeStatus();
+        this.mode = mode;
+    }
+
+    public boolean createGame(User user) throws IllegalInputException {
+        if (!user.getUsername().equals(owner.getUsername())) {
+            throw new IllegalInputException("user is not the owner");
+        }
+
         //TODO: complete this method
-        //TODO: randomize identites if Identity mode --> not the God King
-        if (isFull()) {
+        //TODO: randomize identities if Identity mode --> not the God King
+        if (numberPlayers >= mode.minPlayer() && numberPlayers <= mode.maxPlayer()) {
             status = LobbyStatus.GAME_RUNNING;
             return true;
         }

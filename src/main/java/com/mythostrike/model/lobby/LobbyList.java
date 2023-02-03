@@ -2,6 +2,7 @@ package com.mythostrike.model.lobby;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ public final class LobbyList {
         return lobbiesOverview;
     }
 
+    @Nullable
     public Lobby getLobby(int id) {
         return lobbyMap.get(id);
     }
