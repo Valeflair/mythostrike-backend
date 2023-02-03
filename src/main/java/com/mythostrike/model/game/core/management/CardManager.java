@@ -1,14 +1,13 @@
 package com.mythostrike.model.game.core.management;
 
-import com.mythostrike.model.game.core.CardData;
-import com.mythostrike.model.game.core.CardDeck;
-import com.mythostrike.model.game.core.CardList;
-import com.mythostrike.model.game.core.CardSpace;
-import com.mythostrike.model.game.core.CardSymbol;
-import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.cards.CardPile;
+import com.mythostrike.model.game.core.activity.cards.CardList;
+import com.mythostrike.model.game.core.activity.cards.CardSpace;
+import com.mythostrike.model.game.core.activity.cards.CardSymbol;
+import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.skill.events.handle.CardDrawHandle;
-import com.mythostrike.model.game.skill.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class CardManager {
     }
 
     public void swapDeck() {
-        CardDeck dummy = gameManager.getGame().getDrawDeck();
+        CardPile dummy = gameManager.getGame().getDrawDeck();
         gameManager.getGame().setDrawDeck(gameManager.getGame().getThrowDeck());
         gameManager.getGame().setThrowDeck(dummy);
         gameManager.getGame().getDrawDeck().shuffle();
@@ -43,16 +42,16 @@ public class CardManager {
 
     public void drawCard(CardDrawHandle cardDrawHandle) {
 
-        Player player = cardDrawHandle.getFrom();
+        Player player = cardDrawHandle.getPlayer();
         int count = cardDrawHandle.getCount();
-        CardDeck drawDeck = cardDrawHandle.getDrawDeck();
+        CardPile drawDeck = cardDrawHandle.getDrawPile();
         //TODO : add CardDrawEvent
         StringBuilder debug = new StringBuilder(
             "Player " + player.getName() + " draws " + count + "card(s) because of " + cardDrawHandle.getReason() +
                 ", they are :");
         for (int i = 0; i < cardDrawHandle.getCount(); i++) {
             Card card = drawDeck.subtractCard();
-            player.getHandCards().addCard(card);
+            player.getHandCards().add(card);
             debug.append(card.getName()).append(",");
         }
         debug.delete(debug.length() - 1, debug.length() - 1);

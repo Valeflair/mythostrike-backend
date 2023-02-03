@@ -7,6 +7,10 @@ public enum Phase {
     DRAW,
     ACTIVETURN,
     DISCARD,
-    FINISH,
-    NOTACTIVE
+    FINISH;
+
+    public static Phase nextPhase(Phase current) {
+        int nextOrdinal = (current.ordinal() + 1) % Phase.values().length;
+        return Phase.values()[nextOrdinal];
+    }
 }

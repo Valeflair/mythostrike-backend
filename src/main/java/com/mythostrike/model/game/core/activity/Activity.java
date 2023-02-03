@@ -1,48 +1,32 @@
 package com.mythostrike.model.game.core.activity;
 
 
-import com.mythostrike.model.game.core.Player;
-import com.mythostrike.model.game.skill.events.handle.AttackHandle;
-import com.mythostrike.model.game.skill.events.handle.CardAskHandle;
-import com.mythostrike.model.game.skill.events.handle.CardDrawHandle;
-import com.mythostrike.model.game.skill.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.skill.events.handle.CardUseHandle;
-import com.mythostrike.model.game.skill.events.handle.DamageHandle;
-import com.mythostrike.model.game.skill.events.handle.PhaseChangeHandle;
-import com.mythostrike.model.game.skill.events.handle.PhaseHandle;
-import com.mythostrike.model.game.skill.events.handle.PlayerHandle;
+import com.mythostrike.model.game.core.activity.events.handle.AttackHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardAskHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
+import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.core.activity.events.handle.PhaseChangeHandle;
+import com.mythostrike.model.game.core.activity.events.handle.PhaseHandle;
+import com.mythostrike.model.game.core.activity.events.handle.PlayerHandle;
+import lombok.Getter;
 
-import java.util.List;
+import java.util.Objects;
 
+@Getter
 public abstract class Activity {
-    private String name;
-    private String description;
+    private final int id;
+    private final String name;
+    private final String description;
 
 
-    public Activity(String name, String description) {
+    public Activity(int id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof Activity activity)) {
-            return false;
-        }
-        return name.equals(activity.getName());
-    }
 
     public boolean checkCondition(AttackHandle attackHandle) {
         return false;
@@ -80,25 +64,17 @@ public abstract class Activity {
         return false;
     }
 
-    public void activate() {
-    }
-
-    public void pickedTargets(List<Player> players) {
-    }
-
-    /**
-     * method for frontend after picked card
-     *
-     * @param cards cards picked
-     */
-    public void pickedCards(List<Card> cards) {
-    }
-
-    public void clickedConfirmButton(boolean confirm) {
-    }
-
     public void use() {
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Activity activity)) {
+            return false;
+        }
+        return name.equals(activity.getName());
+    }
 }

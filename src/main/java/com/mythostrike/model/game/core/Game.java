@@ -1,9 +1,15 @@
 package com.mythostrike.model.game.core;
 
+import com.mythostrike.model.game.core.activity.cards.CardPile;
+import com.mythostrike.model.game.core.activity.cards.CardList;
 import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.core.player.Player;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter
 public class Game {
     /**
      * describe how many cards player start with
@@ -13,79 +19,45 @@ public class Game {
      * describe how many cards player draw.
      */
     public static final int DRAWCARDCOUNT = 4;
-    private GameManager gameManager;
-    private Player currentPlayer;
+    private final GameManager gameManager;
     private String console;
-    private final ArrayList<Player> players;
-    private CardDeck drawDeck;
-    private CardDeck throwDeck;
-    private CardDeck tableDeck;
-    private Mode mode;
+    private final ArrayList<Player> allPlayers;
+    private final ArrayList<Player> alivePlayers;
+    private CardList cardList;
+    private CardPile drawDeck;
+    private CardPile throwDeck;
+    private CardPile tableDeck;
+    private final Mode mode;
 
 
     public Game(ArrayList<Player> players, Mode mode, GameManager gameManager) {
-        this.players = players;
+        this.allPlayers = players;
         this.mode = mode;
         this.gameManager = gameManager;
+        alivePlayers = new ArrayList<>(allPlayers);
+        cardList = CardList.getInstance();
+        drawDeck = new CardPile(cardList.getCards());
+        tableDeck = new CardPile();
+        throwDeck = new CardPile();
     }
 
-    public void output(String output) {
-        System.out.println(output);
-        console += output;
-        console += "\n";
-    }
+    public void nextPlayer() {
 
-    public GameManager getGameManager() {
-        return gameManager;
+        //TODO:implement
     }
 
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return alivePlayers.get(0);
     }
 
-    public String getConsole() {
-        return console;
+    public boolean isPlayerAlive(Player player) {
+        return player.isAlive();
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
+
+
+    public void output(String output) {
+        //TODO: merge with apis
     }
 
-    public CardDeck getDrawDeck() {
-        return drawDeck;
-    }
-
-    public CardDeck getThrowDeck() {
-        return throwDeck;
-    }
-
-    public CardDeck getTableDeck() {
-        return tableDeck;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public void setDrawDeck(CardDeck drawDeck) {
-        this.drawDeck = drawDeck;
-    }
-
-    public void setThrowDeck(CardDeck throwDeck) {
-        this.throwDeck = throwDeck;
-    }
-
-    public void setTableDeck(CardDeck tableDeck) {
-        this.tableDeck = tableDeck;
-    }
-
-    public ArrayList<Player> getOtherPlayers(Player player) {
-        ArrayList<Player> otherPlayers = new ArrayList<Player>(players);
-        otherPlayers.remove(player);
-        return otherPlayers;
-    }
 }

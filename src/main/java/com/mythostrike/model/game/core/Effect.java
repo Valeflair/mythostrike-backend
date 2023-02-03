@@ -1,6 +1,6 @@
 package com.mythostrike.model.game.core;
 
-import com.mythostrike.model.game.skill.events.handle.EventHandle;
+import com.mythostrike.model.game.core.activity.events.handle.EventHandle;
 
 import java.util.function.Function;
 

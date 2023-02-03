@@ -1,11 +1,10 @@
 package com.mythostrike.model.game.core.management;
 
 import com.mythostrike.model.game.Test.Main;
-import com.mythostrike.model.game.core.CardSpace;
-import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.activity.cards.CardSpace;
+import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.skill.Skill;
-import com.mythostrike.model.game.skill.events.handle.CardAskHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardAskHandle;
 
 import java.util.ArrayList;
 
@@ -22,7 +21,7 @@ public class GameController {
     }
 
     public boolean askForDiscard(CardAskHandle cardAskHandle) {
-        Player player = cardAskHandle.getFrom();
+        Player player = cardAskHandle.getPlayer();
         int count = cardAskHandle.getAmount();
         String reason = cardAskHandle.getReason();
         boolean optional = cardAskHandle.isOptional();
@@ -33,20 +32,20 @@ public class GameController {
             return false;
         } else {
             System.out.println("drop true");
-            gameManager.getCardManager().throwCard(player, cards, fromSpace, cardAskHandle.getTargetList(), reason);
+            gameManager.getCardManager().throwCard(player, cards, fromSpace, cardAskHandle.getTargetSpace(), reason);
             return true;
         }
     }
 
     public ArrayList<Card> askForCard(CardAskHandle cardAskHandle) {
-        Player player = cardAskHandle.getFrom();
+        Player player = cardAskHandle.getPlayer();
         int amount = cardAskHandle.getAmount();
         boolean optional = cardAskHandle.isOptional();
         String reason = cardAskHandle.getReason();
         CardSpace fromSpace = new CardSpace();
         for (Card card : cardAskHandle.getFromSpace().getCards()) {
             if (cardAskHandle.getCardData() == null || card.isSame(cardAskHandle.getCardData())) {
-                fromSpace.addCard(card);
+                fromSpace.add(card);
             }
         }
         ArrayList<Card> cards = Main.askForCard(player, fromSpace, amount, amount, optional, reason);

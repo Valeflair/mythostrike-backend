@@ -1,17 +1,14 @@
 package com.mythostrike.model.game.Test;
 
-import com.mythostrike.model.game.core.CardData;
-import com.mythostrike.model.game.core.CardDeck;
-import com.mythostrike.model.game.core.CardList;
-import com.mythostrike.model.game.core.CardSpace;
-import com.mythostrike.model.game.core.CardSymbol;
-import com.mythostrike.model.game.core.Champion;
-import com.mythostrike.model.game.core.Initialization.ChampionInitialize;
+import com.mythostrike.model.game.core.activity.cards.CardPile;
+import com.mythostrike.model.game.core.activity.cards.CardList;
+import com.mythostrike.model.game.core.activity.cards.CardSpace;
+import com.mythostrike.model.game.core.activity.cards.CardSymbol;
+import com.mythostrike.model.game.core.player.Champion;
 import com.mythostrike.model.game.core.Mode;
-import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.management.GameManager;
-import com.mythostrike.model.game.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,13 +61,13 @@ public class Main {
         Champion.setChampionPatterns(champions);
 
         //initial patternDeck
-        CardDeck pattern = new CardDeck();
-        CardDeck.setPatternDeck(pattern);
+        CardPile pattern = new CardPile();
+        CardPile.setPatternDeck(pattern);
         CardSymbol[] symbols = {CardSymbol.CLUB, CardSymbol.DIAMOND, CardSymbol.HEART, CardSymbol.SPADE};
         for (int i = 0; i < 40; i++) {
-            pattern.addCard(new Card(CardData.ATTACK, symbols[i % 4], i % 13 + 1));
+            pattern.add(new Card(CardData.ATTACK, symbols[i % 4], i % 13 + 1));
             if (i % 2 == 0) {
-                pattern.addCard(new Card(CardData.DEFEND, symbols[(i / 2) % 4], (i / 2) % 13 + 1));
+                pattern.add(new Card(CardData.DEFEND, symbols[(i / 2) % 4], (i / 2) % 13 + 1));
             }
         }
         pattern.shuffle();
@@ -103,7 +100,7 @@ public class Main {
         return cards;
     }
 
-    public static Champion championSelect(Player player, ArrayList<Champion> championList) {
+    public static Champion championSelect(Player player, List<Champion> championList) {
         outputPlayerIsOn(player);
         for (int i = 0; i < championList.size(); i++) {
             Champion champion = championList.get(i);

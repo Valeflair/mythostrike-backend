@@ -1,22 +1,21 @@
 package com.mythostrike.model.game.core.activity;
 
 
-import com.mythostrike.model.game.core.Player;
+import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.management.EventManager;
+import lombok.Getter;
 
+@Getter
 public abstract class PassiveSkill extends Activity {
 
-    private Player player;
 
-    public PassiveSkill(String name, String description, Player player) {
-        super(name, description);
-        this.player = player;
+    public PassiveSkill(int id, String name, String description) {
+        super(id, name, description);
     }
 
-    public Player getPlayer() {
-        return player;
+
+    public void register(EventManager eventManager, Player player) {
     }
 
-    public void register(EventManager eventManager) {
-    }
+    public void activate();
 }

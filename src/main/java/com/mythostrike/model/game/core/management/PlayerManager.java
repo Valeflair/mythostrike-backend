@@ -1,9 +1,15 @@
 package com.mythostrike.model.game.core.management;
 
 
-import com.mythostrike.model.game.skill.events.handle.DamageHandle;
-import com.mythostrike.model.game.skill.events.handle.DamageType;
-import com.mythostrike.model.game.skill.events.type.EventTypeDamage;
+import com.mythostrike.model.game.core.activity.ActiveSkill;
+import com.mythostrike.model.game.core.activity.PassiveSkill;
+import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.core.activity.events.handle.DamageType;
+import com.mythostrike.model.game.core.activity.events.type.EventTypeDamage;
+import com.mythostrike.model.game.core.player.Champion;
+import com.mythostrike.model.game.core.player.Player;
+
+import java.util.List;
 
 public class PlayerManager {
 
@@ -36,10 +42,10 @@ public class PlayerManager {
                 gameManager.getEventManager().triggerEvent(EventTypeDamage.BEFORE_DAMAGE_DONE, damageHandle);
                 gameManager.getEventManager().triggerEvent(EventTypeDamage.DAMAGE_DONE, damageHandle);
                 //reduce hp
-                damageHandle.getTo().setCurrentHp(damageHandle.getTo().getCurrentHp() - damageHandle.getDamage());
+                damageHandle.getTo().decreaseCurrentHp(damageHandle.getDamage());
 
                 //output message
-                String hint = "Player " + damageHandle.getFrom().getName();
+                String hint = "Player " + damageHandle.getPlayer().getName();
                 hint += " deals " + damageHandle.getDamage() + " ";
                 if (!damageHandle.getDamageType().equals(DamageType.NORMAL)) {
                     hint += damageHandle.getDamageType().toString();
@@ -56,5 +62,33 @@ public class PlayerManager {
             //TODO heal
         }
 
+    }
+
+    public void initialChampions(Champion champion, Player player) {
+        player.setChampion(champion);
+        player.setMaxHp(champion.getMaxHp());
+        for (PassiveSkill passiveSkill : champion.getPassiveSkills()) {
+            addSkillToPlayer(player, passiveSkill);
+        }
+        for (ActiveSkill activeSkill : champion.getActiveSkills()) {
+            addSkillToPlayer(player, activeSkill);
+        }
+    }
+
+    public void addSkillToPlayer(Player player, PassiveSkill skill) {
+        List<PassiveSkill> skills = player.getPassiveSkills();
+        if (!skills.contains(skill)) {
+            skills.add(skill);
+            skill.register(gameManager.getEventManager(), player);
+            //TODO:add output message
+        }
+    }
+
+    public void addSkillToPlayer(Player player, ActiveSkill skill) {
+        List<ActiveSkill> skills = player.getActiveSkills();
+        if (!skills.contains(skill)) {
+            skills.add(skill);
+            //TODO:add output message
+        }
     }
 }
