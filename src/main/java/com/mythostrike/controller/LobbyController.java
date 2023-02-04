@@ -1,5 +1,6 @@
 package com.mythostrike.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.*;
@@ -12,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,9 +28,9 @@ import java.util.List;
 @Slf4j
 public class LobbyController {
 
-    //private final SimpMessagingTemplate simpMessagingTemplate = new SimpMessagingTemplate(null);
-
     private final UserService userService;
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
@@ -45,7 +48,7 @@ public class LobbyController {
     }
 
     @PostMapping
-    public ResponseEntity<LobbyIdRequest> create(Principal principal, @RequestBody CreateLobbyRequest request)
+    public ResponseEntity<Lobby> create(Principal principal, @RequestBody CreateLobbyRequest request)
         throws IllegalInputException {
         log.debug("create lobby request from '{}' with  mode '{}", principal.getName(), request.modeId());
 
@@ -56,13 +59,15 @@ public class LobbyController {
         //create lobby
         Lobby lobby = lobbyList.createLobby(user, mode);
         log.debug("created lobby '{}' with  mode '{}", lobby.getId(), request.modeId());
+
+        updateLobby(lobby.getId());
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new LobbyIdRequest(lobby.getId()));
+            .body(lobby);
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Void> join(Principal principal, @RequestBody LobbyIdRequest request)
+    public ResponseEntity<Lobby> join(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
         log.debug("join lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
 
@@ -78,8 +83,8 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lobby is full");
         }
 
-        return ResponseEntity
-            .status(HttpStatus.OK).build();
+        updateLobby(request.lobbyId());
+        return ResponseEntity.ok(lobby);
     }
 
     @PostMapping("/leave")
@@ -99,6 +104,7 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not in lobby");
         }
 
+        updateLobby(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -120,6 +126,7 @@ public class LobbyController {
         //change mode in lobby
         lobby.changeMode(mode, user);
 
+        updateLobby(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -142,6 +149,7 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seat is already taken");
         }
 
+        updateLobby(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -163,6 +171,7 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lobby is full");
         }
 
+        updateLobby(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -187,11 +196,24 @@ public class LobbyController {
             .status(HttpStatus.CREATED).build();
     }
 
-    /*public void updateLobby(int lobbyId) {
+    //TODO: remove
+    @PostMapping("/lobby")
+    public ResponseEntity<Lobby> getLobby(Principal principal, @RequestBody LobbyIdRequest request)
+        throws IllegalInputException {
+        log.debug("get lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
+        //get objects from REST data
+        Lobby lobby = lobbyList.getLobby(request.lobbyId());
+        if (lobby == null) {
+            throw new IllegalInputException("Lobby not found");
+        }
+        return ResponseEntity.ok(lobby);
+    }
+
+    public void updateLobby(int lobbyId) {
         Lobby lobby = lobbyList.getLobby(lobbyId);
         if (lobby == null) {
             return;
         }
         simpMessagingTemplate.convertAndSend("/lobbies/" + lobbyId, lobby);
-    }*/
+    }
 }

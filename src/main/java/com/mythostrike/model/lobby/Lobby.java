@@ -1,22 +1,25 @@
 package com.mythostrike.model.lobby;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Player;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Lobby {
     private static final int MAX_PLAYERS = 8;
-
     private final int id;
     private Mode mode;
     private Player owner;
+    @JsonIgnore
     private LobbyStatus status;
     private final Seat[] seats;
+    @JsonIgnore
     private int numberPlayers;
-
 
     public Lobby(int id, Mode mode, User owner) {
         this.id = id;
@@ -33,6 +36,17 @@ public class Lobby {
         seats[0].setPlayer(new Player(owner));
     }
 
+    @JsonGetter("mode")
+    private String modeToString() {
+        return mode.name();
+    }
+
+    @JsonGetter("owner")
+    private String ownerToString() {
+        return owner.getUsername();
+    }
+
+    @JsonIgnore
     public boolean isFull() {
         return numberPlayers >= mode.maxPlayer();
     }
@@ -135,7 +149,7 @@ public class Lobby {
     }
 
     public void changeMode(Mode mode, User user) throws IllegalInputException {
-        if (!user.getUsername().equals(owner.getUsername())) {
+        if (isNotOwner(user)) {
             throw new IllegalInputException("user is not the owner");
         }
         //TODO: mit game != null abfrage ersetzen
@@ -147,7 +161,7 @@ public class Lobby {
     }
 
     public boolean createGame(User user) throws IllegalInputException {
-        if (!user.getUsername().equals(owner.getUsername())) {
+        if (isNotOwner(user)) {
             throw new IllegalInputException("user is not the owner");
         }
 
@@ -158,5 +172,9 @@ public class Lobby {
             return true;
         }
         return false;
+    }
+
+    private boolean isNotOwner(User user) {
+        return !user.getUsername().equals(owner.getUsername());
     }
 }
