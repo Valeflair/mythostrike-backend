@@ -44,7 +44,7 @@ public class PickRequest extends Activity {
         //TODO implement with highlightmessage
         //highlightmessage should contain a class PlayCard added into gamemanager and use setTarget or setCard before call back
 
-
+        //TODO think how to keep card like duel consist in acitivity list
     }
 
     private List<Card> getPlayableCards(Player player) {

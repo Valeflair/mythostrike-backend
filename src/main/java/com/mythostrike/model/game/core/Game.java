@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Game {
@@ -63,4 +64,9 @@ public class Game {
         //TODO: merge with apis
     }
 
+    public List<Player> getOtherPlayers(Player player) {
+        List<Player> players = new ArrayList<>(alivePlayers);
+        alivePlayers.remove(player);
+        return players;
+    }
 }

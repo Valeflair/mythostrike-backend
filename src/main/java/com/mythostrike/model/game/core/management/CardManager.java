@@ -28,7 +28,7 @@ public class CardManager {
 
     public Card judge() {
         //TODO:use judgeHandle instead judge
-        return gameManager.getGame().getDrawPile().subtractCard();
+        return gameManager.getGame().getDrawPile().subtractCard(0);
     }
 
     public void drawCard(CardDrawHandle cardDrawHandle) {
@@ -49,7 +49,7 @@ public class CardManager {
         gameManager.debug(debug.toString());
     }
 
-    public void throwCard(Player player, ArrayList<Card> cards, CardSpace fromSpace) {
+    public void throwCard(Player player, List<Card> cards, CardSpace fromSpace) {
 
         CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
             "player drops card", player, null, fromSpace, gameManager.getGame().getThrowPile());

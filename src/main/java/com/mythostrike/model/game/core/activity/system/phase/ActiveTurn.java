@@ -19,6 +19,7 @@ public class ActiveTurn extends Activity {
 
     @Override
     public void use() {
+        gameManager.cleanTable();
         Player player = gameManager.getGame().getCurrentPlayer();
         gameManager.queueActivity(new PickCardToPLay(gameManager));
     }

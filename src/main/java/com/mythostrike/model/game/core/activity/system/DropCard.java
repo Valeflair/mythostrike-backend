@@ -6,6 +6,7 @@ import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.core.management.CardManager;
 import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +36,6 @@ public class DropCard extends Activity {
         if (cards == null || cards.size() == 0) {
             return;
         }
-        gameManager.getCardManager().throwCard(player, cards, );
+        gameManager.getCardManager().throwCard(player, cards, player.getHandCards());
     }
 }
