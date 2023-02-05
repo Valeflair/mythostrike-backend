@@ -214,6 +214,7 @@ public class LobbyController {
         if (lobby == null) {
             return;
         }
+        log.debug("update lobby '{}'", lobbyId);
         simpMessagingTemplate.convertAndSend("/lobbies/" + lobbyId, lobby);
     }
 }
