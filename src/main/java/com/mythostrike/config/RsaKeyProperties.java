@@ -1,4 +1,4 @@
-package com.mythostrike.account.config;
+package com.mythostrike.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

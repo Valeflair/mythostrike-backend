@@ -8,7 +8,13 @@ class MythostrikeBackendApplicationTests {
 
     @Test
     void contextLoads() {
-        
+
+    }
+
+    @Test
+    void webSocketTest() {
+        //test if websockets work
+
     }
 
 }

@@ -1,4 +1,4 @@
-package com.mythostrike.account.config;
+package com.mythostrike.config;
 
 import com.mythostrike.account.service.UserService;
 import com.nimbusds.jose.jwk.JWK;
@@ -45,7 +45,7 @@ public class SecurityConfig {
                     .requestMatchers("/users/login").permitAll()
                     .requestMatchers("/users/register").permitAll()
                     .requestMatchers(HttpMethod.GET).permitAll()
-                    .requestMatchers("/ws").permitAll()
+                    .requestMatchers("/ws/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
                 )

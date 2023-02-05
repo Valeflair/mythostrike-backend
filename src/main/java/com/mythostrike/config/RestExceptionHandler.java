@@ -1,4 +1,4 @@
-package com.mythostrike.controller;
+package com.mythostrike.config;
 
 import com.mythostrike.model.exception.IllegalInputException;
 import jakarta.persistence.EntityNotFoundException;
