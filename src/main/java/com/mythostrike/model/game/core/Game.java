@@ -23,10 +23,13 @@ public class Game {
     private String console;
     private final ArrayList<Player> allPlayers;
     private final ArrayList<Player> alivePlayers;
-    private CardList cardList;
-    private CardPile drawDeck;
-    private CardPile throwDeck;
-    private CardPile tableDeck;
+    private final CardList cardList;
+    @Setter
+    private CardPile drawPile;
+    @Setter
+    private CardPile throwPile;
+    @Setter
+    private CardPile tablePile;
     private final Mode mode;
 
 
@@ -35,10 +38,10 @@ public class Game {
         this.mode = mode;
         this.gameManager = gameManager;
         alivePlayers = new ArrayList<>(allPlayers);
-        cardList = CardList.getInstance();
-        drawDeck = new CardPile(cardList.getCards());
-        tableDeck = new CardPile();
-        throwDeck = new CardPile();
+        cardList = new CardList(CardList.getInstance().getCards());
+        drawPile = new CardPile(cardList.getCards());
+        tablePile = new CardPile();
+        throwPile = new CardPile();
     }
 
     public void nextPlayer() {

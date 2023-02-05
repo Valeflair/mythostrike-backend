@@ -4,6 +4,7 @@ import com.mythostrike.model.game.core.activity.Card;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -12,17 +13,31 @@ public class CardList {
     @Getter
     private static final CardList instance = new CardList(new ArrayList<>(List.of()));
     protected List<Card> cards;
+    private HashMap<Integer, Card> cardMap;
 
     public CardList() {
         cards = new ArrayList<>();
+        cardMap = new HashMap<>();
     }
 
     public CardList(List<Card> cards) {
         cards = new ArrayList<>(cards);
+        cardMap = new HashMap<>();
+        for (Card card : cards) {
+            cardMap.put(card.getId(), card);
+        }
+    }
+
+    public Card getCardById(int id) {
+        if (!cardMap.containsKey(id)) {
+            return null;
+        }
+        return cardMap.get(id);
     }
 
     public void addCard(Card card) {
         cards.add(card);
+        cardMap.put(card.getId(), card);
     }
 
     public void addCardToBottom(Card card) {

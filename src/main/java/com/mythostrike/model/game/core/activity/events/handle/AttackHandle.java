@@ -33,7 +33,7 @@ public class AttackHandle extends EventHandle {
         this.attack = attack;
         isPrevented = false;
         defendAskHandle = new CardAskHandle(gameManager,  "you get attacked, drop a defend or you get damage",
-            opponent, List.of(Defend.NAME), opponent.getHandCards(), gameManager.getGame().getTableDeck(), 1, false , true);
+            opponent, List.of(Defend.NAME), opponent.getHandCards(), gameManager.getGame().getTablePile(), 1, false , true);
         targetCount = 1;
     }
 

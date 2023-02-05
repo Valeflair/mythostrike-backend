@@ -15,15 +15,15 @@ import java.util.List;
 @Setter
 public class CardMoveHandle extends EventHandle {
     private Player to;
-    private CardSpace fromPile;
-    private CardPile toPile;
+    private CardSpace fromSpace;
+    private CardSpace toSpace;
     private List<Card> moveCards;
 
     public CardMoveHandle(GameManager gameController, String reason, Player player, Player to,
-                          CardPile fromPile, CardPile toPile) {
+                          CardSpace fromSpace, CardSpace toSpace) {
         super(gameController, reason, player);
         this.to = to;
-        this.fromPile = fromPile;
-        this.toPile = toPile;
+        this.fromSpace = fromSpace;
+        this.toSpace = toSpace;
     }
 }

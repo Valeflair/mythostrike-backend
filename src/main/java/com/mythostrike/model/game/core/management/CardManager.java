@@ -1,15 +1,14 @@
 package com.mythostrike.model.game.core.management;
 
 import com.mythostrike.model.game.core.activity.cards.CardPile;
-import com.mythostrike.model.game.core.activity.cards.CardList;
 import com.mythostrike.model.game.core.activity.cards.CardSpace;
-import com.mythostrike.model.game.core.activity.cards.CardSymbol;
 import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardManager {
     GameManager gameManager;
@@ -19,25 +18,17 @@ public class CardManager {
     }
 
 
-    public Card cloneCard(Card card) {
-        return new Card(card.getCardData(), card.getSymbol(), card.getPoint());
-    }
-
-    //TODO : discuss if its necessary
-    public Card cloneCard(CardData data, CardSymbol symbol, int point) {
-        return new Card(data, symbol, point);
-    }
-
-    public void swapDeck() {
-        CardPile dummy = gameManager.getGame().getDrawDeck();
-        gameManager.getGame().setDrawDeck(gameManager.getGame().getThrowDeck());
-        gameManager.getGame().setThrowDeck(dummy);
-        gameManager.getGame().getDrawDeck().shuffle();
+    public void shuffleDiscardPile() {
+        CardPile dummy = gameManager.getGame().getDrawPile();
+        gameManager.getGame().setDrawPile(gameManager.getGame().getThrowPile());
+        gameManager.getGame().setThrowPile(dummy);
+        gameManager.getGame().getDrawPile().shuffle();
+        //TODO update it to frontend
     }
 
     public Card judge() {
         //TODO:use judgeHandle instead judge
-        return gameManager.getGame().getDrawDeck().subtractCard();
+        return gameManager.getGame().getDrawPile().subtractCard();
     }
 
     public void drawCard(CardDrawHandle cardDrawHandle) {
@@ -47,10 +38,10 @@ public class CardManager {
         CardPile drawDeck = cardDrawHandle.getDrawPile();
         //TODO : add CardDrawEvent
         StringBuilder debug = new StringBuilder(
-            "Player " + player.getName() + " draws " + count + "card(s) because of " + cardDrawHandle.getReason() +
-                ", they are :");
+            "Player " + player.getName() + " draws " + count + "card(s) because of " + cardDrawHandle.getReason()
+                + ", they are :");
         for (int i = 0; i < cardDrawHandle.getCount(); i++) {
-            Card card = drawDeck.subtractCard();
+            Card card = drawDeck.subtractCard(0);
             player.getHandCards().add(card);
             debug.append(card.getName()).append(",");
         }
@@ -58,26 +49,22 @@ public class CardManager {
         gameManager.debug(debug.toString());
     }
 
-    public void throwCard(Player player, ArrayList<Card> cards, CardSpace fromSpace, CardList throwList,
-                          String reason) {
-        //TODO : call event for CardMoveEvent
-        StringBuilder hint = new StringBuilder("Player " + player + " has dropped ");
-        for (Card card : cards) {
-            hint.append(card.getName()).append("(").append(card.getSymbol()).append(" ").append(card.getPoint())
-                .append(")");
-            hint.append(",");
-            fromSpace.getCards().remove(card);
-            throwList.addCard(card);
-        }
-        hint.deleteCharAt(hint.length() - 1);
-        gameManager.getGame().output(hint.toString());
+    public void throwCard(Player player, ArrayList<Card> cards, CardSpace fromSpace) {
+
+        CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
+            "player drops card", player, null, fromSpace, gameManager.getGame().getThrowPile());
+        moveCard(cardMoveHandle);
+
     }
 
     public void moveCard(CardMoveHandle cardMoveHandle) {
-        //TODO : update CardMoveEvent
+        List<Card> cards = cardMoveHandle.getMoveCards();
+        CardSpace from = cardMoveHandle.getFromSpace();
+        CardSpace to = cardMoveHandle.getToSpace();
+        from.getCards().removeAll(cards);
+        to.getCards().addAll(cards);
+
+        ///TODO update it to frontend
     }
 
-    public void playerGetCardFromList(Player player, CardList cardList, String reason) {
-        //TODO : implement
-    }
 }

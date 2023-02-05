@@ -15,7 +15,6 @@ import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.events.handle.CardAskHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
-import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.core.activity.events.handle.PhaseChangeHandle;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,7 +84,7 @@ public class GameManager {
 
             cardManager.drawCard(
                 new CardDrawHandle(this, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,
-                    game.getDrawDeck()));
+                    game.getDrawPile()));
 
         }
 
@@ -199,7 +198,7 @@ public class GameManager {
                 //eventmanager.triggerEvent(PhaseStart, PhaseHandle)
                 cardManager.drawCard(
                     new CardDrawHandle(this, null, "draw 2 cards at turn start", player, CARD_COUNT_TURN_START,
-                        game.getDrawDeck()));
+                        game.getDrawPile()));
                 //eventmanager.triggerEvent(PhaseStart)
 
             }
@@ -220,7 +219,7 @@ public class GameManager {
                     int drop = player.getHandCards().getSum() - player.getCurrentHp();
                     CardAskHandle cardAskHandle =
                         new CardAskHandle(this, null, "you have to drop " + drop + " Cards because of your HP", player,
-                            player.getHandCards(), null, drop, game.getThrowDeck(), false);
+                            player.getHandCards(), null, drop, game.getThrowPile(), false);
                     gameController.askForDiscard(cardAskHandle);
                 }
             }
@@ -251,18 +250,7 @@ public class GameManager {
         //TODO:implement with APIs
     }
 
-    private CardSpace getPlayableCards(Player player) {
-        CardSpace playableCards = new CardSpace();
-        for (Card card : player.getHandCards().getCards()) {
-            CardUseHandle cardUseHandle = new CardUseHandle(
-                this, card, "check if card is playable", player, player,
-                    true);
-            if (card.isPlayable(cardUseHandle)) {
-                playableCards.add(card);
-            }
-        }
-        return playableCards;
-    }
+
 
     private void changePhase(Player player, Phase phase, String reason) {
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(this, reason, player, player.getPhase(), phase);
@@ -272,8 +260,8 @@ public class GameManager {
 
     private void cleanTable() {
         StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
-        CardPile throwDeck = game.getThrowDeck();
-        CardPile tableDeck = game.getTableDeck();
+        CardPile throwDeck = game.getThrowPile();
+        CardPile tableDeck = game.getTablePile();
         for (Card card : tableDeck.getCards()) {
             hint.append(card.toString()).append(",");
 
@@ -281,6 +269,14 @@ public class GameManager {
         }
         tableDeck.getCards().clear();
         debug(hint.toString());
+    }
+
+    public void queueActivity(Activity activity) {
+        currentActivity.add(0, activity);
+    }
+
+    public void queueActivity(int pos, Activity activity) {
+        currentActivity.add(pos, activity);
     }
 
     //---------------getter----------
