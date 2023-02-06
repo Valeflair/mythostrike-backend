@@ -46,8 +46,7 @@ public class Game {
     }
 
     public void nextPlayer() {
-
-        //TODO:implement
+        alivePlayers.add(alivePlayers.remove(0));
     }
 
     public Player getCurrentPlayer() {

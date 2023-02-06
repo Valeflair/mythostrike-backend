@@ -26,6 +26,8 @@ public class PickRequest extends Activity {
     @Setter
     private List<Player> selectedPlayers;
     @Setter
+    private boolean clickedCancel;
+    @Setter
     private HighlightMessage highlightMessage;
 
     public PickRequest(Player player, GameManager gameManager, HighlightMessage highlightMessage) {
@@ -39,8 +41,19 @@ public class PickRequest extends Activity {
     @Override
     public void use() {
         //highlight message to frontend and get feedback in data base
+        /*
+         * use() -> gameController.highlight(this)
+         * ....
+         * in gameController : {
+         *     pickRequest.setSelectedCards(...);
+         *     pickRequest.setSelectedPlayers(...);
+         *     pickRequest.setClickedCancel(...);
+         *     gameManager.proceed();
+         * }
+         */
         //TODO implement with highlightmessage
         //TODO think how to keep card like duel consist in acitivity list
+        //TODO dont forget the VIEW_AS skill,think how to do
     }
 
 

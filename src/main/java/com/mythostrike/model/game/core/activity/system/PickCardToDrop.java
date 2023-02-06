@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.core.activity.system;
 
+import com.mythostrike.model.game.core.Game;
 import com.mythostrike.model.game.core.HighlightMessage;
 import com.mythostrike.model.game.core.activity.Activity;
 import com.mythostrike.model.game.core.activity.Card;
@@ -32,10 +33,7 @@ public class PickCardToDrop extends Activity {
 
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> cards = player.getHandCards().getCards();
-        List<Integer> cardIds = new ArrayList<>();
-        for (Card card : cards) {
-            cardIds.add(card.getId());
-        }
+        List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
             null, amount, amount, 0, 0, "Pick Card to drop", false);
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);

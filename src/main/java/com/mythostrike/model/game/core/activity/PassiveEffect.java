@@ -18,6 +18,10 @@ public class PassiveEffect {
         this.skill = skill;
     }
 
+    public void cleanTemporaryPlayerList() {
+        temporaryPlayerList.clear();
+    }
+
     public boolean addPermanentTo(Player player) {
         if (!permanentPlayerList.contains(player)) {
             permanentPlayerList.add(player);

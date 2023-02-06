@@ -19,7 +19,7 @@ public class Revenge extends PassiveSkill {
     }
 
     @Override
-    public void register(EventManager eventManager) {
+    public void register(EventManager eventManager, Player player) {
         eventManager.registerEvent(EventTypeDamage.DAMAGED, this);
     }
 

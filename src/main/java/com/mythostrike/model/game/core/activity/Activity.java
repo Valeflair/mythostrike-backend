@@ -67,6 +67,17 @@ public abstract class Activity {
     public void use() {
     }
 
+    public void activate() {
+    }
+
+    /**
+     * if returns true, Game Manager will delete this activity from queue after call use()
+     * @return value if the activity has to keep stay in currentActivity after use()
+     */
+    public boolean end() {
+        return true;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

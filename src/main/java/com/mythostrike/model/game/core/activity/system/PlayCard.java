@@ -35,7 +35,6 @@ public class PlayCard extends Activity {
                 restrict.put(card.getName(), restrict.get(card.getName()) - 1);
                 card.activate();
             }
-
         }
     }
 }

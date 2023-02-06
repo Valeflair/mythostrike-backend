@@ -14,8 +14,8 @@ public abstract class PassiveSkill extends Activity {
     }
 
 
-    public void register(EventManager eventManager, Player player) {
-    }
+    public abstract void register(EventManager eventManager, Player player);
 
-    public void activate();
+    public void activate() { }
+
 }

@@ -75,7 +75,7 @@ public class GameManager {
         selectChampionPhase(players);
 
 
-
+        //initial Cards for player
         game.output("Game Started, Player has following champions:");
         for (Player player : players) {
             game.output(
@@ -87,6 +87,7 @@ public class GameManager {
                     game.getDrawPile()));
 
         }
+
 
         phase = Phase.ROUNDSTART;
         proceed();
@@ -167,7 +168,9 @@ public class GameManager {
 
     private void runActivity(@NotNull Activity activity) {
         activity.use();
-        currentActivity.remove(activity);
+        if (activity.end()) {
+            currentActivity.remove(activity);
+        }
     }
 
     public void cleanTable() {
@@ -195,8 +198,14 @@ public class GameManager {
         //TODO implement with frontend panel
     }
 
-    //---------------getter----------
-
+    //---------------compiling method----------
+    public static List<Integer> convertCardsToInteger(List<Card> cards) {
+        List<Integer> cardIds = new ArrayList<>();
+        for (Card card : cards) {
+            cardIds.add(card.getId());
+        }
+        return cardIds;
+    }
 
 
 }
