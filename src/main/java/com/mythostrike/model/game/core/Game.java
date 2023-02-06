@@ -69,4 +69,9 @@ public class Game {
         alivePlayers.remove(player);
         return players;
     }
+
+    public boolean isGameOver() {
+        //TODO implement
+        return false;
+    }
 }

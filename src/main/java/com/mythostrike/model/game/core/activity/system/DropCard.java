@@ -2,9 +2,6 @@ package com.mythostrike.model.game.core.activity.system;
 
 import com.mythostrike.model.game.core.activity.Activity;
 import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.core.management.CardManager;
 import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
@@ -19,14 +16,15 @@ public class DropCard extends Activity {
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
     @Setter
-    @Getter
     private PickRequest pickRequest;
 
 
-    public DropCard(GameManager gameManager) {
+    public DropCard(GameManager gameManager, PickRequest pickRequest) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
+        this.pickRequest = pickRequest;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class PickCardToPLay extends Activity {
             null, 1, 1, 0, 0, "Pick a Card to play", true);
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
 
-        PlayCard playCard = new PlayCard(gameManager);
+        PlayCard playCard = new PlayCard(gameManager, pickRequest);
         gameManager.queueActivity(playCard);
         gameManager.queueActivity(pickRequest);
 

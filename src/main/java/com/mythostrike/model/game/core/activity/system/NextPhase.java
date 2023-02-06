@@ -22,11 +22,12 @@ public class NextPhase extends SystemAction {
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
     public static final int ID = -1;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     //TODO : adjust with highlightMessage
     public NextPhase(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION, gameManager);
+        this.gameManager = gameManager;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class NextPhase extends SystemAction {
             .getCurrentPlayer(), before);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
         Phase after = Phase.nextPhase(before);
-        phaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
+        PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
             .getCurrentPlayer(), after);
 
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(
@@ -54,8 +55,8 @@ public class NextPhase extends SystemAction {
             case DISCARD -> gameManager.queueActivity(new DropTurn(gameManager));
             default -> { }
         }
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, phaseHandle);
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, phaseHandle);
+        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, afterPhaseHandle);
+        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, afterPhaseHandle);
         gameManager.setPhase(after);
     }
 }

@@ -21,11 +21,7 @@ public class RoundStartTurn extends Activity {
     @Override
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
-        PhaseHandle phaseHandle = new PhaseHandle(gameManager, "running his phase", player, gameManager.getPhase());
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, phaseHandle);
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, phaseHandle);
         player.resetImmunity();
         player.resetRestrict();
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
     }
 }

@@ -15,6 +15,7 @@ import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -130,8 +131,8 @@ public class GameManager {
             players.get(i).setIdentity(mode.getIdentities().get(i));
         }
         //set godking into the first place
-        if (!players.get(0).getIdentity().equals(Identity.GODKING) &&
-            (mode.equals(Mode.IDENTITY))) {
+        if (!players.get(0).getIdentity().equals(Identity.GODKING)
+            && (mode.equals(Mode.IDENTITY))) {
             for (int i = 0; i < players.size(); i++) {
                 if (players.get(i).getIdentity().equals(Identity.GODKING)) {
                     Player godking = players.get(i);
@@ -145,6 +146,7 @@ public class GameManager {
     //----------------GameRun----------------
 
     public void proceed() {
+        proceeding = true;
 
         while (proceeding) {
             if (currentActivity.isEmpty()) {
@@ -154,11 +156,16 @@ public class GameManager {
             if (activity.getName().equals(PickRequest.NAME)) {
                 proceeding = false;
             }
+            if (game.isGameOver()) {
+                gameOver();
+                proceeding = false;
+                return;
+            }
             runActivity(activity);
         }
     }
 
-    private void runActivity(Activity activity) {
+    private void runActivity(@NotNull Activity activity) {
         activity.use();
         currentActivity.remove(activity);
     }
@@ -182,6 +189,10 @@ public class GameManager {
 
     public void queueActivity(int pos, Activity activity) {
         currentActivity.add(pos, activity);
+    }
+
+    public void gameOver() {
+        //TODO implement with frontend panel
     }
 
     //---------------getter----------

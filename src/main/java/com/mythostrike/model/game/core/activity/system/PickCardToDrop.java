@@ -6,6 +6,7 @@ import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class PickCardToDrop extends Activity {
     public static final int CARD_COUNT_TURN_START = 2;
 
     private GameManager gameManager;
-    int amount;
+    @Setter
+    private int amount;
 
     public PickCardToDrop(GameManager gameManager, int amount) {
         super(ID, NAME, DESCRIPTION);
@@ -37,7 +39,7 @@ public class PickCardToDrop extends Activity {
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
             null, amount, amount, 0, 0, "Pick Card to drop", false);
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
-        DropCard dropCard = new DropCard(gameManager);
+        DropCard dropCard = new DropCard(gameManager, pickRequest);
         gameManager.queueActivity(dropCard);
         gameManager.queueActivity(pickRequest);
         //TODO implement with highlightmessage

@@ -15,11 +15,13 @@ public class PlayCard extends Activity {
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
-    private PickRequest pickRequest;
+    private final GameManager gameManager;
+    private final PickRequest pickRequest;
 
-    public PlayCard(GameManager gameManager) {
+    public PlayCard(GameManager gameManager, PickRequest pickRequest) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
+        this.pickRequest = pickRequest;
     }
 
     @Override

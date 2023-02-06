@@ -14,17 +14,18 @@ import java.util.List;
 
 @Getter
 public class PickRequest extends Activity {
-    public static final String NAME = "Draw";
-    public static final String DESCRIPTION = "Drawing it's card";
+    public static final String NAME = "pickreqeust";
+    public static final String DESCRIPTION = "you have to pick card";
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
-    private Player player;
+    private final GameManager gameManager;
+    private final Player player;
     @Setter
     private List<Card> selectedCards;
     @Setter
     private List<Player> selectedPlayers;
+    @Setter
     private HighlightMessage highlightMessage;
 
     public PickRequest(Player player, GameManager gameManager, HighlightMessage highlightMessage) {
@@ -34,31 +35,14 @@ public class PickRequest extends Activity {
         this.highlightMessage = highlightMessage;
     }
 
+
     @Override
     public void use() {
-        Player player = gameManager.getGame().getCurrentPlayer();
-        List<Card> playableCards = getPlayableCards(player);
-
-        PlayCard playCard = new PlayCard(gameManager);
-        gameManager.queueActivity(playCard);
+        //highlight message to frontend and get feedback in data base
         //TODO implement with highlightmessage
-        //highlightmessage should contain a class PlayCard added into gamemanager and use setTarget or setCard before call back
-
         //TODO think how to keep card like duel consist in acitivity list
     }
 
-    private List<Card> getPlayableCards(Player player) {
 
-        List<Card> playableCards = new ArrayList<>();
-        for (Card card : player.getHandCards().getCards()) {
-            CardUseHandle cardUseHandle = new CardUseHandle(
-                gameManager, card, "check if card is playable", player, player,
-                true);
-            if (card.checkCondition(cardUseHandle)) {
-                playableCards.add(card);
-            }
-        }
-        return playableCards;
-    }
 
 }
