@@ -45,7 +45,7 @@ public class SecurityConfig {
                     .requestMatchers("/users/login").permitAll()
                     .requestMatchers("/users/register").permitAll()
                     .requestMatchers(HttpMethod.GET).permitAll()
-                    .requestMatchers("/gs-guide-websocket/**").permitAll()
+                    .requestMatchers("/updates/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
                 )
