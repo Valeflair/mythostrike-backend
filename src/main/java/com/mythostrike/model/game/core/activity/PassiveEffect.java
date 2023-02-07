@@ -22,20 +22,16 @@ public class PassiveEffect {
         temporaryPlayerList.clear();
     }
 
-    public boolean addPermanentTo(Player player) {
+    public void addPermanentTo(Player player) {
         if (!permanentPlayerList.contains(player)) {
             permanentPlayerList.add(player);
-            return true;
         }
-        return false;
     }
 
-    public boolean addTemporaryTo(Player player) {
+    public void addTemporaryTo(Player player) {
         if (!temporaryPlayerList.contains(player)) {
             temporaryPlayerList.add(player);
-            return true;
         }
-        return false;
     }
 
     public boolean deletePermanentFrom(Player player) {

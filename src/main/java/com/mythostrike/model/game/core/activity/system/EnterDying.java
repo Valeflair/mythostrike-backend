@@ -64,7 +64,7 @@ public class EnterDying extends Activity {
             return;
         } else {
             Player healer = players.get(0);
-
+            healer.getHandCards()
 
 
             HighlightMessage highlightMessage = new HighlightMessage();
