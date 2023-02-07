@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class Player {
 
-    private String username;
+    private final String username;
 
     public Player(User user) {
         this.username = user.getUsername();

@@ -39,20 +39,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors().and()
-                .csrf(AbstractHttpConfigurer::disable)  // maybe change
-                .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/users/login").permitAll()
-                    .requestMatchers("/users/register").permitAll()
-                    .requestMatchers(HttpMethod.GET).permitAll()
-                    .requestMatchers("/updates/**").permitAll()
-                    .requestMatchers("/error").permitAll()
-                    .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .userDetailsService(userService)
-                .build();
+            .cors().and()
+            .csrf(AbstractHttpConfigurer::disable)  // maybe change
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/users/register").permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers("/updates/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .userDetailsService(userService)
+            .build();
     }
 
     @Bean

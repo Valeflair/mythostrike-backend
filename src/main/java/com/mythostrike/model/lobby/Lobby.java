@@ -2,8 +2,6 @@ package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Player;
@@ -13,11 +11,11 @@ import lombok.Getter;
 public class Lobby {
     private static final int MAX_PLAYERS = 8;
     private final int id;
+    private final Seat[] seats;
     private Mode mode;
     private Player owner;
     @JsonIgnore
     private LobbyStatus status;
-    private final Seat[] seats;
     @JsonIgnore
     private int numberPlayers;
 
@@ -61,7 +59,7 @@ public class Lobby {
                 throw new IllegalInputException("user is already in the lobby");
             }
         }
-        for (Seat seat: seats) {
+        for (Seat seat : seats) {
             if (seat.getPlayer() == null) {
                 seat.setPlayer(new Player(user));
                 numberPlayers++;

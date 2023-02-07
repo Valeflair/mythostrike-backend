@@ -16,14 +16,6 @@ public enum Identity {
     RENEGADE("Renegade", true, true),
     NONE("none", false, true);
 
-    @Getter
-    private final String name;
-    @Getter
-    private final boolean incognito;
-    private final boolean playerNeedsToBeAlive;
-    private List<Identity> hasToSurvive;
-    private List<Identity> hasToDie;
-
     static {
         TEAM_RED.hasToSurvive = List.of(TEAM_RED);
         TEAM_RED.hasToDie = List.of(TEAM_BLUE);
@@ -43,6 +35,14 @@ public enum Identity {
         RENEGADE.hasToSurvive = List.of(RENEGADE);
         RENEGADE.hasToDie = List.of(GOD_KING, GENERAL, REBEL);
     }
+
+    @Getter
+    private final String name;
+    @Getter
+    private final boolean incognito;
+    private final boolean playerNeedsToBeAlive;
+    private List<Identity> hasToSurvive;
+    private List<Identity> hasToDie;
 
     Identity(String name, boolean incognito, boolean playerNeedsToBeAlive) {
         this.name = name;

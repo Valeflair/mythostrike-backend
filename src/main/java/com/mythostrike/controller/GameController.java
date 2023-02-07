@@ -1,13 +1,16 @@
 package com.mythostrike.controller;
 
 import com.mythostrike.controller.message.game.*;
-import com.mythostrike.controller.message.lobby.*;
+import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.game.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,10 +24,10 @@ public class GameController {
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request) {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
-                principal.getName());
+            principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/cards")
@@ -32,34 +35,34 @@ public class GameController {
         log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/targets")
     public ResponseEntity<Void> useCard(Principal principal, @RequestBody UseCardRequest request) {
         log.debug("use card '{}' on '{}' request in '{}' from '{}'", request.cardId(), request.targets(),
-                request.lobbyId(), principal.getName());
+            request.lobbyId(), principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/discard")
     public ResponseEntity<Void> discardCard(Principal principal, @RequestBody DiscardCardRequest request) {
         log.debug("discard cards '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(),
-                principal.getName());
+            principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
         log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
-                principal.getName());
+            principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/end")
@@ -67,7 +70,7 @@ public class GameController {
         log.debug("end turn request in '{}' from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+            .status(HttpStatus.OK).build();
     }
 
     public void selectChampionFrom(ChampionSelectionMessage message) {
@@ -85,7 +88,6 @@ public class GameController {
     public void updateGame(CardMoveMessage message, List<Player> players) {
 
     }
-
 
 
 }
