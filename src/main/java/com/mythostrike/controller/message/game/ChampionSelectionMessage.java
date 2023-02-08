@@ -1,6 +1,6 @@
 package com.mythostrike.controller.message.game;
 
-import com.mythostrike.model.game.Champion;
+import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.lobby.Identity;
 
 import java.util.List;

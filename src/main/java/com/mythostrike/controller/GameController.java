@@ -9,7 +9,7 @@ import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseCardRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
-import com.mythostrike.model.game.Player;
+import com.mythostrike.model.game.player.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,10 +28,14 @@ import java.util.List;
 @Slf4j
 public class GameController {
 
+    //TODO: add cancel request
+
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request) {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
             principal.getName());
+
+
 
         return ResponseEntity
             .status(HttpStatus.OK).build();
@@ -40,6 +44,8 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCard(Principal principal, @RequestBody SelectCardRequest request) {
         log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
+
+
 
         return ResponseEntity
             .status(HttpStatus.OK).build();
@@ -80,21 +86,19 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
-    public void selectChampionFrom(ChampionSelectionMessage message) {
+    public void selectChampionFrom(int lobbyId, ChampionSelectionMessage message) {
 
     }
 
-    public void highlight(HighlightMessage message) {
+    public void highlight(int lobbyId, HighlightMessage message) {
 
     }
 
-    public void updateGame(CardMoveMessage message) {
+    public void updateGame(int lobbyId, CardMoveMessage message) {
 
     }
 
-    public void updateGame(CardMoveMessage message, List<Player> players) {
+    public void updateGame(int lobbyId, CardMoveMessage message, List<Player> players) {
 
     }
-
-
 }

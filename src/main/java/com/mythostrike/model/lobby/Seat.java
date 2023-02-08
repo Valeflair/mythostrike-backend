@@ -1,12 +1,16 @@
 package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.mythostrike.model.game.Player;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.mythostrike.controller.message.lobby.SeatMessage;
+import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 public class Seat {
+    @JsonIgnore
     private final int id;
     @Setter
     private Player player;
@@ -21,10 +25,11 @@ public class Seat {
     }
 
     @JsonGetter("player")
-    private String modeToString() {
+    @JsonUnwrapped
+    private SeatMessage modeToString() {
         if (player == null) {
-            return "";
+            return null;
         }
-        return player.getUsername();
+        return new SeatMessage(player);
     }
 }

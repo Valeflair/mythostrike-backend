@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.exception.IllegalInputException;
-import com.mythostrike.model.game.Player;
+import com.mythostrike.model.game.player.Player;
+import com.mythostrike.model.game.Game;
 import lombok.Getter;
 
 @Getter
@@ -18,6 +19,8 @@ public class Lobby {
     private LobbyStatus status;
     @JsonIgnore
     private int numberPlayers;
+    @JsonIgnore
+    private Game game;
 
     public Lobby(int id, Mode mode, User owner) {
         this.id = id;
@@ -150,8 +153,8 @@ public class Lobby {
         if (isNotOwner(user)) {
             throw new IllegalInputException("user is not the owner");
         }
-        //TODO: mit game != null abfrage ersetzen
-        if (status != LobbyStatus.OPEN && status != LobbyStatus.FULL) {
+
+        if (game != null) {
             throw new IllegalInputException("lobby is not in Lobby Screen");
         }
         updateModeStatus();
@@ -163,7 +166,7 @@ public class Lobby {
             throw new IllegalInputException("user is not the owner");
         }
 
-        //TODO: complete this method
+        //TODO: complete this method --> create game
         //TODO: randomize identities if Identity mode --> not the God King
         if (numberPlayers >= mode.minPlayer() && numberPlayers <= mode.maxPlayer()) {
             status = LobbyStatus.GAME_RUNNING;

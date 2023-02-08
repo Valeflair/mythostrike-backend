@@ -3,10 +3,6 @@ package com.mythostrike.config;
 import com.mythostrike.account.service.UserService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
-<<<<<<< HEAD:src/main/java/com/mythostrike/config/SecurityConfig.java
-=======
-import com.nimbusds.jose.jwk.RSAKey;
->>>>>>> game-server:src/main/java/com/mythostrike/account/config/SecurityConfig.java
 import com.nimbusds.jose.jwk.RSAKey.Builder;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -87,5 +83,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         return authentication -> authentication;
     }
-
 }
