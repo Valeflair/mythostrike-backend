@@ -7,10 +7,28 @@ import java.util.List;
 
 public class CardFilter {
 
-    
+    private final List<String> includeList;
+    private final List<String> excludeList;
 
-    private final List<String> includeList = new ArrayList<>();
-    private final List<String> excludeList = new ArrayList<>();
+    public CardFilter() {
+        includeList = new ArrayList<>();
+        excludeList = new ArrayList<>();
+    }
+
+    /**
+     *
+     * @param filter are strings seperated by "|", e.g. "Attack|Defend"
+     */
+    public CardFilter(String filter) {
+        includeList = new ArrayList<>();
+        excludeList = new ArrayList<>();
+        String[] filters = filter.split("\\|");
+        for (String include : filters) {
+            addIncludeFilter(include);
+        }
+    }
+
+
 
     public void addIncludeFilter(String name) {
         includeList.add(name);
@@ -20,8 +38,15 @@ public class CardFilter {
         excludeList.add(name);
     }
 
+    public void removeIncludeFilter(String name) { includeList.remove(name); }
+
+    public void removeExcludeFilter(String name) { includeList.remove(name); }
+
     public List<Card> filter(List<Card> cards) {
-        List<Card> result = new ArrayList<Card>();
+        if (includeList.isEmpty()) {
+            return new ArrayList<>(cards);
+        }
+        List<Card> result = new ArrayList<>();
         for (Card card : cards) {
             String name = card.getName();
             if (includeList.isEmpty() || includeList.contains(name)) {

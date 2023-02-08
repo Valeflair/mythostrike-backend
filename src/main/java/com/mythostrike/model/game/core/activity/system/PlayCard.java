@@ -31,8 +31,10 @@ public class PlayCard extends Activity {
         } else {
             gameManager.getCurrentActivity().add(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
-                HashMap<String, Integer> restrict = pickRequest.getPlayer().getRestrict();
-                restrict.put(card.getName(), restrict.get(card.getName()) - 1);
+                /*HashMap<String, Integer> restrict = pickRequest.getPlayer().getRestrict();
+                *
+                * restrict.put(card.getName(), restrict.get(card.getName()) - 1);
+                * */
                 card.activate();
             }
         }

@@ -13,27 +13,21 @@ public class Revenge extends PassiveSkill {
     public static final String NAME = "Revenge";
     public static final String DESCRIPTION = "when you get damage, judge, if not heart, dealer drop "
         + "2 or get damage by you";
-
-    public Revenge(Player player) {
-        super(NAME, DESCRIPTION, player);
+    //TODO:implement
+    public Revenge(int id) {
+        super(id, NAME, DESCRIPTION);
     }
+
 
     @Override
     public void register(EventManager eventManager, Player player) {
-        eventManager.registerEvent(EventTypeDamage.DAMAGED, this);
+        eventManager.registerEvent(EventTypeDamage.DAMAGED, this, player, true);
     }
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
         //TODO
         return true; //damageHandle.getTo().hasSkill("Revenge");
-    }
-
-    @Override
-    public void clickedConfirmButton(boolean confirm) {
-        if (confirm) {
-            use();
-        }
     }
 
     @Override

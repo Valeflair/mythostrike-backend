@@ -9,8 +9,8 @@ import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 
 public class CheckDying extends PassiveSkill {
-    public static final String NAME = "EnterDying";
-    public static final String DESCRIPTION = "if player is about to die";
+    public static final String NAME = "CheckDying";
+    public static final String DESCRIPTION = "if player has low hp";
     public static final int ID = -11;
     private DamageHandle damageHandle;
 

@@ -1,6 +1,5 @@
 package com.mythostrike.model.game.core.management;
 
-import com.mythostrike.model.game.Test.Main;
 import com.mythostrike.model.game.core.activity.Activity;
 import com.mythostrike.model.game.core.activity.cards.CardPile;
 import com.mythostrike.model.game.core.activity.system.NextPhase;
@@ -118,7 +117,7 @@ public class GameManager {
 
     public Champion playerPickChampionFromList(Player player, List<Champion> championList) {
         //TODO adjust with API
-        return Main.championSelect(player, championList);
+        return null;
     }
 
     private void identityDistribution(ArrayList<Player> players) {
@@ -207,5 +206,11 @@ public class GameManager {
         return cardIds;
     }
 
-
+    public static List<String> convertPlayersToInteger(List<Player> players) {
+        List<String> playerNames = new ArrayList<>();
+        for (Player player : players) {
+            playerNames.add(player.getName());
+        }
+        return playerNames;
+    }
 }

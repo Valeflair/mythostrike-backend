@@ -2,6 +2,8 @@ package com.mythostrike.model.game.core.activity.system;
 
 import com.mythostrike.model.game.core.HighlightMessage;
 import com.mythostrike.model.game.core.activity.Activity;
+import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.activity.cards.CardFilter;
 import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageType;
 import com.mythostrike.model.game.core.management.GameManager;
@@ -25,6 +27,7 @@ public class EnterDying extends Activity {
     public static final String NAME = "EnterDying";
     public static final String DESCRIPTION = "if player is about to die";
     public static final int ID = -11;
+    public static final CardFilter filter = new CardFilter("Heal");
 
     private final Player player;
     private final GameManager gameManager;
@@ -39,6 +42,7 @@ public class EnterDying extends Activity {
         this.player = player;
         this.gameManager = gameManager;
         players = new ArrayList<>(gameManager.getGame().getAlivePlayers());
+        end = false;
     }
 
     @Override
@@ -59,15 +63,28 @@ public class EnterDying extends Activity {
                 players.remove(healer);
             }
         }
+        int count = 1 - player.getCurrentHp();
+        // player is already alive again
+        if (count < 1) {
+            end = true;
+            return;
+        }
+        // no one else can heal him now
         if (players.isEmpty()) {
             gameManager.getPlayerManager().killPlayer(player);
+            end = true;
             return;
         } else {
             Player healer = players.get(0);
-            healer.getHandCards()
-
-
-            HighlightMessage highlightMessage = new HighlightMessage();
+            List<Card> cards = filter.filter(healer.getHandCards().getCards());
+            List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
+            //TODO implement
+            String hint = "Player " + player.getName() + "is about to die, he needs " + count + "heal(s) to get alive"
+                + "if you want to heal him, pick heal and click confirm";
+            HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null, 1,
+                1, 0, 0, hint, true);
+            pickRequest = new PickRequest(player, gameManager, highlightMessage);
+            gameManager.queueActivity(pickRequest);
         }
     }
 

@@ -6,10 +6,7 @@ import com.mythostrike.model.game.core.activity.cards.CardType;
 import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageType;
-import com.mythostrike.model.game.core.management.GameManager;
-import com.mythostrike.model.game.core.player.Player;
 
-import java.util.ArrayList;
 
 public class Heal extends Card {
 
@@ -18,7 +15,7 @@ public class Heal extends Card {
         + " heal him 1 hp";
     public static final CardType TYPE = CardType.BASICCARD;
 
-    CardUseHandle cardUseHandle;
+    private CardUseHandle cardUseHandle;
 
     public Heal(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);

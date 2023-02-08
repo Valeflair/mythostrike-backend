@@ -105,5 +105,9 @@ public class Player {
         restrict.put(cardName, restrict.get(cardName) - 1);
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Player other)) return false;
+        return this.name.equals(other.name);
+    }
 }
