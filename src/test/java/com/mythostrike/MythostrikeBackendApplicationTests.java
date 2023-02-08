@@ -10,4 +10,6 @@ class MythostrikeBackendApplicationTests {
     void contextLoads() {
 
     }
+
+    }
 }

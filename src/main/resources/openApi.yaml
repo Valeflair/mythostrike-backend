@@ -163,7 +163,7 @@ paths:
         "201":
           description: Successfully created lobby
           content:
-            application/json:
+            integer:
               schema:
                 $ref: "#/components/schemas/Lobby"
 
