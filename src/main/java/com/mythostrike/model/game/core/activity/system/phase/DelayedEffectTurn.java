@@ -22,7 +22,7 @@ public class DelayedEffectTurn extends Activity {
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> delayedEffects = player.getDelayedEffect().getCards();
-        for (Card card :delayedEffects) {
+        for (Card card : delayedEffects) {
             gameManager.queueActivity(card);
         }
     }

@@ -2,20 +2,20 @@ package com.mythostrike.model.game.core.activity.cards.cardtype;
 
 
 import com.mythostrike.model.game.core.HighlightMessage;
+import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.cards.CardFilter;
 import com.mythostrike.model.game.core.activity.cards.CardSymbol;
 import com.mythostrike.model.game.core.activity.cards.CardType;
-import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.core.activity.system.PickRequest;
-import com.mythostrike.model.game.core.player.Player;
-import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.activity.events.handle.AttackHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardAskHandle;
+import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageType;
 import com.mythostrike.model.game.core.activity.events.type.EventTypeAttack;
+import com.mythostrike.model.game.core.activity.system.PickRequest;
+import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +42,7 @@ public class Attack extends Card {
 
     /**
      * call in active turn, check if there is availble target to attack
+     *
      * @param cardUseHandle the player uses this card
      * @return true if there is any target to attack
      */
@@ -97,8 +98,8 @@ public class Attack extends Card {
 
         if (pickRequest.getPlayer().equals(cardUseHandle.getPlayer())) {
             if (pickRequest.getSelectedPlayers() != null
-            && !pickRequest.getSelectedPlayers().isEmpty()
-            && !pickRequest.isClickedCancel()) {
+                && !pickRequest.getSelectedPlayers().isEmpty()
+                && !pickRequest.isClickedCancel()) {
                 cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
                     null, player.getHandCards(), gameManager.getGame().getTablePile());
                 playOut();
@@ -119,8 +120,9 @@ public class Attack extends Card {
                 attackHandle.setPrevented(false);
                 gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
                 DamageHandle damageHandle =
-                new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "attack damaged", player, opponent,
-                    1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
+                    new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "attack damaged", player,
+                        opponent,
+                        1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
                 attackHandle.setDamageHandle(damageHandle);
                 gameManager.getPlayerManager().applyDamage(damageHandle);
             }

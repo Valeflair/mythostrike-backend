@@ -11,7 +11,7 @@ public enum CardSymbol {
     NOSYMBOL("NoSymbol");
 
     @Getter
-    private String name;
+    private final String name;
 
     CardSymbol(String name) {
         this.name = name;

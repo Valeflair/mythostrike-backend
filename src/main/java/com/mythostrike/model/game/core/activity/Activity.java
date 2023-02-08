@@ -12,8 +12,6 @@ import com.mythostrike.model.game.core.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.core.activity.events.handle.PlayerHandle;
 import lombok.Getter;
 
-import java.util.Objects;
-
 @Getter
 public abstract class Activity {
     private final int id;
@@ -21,7 +19,7 @@ public abstract class Activity {
     private final String description;
 
 
-    public Activity(int id, String name, String description) {
+    protected Activity(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -72,6 +70,7 @@ public abstract class Activity {
 
     /**
      * if returns true, Game Manager will delete this activity from queue after call use()
+     *
      * @return value if the activity has to keep stay in currentActivity after use()
      */
     public boolean end() {
@@ -83,9 +82,6 @@ public abstract class Activity {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Activity activity)) {
-            return false;
-        }
-        return name.equals(activity.getName());
+        return obj instanceof Activity activity && name.equals(activity.getName());
     }
 }

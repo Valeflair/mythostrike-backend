@@ -1,13 +1,12 @@
 package com.mythostrike.model.game.core.management;
 
+import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.cards.CardPile;
 import com.mythostrike.model.game.core.activity.cards.CardSpace;
-import com.mythostrike.model.game.core.player.Player;
-import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.core.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CardManager {

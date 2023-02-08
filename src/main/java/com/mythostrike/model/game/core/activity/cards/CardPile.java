@@ -8,7 +8,6 @@ import java.util.List;
 public class CardPile extends CardSpace {
 
     public CardPile() {
-        super();
     }
 
     public CardPile(List<Card> cards) {

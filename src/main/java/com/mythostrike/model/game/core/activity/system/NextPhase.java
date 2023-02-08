@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.core.activity.system;
 
+import com.mythostrike.model.game.core.Phase;
 import com.mythostrike.model.game.core.activity.SystemAction;
 import com.mythostrike.model.game.core.activity.events.handle.PhaseChangeHandle;
 import com.mythostrike.model.game.core.activity.events.handle.PhaseHandle;
@@ -7,12 +8,10 @@ import com.mythostrike.model.game.core.activity.events.type.EventTypePhase;
 import com.mythostrike.model.game.core.activity.events.type.EventTypePhaseChange;
 import com.mythostrike.model.game.core.activity.system.phase.ActiveTurn;
 import com.mythostrike.model.game.core.activity.system.phase.DelayedEffectTurn;
-
 import com.mythostrike.model.game.core.activity.system.phase.DrawTurn;
 import com.mythostrike.model.game.core.activity.system.phase.DropTurn;
 import com.mythostrike.model.game.core.activity.system.phase.RoundStartTurn;
 import com.mythostrike.model.game.core.management.GameManager;
-import com.mythostrike.model.game.core.Phase;
 import lombok.Getter;
 
 @Getter
@@ -53,7 +52,8 @@ public class NextPhase extends SystemAction {
             case DRAW -> gameManager.queueActivity(new DrawTurn(gameManager));
             case ACTIVETURN -> gameManager.queueActivity(new ActiveTurn(gameManager));
             case DISCARD -> gameManager.queueActivity(new DropTurn(gameManager));
-            default -> { }
+            default -> {
+            }
         }
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, afterPhaseHandle);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, afterPhaseHandle);

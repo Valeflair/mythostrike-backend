@@ -1,7 +1,7 @@
 package com.mythostrike.model.game.core;
 
-import com.mythostrike.model.game.core.activity.cards.CardPile;
 import com.mythostrike.model.game.core.activity.cards.CardList;
+import com.mythostrike.model.game.core.activity.cards.CardPile;
 import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
@@ -21,17 +21,17 @@ public class Game {
      */
     public static final int DRAWCARDCOUNT = 4;
     private final GameManager gameManager;
-    private String console;
     private final ArrayList<Player> allPlayers;
     private final ArrayList<Player> alivePlayers;
     private final CardList cardList;
+    private final Mode mode;
+    private String console;
     @Setter
     private CardPile drawPile;
     @Setter
     private CardPile throwPile;
     @Setter
     private CardPile tablePile;
-    private final Mode mode;
 
 
     public Game(ArrayList<Player> players, Mode mode, GameManager gameManager) {
@@ -56,7 +56,6 @@ public class Game {
     public boolean isPlayerAlive(Player player) {
         return player.isAlive();
     }
-
 
 
     public void output(String output) {

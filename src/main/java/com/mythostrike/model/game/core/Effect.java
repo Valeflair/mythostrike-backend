@@ -7,19 +7,21 @@ import java.util.function.Function;
 public class Effect<T extends EventHandle> {
     private final Function<T, Boolean> alwaysTrue = new Function<T, Boolean>() {
 
+        @Override
         public Boolean apply(T handle) {
             return true;
         }
     };
     private final Function<T, Boolean> alwaysFalse = new Function<T, Boolean>() {
 
+        @Override
         public Boolean apply(T handle) {
             return false;
         }
     };
 
-    private Function<T, Boolean> condition;
-    private Function<T, Boolean> function;
+    private final Function<T, Boolean> condition;
+    private final Function<T, Boolean> function;
 
     public Effect(Function<T, Boolean> condition, Function<T, Boolean> function) {
         this.condition = condition;

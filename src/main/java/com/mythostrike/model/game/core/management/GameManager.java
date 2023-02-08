@@ -1,17 +1,17 @@
 package com.mythostrike.model.game.core.management;
 
+import com.mythostrike.model.game.core.Game;
+import com.mythostrike.model.game.core.Mode;
+import com.mythostrike.model.game.core.Phase;
 import com.mythostrike.model.game.core.activity.Activity;
+import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.cards.CardPile;
+import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.core.activity.system.NextPhase;
 import com.mythostrike.model.game.core.activity.system.PickRequest;
 import com.mythostrike.model.game.core.player.Champion;
-import com.mythostrike.model.game.core.Game;
 import com.mythostrike.model.game.core.player.Identity;
-import com.mythostrike.model.game.core.Mode;
-import com.mythostrike.model.game.core.Phase;
 import com.mythostrike.model.game.core.player.Player;
-import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.core.activity.events.handle.CardDrawHandle;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -28,13 +28,6 @@ public class GameManager {
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
     public static final int CARD_COUNT_TURN_START = 2;
-
-    @Getter
-    private List<Activity> currentActivity;
-    @Getter
-    @Setter
-    private Phase phase;
-
     @Getter
     private final Game game;
     @Getter
@@ -45,10 +38,12 @@ public class GameManager {
     private final PlayerManager playerManager;
     @Getter
     private final GameController gameController;
-
+    @Getter
+    private List<Activity> currentActivity;
+    @Getter
+    @Setter
+    private Phase phase;
     private boolean proceeding;
-
-
 
 
     public GameManager(ArrayList<Player> players, Mode mode, GameController gameController) {
@@ -57,6 +52,23 @@ public class GameManager {
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
         this.gameController = gameController;
+    }
+
+    //---------------compiling method----------
+    public static List<Integer> convertCardsToInteger(List<Card> cards) {
+        List<Integer> cardIds = new ArrayList<>();
+        for (Card card : cards) {
+            cardIds.add(card.getId());
+        }
+        return cardIds;
+    }
+
+    public static List<String> convertPlayersToInteger(List<Player> players) {
+        List<String> playerNames = new ArrayList<>();
+        for (Player player : players) {
+            playerNames.add(player.getName());
+        }
+        return playerNames;
     }
 
     //debug
@@ -115,6 +127,8 @@ public class GameManager {
         }
     }
 
+    //----------------GameRun----------------
+
     public Champion playerPickChampionFromList(Player player, List<Champion> championList) {
         //TODO adjust with API
         return null;
@@ -142,8 +156,6 @@ public class GameManager {
             }
         }
     }
-
-    //----------------GameRun----------------
 
     public void proceed() {
         proceeding = true;
@@ -195,22 +207,5 @@ public class GameManager {
 
     public void gameOver() {
         //TODO implement with frontend panel
-    }
-
-    //---------------compiling method----------
-    public static List<Integer> convertCardsToInteger(List<Card> cards) {
-        List<Integer> cardIds = new ArrayList<>();
-        for (Card card : cards) {
-            cardIds.add(card.getId());
-        }
-        return cardIds;
-    }
-
-    public static List<String> convertPlayersToInteger(List<Player> players) {
-        List<String> playerNames = new ArrayList<>();
-        for (Player player : players) {
-            playerNames.add(player.getName());
-        }
-        return playerNames;
     }
 }

@@ -1,10 +1,10 @@
 package com.mythostrike.model.game.core.activity.events.handle;
 
 
-import com.mythostrike.model.game.core.activity.cards.cardtype.Defend;
-import com.mythostrike.model.game.core.player.Player;
 import com.mythostrike.model.game.core.activity.Card;
+import com.mythostrike.model.game.core.activity.cards.cardtype.Defend;
 import com.mythostrike.model.game.core.management.GameManager;
+import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,8 +32,9 @@ public class AttackHandle extends EventHandle {
         this.extraDamage = 0;
         this.attack = attack;
         isPrevented = false;
-        defendAskHandle = new CardAskHandle(gameManager,  "you get attacked, drop a defend or you get damage",
-            opponent, List.of(Defend.NAME), opponent.getHandCards(), gameManager.getGame().getTablePile(), 1, false , true);
+        defendAskHandle = new CardAskHandle(gameManager, "you get attacked, drop a defend or you get damage",
+            opponent, List.of(Defend.NAME), opponent.getHandCards(), gameManager.getGame().getTablePile(), 1, false,
+            true);
         targetCount = 1;
     }
 

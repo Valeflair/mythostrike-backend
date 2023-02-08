@@ -1,9 +1,6 @@
 package com.mythostrike.model.game.core.activity.system.phase;
 
 import com.mythostrike.model.game.core.activity.Activity;
-import com.mythostrike.model.game.core.activity.events.handle.PhaseHandle;
-import com.mythostrike.model.game.core.activity.events.type.EventTypePhase;
-
 import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 

@@ -21,7 +21,6 @@ import java.util.List;
  * 3.check if player plays, if true then heal and check if dying player has hp > 0, else back to step 2
  * 4.if player1 don't want to play heal, go to the next player to the list
  * 5.this end if list is empty (no more player to ask), player die or dying player has hp > 0, survive
- *
  */
 public class EnterDying extends Activity {
     public static final String NAME = "EnterDying";
@@ -73,7 +72,6 @@ public class EnterDying extends Activity {
         if (players.isEmpty()) {
             gameManager.getPlayerManager().killPlayer(player);
             end = true;
-            return;
         } else {
             Player healer = players.get(0);
             List<Card> cards = filter.filter(healer.getHandCards().getCards());

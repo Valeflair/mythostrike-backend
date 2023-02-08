@@ -13,7 +13,7 @@ public class CardList {
     @Getter
     private static final CardList instance = new CardList(new ArrayList<>(List.of()));
     protected List<Card> cards;
-    private HashMap<Integer, Card> cardMap;
+    private final HashMap<Integer, Card> cardMap;
 
     public CardList() {
         cards = new ArrayList<>();

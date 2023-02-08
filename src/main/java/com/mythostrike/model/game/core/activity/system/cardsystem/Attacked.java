@@ -6,14 +6,11 @@ import com.mythostrike.model.game.core.activity.events.handle.AttackHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.core.activity.events.handle.DamageType;
-import com.mythostrike.model.game.core.activity.system.PickCardToPLay;
 import com.mythostrike.model.game.core.activity.system.PickRequest;
 import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashMap;
 
 @Getter
 @Setter
@@ -39,7 +36,6 @@ public class Attacked extends Activity {
             Card attack = attackHandle.getAttack();
             new DamageHandle(gameManager, attack, DESCRIPTION, attacker, defender,
                 attackHandle.getExtraDamage() + 1, DamageType.NORMAL);
-            return;
         } else {
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays defend", defender, null,
                 defender.getHandCards(), gameManager.getGame().getTablePile());

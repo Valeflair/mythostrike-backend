@@ -3,7 +3,6 @@ package com.mythostrike.model.game.core.player;
 
 import com.mythostrike.model.game.core.activity.ActiveSkill;
 import com.mythostrike.model.game.core.activity.PassiveSkill;
-import com.mythostrike.model.game.core.activity.cards.CardSpace;
 import com.mythostrike.model.game.core.activity.cards.CardSpaceRestrictedByName;
 import com.mythostrike.model.game.core.activity.cards.CardSpaceRestrictedByType;
 import com.mythostrike.model.game.core.activity.cards.CardType;
@@ -24,6 +23,20 @@ public class Player {
     @Getter
     private final String name;
     @Getter
+    private final HandCards handCards;
+    @Getter
+    private final CardSpaceRestrictedByType equipment;
+    @Getter
+    private final CardSpaceRestrictedByName delayedEffect;
+    @Getter
+    private final HashMap<String, Integer> permanentRestrict;
+    @Getter
+    private final HashMap<String, Boolean> permanentImmunity;
+    @Getter
+    private final List<ActiveSkill> activeSkills;
+    @Getter
+    private final List<PassiveSkill> passiveSkills;
+    @Getter
     @Setter
     private Champion champion;
     @Getter
@@ -35,23 +48,9 @@ public class Player {
     @Setter
     private Identity identity;
     @Getter
-    private final HandCards handCards;
-    @Getter
-    private final CardSpaceRestrictedByType equipment;
-    @Getter
-    private final CardSpaceRestrictedByName delayedEffect;
-    @Getter
-    private final HashMap<String, Integer> permanentRestrict;
-    @Getter
-    private final HashMap<String, Boolean> permanentImmunity;
-    @Getter
     private HashMap<String, Integer> restrict;
     @Getter
     private HashMap<String, Boolean> immunity;
-    @Getter
-    private final List<ActiveSkill> activeSkills;
-    @Getter
-    private final List<PassiveSkill> passiveSkills;
     @Getter
     @Setter
     private boolean isAlive;
@@ -107,7 +106,6 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Player other)) return false;
-        return this.name.equals(other.name);
+        return obj instanceof Player other && this.name.equals(other.name);
     }
 }

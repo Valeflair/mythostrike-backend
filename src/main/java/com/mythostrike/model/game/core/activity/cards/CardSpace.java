@@ -4,7 +4,6 @@ import com.mythostrike.model.game.core.activity.Card;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class CardSpace {

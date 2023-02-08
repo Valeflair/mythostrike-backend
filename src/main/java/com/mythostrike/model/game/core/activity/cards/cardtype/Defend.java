@@ -4,16 +4,9 @@ package com.mythostrike.model.game.core.activity.cards.cardtype;
 import com.mythostrike.model.game.core.activity.Card;
 import com.mythostrike.model.game.core.activity.cards.CardSymbol;
 import com.mythostrike.model.game.core.activity.cards.CardType;
-import com.mythostrike.model.game.core.activity.events.handle.AttackHandle;
-import com.mythostrike.model.game.core.activity.events.handle.CardAskHandle;
 import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.core.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.core.activity.events.handle.DamageType;
-import com.mythostrike.model.game.core.activity.events.type.EventTypeAttack;
-import com.mythostrike.model.game.core.management.GameManager;
 import com.mythostrike.model.game.core.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Defend extends Card {

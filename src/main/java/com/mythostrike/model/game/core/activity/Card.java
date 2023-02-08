@@ -19,7 +19,7 @@ public abstract class Card extends Activity {
     protected GameManager gameManager;
 
 
-    public Card(int id, String name, String description, CardType type, CardSymbol symbol, int point) {
+    protected Card(int id, String name, String description, CardType type, CardSymbol symbol, int point) {
         super(id, name, description);
         this.type = type;
         this.symbol = symbol;
@@ -42,7 +42,9 @@ public abstract class Card extends Activity {
         return point;
     }
 
-    public void activate() { }
+    @Override
+    public void activate() {
+    }
 
     public void playOut() {
         gameManager.getCardManager().moveCard(cardMoveHandle);

@@ -5,7 +5,6 @@ import com.mythostrike.model.game.core.activity.PassiveSkill;
 import com.mythostrike.model.game.core.activity.skill.passive.Revenge;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

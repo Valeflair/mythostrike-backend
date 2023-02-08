@@ -10,7 +10,7 @@ public enum Phase {
     FINISH;
 
     public static Phase nextPhase(Phase current) {
-        int nextOrdinal = (current.ordinal() + 1) % Phase.values().length;
-        return Phase.values()[nextOrdinal];
+        int nextOrdinal = (current.ordinal() + 1) % values().length;
+        return values()[nextOrdinal];
     }
 }

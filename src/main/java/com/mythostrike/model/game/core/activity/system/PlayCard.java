@@ -2,11 +2,8 @@ package com.mythostrike.model.game.core.activity.system;
 
 import com.mythostrike.model.game.core.activity.Activity;
 import com.mythostrike.model.game.core.activity.Card;
-import com.mythostrike.model.game.core.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.core.management.GameManager;
 import lombok.Getter;
-
-import java.util.HashMap;
 
 @Getter
 public class PlayCard extends Activity {
@@ -27,14 +24,13 @@ public class PlayCard extends Activity {
     @Override
     public void use() {
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().size() == 0) {
-            return;
         } else {
             gameManager.getCurrentActivity().add(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
                 /*HashMap<String, Integer> restrict = pickRequest.getPlayer().getRestrict();
-                *
-                * restrict.put(card.getName(), restrict.get(card.getName()) - 1);
-                * */
+                 *
+                 * restrict.put(card.getName(), restrict.get(card.getName()) - 1);
+                 * */
                 card.activate();
             }
         }

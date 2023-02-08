@@ -4,8 +4,8 @@ import com.mythostrike.model.game.core.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -49,8 +49,7 @@ public class PassiveEffect {
     @Override
     public boolean equals(Object object) {
         if (object == null) return false;
-        if (!(object instanceof PassiveEffect other)) return false;
-        return skill.equals(other.getSkill());
+        return object instanceof PassiveEffect other && skill.equals(other.getSkill());
     }
 }
 

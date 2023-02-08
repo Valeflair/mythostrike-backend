@@ -36,10 +36,8 @@ public class UserService implements UserDetailsService {
 
     public boolean areCredentialsValid(AuthRequest request) {
         Optional<User> optionalUser = userRepository.findByUsername(request.username());
-        if (optionalUser.isEmpty()) {
-            return false;
-        }
-        return passwordEncoder.matches(request.password(), optionalUser.get().getPassword());
+        return optionalUser.isPresent() &&
+            passwordEncoder.matches(request.password(), optionalUser.get().getPassword());
     }
 
     @Override

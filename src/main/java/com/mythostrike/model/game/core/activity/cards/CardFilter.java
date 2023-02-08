@@ -16,7 +16,6 @@ public class CardFilter {
     }
 
     /**
-     *
      * @param filter are strings seperated by "|", e.g. "Attack|Defend"
      */
     public CardFilter(String filter) {
@@ -29,7 +28,6 @@ public class CardFilter {
     }
 
 
-
     public void addIncludeFilter(String name) {
         includeList.add(name);
     }
@@ -38,9 +36,13 @@ public class CardFilter {
         excludeList.add(name);
     }
 
-    public void removeIncludeFilter(String name) { includeList.remove(name); }
+    public void removeIncludeFilter(String name) {
+        includeList.remove(name);
+    }
 
-    public void removeExcludeFilter(String name) { includeList.remove(name); }
+    public void removeExcludeFilter(String name) {
+        includeList.remove(name);
+    }
 
     public List<Card> filter(List<Card> cards) {
         if (includeList.isEmpty()) {
