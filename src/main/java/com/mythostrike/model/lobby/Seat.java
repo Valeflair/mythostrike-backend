@@ -27,5 +27,4 @@ public class Seat {
         }
         return player.getUsername();
     }
-
 }

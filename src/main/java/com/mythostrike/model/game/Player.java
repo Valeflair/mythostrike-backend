@@ -7,13 +7,16 @@ import lombok.Getter;
 public class Player {
 
     private final String username;
+    private final int avatarNumber;
 
     public Player(User user) {
         this.username = user.getUsername();
+        this.avatarNumber = user.getAvatarNumber();
     }
 
     public Player(String username) {
         this.username = username;
+        this.avatarNumber = 0;
     }
 
 }
