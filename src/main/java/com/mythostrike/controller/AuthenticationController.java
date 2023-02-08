@@ -40,8 +40,8 @@ public class AuthenticationController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new UserAuthResponse(tokenService.generateToken(request)));
+            .status(HttpStatus.CREATED)
+            .body(new UserAuthResponse(tokenService.generateToken(request)));
     }
 
     @PostMapping("/login")

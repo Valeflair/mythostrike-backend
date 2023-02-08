@@ -32,4 +32,20 @@ public class User {
     private int drachma;
 
     private int avatarNumber;
+
+    public boolean changeDrachma(int amount) {
+        if (this.drachma + amount < 0) {
+            return false;
+        }
+        this.drachma += amount;
+        return true;
+    }
+
+    public boolean changeRankPoints(int amount) {
+        if (this.rankPoints + amount < 0) {
+            return false;
+        }
+        this.rankPoints += amount;
+        return true;
+    }
 }

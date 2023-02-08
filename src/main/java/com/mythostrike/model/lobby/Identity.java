@@ -1,26 +1,63 @@
 package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.Getter;
 
+import java.util.List;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-@Getter
+
+@JsonFormat(shape = Shape.OBJECT)
 public enum Identity {
-    TEAM_RED("Team Red", false),
-    TEAM_BLUE("Team Blue", false),
-    GOD_KING("God King", false),
-    GENERAL("General", true),
-    REBEL("Rebel", true),
-    RENEGADE("Renegade", true),
-    NOT_SET("not set", false);
+    TEAM_RED("Team Red", false, true),
+    TEAM_BLUE("Team Blue", false, true),
+    GOD_KING("God King", false, true),
+    GENERAL("General", true, false),
+    REBEL("Rebel", true, false),
+    RENEGADE("Renegade", true, true),
+    NONE("none", false, true);
 
-    private final boolean incognito;
+    static {
+        TEAM_RED.hasToSurvive = List.of(TEAM_RED);
+        TEAM_RED.hasToDie = List.of(TEAM_BLUE);
 
+        TEAM_BLUE.hasToSurvive = List.of(TEAM_BLUE);
+        TEAM_BLUE.hasToDie = List.of(TEAM_RED);
+
+        GOD_KING.hasToSurvive = List.of(GOD_KING);
+        GOD_KING.hasToDie = List.of(REBEL, RENEGADE);
+
+        GENERAL.hasToSurvive = List.of(GOD_KING);
+        GENERAL.hasToDie = List.of(REBEL, RENEGADE);
+
+        REBEL.hasToSurvive = List.of(REBEL);
+        REBEL.hasToDie = List.of(GOD_KING, GENERAL, RENEGADE);
+
+        RENEGADE.hasToSurvive = List.of(RENEGADE);
+        RENEGADE.hasToDie = List.of(GOD_KING, GENERAL, REBEL);
+    }
+
+    @Getter
     private final String name;
-    Identity(String name, boolean incognito) {
+    @Getter
+    private final boolean incognito;
+    private final boolean playerNeedsToBeAlive;
+    private List<Identity> hasToSurvive;
+    private List<Identity> hasToDie;
+
+    Identity(String name, boolean incognito, boolean playerNeedsToBeAlive) {
         this.name = name;
         this.incognito = incognito;
+        this.playerNeedsToBeAlive = playerNeedsToBeAlive;
+    }
+
+    //TODO: Implement this method
+    /*public boolean hasWon(Player player , GameManager gameManager) {
+
+    }*/
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

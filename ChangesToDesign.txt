@@ -1,1 +1,8 @@
 - ChampionSelectionController und GameController zusammengelegt
+- namen in Rest Dokumentation verbessert
+- create und join Lobby geben eine Lobby zurück
+- neue Klassen:
+  * WebSocketConfiguration
+  * RestExceptionHandler
+  * IllegalInputException
+
