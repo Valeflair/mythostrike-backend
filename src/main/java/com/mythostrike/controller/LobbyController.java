@@ -2,7 +2,11 @@ package com.mythostrike.controller;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
-import com.mythostrike.controller.message.lobby.*;
+import com.mythostrike.controller.message.lobby.ChangeModeRequest;
+import com.mythostrike.controller.message.lobby.ChangeSeatRequest;
+import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
+import com.mythostrike.controller.message.lobby.LobbyIdRequest;
+import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.LobbyList;
@@ -13,7 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -211,7 +220,9 @@ public class LobbyController {
         if (lobby == null) {
             return;
         }
-        log.debug("update lobby '{}'", lobbyId);
-        simpMessagingTemplate.convertAndSend("/lobbies/" + lobbyId, lobby);
+        String path = "/lobbies/" + lobbyId;
+
+        log.debug("update lobby on '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, lobby);
     }
 }

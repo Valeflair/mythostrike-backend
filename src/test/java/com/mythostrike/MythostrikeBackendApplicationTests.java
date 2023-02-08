@@ -10,11 +10,4 @@ class MythostrikeBackendApplicationTests {
     void contextLoads() {
 
     }
-
-    @Test
-    void webSocketTest() {
-        //test if websockets work
-
-    }
-
 }

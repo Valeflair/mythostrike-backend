@@ -1,12 +1,13 @@
 package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.Getter;
 
 import java.util.List;
 
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonFormat(shape = Shape.OBJECT)
 public enum Identity {
     TEAM_RED("Team Red", false, true),
     TEAM_BLUE("Team Blue", false, true),
