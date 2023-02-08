@@ -39,9 +39,6 @@ public class PickCardToPLay extends Activity {
         gameManager.queueActivity(playCard);
         gameManager.queueActivity(pickRequest);
 
-        //TODO implement with highlightmessage
-        //highlightmessage should contain a class PlayCard added into gamemanager and use setTarget or setCard before call back
-
 
     }
 
