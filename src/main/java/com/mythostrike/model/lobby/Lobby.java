@@ -62,13 +62,15 @@ public class Lobby {
                 throw new IllegalInputException("user is already in the lobby");
             }
         }
+        //add user to the first free seat
         for (Seat seat : seats) {
             if (seat.getPlayer() == null) {
                 seat.setPlayer(new Player(user));
                 numberPlayers++;
+                break;
             }
         }
-        updateModeStatus();
+        updateLobbyStatus();
         return true;
     }
 
@@ -88,7 +90,7 @@ public class Lobby {
                 if (numberPlayers == 0) {
                     status = LobbyStatus.CLOSED;
                 }
-                updateModeStatus();
+                updateLobbyStatus();
                 return true;
             }
         }
@@ -104,7 +106,7 @@ public class Lobby {
         }
     }
 
-    private void updateModeStatus() {
+    private void updateLobbyStatus() {
         if (numberPlayers >= mode.maxPlayer()) {
             status = LobbyStatus.FULL;
         } else {
@@ -124,7 +126,7 @@ public class Lobby {
             if (seats[i].getPlayer() == null) {
                 seats[i].setPlayer(new Player("Bot" + i));
                 numberPlayers++;
-                updateModeStatus();
+                updateLobbyStatus();
                 return true;
             }
         }
@@ -157,7 +159,7 @@ public class Lobby {
         if (game != null) {
             throw new IllegalInputException("lobby is not in Lobby Screen");
         }
-        updateModeStatus();
+        updateLobbyStatus();
         this.mode = mode;
     }
 

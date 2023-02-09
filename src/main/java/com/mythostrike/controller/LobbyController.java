@@ -110,9 +110,13 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not in lobby");
         }
 
-        //TODO: remove lobby if empty
+        //remove lobby if empty
+        if (lobby.getNumberPlayers() == 0) {
+            lobbyList.removeLobby(request.lobbyId());
+        } else {
+            updateLobby(request.lobbyId());
+        }
 
-        updateLobby(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }

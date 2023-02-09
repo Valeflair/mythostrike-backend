@@ -24,7 +24,7 @@ public class ResourceController {
     @GetMapping("/cards")
     public ResponseEntity<Void> getCards() {
         log.debug("getCards request");
-        //TODO:
+        //TODO: generate list of cards
         //return ResponseEntity.ok(list);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -38,6 +38,7 @@ public class ResourceController {
     @GetMapping("/champions")
     public ResponseEntity<List<LobbyOverview>> getChampions() {
         log.debug("getChampions request");
+        //TODO: generate list of champions
         //return ResponseEntity.ok(list);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
