@@ -1,5 +1,7 @@
 package com.mythostrike.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
@@ -27,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.logging.Level;
 
 @RestController
 @RequiredArgsConstructor
@@ -111,7 +114,7 @@ public class LobbyController {
         }
 
         //remove lobby if empty
-        if (lobby.getNumberPlayers() == 0) {
+        if (lobby.canBeDeleted()) {
             lobbyList.removeLobby(request.lobbyId());
         } else {
             updateLobby(request.lobbyId());
@@ -230,5 +233,12 @@ public class LobbyController {
 
         log.debug("update lobby on '{}'", path);
         simpMessagingTemplate.convertAndSend(path, lobby);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(lobby);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert lobby to json", e);
+        }
     }
 }

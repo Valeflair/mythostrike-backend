@@ -103,8 +103,9 @@ public class Lobby {
         return false;
     }
 
-    public boolean isEmpty() {
-        return numberPlayers == 0;
+    @JsonIgnore
+    public boolean canBeDeleted() {
+        return numberHumans == 0;
     }
 
     private void selectNewOwner() {
