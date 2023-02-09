@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.exception.IllegalInputException;
+import com.mythostrike.model.game.player.Bot;
+import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.game.Game;
 import lombok.Getter;
@@ -20,21 +22,24 @@ public class Lobby {
     @JsonIgnore
     private int numberPlayers;
     @JsonIgnore
+    private int numberHumans;
+    @JsonIgnore
     private Game game;
 
     public Lobby(int id, Mode mode, User owner) {
         this.id = id;
         this.mode = mode;
-        this.owner = new Player(owner);
+        this.owner = new Human(owner);
         this.status = LobbyStatus.OPEN;
 
         this.numberPlayers = 1;
+        this.numberHumans = 1;
         //initialize seats array
         this.seats = new Seat[MAX_PLAYERS];
         for (int i = 0; i < MAX_PLAYERS; i++) {
             this.seats[i] = new Seat(i);
         }
-        seats[0].setPlayer(new Player(owner));
+        seats[0].setPlayer(this.owner);
     }
 
     @JsonGetter("mode")
@@ -65,8 +70,9 @@ public class Lobby {
         //add user to the first free seat
         for (Seat seat : seats) {
             if (seat.getPlayer() == null) {
-                seat.setPlayer(new Player(user));
-                numberPlayers++;
+                seat.setPlayer(new Human(user));
+                this.numberPlayers++;
+                this.numberHumans++;
                 break;
             }
         }
@@ -79,15 +85,15 @@ public class Lobby {
             //check if in which seat the user is
             if (seats[i].getPlayer() != null && seats[i].getPlayer().getUsername().equals(user.getUsername())) {
                 seats[i].setPlayer(null);
+                this.numberPlayers--;
+                this.numberHumans--;
 
                 //select new owner if the owner left
                 if (user.getUsername().equals(owner.getUsername())) {
                     selectNewOwner();
                 }
-                numberPlayers--;
-
                 //if the lobby is empty, close it
-                if (numberPlayers == 0) {
+                if (numberHumans == 0) {
                     status = LobbyStatus.CLOSED;
                 }
                 updateLobbyStatus();
@@ -97,9 +103,13 @@ public class Lobby {
         return false;
     }
 
+    public boolean isEmpty() {
+        return numberPlayers == 0;
+    }
+
     private void selectNewOwner() {
         for (int i = 0; i < MAX_PLAYERS; i++) {
-            if (seats[i].getPlayer() != null) {
+            if (seats[i].getPlayer() instanceof Human) {
                 owner = seats[i].getPlayer();
                 return;
             }
@@ -124,7 +134,7 @@ public class Lobby {
         //TODO: echten Bot erstellen
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (seats[i].getPlayer() == null) {
-                seats[i].setPlayer(new Player("Bot" + i));
+                seats[i].setPlayer(new Bot("Bot" + i, 1));
                 numberPlayers++;
                 updateLobbyStatus();
                 return true;
@@ -142,12 +152,15 @@ public class Lobby {
         if (seats[seatId].getPlayer() != null) {
             return false;
         }
+
         //check if user is in the lobby and remove him
         if (!removeUser(user)) {
             throw new IllegalInputException("user is not in lobby");
         }
 
-        seats[seatId].setPlayer(new Player(user));
+        seats[seatId].setPlayer(new Human(user));
+        this.numberPlayers++;
+        this.numberHumans++;
         return true;
     }
 
