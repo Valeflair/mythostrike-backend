@@ -1,6 +1,6 @@
 - ChampionSelectionController und GameController zusammengelegt
-- namen in Rest Dokumentation verbessert
 - Rest:
+    * variablen namen in jsons verbessert
     * create und join Lobby geben eine Lobby zurück
     * cancel Lobby request
 - neue Klassen:

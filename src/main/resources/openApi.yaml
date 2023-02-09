@@ -313,6 +313,24 @@ paths:
       responses:
         "200":
           description: OK
+  /games/play/cancel:
+    post:
+      tags:
+        - Game
+      operationId: cancelSelection
+      summary: cancel current selection
+      description: cancel the current selection of cards and targets. Reset to start the selection from the beginning
+        again
+      security:
+        - bearerAuth: [ user ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LobbyId"
+      responses:
+        "200":
+          description: OK
   /games/play/targets:
     post:
       tags:

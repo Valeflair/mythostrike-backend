@@ -28,8 +28,6 @@ import java.util.List;
 @Slf4j
 public class GameController {
 
-    //TODO: add cancel request
-
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request) {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
@@ -46,6 +44,14 @@ public class GameController {
         log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
 
 
+
+        return ResponseEntity
+            .status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<Void> cancelSelection(Principal principal, @RequestBody LobbyIdRequest request) {
+        log.debug("cancel request in '{}' from '{}'", request.lobbyId(), principal.getName());
 
         return ResponseEntity
             .status(HttpStatus.OK).build();
