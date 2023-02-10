@@ -119,10 +119,9 @@ public class Attack extends Card {
             } else {
                 attackHandle.setPrevented(false);
                 gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
-                DamageHandle damageHandle =
-                    new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(), "attack damaged", player,
-                        opponent,
-                        1 + attackHandle.getExtraDamage(), DamageType.NORMAL);
+                DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
+                    "attack damaged", player, opponent, 1 + attackHandle.getExtraDamage(),
+                    DamageType.NORMAL);
                 attackHandle.setDamageHandle(damageHandle);
                 gameManager.getPlayerManager().applyDamage(damageHandle);
             }
