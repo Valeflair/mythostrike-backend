@@ -1,18 +1,18 @@
 package com.mythostrike.model.game.management;
 
+import com.mythostrike.controller.GameController;
+import com.mythostrike.model.game.Game;
+import com.mythostrike.model.game.Phase;
+import com.mythostrike.model.game.activity.Activity;
+import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
-import com.mythostrike.model.game.Game;
-import com.mythostrike.model.lobby.Mode;
-import com.mythostrike.model.game.Phase;
-import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.player.Champion;
-import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.game.player.Player;
-import com.mythostrike.controller.GameController;
+import com.mythostrike.model.lobby.Identity;
+import com.mythostrike.model.lobby.Mode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class GameManager {
 
     //player has 3 champions to pick in game, god-king has 5
     public static final int PICK_CHAMPION_COUNT = 3;
-    public static final int PICK_CHAMPION_COUNT_GODKING = 5;
+    public static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
     public static final int CARD_COUNT_TURN_START = 2;
@@ -39,15 +39,15 @@ public class GameManager {
     @Getter
     private final PlayerManager playerManager;
     @Getter
+    private final int lobbyId;
+    @Getter
     @Autowired
-    private final GameController gameController;
+    private GameController gameController;
     @Getter
     private List<Activity> currentActivity;
     @Getter
     @Setter
     private Phase phase;
-    @Getter
-    private final int lobbyId;
     private boolean proceeding;
 
 
@@ -86,7 +86,7 @@ public class GameManager {
 
         List<Player> players = game.getAlivePlayers();
         //TODO:unterschiedliche dinge an frontend schicken
-        identityDistribution(players);
+        //identityDistribution(players);
         //TODO:extra panel machen
         selectChampionPhase(players);
 
@@ -117,8 +117,8 @@ public class GameManager {
             List<Champion> list = new ArrayList<>();
             //ask player to pick champion
             int championCount = PICK_CHAMPION_COUNT;
-            if (player.getIdentity().equals(Identity.GODKING)) {
-                championCount = PICK_CHAMPION_COUNT_GODKING;
+            if (player.getIdentity().equals(Identity.GOD_KING)) {
+                championCount = PICK_CHAMPION_COUNT_GOD_KING;
             }
             //liste aufstellen
             while (list.size() < championCount) {
@@ -137,29 +137,6 @@ public class GameManager {
     public Champion playerPickChampionFromList(Player player, List<Champion> championList) {
         //TODO adjust with API
         return null;
-    }
-
-    private void identityDistribution(List<Player> players) {
-        Mode mode = game.getMode();
-        //only shuffle in identitymode
-        if (game.getMode().equals(Mode.IDENTITY)) {
-            Collections.shuffle(players);
-        }
-        //player get its own identity
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).setIdentity(mode.getIdentities().get(i));
-        }
-        //set godking into the first place
-        if (!players.get(0).getIdentity().equals(Identity.GODKING)
-            && (mode.equals(Mode.IDENTITY))) {
-            for (int i = 0; i < players.size(); i++) {
-                if (players.get(i).getIdentity().equals(Identity.GODKING)) {
-                    Player godking = players.get(i);
-                    players.set(i, players.get(0));
-                    players.set(0, godking);
-                }
-            }
-        }
     }
 
     public void proceed() {

@@ -1,9 +1,9 @@
 package com.mythostrike.model.game.activity.skill.passive;
 
 
+import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
-import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.player.Player;
 

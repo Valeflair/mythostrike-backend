@@ -1,18 +1,13 @@
 package com.mythostrike.model.game.activity.cards.cardtype;
 
 
-import com.mythostrike.model.game.activity.events.handle.AttackHandle;
-import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
-import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageType;
-import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
+import com.mythostrike.model.game.activity.events.handle.*;
+import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -81,7 +76,7 @@ public class Attack extends Card {
         List<String> playerNames = GameManager.convertPlayersToInteger(targets);
 
         HighlightMessage highlightMessage = new HighlightMessage(null, playerNames, null, 0,
-            0, 1, 1, DESCRIPTION, true);
+            0, 1, 1, DESCRIPTION, true, true);
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
         gameManager.queueActivity(this);
         gameManager.queueActivity(pickRequest);
@@ -150,6 +145,6 @@ public class Attack extends Card {
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null,
             attackHandle.getDefendAskHandle().getAmount(), attackHandle.getDefendAskHandle().getAmount(),
             0, 0, attackHandle.getDefendAskHandle().getReason(),
-            attackHandle.getDefendAskHandle().isOptional());
+            attackHandle.getDefendAskHandle().isOptional(), true);
     }
 }

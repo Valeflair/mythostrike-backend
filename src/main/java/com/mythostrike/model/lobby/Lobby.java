@@ -4,14 +4,17 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.exception.IllegalInputException;
+import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
-import com.mythostrike.model.game.Game;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Getter
 public class Lobby {
@@ -185,15 +188,27 @@ public class Lobby {
             throw new IllegalInputException("user is not the owner");
         }
 
-        //TODO: complete this method --> create game
-        //TODO: randomize identities if Identity mode --> not the God King
-        if (numberPlayers >= mode.minPlayer() && numberPlayers <= mode.maxPlayer()) {
-            status = LobbyStatus.GAME_RUNNING;
-
-            gameManager = new GameManager(Arrays.stream(seats).map(Seat::getPlayer).toList(), mode);
-            return true;
+        if (numberPlayers < mode.minPlayer() || numberPlayers > mode.maxPlayer()) {
+            return false;
         }
-        return false;
+        status = LobbyStatus.GAME_RUNNING;
+
+        List<Player> players = new ArrayList<>(Arrays.stream(seats).map(Seat::getPlayer).toList());
+
+        //randomize positions if mode is Identity (except God King)
+        if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
+            Player godKing = players.remove(0);
+            Collections.shuffle(players, Game.SEED);
+            players.add(0, godKing);
+        }
+
+        //set identities depending on position
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setIdentity(mode.identityList().get(i));
+        }
+
+        gameManager = new GameManager(players, mode, id);
+        return true;
     }
 
     private boolean isNotOwner(User user) {

@@ -1,18 +1,10 @@
 package com.mythostrike.controller;
 
-import com.mythostrike.controller.message.game.CardMoveMessage;
-import com.mythostrike.controller.message.game.ChampionSelectionMessage;
-import com.mythostrike.controller.message.game.DiscardCardRequest;
-import com.mythostrike.controller.message.game.HighlightMessage;
-import com.mythostrike.controller.message.game.SelectCardRequest;
-import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.UseCardRequest;
-import com.mythostrike.controller.message.game.UseSkillRequest;
+import com.mythostrike.controller.message.game.*;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.game.player.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,16 +21,10 @@ import java.util.List;
 @Slf4j
 public class GameController {
 
-    @Bean
-    public static GameController gameController() {
-        return new GameController();
-    }
-
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request) {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
             principal.getName());
-
 
 
         return ResponseEntity
@@ -48,8 +34,6 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCard(Principal principal, @RequestBody SelectCardRequest request) {
         log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
-
-
 
 
         return ResponseEntity
@@ -107,11 +91,15 @@ public class GameController {
 
     }
 
-    public void updateGame(int lobbyId, CardMoveMessage message) {
+    public void updateGame(int lobbyId, String logMessage, List<PlayerData> playerDatas) {
 
     }
 
-    public void updateGame(int lobbyId, CardMoveMessage message, List<Player> players) {
+    public void cardMove(int lobbyId, CardMoveMessage message) {
+
+    }
+
+    public void cardMove(int lobbyId, CardMoveMessage message, List<Player> players) {
 
     }
 }

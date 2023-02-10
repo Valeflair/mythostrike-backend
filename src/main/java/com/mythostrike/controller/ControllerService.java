@@ -1,16 +1,16 @@
-package com.mythostrike;
+package com.mythostrike.controller;
 
 import com.mythostrike.account.service.TokenService;
 import com.mythostrike.account.service.UserService;
-import com.mythostrike.controller.AuthenticationController;
-import com.mythostrike.controller.GameController;
-import com.mythostrike.controller.LobbyController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
+
+@Service
 @RequiredArgsConstructor
-public class TestConfig {
+public class ControllerService {
 
     private final UserService userService;
     private final TokenService tokenService;

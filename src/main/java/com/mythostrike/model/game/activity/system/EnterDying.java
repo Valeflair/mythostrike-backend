@@ -1,11 +1,11 @@
 package com.mythostrike.model.game.activity.system;
 
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
+import com.mythostrike.model.game.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
@@ -77,10 +77,11 @@ public class EnterDying extends Activity {
             List<Card> cards = filter.filter(healer.getHandCards().getCards());
             List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
             //TODO implement
-            String hint = "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
-                + "if you want to heal him, pick heal and click confirm";
+            String hint =
+                "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
+                    + "if you want to heal him, pick heal and click confirm";
             HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null, 1,
-                1, 0, 0, hint, true);
+                1, 0, 0, hint, true, true);
             pickRequest = new PickRequest(player, gameManager, highlightMessage);
             gameManager.queueActivity(pickRequest);
         }

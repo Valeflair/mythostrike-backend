@@ -1,10 +1,10 @@
 package com.mythostrike.model.game.management;
 
+import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.cards.CardSpace;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.List;

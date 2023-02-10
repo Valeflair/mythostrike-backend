@@ -1,8 +1,8 @@
 package com.mythostrike.model.game.player;
 
-import com.mythostrike.model.game.activity.Card;
-import com.mythostrike.model.game.Game;
 import com.mythostrike.controller.GameController;
+import com.mythostrike.model.game.Game;
+import com.mythostrike.model.game.activity.Card;
 import lombok.Getter;
 
 import java.util.List;

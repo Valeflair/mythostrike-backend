@@ -33,7 +33,7 @@ public class PickCardToDrop extends Activity {
         List<Card> cards = player.getHandCards().getCards();
         List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
-            null, amount, amount, 0, 0, "Pick Card to drop", false);
+            null, amount, amount, 0, 0, "Pick Card to drop", false, true);
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
         Activity dropCard = new DropCard(gameManager, pickRequest);
         gameManager.queueActivity(dropCard);

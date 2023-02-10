@@ -1,9 +1,9 @@
 package com.mythostrike.model.game.activity.system;
 
-import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class PickCardToPLay extends Activity {
         List<Card> playableCards = getPlayableCards(player);
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
-            null, 1, 1, 0, 0, "Pick a Card to play", true);
+            null, 1, 1, 0, 0, "Pick a Card to play", true, false);
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
 
         PlayCard playCard = new PlayCard(gameManager, pickRequest);

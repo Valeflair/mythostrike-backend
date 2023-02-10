@@ -1,11 +1,11 @@
 package com.mythostrike.model.game.management;
 
 
+import com.mythostrike.model.game.activity.ActiveSkill;
+import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
-import com.mythostrike.model.game.activity.ActiveSkill;
-import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.Player;
 

@@ -23,4 +23,18 @@ public record Mode(int id, String name, String description, int minPlayer, int m
         }
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Mode mode = (Mode) o;
+
+        return id == mode.id;
+    }
+
+    public boolean isFrom(ModeData data) {
+        return this.name.equals(data.getName());
+    }
 }

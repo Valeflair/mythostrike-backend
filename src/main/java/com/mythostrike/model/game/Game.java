@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 public class Game {
@@ -21,6 +22,8 @@ public class Game {
      * describe how many cards player draw.
      */
     public static final int DRAWCARDCOUNT = 4;
+
+    public static final Random SEED = new Random(42);
     private final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;

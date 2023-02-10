@@ -1,16 +1,12 @@
 package com.mythostrike.model.game.activity.system;
 
+import com.mythostrike.model.game.Phase;
+import com.mythostrike.model.game.activity.SystemAction;
 import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypePhase;
 import com.mythostrike.model.game.activity.events.type.EventTypePhaseChange;
-import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
-import com.mythostrike.model.game.activity.system.phase.DelayedEffectTurn;
-import com.mythostrike.model.game.activity.system.phase.DrawTurn;
-import com.mythostrike.model.game.activity.system.phase.DropTurn;
-import com.mythostrike.model.game.activity.system.phase.RoundStartTurn;
-import com.mythostrike.model.game.Phase;
-import com.mythostrike.model.game.activity.SystemAction;
+import com.mythostrike.model.game.activity.system.phase.*;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
 
