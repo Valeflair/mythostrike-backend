@@ -4,6 +4,7 @@ import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
+import com.mythostrike.model.lobby.Mode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +22,8 @@ public class Game {
      */
     public static final int DRAWCARDCOUNT = 4;
     private final GameManager gameManager;
-    private final ArrayList<Player> allPlayers;
-    private final ArrayList<Player> alivePlayers;
+    private final List<Player> allPlayers;
+    private final List<Player> alivePlayers;
     private final CardList cardList;
     private final Mode mode;
     private String console;
@@ -34,7 +35,7 @@ public class Game {
     private CardPile tablePile;
 
 
-    public Game(ArrayList<Player> players, Mode mode, GameManager gameManager) {
+    public Game(List<Player> players, Mode mode, GameManager gameManager) {
         this.allPlayers = players;
         this.mode = mode;
         this.gameManager = gameManager;

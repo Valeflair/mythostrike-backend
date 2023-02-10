@@ -22,6 +22,9 @@ public class CardManager {
         gameManager.getGame().setDrawPile(gameManager.getGame().getThrowPile());
         gameManager.getGame().setThrowPile(dummy);
         gameManager.getGame().getDrawPile().shuffle();
+        //TODO:
+        /*CardMoveMessage
+        gameManager.getGameController().updateGame(gameManager.getLobbyId(),);*/
         //TODO update it to frontend
     }
 

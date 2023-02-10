@@ -5,16 +5,18 @@ import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.Mode;
+import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.player.Champion;
-import com.mythostrike.model.game.player.Identity;
+import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.game.player.Player;
+import com.mythostrike.controller.GameController;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,21 +39,24 @@ public class GameManager {
     @Getter
     private final PlayerManager playerManager;
     @Getter
+    @Autowired
     private final GameController gameController;
     @Getter
     private List<Activity> currentActivity;
     @Getter
     @Setter
     private Phase phase;
+    @Getter
+    private final int lobbyId;
     private boolean proceeding;
 
 
-    public GameManager(ArrayList<Player> players, Mode mode, GameController gameController) {
+    public GameManager(List<Player> players, Mode mode, int lobbyId) {
         game = new Game(players, mode, this);
         cardManager = new CardManager(this);
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
-        this.gameController = gameController;
+        this.lobbyId = lobbyId;
     }
 
     //---------------compiling method----------
@@ -79,7 +84,7 @@ public class GameManager {
     //----------------GameStart----------------
     public void gameStart() {
 
-        ArrayList<Player> players = game.getAlivePlayers();
+        List<Player> players = game.getAlivePlayers();
         //TODO:unterschiedliche dinge an frontend schicken
         identityDistribution(players);
         //TODO:extra panel machen
@@ -134,7 +139,7 @@ public class GameManager {
         return null;
     }
 
-    private void identityDistribution(ArrayList<Player> players) {
+    private void identityDistribution(List<Player> players) {
         Mode mode = game.getMode();
         //only shuffle in identitymode
         if (game.getMode().equals(Mode.IDENTITY)) {

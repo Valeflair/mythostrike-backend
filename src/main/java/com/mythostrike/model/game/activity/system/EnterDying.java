@@ -2,7 +2,7 @@ package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageType;
-import com.mythostrike.model.game.HighlightMessage;
+import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;

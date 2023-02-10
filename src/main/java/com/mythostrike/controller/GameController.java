@@ -12,6 +12,7 @@ import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.game.player.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,11 @@ import java.util.List;
 @Slf4j
 public class GameController {
 
+    @Bean
+    public static GameController gameController() {
+        return new GameController();
+    }
+
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request) {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
@@ -42,6 +48,7 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCard(Principal principal, @RequestBody SelectCardRequest request) {
         log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
+
 
 
 

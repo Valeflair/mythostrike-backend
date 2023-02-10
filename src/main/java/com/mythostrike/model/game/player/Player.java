@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.cards.HandCards;
 import com.mythostrike.model.game.activity.cards.cardtype.Drought;
 import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
+import com.mythostrike.model.lobby.Identity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

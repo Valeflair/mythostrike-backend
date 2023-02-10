@@ -3,6 +3,7 @@ package com.mythostrike.model.lobby;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.exception.IllegalInputException;
+import com.mythostrike.model.game.management.GameManager;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -58,11 +59,7 @@ public final class LobbyList {
         return lobbyMap.get(id);
     }
 
-    /*public Game getGame(int id) {
-        return lobbyMap.get(id).getGame();
-    }
-
     public GameManager getGameManager(int id) {
         return lobbyMap.get(id).getGameManager();
-    }*/
+    }
 }

@@ -1,7 +1,7 @@
 package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.HighlightMessage;
+import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.management.GameManager;
