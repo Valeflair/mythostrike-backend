@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.game.GameEndMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.LogMessage;
-import com.mythostrike.controller.message.game.PlayerData;
+import com.mythostrike.controller.message.game.PlayerDataMessage;
 import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseCardRequest;
@@ -51,6 +52,8 @@ public class GameController {
 
     private final CardList cardList = CardList.getCardList();
 
+    private final WebSocketService webSocketService;
+
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request)
         throws IllegalInputException {
@@ -78,7 +81,12 @@ public class GameController {
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        List<Card> cards = new ArrayList<>( request.cardIdList().stream().map(cardList::getCard).toList() );
+
+        List<Card> cards = new ArrayList<>();
+        for (int cardId : request.cardIdList()) {
+            cards.add(cardList.getCard(cardId));
+        }
+
         //gameManager.selectCard(principal.getName(), cards);
 
 
@@ -123,86 +131,44 @@ public class GameController {
     public void selectChampionFrom(int lobbyId, String toUsername, ChampionSelectionMessage message) {
         String path = String.format("/games/%d/%s/selectChampion", lobbyId, toUsername);
 
-        log.debug("selectChampionFrom to '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, message);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(message);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert ChampionSelectionMessage to json", e);
-        }
+        webSocketService.sendMessage(path, message, "selectChampionFrom");
     }
 
-    public void updateGame(int lobbyId, List<PlayerData> playerDatas) {
+    public void updateGame(int lobbyId, List<PlayerDataMessage> playerDataMessages) {
         String path = String.format("/games/%d", lobbyId);
 
-        log.debug("updateGame to '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, playerDatas);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(playerDatas);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert playerDatas to json", e);
-        }
+        webSocketService.sendMessage(path, playerDataMessages, "updateGame");
     }
 
     public void highlight(int lobbyId, String toUsername, HighlightMessage message) {
         String path = String.format("/games/%d/%s", lobbyId, toUsername);
 
-        log.debug("highlightMessage to '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, message);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(message);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert highlightMessage to json", e);
-        }
+        webSocketService.sendMessage(path, message, "highlight");
     }
 
     public void cardMove(int lobbyId, CardMoveMessage message) {
         String path = String.format("/games/%d", lobbyId);
 
-        log.debug("cardMove to '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, message);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(message);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert cardMoveMessage to json", e);
-        }
+        webSocketService.sendMessage(path, message, "cardMove");
     }
 
     public void cardMove(int lobbyId, List<String> toUsernames, CardMoveMessage message) {
         for (String username : toUsernames) {
             String path = String.format("/games/%d/%s", lobbyId, username);
-            log.debug("cardMove to '{}'", path);
 
-            simpMessagingTemplate.convertAndSend(path, message);
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                String json = mapper.writeValueAsString(message);
-                log.debug("sent to frontend: {}", json);
-            } catch (JsonProcessingException e) {
-                log.error("could not convert cardMoveMessage to json", e);
-            }
+            webSocketService.sendMessage(path, message, "cardMovePrivate");
         }
     }
 
     public void logMessage(int lobbyId, LogMessage message) {
         String path = String.format("/games/%d", lobbyId);
 
-        log.debug("logMessage to '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, message);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(message);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert LogMessage to json", e);
-        }
+        webSocketService.sendMessage(path, message, "logMessage");
+    }
+
+    public void gameEnd(int lobbyId, GameEndMessage message) {
+        String path = String.format("/games/%d", lobbyId);
+
+        webSocketService.sendMessage(path, message, "gameEnd");
     }
 }

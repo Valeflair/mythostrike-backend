@@ -4,5 +4,6 @@ public enum WebsocketGameMessageType {
     UPDATE_GAME,
     HIGHLIGHT,
     CARD_MOVE,
-    LOG;
+    LOG,
+    GAME_END;
 }

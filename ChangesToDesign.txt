@@ -8,3 +8,5 @@
     * WebSocketConfiguration
     * RestExceptionHandler
     * IllegalInputException
+    * WebSocketService
+- log Fenster in Frontend und übertragung der Nachrichten per Websocket hinzugefügt

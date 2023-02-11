@@ -74,7 +74,7 @@ public class EnterDying extends Activity {
             end = true;
         } else {
             Player healer = players.get(0);
-            List<Card> cards = filter.filter(healer.getHandCards().getCards());
+            List<Card> cards = FILTER.filter(healer.getHandCards().getCards());
             List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
             //TODO implement
             String hint

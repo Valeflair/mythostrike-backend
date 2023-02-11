@@ -1,7 +1,5 @@
 package com.mythostrike.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
@@ -43,6 +41,8 @@ public class LobbyController {
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
     private final ModeList modeList = ModeList.getModeList();
+
+    private final WebSocketService webSocketService;
 
     @GetMapping
     public ResponseEntity<List<LobbyOverview>> getLobbies() {
@@ -230,14 +230,6 @@ public class LobbyController {
         }
         String path = "/lobbies/" + lobbyId;
 
-        log.debug("update lobby on '{}'", path);
-        simpMessagingTemplate.convertAndSend(path, lobby);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(lobby);
-            log.debug("sent to frontend: {}", json);
-        } catch (JsonProcessingException e) {
-            log.error("could not convert lobby to json", e);
-        }
+        webSocketService.sendMessage(path, lobby, "updateLobby");
     }
 }

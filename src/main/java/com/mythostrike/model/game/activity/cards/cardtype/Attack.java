@@ -150,7 +150,7 @@ public class Attack extends Card {
         gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_PROCEED, attackHandle);
         CardAskHandle cardAskHandle = attackHandle.getDefendAskHandle();
 
-        List<Integer> cardIds = GameManager.convertCardsToInteger(filter.filter(opponent.getHandCards().getCards()));
+        List<Integer> cardIds = GameManager.convertCardsToInteger(FILTER.filter(opponent.getHandCards().getCards()));
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null,
             attackHandle.getDefendAskHandle().getAmount(), attackHandle.getDefendAskHandle().getAmount(),
             0, 0, attackHandle.getDefendAskHandle().getReason(),
