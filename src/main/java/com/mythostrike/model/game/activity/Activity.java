@@ -14,9 +14,9 @@ import lombok.Getter;
 
 @Getter
 public abstract class Activity {
-    private final int id;
-    private final String name;
-    private final String description;
+    protected final int id;
+    protected final String name;
+    protected final String description;
 
 
     protected Activity(int id, String name, String description) {

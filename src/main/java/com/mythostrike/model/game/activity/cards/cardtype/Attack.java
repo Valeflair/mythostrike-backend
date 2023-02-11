@@ -63,6 +63,11 @@ public class Attack extends Card {
         return false;
     }
 
+    @Override
+    public Attack deepCopy() {
+        return new Attack(id, symbol, point);
+    }
+
     /**
      * player choose this card, highlight all target enemies
      * creates a pickRequest for card user

@@ -20,5 +20,10 @@ public class Defend extends Card {
     public Defend(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
+
+    @Override
+    public Defend deepCopy() {
+        return new Defend(id, symbol, point);
+    }
     //TODO:implement
 }

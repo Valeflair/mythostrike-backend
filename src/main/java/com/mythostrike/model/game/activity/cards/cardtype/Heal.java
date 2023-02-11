@@ -22,6 +22,11 @@ public class Heal extends Card {
     }
 
     @Override
+    public Heal deepCopy() {
+        return new Heal(id, symbol, point);
+    }
+
+    @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         this.cardUseHandle = cardUseHandle;
         return cardUseHandle.getPlayer().getCurrentHp() < cardUseHandle.getPlayer().getMaxHp()

@@ -9,8 +9,6 @@ import com.mythostrike.model.game.management.GameManager;
 import java.util.HashMap;
 
 public abstract class Card extends Activity {
-
-
     protected CardType type;
     protected CardSymbol symbol;
     protected int point;
@@ -24,6 +22,13 @@ public abstract class Card extends Activity {
         this.type = type;
         this.symbol = symbol;
         this.point = point;
+    }
+
+    protected Card(Card card) {
+        super(card.getId(), card.getName(), card.getDescription());
+        this.type = card.getType();
+        this.symbol = card.getSymbol();
+        this.point = card.getPoint();
     }
 
     public CardType getType() {
@@ -41,6 +46,8 @@ public abstract class Card extends Activity {
     public int getPoint() {
         return point;
     }
+
+    public abstract Card deepCopy();
 
     @Override
     public void activate() {

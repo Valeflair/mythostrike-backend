@@ -39,11 +39,11 @@ public class Game {
 
 
     public Game(List<Player> players, Mode mode, GameManager gameManager) {
-        this.allPlayers = players;
+        this.allPlayers = new ArrayList<>(players);
         this.mode = mode;
         this.gameManager = gameManager;
         alivePlayers = new ArrayList<>(allPlayers);
-        cardList = new CardList(CardList.getInstance().getCards());
+        cardList = CardList.getCardList();
         drawPile = new CardPile(cardList.getCards());
         tablePile = new CardPile();
         throwPile = new CardPile();

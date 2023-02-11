@@ -20,5 +20,11 @@ public class Drought extends Card {
     public Drought(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
+
+    @Override
+    public Drought deepCopy() {
+        return new Drought(id, symbol, point);
+    }
+
     //TODO:implement
 }

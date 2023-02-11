@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class Champion {
 
-    private int id;
+    private final int id;
     private final String name;
     private final int maxHp;
     private final List<PassiveSkill> passiveSkills;
@@ -17,6 +17,7 @@ public class Champion {
 
     public Champion(int id, String name, int maxHp, List<PassiveSkill> passiveSkills,
                     List<ActiveSkill> activeSkills) {
+        this.id = id;
         this.name = name;
         this.maxHp = maxHp;
         this.passiveSkills = List.copyOf(passiveSkills);

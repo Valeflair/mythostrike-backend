@@ -20,5 +20,11 @@ public class Nightmare extends Card {
     public Nightmare(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
+
+    @Override
+    public Nightmare deepCopy() {
+        return new Nightmare(id, symbol, point);
+    }
+
     //TODO:implement
 }
