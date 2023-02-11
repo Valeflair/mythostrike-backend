@@ -113,7 +113,7 @@ public class GameManager {
 
     private void selectChampionPhase(List<Player> players) {
 
-        List<Champion> championList = ChampionList.getChampionList().getChampions();
+        List<Champion> championList = new ArrayList<>( ChampionList.getChampionList().getChampions() );
         for (Player player : players) {
 
             List<Champion> list = new ArrayList<>();
