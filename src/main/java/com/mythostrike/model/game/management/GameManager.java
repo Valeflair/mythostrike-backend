@@ -2,7 +2,7 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
-import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.Activity;
@@ -64,7 +64,24 @@ public class GameManager {
         this.lobbyId = lobbyId;
     }
 
+    //---------------compiling method----------
+    public static List<Integer> convertCardsToInteger(List<Card> cards) {
+        List<Integer> cardIds = new ArrayList<>();
+        for (Card card : cards) {
+            cardIds.add(card.getId());
+        }
+        return cardIds;
+    }
 
+    public static List<String> convertPlayersToUsername(List<Player> players) {
+        List<String> playerNames = new ArrayList<>();
+        for (Player player : players) {
+            playerNames.add(player.getUsername());
+        }
+        return playerNames;
+    }
+
+    //----------------GameRun----------------
 
     //----------------GameStart----------------
     public void gameStart() {
@@ -77,22 +94,17 @@ public class GameManager {
 
 
         //initial Cards for player
-        game.output("Game Started, Player has following champions:");
+        output("Game Started, Player has following champions:");
         for (Player player : players) {
-            game.output(
-                    player.getUsername() + " as Seat " + players.indexOf(player) + " has " + player.getChampion().getName()
-                            + "with skill:");
+            output(player.getUsername() + " as Seat " + players.indexOf(player) + " has "
+                + player.getChampion().getName() + "with skill:");
 
-            cardManager.drawCard(
-                    new CardDrawHandle(this, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,
-                            game.getDrawPile()));
-
+            cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
+                player, CARD_COUNT_START_UP, game.getDrawPile()));
         }
-
 
         phase = Phase.ROUNDSTART;
         proceed();
-
     }
 
     private void selectChampionPhase(List<Player> players) {
@@ -115,16 +127,10 @@ public class GameManager {
                 }
             }
             //wahl aussuchen und Leben initialisieren
-            ChampionSelectionMessage championSelectionMessage = new ChampionSelectionMessage(player.getIdentity(), list);
+            ChampionSelectionMessage championSelectionMessage
+                = new ChampionSelectionMessage(player.getIdentity(), list);
             gameController.selectChampionFrom(lobbyId, player.getUsername(), championSelectionMessage);
         }
-    }
-
-    //----------------GameRun----------------
-
-    public Champion playerPickChampionFromList(Player player, List<Champion> championList) {
-        //TODO adjust with API
-        return null;
     }
 
     public void proceed() {
@@ -172,6 +178,8 @@ public class GameManager {
         currentActivity.add(0, activity);
     }
 
+    //----------------Request Response----------------
+
     public void queueActivity(int pos, Activity activity) {
         currentActivity.add(pos, activity);
     }
@@ -180,10 +188,8 @@ public class GameManager {
         //TODO implement with frontend panel
     }
 
-    //----------------Request Response----------------
-
-    public void highlightPickRequest(PickRequest pickRequest){
-        gameController.highlight(lobbyId,pickRequest.getPlayer().getUsername() , pickRequest.getHighlightMessage());
+    public void highlightPickRequest(PickRequest pickRequest) {
+        gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
         lastPickRequest = pickRequest;
     }
 
@@ -200,10 +206,12 @@ public class GameManager {
         }
     }
 
-    public void selectPlayers(String playerName, List<Player> players) {
+    public void selectPlayers(String playerName, List<String> targetUsernames) {
         Player player = getPlayerByName(playerName);
+
+        List<Player> targets = new ArrayList<>( targetUsernames.stream().map(this::getPlayerByName).toList());
         if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
-            lastPickRequest.setSelectedPlayers(players);
+            lastPickRequest.setSelectedPlayers(targets);
             lastPickRequest = null;
             proceed();
         }
@@ -215,23 +223,6 @@ public class GameManager {
             lastPickRequest.setClickedCancel(true);
             proceed();
         }
-    }
-
-    //---------------compiling method----------
-    public static List<Integer> convertCardsToInteger(List<Card> cards) {
-        List<Integer> cardIds = new ArrayList<>();
-        for (Card card : cards) {
-            cardIds.add(card.getId());
-        }
-        return cardIds;
-    }
-
-    public static List<String> convertPlayersToInteger(List<Player> players) {
-        List<String> playerNames = new ArrayList<>();
-        for (Player player : players) {
-            playerNames.add(player.getUsername());
-        }
-        return playerNames;
     }
 
     public Player getPlayerByName(String playerName) {
@@ -246,5 +237,9 @@ public class GameManager {
     //debug
     public void debug(String hint) {
         System.out.println("D:" + hint);
+    }
+
+    public void output(String output) {
+        getGameController().logMessage(lobbyId, new LogMessage(output));
     }
 }

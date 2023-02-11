@@ -83,7 +83,7 @@ public class Attack extends Card {
                 targets.add(target);
             }
         }
-        List<String> playerNames = GameManager.convertPlayersToInteger(targets);
+        List<String> playerNames = GameManager.convertPlayersToUsername(targets);
 
         HighlightMessage highlightMessage = new HighlightMessage(null, playerNames, null, 0,
             0, 1, 1, DESCRIPTION, true, true);

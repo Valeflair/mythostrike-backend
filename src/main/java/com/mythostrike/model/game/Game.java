@@ -24,7 +24,7 @@ public class Game {
     public static final int DRAWCARDCOUNT = 4;
 
     public static final Random RANDOM_SEED = new Random(42);
-    private final GameManager gameManager;
+    public final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
     private final CardList cardList;
@@ -59,11 +59,6 @@ public class Game {
 
     public boolean isPlayerAlive(Player player) {
         return player.isAlive();
-    }
-
-
-    public void output(String output) {
-        gameManager.getGameController().log(output);
     }
 
     public List<Player> getOtherPlayers(Player player) {

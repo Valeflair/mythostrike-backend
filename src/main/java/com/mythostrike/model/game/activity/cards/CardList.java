@@ -28,7 +28,7 @@ public final class CardList {
         this.cards = new ArrayList<>();
 
         //initilize a complete card deck in the card list
-        int id = 0;
+        int id = 1000;
         //TODO: doppelte entfernen bzw. neu verteilen
         //stand von ausgedruckten Karten
         /*cards.add(new GoldenApple(id++, CardSymbol.HEART, 1));

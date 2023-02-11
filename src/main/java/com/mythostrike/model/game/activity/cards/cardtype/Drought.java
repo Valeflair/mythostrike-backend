@@ -5,7 +5,6 @@ import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public class Drought extends Card {
     public Drought(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
+
     @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         gameManager = cardUseHandle.getGameManager();
@@ -29,7 +29,7 @@ public class Drought extends Card {
         List<Player> targets = new ArrayList<>();
         for (Player target : cardUseHandle.getGameManager().getGame().getOtherPlayers(player)) {
             if (!target.equals(player) && target.isAlive() && Boolean.FALSE.equals(target.isImmune(NAME))
-            && target.getDelayedEffect().accepts(this)) {
+                && target.getDelayedEffect().accepts(this)) {
                 targets.add(target);
             }
         }
@@ -39,6 +39,7 @@ public class Drought extends Card {
         }
         return false;
     }
+
     @Override
     public void activate() {
         //TODO:implement

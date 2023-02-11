@@ -118,7 +118,8 @@ public class CardManager {
             }
         }
         ///TODO update it DEPENDS ON who can see the cards and who doesn't
-        CardMoveMessage cardMoveMessage = new CardMoveMessage(fromString, toString, cardMoveHandle.getMoveCards().size(),
+        CardMoveMessage cardMoveMessage =
+            new CardMoveMessage(fromString, toString, cardMoveHandle.getMoveCards().size(),
                 GameManager.convertCardsToInteger(cardMoveHandle.getMoveCards()));
     }
 

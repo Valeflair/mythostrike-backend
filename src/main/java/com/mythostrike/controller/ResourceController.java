@@ -1,6 +1,11 @@
 package com.mythostrike.controller;
 
+import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
+import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.CardList;
+import com.mythostrike.model.game.player.Champion;
+import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +26,14 @@ public class ResourceController {
 
     private final ModeList modeList = ModeList.getModeList();
 
+    private final ChampionList championList = ChampionList.getChampionList();
+
+    private final CardList cardList = CardList.getCardList();
+
     @GetMapping("/cards")
-    public ResponseEntity<Void> getCards() {
+    public ResponseEntity<List<Card>> getCards() {
         log.debug("getCards request");
-        //TODO: generate list of cards
-        //return ResponseEntity.ok(list);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(cardList.getCards());
     }
 
     @GetMapping("/modes")
@@ -36,10 +43,8 @@ public class ResourceController {
     }
 
     @GetMapping("/champions")
-    public ResponseEntity<List<LobbyOverview>> getChampions() {
+    public ResponseEntity<List<Champion>> getChampions() {
         log.debug("getChampions request");
-        //TODO: generate list of champions
-        //return ResponseEntity.ok(list);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(championList.getChampions());
     }
 }

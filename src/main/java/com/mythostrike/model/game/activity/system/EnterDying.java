@@ -80,7 +80,7 @@ public class EnterDying extends Activity {
             //TODO implement
             String hint
                 = "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
-                    + "if you want to heal him, pick heal and click confirm";
+                + "if you want to heal him, pick heal and click confirm";
             HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null, 1,
                 1, 0, 0, hint, true, true);
             pickRequest = new PickRequest(player, gameManager, highlightMessage);

@@ -44,7 +44,7 @@ public class PlayerManager {
                     }
                     hint += " damage to Player " + damageHandle.getTo().getUsername();
                     hint += ", ouch! And he has now " + damageHandle.getTo().getCurrentHp() + " HP.";
-                    gameManager.getGame().output(hint);
+                    gameManager.getGame().gameManager.output(hint);
                     eventManager.triggerEvent(EventTypeDamage.DAMAGE, damageHandle);
                     eventManager.triggerEvent(EventTypeDamage.DAMAGED, damageHandle);
                     eventManager.triggerEvent(EventTypeDamage.DAMAGE_COMPLETE, damageHandle);

@@ -1,7 +1,5 @@
 package com.mythostrike.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
@@ -11,7 +9,7 @@ import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.controller.message.game.PlayerDataMessage;
 import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.UseCardRequest;
+import com.mythostrike.controller.message.game.SelectTargetRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.exception.IllegalInputException;
@@ -60,14 +58,16 @@ public class GameController {
         log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
             principal.getName());
 
+        //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
         Champion champion = championList.getChampion(request.championId());
 
-        //gameManager.selectChampion(principal.getName(), champion);
+        gameManager.selectChampion(principal.getName(), champion);
 
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -75,38 +75,58 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
         throws IllegalInputException {
-        log.debug("play card '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(), principal.getName());
+        log.debug("play card '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(),
+            principal.getName());
 
+        //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-
         List<Card> cards = new ArrayList<>();
         for (int cardId : request.cardIdList()) {
             cards.add(cardList.getCard(cardId));
         }
 
-        //gameManager.selectCard(principal.getName(), cards);
+        gameManager.selectCards(principal.getName(), cards);
 
-
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<Void> cancelSelection(Principal principal, @RequestBody LobbyIdRequest request) {
+    public ResponseEntity<Void> cancelRequest(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("cancel request in '{}' from '{}'", request.lobbyId(), principal.getName());
 
+        //get objects from REST data
+        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
+        if (gameManager == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+
+        gameManager.cancelRequest(principal.getName());
+
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
 
     @PostMapping("/targets")
-    public ResponseEntity<Void> useCard(Principal principal, @RequestBody UseCardRequest request) {
+    public ResponseEntity<Void> selectTargets(Principal principal, @RequestBody SelectTargetRequest request) {
         log.debug("use card '{}' on '{}' request in '{}' from '{}'", request.cardId(), request.targets(),
             request.lobbyId(), principal.getName());
 
+        //get objects from REST data
+        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
+        if (gameManager == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+
+        //TODO: cardId unnötig?
+        gameManager.selectPlayers(principal.getName(), request.targets());
+
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -116,6 +136,14 @@ public class GameController {
         log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
             principal.getName());
 
+        //get objects from REST data
+        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
+        if (gameManager == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+
+
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -124,6 +152,8 @@ public class GameController {
     public ResponseEntity<Void> endTurn(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("end turn request in '{}' from '{}'", request.lobbyId(), principal.getName());
 
+
+        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -132,6 +162,17 @@ public class GameController {
         String path = String.format("/games/%d/%s/selectChampion", lobbyId, toUsername);
 
         webSocketService.sendMessage(path, message, "selectChampionFrom");
+    }
+
+    public void updateGame(int lobbyId) {
+        GameManager gameManager = lobbyList.getGameManager(lobbyId);
+        if (gameManager == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+        List<PlayerDataMessage> playerDataMessages = new ArrayList<>(
+            gameManager.getGame().getAllPlayers().stream().map(PlayerDataMessage::new).toList()
+        );
+        updateGame(lobbyId, playerDataMessages);
     }
 
     public void updateGame(int lobbyId, List<PlayerDataMessage> playerDataMessages) {

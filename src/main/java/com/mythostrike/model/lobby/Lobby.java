@@ -208,6 +208,7 @@ public class Lobby {
         }
 
         gameManager = new GameManager(players, mode, id);
+        gameManager.gameStart();
         return true;
     }
 
