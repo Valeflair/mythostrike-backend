@@ -3,6 +3,9 @@ package com.mythostrike.model.game.activity.cards;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
+import com.mythostrike.model.game.activity.cards.cardtype.Defend;
+import com.mythostrike.model.game.activity.cards.cardtype.Heal;
+import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeData;
 import com.mythostrike.model.lobby.ModeList;
@@ -28,7 +31,8 @@ public class CardList {
 
         //initilize a complete card deck in the card list
         int id = 0;
-        //TODO: doppelte entfernen
+        //TODO: doppelte entfernen bzw. neu verteilen
+        //stand von ausgedruckten Karten
         /*cards.add(new GoldenApple(id++, CardSymbol.HEART, 1));
         cards.add(new GoldenApple(id++, CardSymbol.HEART, 3));
         cards.add(new GoldenApple(id++, CardSymbol.HEART, 4));*/
@@ -62,6 +66,60 @@ public class CardList {
         cards.add(new Attack(id++, CardSymbol.CLUB, 11));
         cards.add(new Attack(id++, CardSymbol.CLUB, 11)); //doppelt
         cards.add(new Attack(id++, CardSymbol.SPADE, 7));
+        cards.add(new Attack(id++, CardSymbol.SPADE, 8));
+        cards.add(new Attack(id++, CardSymbol.SPADE, 8)); //doppelt
+        cards.add(new Attack(id++, CardSymbol.SPADE, 9));
+        cards.add(new Attack(id++, CardSymbol.SPADE, 9)); //doppelt
+        cards.add(new Attack(id++, CardSymbol.SPADE, 10));
+        cards.add(new Attack(id++, CardSymbol.SPADE, 10)); //doppelt
+        /*cards.add(new BlessOfHecate(id++, CardSymbol.HEART, 7));
+        cards.add(new BlessOfHecate(id++, CardSymbol.HEART, 8));
+        cards.add(new BlessOfHecate(id++, CardSymbol.HEART, 9));
+        cards.add(new BlessOfHecate(id++, CardSymbol.HEART, 11));*/
+        cards.add(new Defend(id++, CardSymbol.HEART, 2));
+        cards.add(new Defend(id++, CardSymbol.HEART, 2)); //doppelt
+        cards.add(new Defend(id++, CardSymbol.HEART, 13));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 2));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 2)); //doppelt
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 3));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 3)); //doppelt
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 5));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 6));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 7));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 8));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 9));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 10));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 11));
+        cards.add(new Defend(id++, CardSymbol.DIAMOND, 11)); //doppelt
+        /*cards.add(new Duel(id++, CardSymbol.HEART, 3));
+        cards.add(new Duel(id++, CardSymbol.HEART, 4));
+        cards.add(new Duel(id++, CardSymbol.DIAMOND, 1));
+        cards.add(new Duel(id++, CardSymbol.CLUB, 1));
+        cards.add(new Duel(id++, CardSymbol.SPADE, 1));*/
+        /*cards.add(new Extort(id++, CardSymbol.DIAMOND, 3));
+        cards.add(new Extort(id++, CardSymbol.DIAMOND, 4));
+        cards.add(new Extort(id++, CardSymbol.SPADE, 3));
+        cards.add(new Extort(id++, CardSymbol.SPADE, 4));
+        cards.add(new Extort(id++, CardSymbol.SPADE, 11));*/
+        cards.add(new Heal(id++, CardSymbol.HEART, 3));
+        cards.add(new Heal(id++, CardSymbol.HEART, 4));
+        cards.add(new Heal(id++, CardSymbol.HEART, 6));
+        cards.add(new Heal(id++, CardSymbol.HEART, 7));
+        cards.add(new Heal(id++, CardSymbol.HEART, 8));
+        cards.add(new Heal(id++, CardSymbol.HEART, 9));
+        cards.add(new Heal(id++, CardSymbol.HEART, 12));
+        cards.add(new Heal(id++, CardSymbol.DIAMOND, 12));
+        cards.add(new Nightmare(id++, CardSymbol.HEART, 6));
+        cards.add(new Nightmare(id++, CardSymbol.CLUB, 6));
+        cards.add(new Nightmare(id++, CardSymbol.SPADE, 6));
+        /*cards.add(new VolcanicEruption(id++, CardSymbol.DIAMOND, 12));
+        cards.add(new VolcanicEruption(id++, CardSymbol.HEART, 13));
+        cards.add(new VolcanicEruption(id++, CardSymbol.CLUB, 13));
+        cards.add(new VolcanicEruption(id++, CardSymbol.CLUB, 12));
+        cards.add(new VolcanicEruption(id++, CardSymbol.SPADE, 11));*/
+
+
+
     }
 
     public static CardList getCardList() {
