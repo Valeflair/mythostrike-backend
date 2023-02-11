@@ -128,11 +128,11 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
-    public void selectChampionFrom(int lobbyId, ChampionSelectionMessage message) {
+    public void selectChampionFrom(int lobbyId, String toUsername, ChampionSelectionMessage message) {
 
     }
 
-    public void highlight(int lobbyId, HighlightMessage message) {
+    public void highlight(int lobbyId, String toUsername, HighlightMessage message) {
 
     }
 
@@ -144,7 +144,7 @@ public class GameController {
 
     }
 
-    public void cardMove(int lobbyId, CardMoveMessage message, List<Player> players) {
+    public void cardMove(int lobbyId, List<String> toUsernames, CardMoveMessage message) {
 
     }
 }

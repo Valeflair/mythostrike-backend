@@ -46,6 +46,7 @@ public class EnterDying extends Activity {
 
     @Override
     public void activate() {
+
         //TODO:update message to frontend, that this player is about to die
     }
 

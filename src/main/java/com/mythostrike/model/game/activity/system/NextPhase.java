@@ -23,7 +23,6 @@ public class NextPhase extends SystemAction {
 
     private final GameManager gameManager;
 
-    //TODO : adjust with highlightMessage
     public NextPhase(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION, gameManager);
         this.gameManager = gameManager;
