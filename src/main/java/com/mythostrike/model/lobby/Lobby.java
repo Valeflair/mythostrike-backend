@@ -198,7 +198,7 @@ public class Lobby {
         //randomize positions if mode is Identity (except God King)
         if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
             Player godKing = players.remove(0);
-            Collections.shuffle(players, Game.SEED);
+            Collections.shuffle(players, Game.RANDOM_SEED);
             players.add(0, godKing);
         }
 

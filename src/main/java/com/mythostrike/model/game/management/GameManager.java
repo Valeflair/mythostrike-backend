@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.player.Champion;
+import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Mode;
@@ -111,7 +112,8 @@ public class GameManager {
     }
 
     private void selectChampionPhase(List<Player> players) {
-        List<Champion> championList = Champion.getChampionPatterns();
+
+        List<Champion> championList = ChampionList.getChampionList().getChampions();
         for (Player player : players) {
 
             List<Champion> list = new ArrayList<>();
@@ -120,9 +122,10 @@ public class GameManager {
             if (player.getIdentity().equals(Identity.GOD_KING)) {
                 championCount = PICK_CHAMPION_COUNT_GOD_KING;
             }
+
             //liste aufstellen
+            Collections.shuffle(championList, Game.RANDOM_SEED);
             while (list.size() < championCount) {
-                Collections.shuffle(championList);
                 if (!list.contains(championList.get(0))) {
                     list.add(championList.get(0));
                 }

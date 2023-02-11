@@ -9,29 +9,26 @@ import java.util.List;
 @Getter
 public class Champion {
 
-    private static List<Champion> championPatterns;
+    private int id;
     private final String name;
-    private final String picture;
     private final int maxHp;
     private final List<PassiveSkill> passiveSkills;
     private final List<ActiveSkill> activeSkills;
 
-    public Champion(String name, String picture, int maxHp, List<PassiveSkill> passiveSkills,
+    public Champion(int id, String name, int maxHp, List<PassiveSkill> passiveSkills,
                     List<ActiveSkill> activeSkills) {
         this.name = name;
-        this.picture = picture;
         this.maxHp = maxHp;
-        this.passiveSkills = passiveSkills;
-        this.activeSkills = activeSkills;
+        this.passiveSkills = List.copyOf(passiveSkills);
+        this.activeSkills = List.copyOf(activeSkills);
     }
 
-
-    public static List<Champion> getChampionPatterns() {
-        return championPatterns;
-    }
-
-    public static void setChampionPatterns(List<Champion> championPatterns) {
-        Champion.championPatterns = championPatterns;
+    public Champion(int id, ChampionData data) {
+        this.id = id;
+        this.name = data.getName();
+        this.maxHp = data.getMaxHp();
+        this.passiveSkills = List.copyOf(data.getPassiveSkills());
+        this.activeSkills = List.copyOf(data.getActiveSkills());
     }
 
 }
