@@ -63,7 +63,7 @@ public class Game {
 
 
     public void output(String output) {
-        //TODO: merge with apis
+        gameManager.getGameController().log(output);
     }
 
     public List<Player> getOtherPlayers(Player player) {

@@ -1,6 +1,8 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
+import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.Activity;
@@ -51,6 +53,8 @@ public class GameManager {
     private Phase phase;
     private boolean proceeding;
 
+    private PickRequest lastPickRequest;
+
 
     public GameManager(List<Player> players, Mode mode, int lobbyId) {
         game = new Game(players, mode, this);
@@ -60,27 +64,7 @@ public class GameManager {
         this.lobbyId = lobbyId;
     }
 
-    //---------------compiling method----------
-    public static List<Integer> convertCardsToInteger(List<Card> cards) {
-        List<Integer> cardIds = new ArrayList<>();
-        for (Card card : cards) {
-            cardIds.add(card.getId());
-        }
-        return cardIds;
-    }
 
-    public static List<String> convertPlayersToInteger(List<Player> players) {
-        List<String> playerNames = new ArrayList<>();
-        for (Player player : players) {
-            playerNames.add(player.getUsername());
-        }
-        return playerNames;
-    }
-
-    //debug
-    public void debug(String hint) {
-        System.out.println("D:" + hint);
-    }
 
     //----------------GameStart----------------
     public void gameStart() {
@@ -96,12 +80,12 @@ public class GameManager {
         game.output("Game Started, Player has following champions:");
         for (Player player : players) {
             game.output(
-                player.getUsername() + " as Seat " + players.indexOf(player) + " has " + player.getChampion().getName()
-                    + "with skill:");
+                    player.getUsername() + " as Seat " + players.indexOf(player) + " has " + player.getChampion().getName()
+                            + "with skill:");
 
             cardManager.drawCard(
-                new CardDrawHandle(this, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,
-                    game.getDrawPile()));
+                    new CardDrawHandle(this, "Draw 4 cards at game start", player, CARD_COUNT_START_UP,
+                            game.getDrawPile()));
 
         }
 
@@ -113,7 +97,7 @@ public class GameManager {
 
     private void selectChampionPhase(List<Player> players) {
 
-        List<Champion> championList = new ArrayList<>( ChampionList.getChampionList().getChampions() );
+        List<Champion> championList = new ArrayList<>(ChampionList.getChampionList().getChampions());
         for (Player player : players) {
 
             List<Champion> list = new ArrayList<>();
@@ -131,7 +115,8 @@ public class GameManager {
                 }
             }
             //wahl aussuchen und Leben initialisieren
-            playerManager.initialChampions(playerPickChampionFromList(player, championList), player);
+            ChampionSelectionMessage championSelectionMessage = new ChampionSelectionMessage(player.getIdentity(), list);
+            gameController.selectChampionFrom(lobbyId, player.getUsername(), championSelectionMessage);
         }
     }
 
@@ -152,6 +137,7 @@ public class GameManager {
             Activity activity = currentActivity.get(0);
             if (activity.getName().equals(PickRequest.NAME)) {
                 proceeding = false;
+                lastPickRequest = (PickRequest) activity;
             }
             if (game.isGameOver()) {
                 gameOver();
@@ -192,5 +178,73 @@ public class GameManager {
 
     public void gameOver() {
         //TODO implement with frontend panel
+    }
+
+    //----------------Request Response----------------
+
+    public void highlightPickRequest(PickRequest pickRequest){
+        gameController.highlight(lobbyId,pickRequest.getPlayer().getUsername() , pickRequest.getHighlightMessage());
+        lastPickRequest = pickRequest;
+    }
+
+    public void selectChampion(String playerName, Champion champion) {
+        playerManager.initialChampions(champion, getPlayerByName(playerName));
+    }
+
+    public void selectCards(String playerName, List<Card> cards) {
+        Player player = getPlayerByName(playerName);
+        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
+            lastPickRequest.setSelectedCards(cards);
+            lastPickRequest = null;
+            proceed();
+        }
+    }
+
+    public void selectPlayers(String playerName, List<Player> players) {
+        Player player = getPlayerByName(playerName);
+        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
+            lastPickRequest.setSelectedPlayers(players);
+            lastPickRequest = null;
+            proceed();
+        }
+    }
+
+    public void cancelRequest(String playerName) {
+        Player player = getPlayerByName(playerName);
+        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
+            lastPickRequest.setClickedCancel(true);
+            proceed();
+        }
+    }
+
+    //---------------compiling method----------
+    public static List<Integer> convertCardsToInteger(List<Card> cards) {
+        List<Integer> cardIds = new ArrayList<>();
+        for (Card card : cards) {
+            cardIds.add(card.getId());
+        }
+        return cardIds;
+    }
+
+    public static List<String> convertPlayersToInteger(List<Player> players) {
+        List<String> playerNames = new ArrayList<>();
+        for (Player player : players) {
+            playerNames.add(player.getUsername());
+        }
+        return playerNames;
+    }
+
+    public Player getPlayerByName(String playerName) {
+        for (Player player : game.getAllPlayers()) {
+            if (player.getUsername().equals(playerName)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    //debug
+    public void debug(String hint) {
+        System.out.println("D:" + hint);
     }
 }

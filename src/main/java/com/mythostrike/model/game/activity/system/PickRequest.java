@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 public class PickRequest extends Activity {
-    public static final String NAME = "pickreqeust";
+    public static final String NAME = "PickRequest";
     public static final String DESCRIPTION = "you have to pick card";
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
@@ -38,20 +38,7 @@ public class PickRequest extends Activity {
 
     @Override
     public void use() {
-        //highlight message to frontend and get feedback in data base
-        /*
-         * use() -> gameController.highlight(this)
-         * ....
-         * in gameController : {
-         *     pickRequest.setSelectedCards(...);
-         *     pickRequest.setSelectedPlayers(...);
-         *     pickRequest.setClickedCancel(...);
-         *     gameManager.proceed();
-         * }
-         */
-        //TODO implement with highlightmessage
-        //TODO think how to keep card like duel consist in acitivity list
-        //TODO dont forget the VIEW_AS skill,think how to do
+        gameManager.highlightPickRequest(this);
     }
 
 
