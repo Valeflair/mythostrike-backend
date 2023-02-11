@@ -28,7 +28,7 @@ public class Attack extends Card {
     public static final String NAME = "Attack";
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASICCARD;
-    public static final CardFilter filter = new CardFilter("Attack");
+    public static final CardFilter FILTER = new CardFilter("Attack");
 
     private CardUseHandle cardUseHandle;
     private PickRequest pickRequest;

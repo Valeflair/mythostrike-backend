@@ -6,9 +6,6 @@ import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
 import com.mythostrike.model.game.activity.cards.cardtype.Heal;
 import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
-import com.mythostrike.model.lobby.Mode;
-import com.mythostrike.model.lobby.ModeData;
-import com.mythostrike.model.lobby.ModeList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CardList {
+public final class CardList {
 
     private static CardList instance;
     private final List<Card> cards;
@@ -26,6 +23,7 @@ public class CardList {
      * Use the getModeList() method to get the instance.
      * The ModeList is created from the Enum Values ModeData.
      */
+    @SuppressWarnings("ValueOfIncrementOrDecrementUsed")
     private CardList() {
         this.cards = new ArrayList<>();
 
@@ -117,9 +115,6 @@ public class CardList {
         cards.add(new VolcanicEruption(id++, CardSymbol.CLUB, 13));
         cards.add(new VolcanicEruption(id++, CardSymbol.CLUB, 12));
         cards.add(new VolcanicEruption(id++, CardSymbol.SPADE, 11));*/
-
-
-
     }
 
     public static CardList getCardList() {

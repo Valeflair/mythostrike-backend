@@ -1,6 +1,5 @@
 package com.mythostrike.controller;
 
-import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;

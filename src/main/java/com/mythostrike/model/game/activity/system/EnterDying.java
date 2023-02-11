@@ -26,7 +26,7 @@ public class EnterDying extends Activity {
     public static final String NAME = "EnterDying";
     public static final String DESCRIPTION = "if player is about to die";
     public static final int ID = -11;
-    public static final CardFilter filter = new CardFilter("Heal");
+    public static final CardFilter FILTER = new CardFilter("Heal");
 
     private final Player player;
     private final GameManager gameManager;
@@ -77,8 +77,8 @@ public class EnterDying extends Activity {
             List<Card> cards = filter.filter(healer.getHandCards().getCards());
             List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
             //TODO implement
-            String hint =
-                "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
+            String hint
+                = "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
                     + "if you want to heal him, pick heal and click confirm";
             HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null, 1,
                 1, 0, 0, hint, true, true);
