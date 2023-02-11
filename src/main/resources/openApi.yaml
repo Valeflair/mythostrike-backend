@@ -302,7 +302,7 @@ paths:
         - Game
       operationId: playedCards
       summary: Play cards
-      description: Request to use the selected card(s)
+      description: Request to play the selected card(s)
       security:
         - bearerAuth: [ user ]
       requestBody:
@@ -313,6 +313,8 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Too many or too less cards are selected
   /games/play/cancel:
     post:
       tags:
@@ -348,25 +350,6 @@ paths:
       responses:
         "200":
           description: OK
-  /games/play/discard:
-    post:
-      tags:
-        - Game
-      operationId: discardedCards
-      summary: Discard cards
-      description: Request to discard hand cards before the turn ended
-      security:
-        - bearerAuth: [ user ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DiscardCardsRequest"
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Too many or too less cards are selected
   /games/play/skills:
     post:
       tags:
@@ -414,18 +397,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Card"
-    DiscardCardsRequest:
-      type: object
-      properties:
-        lobbyId:
-          type: integer
-          format: int32
-          example: 5313
-        cardIdList:
-          type: array
-          items:
-            type: integer
-          example: [ 1, 5 ]
     Card:
       type: object
       properties:
@@ -600,10 +571,11 @@ components:
           type: integer
           format: int32
           example: 5313
-        cardId:
-          type: integer
-          format: int32
-          example: 1
+        cardIdList:
+          type: array
+          items:
+            type: integer
+          example: [ 1, 5 ]
     PlaySkillRequest:
       type: object
       properties:

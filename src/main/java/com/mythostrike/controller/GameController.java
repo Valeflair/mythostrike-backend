@@ -1,12 +1,14 @@
 package com.mythostrike.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
-import com.mythostrike.controller.message.game.DiscardCardRequest;
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.controller.message.game.PlayerData;
-import com.mythostrike.controller.message.game.SelectCardRequest;
+import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseCardRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
@@ -17,7 +19,6 @@ import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
-import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.LobbyList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -68,16 +70,16 @@ public class GameController {
     }
 
     @PostMapping("/cards")
-    public ResponseEntity<Void> selectCardToPlay(Principal principal, @RequestBody SelectCardRequest request)
+    public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
         throws IllegalInputException {
-        log.debug("play card '{}' request in '{}' from '{}'", request.cardId(), request.lobbyId(), principal.getName());
+        log.debug("play card '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(), principal.getName());
 
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        Card card = cardList.getCard(request.cardId());
-        //gameManager.selectCard(principal.getName(), card);
+        List<Card> cards = new ArrayList<>( request.cardIdList().stream().map(cardList::getCard).toList() );
+        //gameManager.selectCard(principal.getName(), cards);
 
 
         return ResponseEntity
@@ -101,15 +103,6 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/discard")
-    public ResponseEntity<Void> discardCard(Principal principal, @RequestBody DiscardCardRequest request) {
-        log.debug("discard cards '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(),
-            principal.getName());
-
-        return ResponseEntity
-            .status(HttpStatus.OK).build();
-    }
-
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
         log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
@@ -127,23 +120,89 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
-    public void selectChampionFrom(int lobbyId, ChampionSelectionMessage message) {
+    public void selectChampionFrom(int lobbyId, String toUsername, ChampionSelectionMessage message) {
+        String path = String.format("/games/%d/%s/selectChampion", lobbyId, toUsername);
 
+        log.debug("selectChampionFrom to '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(message);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert ChampionSelectionMessage to json", e);
+        }
     }
 
-    public void highlight(int lobbyId, HighlightMessage message) {
+    public void updateGame(int lobbyId, List<PlayerData> playerDatas) {
+        String path = String.format("/games/%d", lobbyId);
 
+        log.debug("updateGame to '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, playerDatas);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(playerDatas);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert playerDatas to json", e);
+        }
     }
 
-    public void updateGame(int lobbyId, String logMessage, List<PlayerData> playerDatas) {
+    public void highlight(int lobbyId, String toUsername, HighlightMessage message) {
+        String path = String.format("/games/%d/%s", lobbyId, toUsername);
 
+        log.debug("highlightMessage to '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(message);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert highlightMessage to json", e);
+        }
     }
 
     public void cardMove(int lobbyId, CardMoveMessage message) {
+        String path = String.format("/games/%d", lobbyId);
 
+        log.debug("cardMove to '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(message);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert cardMoveMessage to json", e);
+        }
     }
 
-    public void cardMove(int lobbyId, CardMoveMessage message, List<Player> players) {
+    public void cardMove(int lobbyId, List<String> toUsernames, CardMoveMessage message) {
+        for (String username : toUsernames) {
+            String path = String.format("/games/%d/%s", lobbyId, username);
+            log.debug("cardMove to '{}'", path);
 
+            simpMessagingTemplate.convertAndSend(path, message);
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String json = mapper.writeValueAsString(message);
+                log.debug("sent to frontend: {}", json);
+            } catch (JsonProcessingException e) {
+                log.error("could not convert cardMoveMessage to json", e);
+            }
+        }
+    }
+
+    public void logMessage(int lobbyId, LogMessage message) {
+        String path = String.format("/games/%d", lobbyId);
+
+        log.debug("logMessage to '{}'", path);
+        simpMessagingTemplate.convertAndSend(path, message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(message);
+            log.debug("sent to frontend: {}", json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert LogMessage to json", e);
+        }
     }
 }

@@ -3,8 +3,8 @@
     * variablen namen in jsons verbessert
     * create und join Lobby geben eine Lobby zurück
     * cancel Lobby request
+    * discardCards request entfernt --> alles über /cards (hier mehrer Karten möglich)
 - neue Klassen:
     * WebSocketConfiguration
     * RestExceptionHandler
     * IllegalInputException
-
