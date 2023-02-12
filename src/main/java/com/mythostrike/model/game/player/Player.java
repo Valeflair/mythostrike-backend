@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.cards.HandCards;
 import com.mythostrike.model.game.activity.cards.cardtype.Drought;
 import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
+import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.lobby.Identity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -74,6 +75,10 @@ public class Player {
     public Player(User user) {
         this(user.getUsername());
         this.avatarNumber = user.getAvatarNumber();
+    }
+
+    public void initialize(GameManager gameManager) {
+        //only the bot needs the gameManager
     }
 
     public void increaseCurrentHp(int value) {

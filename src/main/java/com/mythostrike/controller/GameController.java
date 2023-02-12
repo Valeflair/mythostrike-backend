@@ -155,7 +155,7 @@ public class GameController {
     }
 
     public void selectChampionFrom(int lobbyId, String toUsername, ChampionSelectionMessage message) {
-        String path = String.format("/games/%d/%s/selectChampion", lobbyId, toUsername);
+        String path = String.format("/lobbies/%d/%s", lobbyId, toUsername);
 
         webSocketService.sendMessage(path, message, "selectChampionFrom");
     }

@@ -10,5 +10,7 @@
     * IllegalInputException
     * WebSocketService
     * message records for json conversion and communication
+- WebSocket:
+    * selectChampion Message zu /lobbies/{lobbyId}/{username} senden statt /games/{lobbyId}/{username}/selectChampion
+    * game Nachrichten in einheitlichem Schema 'WebSocketGameMessage' versenden (type + payload)
 - log Fenster in Frontend und übertragung der Nachrichten per Websocket hinzugefügt
-- Websocket Game Nachrichten in einheitlichem Schema 'WebSocketGameMessage' schicken (type + payload)

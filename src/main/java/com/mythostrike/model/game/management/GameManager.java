@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
+import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.game.player.Player;
@@ -17,6 +18,7 @@ import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Mode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 public class GameManager {
 
     //player has 3 champions to pick in game, god-king has 5
@@ -45,7 +48,7 @@ public class GameManager {
     @Getter
     private final GameController gameController;
     @Getter
-    private List<Activity> currentActivity;
+    private final List<Activity> currentActivity;
     @Getter
     @Setter
     private Phase phase;
@@ -57,6 +60,7 @@ public class GameManager {
         cardManager = new CardManager(this);
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
+        currentActivity = new ArrayList<>();
         this.lobbyId = lobbyId;
         this.gameController = gameController;
     }
@@ -84,6 +88,7 @@ public class GameManager {
     public void gameStart() {
 
         List<Player> players = game.getAlivePlayers();
+        players.forEach(player -> player.initialize(this));
         //TODO:unterschiedliche dinge an frontend schicken
         //identityDistribution(players);
         //TODO:extra panel machen
@@ -109,7 +114,12 @@ public class GameManager {
             //wahl aussuchen und Leben initialisieren
             ChampionSelectionMessage championSelectionMessage
                 = new ChampionSelectionMessage(player.getIdentity(), list);
-            gameController.selectChampionFrom(lobbyId, player.getUsername(), championSelectionMessage);
+
+            if (player instanceof Bot bot) {
+                bot.selectChampionFrom(championSelectionMessage);
+            } else {
+                gameController.selectChampionFrom(lobbyId, player.getUsername(), championSelectionMessage);
+            }
         }
     }
 
@@ -120,7 +130,7 @@ public class GameManager {
         output("Game Started, Player has following champions:");
         for (Player player : players) {
             output(player.getUsername() + " as Seat " + players.indexOf(player) + " has "
-                + player.getChampion().getName() + "with skill:");
+                + player.getChampion().getName() + " with skill:");
 
             cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
                 player, CARD_COUNT_START_UP, game.getDrawPile()));
@@ -237,8 +247,8 @@ public class GameManager {
     }
 
     //debug
-    public void debug(String hint) {
-        System.out.println("D:" + hint);
+    public void debug(String msg) {
+        log.debug(msg);
     }
 
     public void output(String output) {
