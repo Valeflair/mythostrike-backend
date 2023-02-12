@@ -2,6 +2,7 @@ package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public enum Identity {
     GENERAL("General", true, false),
     REBEL("Rebel", true, false),
     RENEGADE("Renegade", true, true),
-    NONE("none", false, true);
+    NONE("None", false, true);
 
     static {
         TEAM_RED.hasToSurvive = List.of(TEAM_RED);
@@ -40,6 +41,7 @@ public enum Identity {
     @Getter
     private final String name;
     @Getter
+    @JsonIgnore
     private final boolean incognito;
     private final boolean playerNeedsToBeAlive;
     private List<Identity> hasToSurvive;

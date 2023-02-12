@@ -13,7 +13,7 @@ import java.util.List;
 public class Drought extends Card {
     public static final String NAME = "Drought";
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
-    public static final CardType TYPE = CardType.BASICCARD;
+    public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle handle;
 

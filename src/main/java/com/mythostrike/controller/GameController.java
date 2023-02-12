@@ -1,6 +1,5 @@
 package com.mythostrike.controller;
 
-import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.GameEndMessage;
@@ -19,11 +18,11 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.lobby.LobbyList;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/games/play")
 @Slf4j
 public class GameController {
-
-    private final UserService userService;
-
-    private final SimpMessagingTemplate simpMessagingTemplate;
 
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
@@ -50,7 +44,8 @@ public class GameController {
 
     private final CardList cardList = CardList.getCardList();
 
-    private final WebSocketService webSocketService;
+    @Autowired
+    private WebSocketService webSocketService;
 
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request)

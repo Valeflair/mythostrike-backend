@@ -1,10 +1,10 @@
 package com.mythostrike.model.game.activity.cards;
 
 public enum CardType {
-    BASICCARD,
-    SKILLCARD,
+    BASIC_CARD,
+    SKILL_CARD,
     WEAPON,
     ARMOR,
-    DELAYEDEFFECT
+    DELAYED_EFFECT
 
 }

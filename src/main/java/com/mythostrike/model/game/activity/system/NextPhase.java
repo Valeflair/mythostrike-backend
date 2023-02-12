@@ -46,10 +46,10 @@ public class NextPhase extends SystemAction {
             gameManager.getGame().nextPlayer();
         }
         switch (after) {
-            case ROUNDSTART -> gameManager.queueActivity(new RoundStartTurn(gameManager));
-            case DELAYEDEFFECT -> gameManager.queueActivity(new DelayedEffectTurn(gameManager));
+            case ROUND_START -> gameManager.queueActivity(new RoundStartTurn(gameManager));
+            case DELAYED_EFFECT -> gameManager.queueActivity(new DelayedEffectTurn(gameManager));
             case DRAW -> gameManager.queueActivity(new DrawTurn(gameManager));
-            case ACTIVETURN -> gameManager.queueActivity(new ActiveTurn(gameManager));
+            case ACTIVE_TURN -> gameManager.queueActivity(new ActiveTurn(gameManager));
             case DISCARD -> gameManager.queueActivity(new DropTurn(gameManager));
             default -> {
             }

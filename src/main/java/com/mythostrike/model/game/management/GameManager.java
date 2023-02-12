@@ -45,6 +45,7 @@ public class GameManager {
     private final int lobbyId;
     @Getter
     @Autowired
+    //TODO: fix Autowired
     private GameController gameController;
     @Getter
     private List<Activity> currentActivity;
@@ -52,9 +53,7 @@ public class GameManager {
     @Setter
     private Phase phase;
     private boolean proceeding;
-
     private PickRequest lastPickRequest;
-
 
     public GameManager(List<Player> players, Mode mode, int lobbyId) {
         game = new Game(players, mode, this);
@@ -103,14 +102,14 @@ public class GameManager {
                 player, CARD_COUNT_START_UP, game.getDrawPile()));
         }
 
-        phase = Phase.ROUNDSTART;
+        phase = Phase.ROUND_START;
         proceed();
     }
 
     private void selectChampionPhase(List<Player> players) {
-
-        List<Champion> championList = new ArrayList<>(ChampionList.getChampionList().getChampions());
         for (Player player : players) {
+            List<Champion> championList = new ArrayList<>(ChampionList.getChampionList().getChampions());
+            Collections.shuffle(championList, Game.RANDOM_SEED);
 
             List<Champion> list = new ArrayList<>();
             //ask player to pick champion
@@ -120,11 +119,8 @@ public class GameManager {
             }
 
             //liste aufstellen
-            Collections.shuffle(championList, Game.RANDOM_SEED);
-            while (list.size() < championCount) {
-                if (!list.contains(championList.get(0))) {
-                    list.add(championList.get(0));
-                }
+            while (list.size() < championCount && !championList.isEmpty()) {
+                list.add(championList.remove(0));
             }
             //wahl aussuchen und Leben initialisieren
             ChampionSelectionMessage championSelectionMessage
@@ -209,7 +205,7 @@ public class GameManager {
     public void selectPlayers(String playerName, List<String> targetUsernames) {
         Player player = getPlayerByName(playerName);
 
-        List<Player> targets = new ArrayList<>( targetUsernames.stream().map(this::getPlayerByName).toList());
+        List<Player> targets = new ArrayList<>(targetUsernames.stream().map(this::getPlayerByName).toList());
         if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
             lastPickRequest.setSelectedPlayers(targets);
             lastPickRequest = null;
@@ -240,6 +236,6 @@ public class GameManager {
     }
 
     public void output(String output) {
-        getGameController().logMessage(lobbyId, new LogMessage(output));
+        gameController.logMessage(lobbyId, new LogMessage(output));
     }
 }

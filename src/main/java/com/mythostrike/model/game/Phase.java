@@ -2,10 +2,10 @@ package com.mythostrike.model.game;
 
 
 public enum Phase {
-    ROUNDSTART,
-    DELAYEDEFFECT,
+    ROUND_START,
+    DELAYED_EFFECT,
     DRAW,
-    ACTIVETURN,
+    ACTIVE_TURN,
     DISCARD,
     FINISH;
 

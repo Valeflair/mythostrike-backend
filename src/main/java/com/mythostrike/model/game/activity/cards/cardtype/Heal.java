@@ -13,7 +13,7 @@ public class Heal extends Card {
     public static final String NAME = "Heal";
     public static final String DESCRIPTION = "use in active turn to heal you self 1 hp, or use when someone is dying,"
         + " heal him 1 hp";
-    public static final CardType TYPE = CardType.BASICCARD;
+    public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle cardUseHandle;
 

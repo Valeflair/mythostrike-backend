@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 public class Lobby {
@@ -193,7 +194,9 @@ public class Lobby {
         }
         status = LobbyStatus.GAME_RUNNING;
 
-        List<Player> players = new ArrayList<>(Arrays.stream(seats).map(Seat::getPlayer).toList());
+        List<Player> players = new ArrayList<>(
+            Arrays.stream(seats).map(Seat::getPlayer).filter(Objects::nonNull).toList()
+        );
 
         //randomize positions if mode is Identity (except God King)
         if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {

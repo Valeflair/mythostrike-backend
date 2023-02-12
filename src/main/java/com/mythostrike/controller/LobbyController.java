@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,9 +34,8 @@ import java.util.List;
 @Slf4j
 public class LobbyController {
 
+    private static final String LOBBY_NOT_FOUND_MESSAGE = "Lobby not found";
     private final UserService userService;
-
-    private final SimpMessagingTemplate simpMessagingTemplate;
 
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
@@ -83,7 +82,7 @@ public class LobbyController {
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lobby not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //join user to lobby
@@ -104,7 +103,7 @@ public class LobbyController {
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //leave user from lobby
@@ -134,7 +133,7 @@ public class LobbyController {
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         Mode mode = modeList.getMode(request.newModeId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //change mode in lobby
@@ -155,7 +154,7 @@ public class LobbyController {
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //change seat of the player
@@ -177,7 +176,7 @@ public class LobbyController {
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //add bot to lobby
@@ -198,7 +197,7 @@ public class LobbyController {
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
 
         //start game
@@ -218,7 +217,7 @@ public class LobbyController {
         //get objects from REST data
         Lobby lobby = lobbyList.getLobby(request.lobbyId());
         if (lobby == null) {
-            throw new IllegalInputException("Lobby not found");
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
         }
         return ResponseEntity.ok(lobby);
     }

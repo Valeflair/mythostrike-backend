@@ -12,7 +12,7 @@ import java.util.List;
 public class Nightmare extends Card {
     public static final String NAME = "Nightmare";
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
-    public static final CardType TYPE = CardType.BASICCARD;
+    public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle handle;
     private List<Player> target;
