@@ -23,8 +23,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 
 @Slf4j
 public class GameManager {
@@ -48,7 +50,7 @@ public class GameManager {
     @Getter
     private final GameController gameController;
     @Getter
-    private final List<Activity> currentActivity;
+    private final Queue<Activity> currentActivity;
     @Getter
     @Setter
     private Phase phase;
@@ -60,7 +62,7 @@ public class GameManager {
         cardManager = new CardManager(this);
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
-        currentActivity = new ArrayList<>();
+        currentActivity = new LinkedList<>();
         this.lobbyId = lobbyId;
         this.gameController = gameController;
     }
@@ -144,13 +146,15 @@ public class GameManager {
         proceeding = true;
 
         while (proceeding) {
-            if (currentActivity.isEmpty()) {
-                currentActivity.add(new NextPhase(this));
+            Activity activity = currentActivity.peek();
+            if (activity == null) {
+                activity = new NextPhase(this);
             }
-            Activity activity = currentActivity.get(0);
-            if (activity.getName().equals(PickRequest.NAME)) {
+
+            //TODO: maybe remove instanceof
+            if (activity instanceof PickRequest pickRequest) {
                 proceeding = false;
-                lastPickRequest = (PickRequest) activity;
+                lastPickRequest = pickRequest;
             }
             if (game.isGameOver()) {
                 gameOver();
@@ -163,8 +167,9 @@ public class GameManager {
 
     private void runActivity(@NotNull Activity activity) {
         activity.use();
+        //if activity is finished, remove it from queue
         if (activity.end()) {
-            currentActivity.remove(activity);
+            currentActivity.poll();
         }
     }
 
@@ -182,13 +187,7 @@ public class GameManager {
     }
 
     public void queueActivity(Activity activity) {
-        currentActivity.add(0, activity);
-    }
-
-    //----------------Request Response----------------
-
-    public void queueActivity(int pos, Activity activity) {
-        currentActivity.add(pos, activity);
+        currentActivity.add(activity);
     }
 
     public void gameOver() {

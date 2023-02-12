@@ -5,7 +5,7 @@ import com.mythostrike.model.game.management.GameManager;
 
 public class SystemAction extends Activity {
 
-    GameManager gameManager;
+    protected final GameManager gameManager;
 
     public SystemAction(int id, String name, String description, GameManager gameManager) {
         super(id, name, description);

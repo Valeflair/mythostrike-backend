@@ -18,12 +18,13 @@ public class PickCardToPLay extends Activity {
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
     private List<Card> selectedCards;
     private List<Player> selectedPlayers;
 
     public PickCardToPLay(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
     }
 
     @Override

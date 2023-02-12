@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 public enum ChampionData {
-    Ares("Ares", 4, List.of(), List.of(new Revenge(1)));
+    ARES("Ares", 4, List.of(), List.of(new Revenge(1)));
 
     private final String name;
     private final int maxHp;

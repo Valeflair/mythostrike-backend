@@ -12,6 +12,8 @@ import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public abstract class Activity {
     protected final int id;
@@ -78,7 +80,17 @@ public abstract class Activity {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj == this || obj instanceof Activity activity && name.equals(activity.getName());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Activity activity = (Activity) o;
+
+        return id == activity.id && name.equals(activity.name) && description.equals(activity.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description);
     }
 }

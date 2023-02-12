@@ -11,10 +11,11 @@ public class DropTurn extends Activity {
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     public DropTurn(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
     }
 
     @Override

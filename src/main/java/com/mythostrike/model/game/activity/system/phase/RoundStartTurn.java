@@ -9,10 +9,11 @@ public class RoundStartTurn extends Activity {
     public static final String DESCRIPTION = "starts its round";
     public static final int ID = -11;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     public RoundStartTurn(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
     }
 
     @Override

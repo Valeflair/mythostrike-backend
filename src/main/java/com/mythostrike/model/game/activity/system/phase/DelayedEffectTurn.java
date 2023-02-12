@@ -12,10 +12,11 @@ public class DelayedEffectTurn extends Activity {
     public static final String DESCRIPTION = "counting it's delayed effect";
     public static final int ID = -11;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     public DelayedEffectTurn(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
     }
 
     @Override

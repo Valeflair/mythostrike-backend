@@ -17,12 +17,13 @@ public class PickCardToDrop extends Activity {
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
     @Setter
     private int amount;
 
     public PickCardToDrop(GameManager gameManager, int amount) {
         super(ID, NAME, DESCRIPTION);
+        this.gameManager = gameManager;
         this.amount = amount;
     }
 

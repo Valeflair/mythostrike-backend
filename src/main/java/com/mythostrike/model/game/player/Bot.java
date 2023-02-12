@@ -3,12 +3,8 @@ package com.mythostrike.model.game.player;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
-import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class Bot extends Player {
