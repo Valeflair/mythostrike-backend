@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 public class Lobby {
@@ -162,15 +163,15 @@ public class Lobby {
             return false;
         }
 
-        //check if user is in the lobby and remove him
-        if (!removeUser(user)) {
-            throw new IllegalInputException("user is not in lobby");
+        //check if user is in the lobby and move him to the new seat
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            if (seats[i].getPlayer() != null && seats[i].getPlayer().getUsername().equals(user.getUsername())) {
+                seats[seatId].setPlayer(seats[i].getPlayer());
+                seats[i].setPlayer(null);
+                return true;
+            }
         }
-
-        seats[seatId].setPlayer(new Human(user));
-        this.numberPlayers++;
-        this.numberHumans++;
-        return true;
+        throw new IllegalInputException("user is not in lobby");
     }
 
     public void changeMode(Mode mode, User user) throws IllegalInputException {
