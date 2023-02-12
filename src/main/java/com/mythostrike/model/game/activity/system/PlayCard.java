@@ -7,9 +7,9 @@ import lombok.Getter;
 
 @Getter
 public class PlayCard extends Activity {
-    public static final String NAME = "Draw";
-    public static final String DESCRIPTION = "Drawing it's card";
-    public static final int ID = -11;
+    public static final String NAME = Class.class.getSimpleName();
+    public static final String DESCRIPTION = "Play a card";
+    public static final int ID = -17;
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;

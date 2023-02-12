@@ -5,9 +5,10 @@ import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
 import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.player.Player;
+import jakarta.persistence.UniqueConstraint;
 
 public class CheckDying extends PassiveSkill {
-    public static final String NAME = "CheckDying";
+    public static final String NAME = Class.class.getSimpleName();
     public static final String DESCRIPTION = "if player has low hp";
     public static final int ID = -11;
     private DamageHandle damageHandle;

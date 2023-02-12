@@ -17,7 +17,7 @@ import lombok.Getter;
 @Getter
 public class NextPhase extends SystemAction {
 
-    public static final String NAME = "NextPhase";
+    public static final String NAME = Class.class.getSimpleName();
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
     public static final int ID = -1;
 

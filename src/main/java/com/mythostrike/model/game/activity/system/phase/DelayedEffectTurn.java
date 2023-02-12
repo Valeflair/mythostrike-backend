@@ -8,9 +8,9 @@ import com.mythostrike.model.game.player.Player;
 import java.util.List;
 
 public class DelayedEffectTurn extends Activity {
-    public static final String NAME = "DelayedEffect";
+    public static final String NAME = Class.class.getSimpleName();
     public static final String DESCRIPTION = "counting it's delayed effect";
-    public static final int ID = -11;
+    public static final int ID = -20;
 
     private final GameManager gameManager;
 

@@ -12,9 +12,9 @@ import java.util.List;
 
 @Getter
 public class PickRequest extends Activity {
-    public static final String NAME = "PickRequest";
-    public static final String DESCRIPTION = "you have to pick card";
-    public static final int ID = -11;
+    public static final String NAME = Class.class.getSimpleName();
+    public static final String DESCRIPTION = "you have to pick a card";
+    public static final int ID = -16;
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;

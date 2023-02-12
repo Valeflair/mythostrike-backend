@@ -5,9 +5,9 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 
 public class RoundStartTurn extends Activity {
-    public static final String NAME = "RoundStart";
+    public static final String NAME = Class.class.getSimpleName();
     public static final String DESCRIPTION = "starts its round";
-    public static final int ID = -11;
+    public static final int ID = -23;
 
     private final GameManager gameManager;
 
