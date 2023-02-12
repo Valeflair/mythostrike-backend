@@ -114,7 +114,10 @@ public class Player {
     }
 
     public void decreaseUseTime(String cardName) {
-        restrict.put(cardName, restrict.get(cardName) - 1);
+        Integer useTime = restrict.get(cardName);
+        if (useTime != null && useTime > 0) {
+            restrict.put(cardName, useTime - 1);
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@ public class GameManager {
     //player has 3 champions to pick in game, god-king has 5
     public static final int PICK_CHAMPION_COUNT = 3;
     public static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
+
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
     public static final int CARD_COUNT_TURN_START = 2;
