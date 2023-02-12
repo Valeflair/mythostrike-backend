@@ -5,12 +5,15 @@ import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
+import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
+import com.mythostrike.model.game.activity.system.PlayCard;
+import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
 import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
@@ -87,7 +90,24 @@ public class GameManager {
     }
 
     //----------------GameRun----------------
-
+    public void entTurn() {
+        if (currentActivity.peek() == null) {
+            return;
+        }
+        if (!phase.equals(Phase.ACTIVE_TURN)) {
+            return;
+        }
+        Activity activity = currentActivity.peek();
+        if (activity.getName().equals(PickRequest.NAME)) {
+            currentActivity.poll();
+        }
+        if (activity.getName().equals(PlayCard.NAME)) {
+            currentActivity.poll();
+        }
+        if (activity.getName().equals(ActiveTurn.NAME)) {
+            currentActivity.poll();
+        }
+    }
     //----------------GameStart----------------
     public void gameStart() {
 
@@ -229,6 +249,10 @@ public class GameManager {
             lastPickRequest = null;
             proceed();
         }
+    }
+    
+    public void selectSkill(String playerName, ActiveSkill skill) {
+        skill.activate();
     }
 
     public void cancelRequest(String playerName) {
