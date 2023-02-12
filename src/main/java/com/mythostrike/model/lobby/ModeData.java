@@ -11,7 +11,7 @@ import static com.mythostrike.model.lobby.ModeData.Constants.TEAM_FIGHT_DESCRIPT
 @Getter
 @AllArgsConstructor
 public enum ModeData {
-    FREE_FOR_ALL("Free for all", 1, 8,
+    FREE_FOR_ALL("Free for all", 2, 8,
         "Free for all is a mode where everyone is against everyone. "
             + "There is no team, no alliance, no mercy. "
             + "Only the strongest will survive.",

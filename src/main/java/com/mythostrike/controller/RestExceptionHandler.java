@@ -12,18 +12,27 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class RestExceptionHandler {
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseStatusException handleResponseStatusException(ResponseStatusException exception) {
+        log.debug("ResponseStatusException: '{}'", exception.getMessage());
+        throw new ResponseStatusException(exception.getStatusCode(), exception.getMessage());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseStatusException handleIllegalArgumentException(IllegalArgumentException exception) {
+        log.error("IllegalArgumentException: '{}'", exception.getMessage());
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseStatusException handleIEntityNotFoundException(EntityNotFoundException exception) {
+        log.error("EntityNotFoundException: '{}'", exception.getMessage());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(IllegalInputException.class)
     public ResponseStatusException handleIIllegalInputException(IllegalInputException exception) {
+        log.error("IllegalInputException: '{}'", exception.getMessage());
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 }

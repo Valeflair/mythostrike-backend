@@ -56,7 +56,10 @@ public final class LobbyList {
         return lobbyMap.get(id);
     }
 
+    @Nullable
     public GameManager getGameManager(int id) {
-        return lobbyMap.get(id).getGameManager();
+        Lobby lobby = lobbyMap.get(id);
+        if (lobby == null) return null;
+        return lobby.getGameManager();
     }
 }

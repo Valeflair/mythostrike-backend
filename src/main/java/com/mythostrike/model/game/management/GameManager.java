@@ -2,6 +2,7 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.Activity;
@@ -202,7 +203,7 @@ public class GameManager {
     }
 
     public void selectChampion(String playerName, Champion champion) {
-        playerManager.initialChampions(champion, getPlayerByName(playerName));
+        playerManager.initializeChampionForPlayer(champion, getPlayerByName(playerName));
 
         //if all players selected a champion, start game
         if (game.getAlivePlayers().stream().map(Player::getChampion).allMatch(Objects::nonNull)) {
@@ -244,7 +245,7 @@ public class GameManager {
                 return player;
             }
         }
-        return null;
+        throw new IllegalInputException("Player with name " + playerName + " not found");
     }
 
     //debug

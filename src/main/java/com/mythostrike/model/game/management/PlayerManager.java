@@ -70,7 +70,7 @@ public class PlayerManager {
         }
     }
 
-    public void initialChampions(Champion champion, Player player) {
+    public void initializeChampionForPlayer(Champion champion, Player player) {
         player.setChampion(champion);
         player.setMaxHp(champion.getMaxHp());
         for (PassiveSkill passiveSkill : champion.getPassiveSkills()) {
