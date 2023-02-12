@@ -2,7 +2,6 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
-import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.Activity;
@@ -19,11 +18,11 @@ import com.mythostrike.model.lobby.Mode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GameManager {
 
@@ -44,9 +43,7 @@ public class GameManager {
     @Getter
     private final int lobbyId;
     @Getter
-    @Autowired
-    //TODO: fix Autowired
-    private GameController gameController;
+    private final GameController gameController;
     @Getter
     private List<Activity> currentActivity;
     @Getter
@@ -55,12 +52,13 @@ public class GameManager {
     private boolean proceeding;
     private PickRequest lastPickRequest;
 
-    public GameManager(List<Player> players, Mode mode, int lobbyId) {
+    public GameManager(List<Player> players, Mode mode, int lobbyId, GameController gameController) {
         game = new Game(players, mode, this);
         cardManager = new CardManager(this);
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
         this.lobbyId = lobbyId;
+        this.gameController = gameController;
     }
 
     //---------------compiling method----------
@@ -90,20 +88,6 @@ public class GameManager {
         //identityDistribution(players);
         //TODO:extra panel machen
         selectChampionPhase(players);
-
-
-        //initial Cards for player
-        output("Game Started, Player has following champions:");
-        for (Player player : players) {
-            output(player.getUsername() + " as Seat " + players.indexOf(player) + " has "
-                + player.getChampion().getName() + "with skill:");
-
-            cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
-                player, CARD_COUNT_START_UP, game.getDrawPile()));
-        }
-
-        phase = Phase.ROUND_START;
-        proceed();
     }
 
     private void selectChampionPhase(List<Player> players) {
@@ -127,6 +111,23 @@ public class GameManager {
                 = new ChampionSelectionMessage(player.getIdentity(), list);
             gameController.selectChampionFrom(lobbyId, player.getUsername(), championSelectionMessage);
         }
+    }
+
+    private void cardDistribution() {
+        List<Player> players = game.getAlivePlayers();
+
+        //initial Cards for player
+        output("Game Started, Player has following champions:");
+        for (Player player : players) {
+            output(player.getUsername() + " as Seat " + players.indexOf(player) + " has "
+                + player.getChampion().getName() + "with skill:");
+
+            cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
+                player, CARD_COUNT_START_UP, game.getDrawPile()));
+        }
+
+        phase = Phase.ROUND_START;
+        proceed();
     }
 
     public void proceed() {
@@ -191,6 +192,11 @@ public class GameManager {
 
     public void selectChampion(String playerName, Champion champion) {
         playerManager.initialChampions(champion, getPlayerByName(playerName));
+
+        //if all players selected a champion, start game
+        if (game.getAlivePlayers().stream().map(Player::getChampion).allMatch(Objects::nonNull)) {
+            cardDistribution();
+        }
     }
 
     public void selectCards(String playerName, List<Card> cards) {
@@ -236,6 +242,6 @@ public class GameManager {
     }
 
     public void output(String output) {
-        gameController.logMessage(lobbyId, new LogMessage(output));
+        gameController.logMessage(lobbyId, output);
     }
 }

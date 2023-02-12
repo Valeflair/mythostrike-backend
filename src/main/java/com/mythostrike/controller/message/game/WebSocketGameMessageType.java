@@ -1,6 +1,6 @@
 package com.mythostrike.controller.message.game;
 
-public enum WebsocketGameMessageType {
+public enum WebSocketGameMessageType {
     UPDATE_GAME,
     HIGHLIGHT,
     CARD_MOVE,

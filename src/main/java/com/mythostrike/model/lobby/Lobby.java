@@ -3,6 +3,7 @@ package com.mythostrike.model.lobby;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
+import com.mythostrike.controller.GameController;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.management.GameManager;
@@ -184,7 +185,7 @@ public class Lobby {
         this.mode = mode;
     }
 
-    public boolean createGame(User user) throws IllegalInputException {
+    public boolean createGame(User user, GameController gameController) throws IllegalInputException {
         if (isNotOwner(user)) {
             throw new IllegalInputException("user is not the owner");
         }
@@ -210,7 +211,7 @@ public class Lobby {
             players.get(i).setIdentity(mode.identityList().get(i));
         }
 
-        gameManager = new GameManager(players, mode, id);
+        gameManager = new GameManager(players, mode, id, gameController);
         gameManager.gameStart();
         return true;
     }

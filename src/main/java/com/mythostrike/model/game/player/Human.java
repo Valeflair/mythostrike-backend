@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class Human extends Player {
-    User user;
+    private final User user;
 
     public Human(User user) {
         super(user.getUsername());
+        this.user = user;
     }
 }

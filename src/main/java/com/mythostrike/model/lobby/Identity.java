@@ -2,7 +2,8 @@ package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 import java.util.List;
@@ -39,9 +40,10 @@ public enum Identity {
     }
 
     @Getter
+    @JsonValue
+    @JsonUnwrapped
     private final String name;
     @Getter
-    @JsonIgnore
     private final boolean incognito;
     private final boolean playerNeedsToBeAlive;
     private List<Identity> hasToSurvive;

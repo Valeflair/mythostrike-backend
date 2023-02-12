@@ -9,4 +9,6 @@
     * RestExceptionHandler
     * IllegalInputException
     * WebSocketService
+    * message records for json conversion and communication
 - log Fenster in Frontend und übertragung der Nachrichten per Websocket hinzugefügt
+- Websocket Game Nachrichten in einheitlichem Schema 'WebSocketGameMessage' schicken (type + payload)

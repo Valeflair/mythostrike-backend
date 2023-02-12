@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +41,9 @@ public class LobbyController {
     private final ModeList modeList = ModeList.getModeList();
 
     private final WebSocketService webSocketService;
+
+    //@Autowired didnt work in GameManager so i used @RequiredArgsConstructor and handed it through to the GameManager
+    private final GameController gameController;
 
     @GetMapping
     public ResponseEntity<List<LobbyOverview>> getLobbies() {
@@ -201,7 +203,7 @@ public class LobbyController {
         }
 
         //start game
-        if (!lobby.createGame(user)) {
+        if (!lobby.createGame(user, gameController)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not the correct number of players");
         }
 
