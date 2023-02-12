@@ -149,6 +149,7 @@ public class GameManager {
             Activity activity = currentActivity.peek();
             if (activity == null) {
                 activity = new NextPhase(this);
+                currentActivity.add(activity);
             }
 
             //TODO: maybe remove instanceof

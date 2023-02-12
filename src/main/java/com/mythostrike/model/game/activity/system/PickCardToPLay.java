@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 public class PickCardToPLay extends Activity {
-    public static final String NAME = "Draw";
+    public static final String NAME = "Pick Card to Play";
     public static final String DESCRIPTION = "Drawing it's card";
     public static final int ID = -11;
     public static final int CARD_COUNT_TURN_START = 2;

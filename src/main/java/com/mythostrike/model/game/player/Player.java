@@ -8,6 +8,7 @@ import com.mythostrike.model.game.activity.cards.CardSpaceRestrictedByName;
 import com.mythostrike.model.game.activity.cards.CardSpaceRestrictedByType;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.cards.HandCards;
+import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Drought;
 import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
 import com.mythostrike.model.game.management.GameManager;
@@ -25,9 +26,9 @@ import java.util.Map;
 @Getter
 public class Player {
     @Getter(AccessLevel.NONE)
-    public static final Map<String, Integer> DEFAULT_RESTRICT = new HashMap<>();
+    private static final Map<String, Integer> DEFAULT_RESTRICT = new HashMap<>();
     @Getter(AccessLevel.NONE)
-    public static final Map<String, Boolean> DEFAULT_IMMUNITY = new HashMap<>();
+    private static final Map<String, Boolean> DEFAULT_IMMUNITY = new HashMap<>();
 
     private final String username;
     private final HandCards handCards;
@@ -51,6 +52,7 @@ public class Player {
     private int avatarNumber;
 
     public Player(String username) {
+        initilizeDefaultHashMaps();
         permanentRestrict = new HashMap<>(DEFAULT_RESTRICT);
         permanentImmunity = new HashMap<>(DEFAULT_IMMUNITY);
         resetRestrict();
@@ -77,6 +79,10 @@ public class Player {
         this.avatarNumber = user.getAvatarNumber();
     }
 
+    private void initilizeDefaultHashMaps() {
+        DEFAULT_RESTRICT.put(Attack.NAME, 1);
+    }
+
     public void initialize(GameManager gameManager) {
         //only the bot needs the gameManager
     }
@@ -98,11 +104,13 @@ public class Player {
     }
 
     public boolean isRestricted(String cardName) {
-        return restrict.get(cardName) <= 0;
+        Integer useTime = restrict.get(cardName);
+        return useTime != null && useTime <= 0;
     }
 
     public boolean isImmune(String cardName) {
-        return immunity.get(cardName);
+        Boolean isImmune = immunity.get(cardName);
+        return isImmune != null && isImmune;
     }
 
     public void decreaseUseTime(String cardName) {
