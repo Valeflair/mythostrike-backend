@@ -1,8 +1,10 @@
 package com.mythostrike.model.game.management;
 
 
+import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
@@ -99,7 +101,17 @@ public class PlayerManager {
 
     public void killPlayer(Player player) {
         //TODO:update information to frontend
-
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "die",
+                player, null, player.getHandCards(), gameManager.getGame().getTablePile()));
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager,
+                "die", player, null, player.getEquipment(), gameManager.getGame().getTablePile()));
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "die",
+                player, null, player.getDelayedEffect(), gameManager.getGame().getTablePile()));
+        gameManager.getGame().getAlivePlayers().remove(player);
+        if (gameManager.getGame().getCurrentPlayer().equals(player)) {
+            gameManager.setPhase(Phase.ROUNDSTART);
+        }
+        
         //TODO:implement
     }
 
