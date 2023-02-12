@@ -21,11 +21,8 @@ public class NextPhase extends SystemAction {
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
     public static final int ID = -1;
 
-    private final GameManager gameManager;
-
     public NextPhase(GameManager gameManager) {
         super(ID, NAME, DESCRIPTION, gameManager);
-        this.gameManager = gameManager;
     }
 
     @Override
