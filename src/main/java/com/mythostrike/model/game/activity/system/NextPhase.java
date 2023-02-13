@@ -19,10 +19,9 @@ public class NextPhase extends SystemAction {
 
     public static final String NAME = NextPhase.class.getSimpleName();
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
-    public static final int ID = -1;
 
     public NextPhase(GameManager gameManager) {
-        super(ID, NAME, DESCRIPTION, gameManager);
+        super(NAME, DESCRIPTION, gameManager);
     }
 
     @Override

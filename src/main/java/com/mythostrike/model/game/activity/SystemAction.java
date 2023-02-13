@@ -7,8 +7,8 @@ public class SystemAction extends Activity {
 
     protected final GameManager gameManager;
 
-    public SystemAction(int id, String name, String description, GameManager gameManager) {
-        super(id, name, description);
+    public SystemAction(String name, String description, GameManager gameManager) {
+        super(name, description);
         this.gameManager = gameManager;
     }
 }

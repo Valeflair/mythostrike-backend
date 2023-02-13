@@ -16,13 +16,15 @@ import java.util.Objects;
 
 @Getter
 public abstract class Activity {
-    protected final int id;
+    private static int idCounter = 100;
+
+    protected int id;
     protected final String name;
     protected final String description;
 
 
-    protected Activity(int id, String name, String description) {
-        this.id = id;
+    protected Activity(String name, String description) {
+        this.id = idCounter++;
         this.name = name;
         this.description = description;
     }

@@ -17,14 +17,13 @@ import lombok.Setter;
 public class Attacked extends Activity {
     public static final String NAME = Attacked.class.getSimpleName();
     public static final String DESCRIPTION = "damage caused by attack ";
-    public static final int ID = -18;
 
     private final GameManager gameManager;
     private AttackHandle attackHandle;
     private PickRequest pickRequest;
 
     public Attacked(GameManager gameManager) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
     }
 

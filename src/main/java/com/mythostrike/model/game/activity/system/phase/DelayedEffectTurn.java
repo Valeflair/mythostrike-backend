@@ -10,12 +10,11 @@ import java.util.List;
 public class DelayedEffectTurn extends Activity {
     public static final String NAME = DelayedEffectTurn.class.getSimpleName();
     public static final String DESCRIPTION = "counting it's delayed effect";
-    public static final int ID = -20;
 
     private final GameManager gameManager;
 
     public DelayedEffectTurn(GameManager gameManager) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
     }
 

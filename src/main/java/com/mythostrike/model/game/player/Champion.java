@@ -22,6 +22,10 @@ public class Champion {
         this.maxHp = maxHp;
         this.passiveSkills = List.copyOf(passiveSkills);
         this.activeSkills = List.copyOf(activeSkills);
+
+        for (int i = 0; i < activeSkills.size(); i++) {
+            activeSkills.get(i).initialize(i);
+        }
     }
 
     public Champion(int id, ChampionData data) {

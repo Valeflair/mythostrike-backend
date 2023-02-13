@@ -25,7 +25,6 @@ import java.util.List;
 public class EnterDying extends Activity {
     public static final String NAME = EnterDying.class.getSimpleName();
     public static final String DESCRIPTION = "if player is about to die";
-    public static final int ID = -13;
     public static final CardFilter FILTER = new CardFilter("Heal");
 
     private final Player player;
@@ -37,7 +36,7 @@ public class EnterDying extends Activity {
     private boolean end;
 
     public EnterDying(Player player, GameManager gameManager) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.player = player;
         this.gameManager = gameManager;
         players = new ArrayList<>(gameManager.getGame().getAlivePlayers());

@@ -11,8 +11,8 @@ import java.util.List;
 
 @Getter
 public enum ChampionData {
-    ARES("Ares", 4, List.of(new Warrior(1)), List.of(new Strength(2))),
-    Achilles("Achilles", 4, List.of(), List.of(new Revenge(3)));
+    ARES("Ares", 4, List.of(new Warrior()), List.of(new Strength())),
+    Achilles("Achilles", 4, List.of(), List.of(new Revenge()));
 
     private final String name;
     private final int maxHp;

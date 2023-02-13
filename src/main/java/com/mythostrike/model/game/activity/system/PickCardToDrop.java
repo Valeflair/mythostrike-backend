@@ -14,7 +14,6 @@ import java.util.List;
 public class PickCardToDrop extends Activity {
     public static final String NAME = PickCardToDrop.class.getSimpleName();
     public static final String DESCRIPTION = "pick card to drop";
-    public static final int ID = -14;
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
@@ -22,7 +21,7 @@ public class PickCardToDrop extends Activity {
     private int amount;
 
     public PickCardToDrop(GameManager gameManager, int amount) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
         this.amount = amount;
     }

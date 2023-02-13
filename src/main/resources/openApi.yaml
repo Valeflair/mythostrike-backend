@@ -571,7 +571,7 @@ components:
           type: integer
           format: int32
           example: 1
-        cardIdList:
+        cardIds:
           type: array
           items:
             type: integer

@@ -21,8 +21,8 @@ public class Strength extends PassiveSkill {
     public static final String DESCRIPTION = "when you attack an enemy, he has to play 2 defense to avoid your attack";
     private AttackHandle attackHandle;
 
-    public Strength(int id) {
-        super(id, NAME, DESCRIPTION);
+    public Strength() {
+        super(NAME, DESCRIPTION);
     }
 
 

@@ -11,8 +11,8 @@ public class Warrior extends ActiveSkill {
     public static final String DESCRIPTION = "you can play defense as attack if you want";
 
 
-    public Warrior(int id) {
-        super(id, NAME, DESCRIPTION);
+    public Warrior() {
+        super(NAME, DESCRIPTION);
     }
 
     //TODO:implement

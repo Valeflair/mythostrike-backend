@@ -2,6 +2,7 @@ package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.game.activity.Card;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +48,7 @@ public class CardSpace {
      * @param count number of cards in the list
      * @return list of cards, returns null if count > size of pile
      */
+    @Nullable
     public List<Card> peekTop(int count) {
         if (count > cards.size()) {
             return null;

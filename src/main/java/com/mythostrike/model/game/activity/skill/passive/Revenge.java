@@ -21,8 +21,8 @@ public class Revenge extends PassiveSkill {
     private DamageHandle damageHandle;
 
 
-    public Revenge(int id) {
-        super(id, NAME, DESCRIPTION);
+    public Revenge() {
+        super(NAME, DESCRIPTION);
     }
 
 

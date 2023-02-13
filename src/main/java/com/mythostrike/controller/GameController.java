@@ -76,7 +76,7 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
         throws IllegalInputException {
-        log.debug("play card '{}' request in '{}' from '{}'", request.cardIdList(), request.lobbyId(),
+        log.debug("play card '{}' request in '{}' from '{}'", request.cardIds(), request.lobbyId(),
             principal.getName());
 
         //get objects from REST data
@@ -85,7 +85,7 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
         List<Card> cards = new ArrayList<>();
-        for (int cardId : request.cardIdList()) {
+        for (int cardId : request.cardIds()) {
             cards.add(cardList.getCard(cardId));
         }
 

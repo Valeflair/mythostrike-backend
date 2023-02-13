@@ -12,14 +12,13 @@ import java.util.HashMap;
 public class PlayCard extends Activity {
     public static final String NAME = PlayCard.class.getSimpleName();
     public static final String DESCRIPTION = "Play a card";
-    public static final int ID = -17;
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
     private final PickRequest pickRequest;
 
     public PlayCard(GameManager gameManager, PickRequest pickRequest) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
         this.pickRequest = pickRequest;
     }

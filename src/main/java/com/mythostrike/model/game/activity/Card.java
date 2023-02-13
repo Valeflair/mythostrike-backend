@@ -18,17 +18,19 @@ public abstract class Card extends Activity {
 
 
     protected Card(int id, String name, String description, CardType type, CardSymbol symbol, int point) {
-        super(id, name, description);
+        super(name, description);
         this.type = type;
         this.symbol = symbol;
         this.point = point;
+        this.id = id;
     }
 
     protected Card(Card card) {
-        super(card.getId(), card.getName(), card.getDescription());
+        super(card.getName(), card.getDescription());
         this.type = card.getType();
         this.symbol = card.getSymbol();
         this.point = card.getPoint();
+        this.id = card.getId();
     }
 
     public CardType getType() {

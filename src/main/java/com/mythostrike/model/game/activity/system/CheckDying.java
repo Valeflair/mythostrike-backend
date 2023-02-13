@@ -9,11 +9,10 @@ import com.mythostrike.model.game.player.Player;
 public class CheckDying extends PassiveSkill {
     public static final String NAME = CheckDying.class.getSimpleName();
     public static final String DESCRIPTION = "if player has low hp";
-    public static final int ID = -11;
     private DamageHandle damageHandle;
 
     public CheckDying() {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
     }
 
     @Override

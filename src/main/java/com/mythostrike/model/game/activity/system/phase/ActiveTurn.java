@@ -8,13 +8,12 @@ import com.mythostrike.model.game.player.Player;
 public class ActiveTurn extends Activity {
     public static final String NAME = ActiveTurn.class.getSimpleName();
     public static final String DESCRIPTION = "active turn";
-    public static final int ID = -19;
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
 
     public ActiveTurn(GameManager gameManager) {
-        super(ID, NAME, DESCRIPTION);
+        super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
     }
 

@@ -9,8 +9,8 @@ import lombok.Getter;
 public abstract class PassiveSkill extends Activity {
 
 
-    protected PassiveSkill(int id, String name, String description) {
-        super(id, name, description);
+    protected PassiveSkill(String name, String description) {
+        super(name, description);
     }
 
 
