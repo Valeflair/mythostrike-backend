@@ -22,6 +22,7 @@ import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Mode;
+import com.mythostrike.model.lobby.ModeData;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,6 @@ public class GameManager {
 
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
-    public static final int CARD_COUNT_TURN_START = 2;
     @Getter
     private final Game game;
     @Getter
@@ -256,8 +256,10 @@ public class GameManager {
     public void gameOver() {
         //TODO implement with frontend panel
         output("Game Over");
-        switch (game.getMode().name()) {
-
+        switch (game.getMode().data()) {
+            case FREE_FOR_ALL:
+                output("Winner is " + game.getAlivePlayers().get(0).getUsername());
+                break;
         }
     }
 
