@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 @Getter
 public class PlayCard extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = PlayCard.class.getSimpleName();
     public static final String DESCRIPTION = "Play a card";
     public static final int ID = -17;
     public static final int CARD_COUNT_TURN_START = 2;
@@ -28,7 +28,7 @@ public class PlayCard extends Activity {
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().size() == 0) {
 
         } else {
-            gameManager.getCurrentActivity().add(new PickCardToPLay(gameManager));
+            gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
                 HashMap<String, Integer> restrict = pickRequest.getPlayer().getRestrict();
                 restrict.put(card.getName(), restrict.get(card.getName()) - 1);

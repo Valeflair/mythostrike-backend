@@ -23,7 +23,7 @@ import java.util.List;
  * 5.this end if list is empty (no more player to ask), player die or dying player has hp > 0, survive
  */
 public class EnterDying extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = EnterDying.class.getSimpleName();
     public static final String DESCRIPTION = "if player is about to die";
     public static final int ID = -13;
     public static final CardFilter FILTER = new CardFilter("Heal");

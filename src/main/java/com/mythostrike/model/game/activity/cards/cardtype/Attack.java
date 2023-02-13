@@ -25,7 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Attack extends Card {
-    public static final String NAME = "Attack";
+    public static final String NAME = Attack.class.getSimpleName();
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASIC_CARD;
     public static final CardFilter FILTER = new CardFilter("Attack");

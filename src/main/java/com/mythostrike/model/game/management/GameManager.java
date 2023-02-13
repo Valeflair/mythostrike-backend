@@ -51,7 +51,7 @@ public class GameManager {
     @Getter
     private final GameController gameController;
     @Getter
-    private final Queue<Activity> currentActivity;
+    private final Deque<Activity> currentActivity;
     @Getter
     @Setter
     private Phase phase;
@@ -107,21 +107,21 @@ public class GameManager {
         if (!game.getCurrentPlayer().getUsername().equals(username)) {
             throw new IllegalInputException("Player " + username + " is not the current player");
         }
-        if (currentActivity.peek() == null) {
+        if (currentActivity.getFirst() == null) {
             return;
         }
         if (!phase.equals(Phase.ACTIVE_TURN)) {
             return;
         }
-        Activity activity = currentActivity.peek();
+        Activity activity = currentActivity.getFirst();
         if (activity.getName().equals(PickRequest.NAME)) {
-            currentActivity.poll();
+            currentActivity.removeFirst();
         }
         if (activity.getName().equals(PlayCard.NAME)) {
-            currentActivity.poll();
+            currentActivity.removeFirst();
         }
         if (activity.getName().equals(ActiveTurn.NAME)) {
-            currentActivity.poll();
+            currentActivity.removeFirst();
         }
     }
     //----------------GameStart----------------
@@ -200,11 +200,11 @@ public class GameManager {
         proceeding = true;
 
         while (proceeding) {
-            Activity activity = currentActivity.peek();
-            if (activity == null) {
-                activity = new NextPhase(this);
-                currentActivity.add(activity);
+            if (currentActivity.isEmpty()) {
+                currentActivity.addFirst(new NextPhase(this));
             }
+            Activity activity = currentActivity.getFirst();
+            debug("running activity:" + activity.getName());
 
             //TODO: maybe remove instanceof
             /*
@@ -229,7 +229,7 @@ public class GameManager {
         activity.use();
         //if activity is finished, remove it from queue
         if (activity.end()) {
-            currentActivity.poll();
+            currentActivity.remove(activity);
         }
     }
 
@@ -253,7 +253,7 @@ public class GameManager {
     }
 
     public void queueActivity(Activity activity) {
-        currentActivity.add(activity);
+        currentActivity.addFirst(activity);
     }
 
     public void gameOver() {

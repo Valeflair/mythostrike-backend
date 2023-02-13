@@ -6,7 +6,7 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 
 public class ActiveTurn extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = ActiveTurn.class.getSimpleName();
     public static final String DESCRIPTION = "active turn";
     public static final int ID = -19;
     public static final int CARD_COUNT_TURN_START = 2;

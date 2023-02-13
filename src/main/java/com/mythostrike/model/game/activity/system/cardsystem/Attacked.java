@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Attacked extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = Attacked.class.getSimpleName();
     public static final String DESCRIPTION = "damage caused by attack ";
     public static final int ID = -18;
 

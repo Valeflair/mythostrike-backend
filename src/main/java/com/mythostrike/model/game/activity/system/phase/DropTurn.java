@@ -6,7 +6,7 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 
 public class DropTurn extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = DropTurn.class.getSimpleName();
     public static final String DESCRIPTION = "Turn to drop";
     public static final int ID = -22;
     public static final int CARD_COUNT_TURN_START = 2;

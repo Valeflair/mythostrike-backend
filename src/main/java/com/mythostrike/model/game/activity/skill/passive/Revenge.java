@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Revenge extends PassiveSkill {
-    public static final String NAME = "Revenge";
+    public static final String NAME = Revenge.class.getSimpleName();
     public static final String DESCRIPTION = "when you get damage, judge, if it's red, the damage dealer drops 1 card,"
         + " if it's black, the damage dealer get 1  damage by you";
     private DamageHandle damageHandle;

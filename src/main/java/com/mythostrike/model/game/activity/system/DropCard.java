@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 public class DropCard extends Activity {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = DropCard.class.getSimpleName();
     public static final String DESCRIPTION = "Drop a card";
     public static final int ID = -12;
     public static final int CARD_COUNT_TURN_START = 2;

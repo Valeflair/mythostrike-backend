@@ -52,7 +52,7 @@ public class CardManager {
         Player player = cardDrawHandle.getPlayer();
         int count = cardDrawHandle.getCount();
         CardPile drawDeck = cardDrawHandle.getDrawPile();
-        List<Card> drawenCards = new ArrayList<>();
+        List<Card> drawedCards = new ArrayList<>();
 
         StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",
             player.getUsername(), count, cardDrawHandle.getReason()));
@@ -60,8 +60,7 @@ public class CardManager {
 
         for (int i = 0; i < cardDrawHandle.getCount(); i++) {
             Card card = drawDeck.subtractCard(0);
-            player.getHandCards().add(card);
-            drawenCards.add(card);
+            drawedCards.add(card);
             message.append(card.getName()).append(",");
         }
 
@@ -71,7 +70,7 @@ public class CardManager {
         gameManager.debug(message.toString());
 
         CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
-            "player draws cards", player, null, drawDeck, player.getHandCards(), drawenCards);
+            "player draws cards", player, null, drawDeck, player.getHandCards(), drawedCards);
         moveCard(cardMoveHandle);
     }
 

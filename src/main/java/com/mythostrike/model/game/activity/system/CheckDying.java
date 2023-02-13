@@ -7,7 +7,7 @@ import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.player.Player;
 
 public class CheckDying extends PassiveSkill {
-    public static final String NAME = Class.class.getSimpleName();
+    public static final String NAME = CheckDying.class.getSimpleName();
     public static final String DESCRIPTION = "if player has low hp";
     public static final int ID = -11;
     private DamageHandle damageHandle;
