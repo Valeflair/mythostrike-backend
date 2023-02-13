@@ -6,9 +6,8 @@ import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 
 public class Warrior extends ActiveSkill {
 
-    public static final String NAME = "Revenge";
-    public static final String DESCRIPTION = "when you get damage, judge, if it's red, the damage dealer drops 1 card,"
-            + " if it's black, the damage dealer get 1  damage by you";
+    public static final String NAME = "Warrior";
+    public static final String DESCRIPTION = "you can play defense as attack if you want";
 
 
     public Warrior(int id) {

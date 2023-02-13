@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Strength extends PassiveSkill {
 
-    public static final String NAME = "Revenge";
+    public static final String NAME = "Strength";
     public static final String DESCRIPTION = "when you attack an enemy, he has to play 2 defense to avoid your attack";
     private AttackHandle attackHandle;
 
