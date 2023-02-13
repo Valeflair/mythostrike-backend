@@ -534,25 +534,25 @@ components:
         lobbyId:
           type: integer
           format: int32
-          example: 728491
+          example: 1
     ChangeModeRequest:
       type: object
       properties:
         lobbyId:
           type: integer
           format: int32
-          example: 5313
+          example: 1
         newModeId:
           type: integer
           format: int32
-          example: 5
+          example: 0
     ChangeSeatRequest:
       type: object
       properties:
         lobbyId:
           type: integer
           format: int32
-          example: 5313
+          example: 1
         newSeatId:
           type: integer
           format: int32
@@ -563,26 +563,26 @@ components:
         modeId:
           type: integer
           format: int32
-          example: 3
+          example: 0
     PlayCardRequest:
       type: object
       properties:
         lobbyId:
           type: integer
           format: int32
-          example: 5313
+          example: 1
         cardIdList:
           type: array
           items:
             type: integer
-          example: [ 1, 5 ]
+          example: [ 1000 ]
     PlaySkillRequest:
       type: object
       properties:
         lobbyId:
           type: integer
           format: int32
-          example: 5313
+          example: 1
         skillId:
           type: integer
           format: int32
@@ -611,22 +611,22 @@ components:
         lobbyId:
           type: integer
           format: int32
-          example: 352361
+          example: 1
         championId:
           type: integer
           format: int32
-          example: 2
+          example: 0
     SelectTargetsRequest:
       type: object
       properties:
         lobbyId:
           type: integer
           format: int32
-          example: 5313
+          example: 1
         cardId:
           type: integer
           format: int32
-          example: 2
+          example: 0
         targets:
           type: array
           items:
@@ -638,7 +638,7 @@ components:
         id:
           type: integer
           format: int32
-          example: 2
+          example: 1
         owner:
           type: string
           example: Hyuman123
