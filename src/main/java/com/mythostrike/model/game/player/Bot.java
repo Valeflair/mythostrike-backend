@@ -85,7 +85,7 @@ public class Bot extends Player {
                 Collections.shuffle(result, Game.RANDOM_SEED);
                 cards = result.subList(0, n);
             }
-            gameManager.selectCards(getUsername(), cards);
+            gameManager.selectCards(getUsername(), GameManager.convertCardsToInteger(cards));
             if (message.needsConfirm()) {
                 gameManager.cancelRequest(getUsername());
             }

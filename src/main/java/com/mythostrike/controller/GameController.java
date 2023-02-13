@@ -84,12 +84,8 @@ public class GameController {
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        List<Card> cards = new ArrayList<>();
-        for (int cardId : request.cardIds()) {
-            cards.add(cardList.getCard(cardId));
-        }
 
-        gameManager.selectCards(principal.getName(), cards);
+        gameManager.selectCards(principal.getName(), request.cardIds());
 
         updateGame(request.lobbyId());
         return ResponseEntity

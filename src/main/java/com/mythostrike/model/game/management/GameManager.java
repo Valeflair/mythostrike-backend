@@ -2,6 +2,7 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
@@ -95,8 +96,8 @@ public class GameManager {
     }
 
     public List<Card> convertIdToCards(List<Integer> cardIds) {
-        CardList cardList = CardList.getCardList();
-        return cardIds.stream().map(cardList::getCard).toList();
+
+        return game.getAllCards().getCards().stream().filter(card -> cardIds.contains(card.getId())).toList();
     }
 
     //----------------GameRun----------------
@@ -204,23 +205,8 @@ public class GameManager {
             }
             Activity activity = currentActivity.getFirst();
             debug("running activity:" + activity.getName());
-
-            //TODO: maybe remove instanceof
-            /*
-            //not necessary, because pickRequest.use() calls highlight(pickRequest) and there will stop proceed and
-            //store pickRequest
-            if (activity instanceof PickRequest pickRequest) {
-                proceeding = false;
-                lastPickRequest = pickRequest;
-            }
-            */
-
-            if (game.isGameOver()) {
-                gameOver();
-                proceeding = false;
-                return;
-            }
             runActivity(activity);
+
         }
     }
 
@@ -253,14 +239,57 @@ public class GameManager {
         currentActivity.addFirst(activity);
     }
 
-    public void gameOver() {
-        //TODO implement with frontend panel
-        output("Game Over");
+    public void checkGameOver() {
+        proceeding = false;
         switch (game.getMode().data()) {
-            case FREE_FOR_ALL:
-                output("Winner is " + game.getAlivePlayers().get(0).getUsername());
-                break;
+            case FREE_FOR_ALL, ONE_VS_ONE -> {
+                if (game.getAlivePlayers().size() == 1) {
+                    output("Winner is " + game.getAlivePlayers().get(0).getUsername());
+                    List<PlayerResult> results = new ArrayList<>();
+                    for (Player player : game.getAllPlayers()) {
+                        results.add(new PlayerResult(player, player.isAlive()));
+                    }
+                    gameController.gameEnd(lobbyId, results);
+                    return;
+                }
+            }
+            case TWO_VS_TWO, THREE_VS_THREE, FOUR_VS_FOUR -> {
+                Set<Identity> aliveTeam = new HashSet<>();
+                for (Player player : game.getAlivePlayers()) {
+                    aliveTeam.add(player.getIdentity());
+                }
+                if (aliveTeam.size() == 1) {
+                    List<PlayerResult> results = new ArrayList<>();
+                    for (Player player : game.getAllPlayers()) {
+                        results.add(new PlayerResult(player, player.isAlive()));
+                    }
+                    gameController.gameEnd(lobbyId, results);
+                    return;
+                }
+            }
+            case IDENTITY_FOR_EIGHT, IDENTITY_FOR_FIVE -> {
+                List<Identity> aliveIdentities = new ArrayList<>();
+                for (Player player : game.getAlivePlayers()) {
+                    aliveIdentities.add(player.getIdentity());
+                }
+                if (!aliveIdentities.contains(Identity.GOD_KING)
+                        || (aliveIdentities.contains(Identity.REBEL) && aliveIdentities.contains(Identity.RENEGADE))) {
+                    List<PlayerResult> results = new ArrayList<>();
+                    for (Player player : game.getAllPlayers()) {
+                        switch (player.getIdentity()) {
+                            case GOD_KING, GENERAL -> results.add(new PlayerResult(player, aliveIdentities.contains(Identity.GOD_KING)
+                                    && (!aliveIdentities.contains(Identity.REBEL) && !aliveIdentities.contains(Identity.RENEGADE))));
+                            case REBEL -> results.add(new PlayerResult(player, !aliveIdentities.contains(Identity.GOD_KING)));
+                            case RENEGADE -> results.add(new PlayerResult(player, game.getAlivePlayers().size() == 1
+                                    && game.getAlivePlayers().contains(player)));
+                        }
+                    }
+                    gameController.gameEnd(lobbyId, results);
+                    return;
+                }
+            }
         }
+        proceeding = true;
     }
 
     public void highlightPickRequest(PickRequest pickRequest) {
@@ -284,7 +313,8 @@ public class GameManager {
         //If all clients are connected, then the methode cardDistribution() is called.
     }
 
-    public void selectCards(String playerName, List<Card> cards) {
+    public void selectCards(String playerName, List<Integer> cardIds) {
+        List<Card> cards = convertIdToCards(cardIds);
         Player player = getPlayerByName(playerName);
         if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
             lastPickRequest.setSelectedCards(cards);

@@ -35,6 +35,8 @@ public class Game {
     private CardPile discardPile;
     @Setter
     private CardPile tablePile;
+    @Getter
+    private CardPile allCards;
 
 
     public Game(List<Player> players, Mode mode, GameManager gameManager) {
@@ -46,6 +48,7 @@ public class Game {
         drawPile = new CardPile("drawPile", CardList.getCardList().getFullCardDeck());
         tablePile = new CardPile("tablePile");
         discardPile = new CardPile("discardPile");
+        allCards = new CardPile("allCards", drawPile.getCards());
         drawPile.shuffle(RANDOM_SEED);
     }
 
@@ -63,7 +66,7 @@ public class Game {
 
     public List<Player> getOtherPlayers(Player player) {
         List<Player> players = new ArrayList<>(alivePlayers);
-        alivePlayers.remove(player);
+        players.remove(player);
         return players;
     }
 

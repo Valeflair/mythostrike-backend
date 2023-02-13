@@ -101,8 +101,7 @@ public class PlayerManager {
     }
 
     public void killPlayer(Player player) {
-        //TODO:update information to frontend
-        //move all cards from player to table pile
+
         gameManager.getCardManager().moveCard(
             new CardMoveHandle(gameManager, "die", player, null, player.getHandCards(),
                 gameManager.getGame().getTablePile(), player.getHandCards().getCards())
@@ -118,13 +117,15 @@ public class PlayerManager {
                 gameManager.getGame().getTablePile(), player.getDelayedEffect().getCards())
         );
 
-        gameManager.getGame().getAlivePlayers().remove(player);
-
         if (gameManager.getGame().getCurrentPlayer().equals(player)) {
             gameManager.setPhase(Phase.ROUND_START);
         }
+        gameManager.getGame().getAlivePlayers().remove(player);
 
-        //TODO:implement
+
+
+        gameManager.checkGameOver();
+
     }
 
 }
