@@ -111,8 +111,8 @@ public class GameController {
 
     @PostMapping("/targets")
     public ResponseEntity<Void> selectTargets(Principal principal, @RequestBody SelectTargetRequest request) {
-        log.debug("use card '{}' on '{}' request in '{}' from '{}'", request.cardId(), request.targets(),
-            request.lobbyId(), principal.getName());
+        log.debug("select '{}' as targets request in '{}' from '{}'", request.targets(), request.lobbyId(),
+            principal.getName());
 
         //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
@@ -120,7 +120,6 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
 
-        //TODO: cardId unnötig?
         gameManager.selectPlayers(principal.getName(), request.targets());
 
         updateGame(request.lobbyId());

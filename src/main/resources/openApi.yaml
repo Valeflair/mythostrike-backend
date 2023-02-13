@@ -13,7 +13,7 @@ tags:
   - name: Resources
     description: All Game Data
   - name: Users
-    description: Authentication of Users
+    description: User Management and Data
   - name: Lobby
     description: Control the Lobby
   - name: Game
@@ -90,22 +90,6 @@ paths:
                 $ref: "#/components/schemas/UserAuthResponse"
         "409":
           description: user already exists
-  /users/data:
-    post:
-      tags:
-        - Users
-      operationId: getUserData
-      summary: User data
-      description: Request for user data from the system
-      security:
-        - bearerAuth: [ user ]
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserInfo"
   /users/login:
     post:
       tags:
@@ -129,6 +113,55 @@ paths:
                 $ref: "#/components/schemas/UserAuthResponse"
         "401":
           description: Wrong username or password
+  /users/data:
+    post:
+      tags:
+        - Users
+      operationId: getUserData
+      summary: User data
+      description: Request for user data from the system
+      security:
+        - bearerAuth: [ user ]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"
+  /users/avatar:
+    post:
+      tags:
+        - Users
+      operationId: avatar
+      summary: Select avatar
+      description: Change avatar picture for the user
+      security:
+        - bearerAuth: [ user ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAvatarRequest"
+      responses:
+        "200":
+          description: OK
+  /users/ranklist:
+    get:
+      tags:
+        - Users
+      operationId: getRanklist
+      summary: player Ranklist
+      description: Get a list of all players
+      security:
+        - { }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRankList"
 
   /lobbies:
     get:
@@ -449,6 +482,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Champion"
+    UserRankList:
+      type: array
+      items:
+        $ref: "#/components/schemas/UserInfo"
     Champion:
       type: object
       properties:
@@ -498,6 +535,13 @@ components:
         password:
           type: string
           example: BestPW123
+    UserAvatarRequest:
+      type: object
+      properties:
+        avatarNumber:
+          type: integer
+          format: int32
+          example: 2
     UserAuthResponse:
       type: object
       properties:

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,7 +25,8 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public User getUser(String username) throws EntityNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new EntityNotFoundException(username + " not found"));
     }
 
     public void createUser(UserAuthRequest request) {
@@ -38,6 +40,14 @@ public class UserService implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findByUsername(request.username());
         return optionalUser.isPresent()
             && passwordEncoder.matches(request.password(), optionalUser.get().getPassword());
+    }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
