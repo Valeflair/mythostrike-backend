@@ -11,6 +11,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public final class CardList {
      */
     @SuppressWarnings("ValueOfIncrementOrDecrementUsed")
     private CardList() {
-        this.cards = new ArrayList<>();
+        this.cards = new HashMap<>();
 
         //initilize a complete card deck in the card list
         int id = 1000;
@@ -126,11 +127,11 @@ public final class CardList {
     }
 
     public @NotNull @UnmodifiableView List<Card> getCards() {
-        return Collections.unmodifiableList(cards.values());
+        return List.copyOf(cards.values());
     }
 
     public List<Card> getFullCardDeck() {
-        return cards.stream().map(Card::deepCopy).toList();
+        return getCards().stream().map(Card::deepCopy).toList();
     }
 
     public Card getCard(int id) throws IllegalInputException {
