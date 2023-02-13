@@ -177,10 +177,15 @@ public class GameManager {
             }
 
             //TODO: maybe remove instanceof
+            /*
+            //not necessary, because pickRequest.use() calls highlight(pickRequest) and there will stop proceed and
+            //store pickRequest
             if (activity instanceof PickRequest pickRequest) {
                 proceeding = false;
                 lastPickRequest = pickRequest;
             }
+            */
+
             if (game.isGameOver()) {
                 gameOver();
                 proceeding = false;
@@ -226,8 +231,9 @@ public class GameManager {
     }
 
     public void highlightPickRequest(PickRequest pickRequest) {
-        gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
         lastPickRequest = pickRequest;
+        proceeding = false;
+        gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
     }
 
     public void selectChampion(String playerName, Champion champion) {
