@@ -4,10 +4,7 @@ import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
-import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageType;
+import com.mythostrike.model.game.activity.events.handle.*;
 import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
@@ -17,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlessOfHecate extends Card {
-    public static final String NAME = "Defend";
-    public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
+    public static final String NAME = "Bless of Hecate";
+    public static final String DESCRIPTION = "Draw 2 cards instantly";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle cardUseHandle;
@@ -44,10 +41,6 @@ public class BlessOfHecate extends Card {
         return new BlessOfHecate(id, symbol, point);
     }
 
-    /**
-     * player choose this card, highlight all target enemies
-     * creates a pickRequest for card user
-     */
     @Override
     public void activate() {
         Player player = cardUseHandle.getPlayer();
@@ -64,7 +57,10 @@ public class BlessOfHecate extends Card {
 
     @Override
     public void use() {
-
+        CardDrawHandle cardDrawHandle = new CardDrawHandle(cardUseHandle.getGameManager(),
+                "draw because of using bless of hecate", cardUseHandle.getPlayer(), 2,
+                cardUseHandle.getGameManager().getGame().getDrawPile());
+        gameManager.getCardManager().drawCard(cardDrawHandle);
     }
 
 }
