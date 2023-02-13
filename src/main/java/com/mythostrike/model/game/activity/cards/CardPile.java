@@ -4,6 +4,7 @@ import com.mythostrike.model.game.activity.Card;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class CardPile extends CardSpace {
 
@@ -23,12 +24,16 @@ public class CardPile extends CardSpace {
         }
     }
 
-    public void shuffle() {
-        Collections.shuffle(cards);
+    public void shuffle(Random seed) {
+        Collections.shuffle(cards, seed);
     }
 
     public Card subtract() {
         return cards.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 }
 

@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.message.game.CardMoveMessage;
+import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.cards.CardSpace;
@@ -31,7 +32,7 @@ public class CardManager {
         );
 
         moveCard(cardMoveHandle);
-        gameManager.getGame().getDrawPile().shuffle();
+        gameManager.getGame().getDrawPile().shuffle(Game.RANDOM_SEED);
         gameManager.output("Discard pile is shuffled");
     }
 
@@ -56,6 +57,9 @@ public class CardManager {
         CardPile drawDeck = cardDrawHandle.getDrawPile();
 
 
+        if (drawDeck.peekTop(count) == null) {
+            refillDrawPile();
+        }
         List<Card> drawedCards = drawDeck.peekTop(count);
 
         //create a debug message

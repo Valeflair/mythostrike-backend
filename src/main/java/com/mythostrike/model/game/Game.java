@@ -46,6 +46,7 @@ public class Game {
         drawPile = new CardPile("drawPile", CardList.getCardList().getFullCardDeck());
         tablePile = new CardPile("tablePile");
         discardPile = new CardPile("discardPile");
+        drawPile.shuffle(RANDOM_SEED);
     }
 
     public void nextPlayer() {

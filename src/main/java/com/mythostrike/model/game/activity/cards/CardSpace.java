@@ -45,9 +45,12 @@ public class CardSpace {
     /**
      *  Returns a list of cards from the top of the pile. Does not remove them.
      * @param count number of cards in the list
-     * @return list of cards
+     * @return list of cards, returns null if count > size of pile
      */
     public List<Card> peekTop(int count) {
+        if (count > cards.size()) {
+            return null;
+        }
         return Collections.unmodifiableList(cards.subList(0, count));
     }
 

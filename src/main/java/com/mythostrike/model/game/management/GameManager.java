@@ -86,7 +86,7 @@ public class GameManager {
         return playerNames;
     }
 
-    public List<Player> convertUserNameToPlayers(List<String> playerNames) {
+    public List<Player> convertUserNameToPlayers(@NotNull List<String> playerNames) {
         List<Player> players = new ArrayList<>();
         for (String name : playerNames) {
             players.add(game.getAllPlayers().stream().filter(player -> player.getUsername().equals(name)).findFirst().orElse(null));
@@ -130,6 +130,8 @@ public class GameManager {
      * When all players subscribed to the game websocket the methode allPlayersConnected() is called and from there
      */
     public void gameStart() {
+
+
 
         List<Player> players = game.getAlivePlayers();
         //bot needs the gameManager to be set
@@ -253,6 +255,10 @@ public class GameManager {
 
     public void gameOver() {
         //TODO implement with frontend panel
+        output("Game Over");
+        switch (game.getMode().name()) {
+
+        }
     }
 
     public void highlightPickRequest(PickRequest pickRequest) {
