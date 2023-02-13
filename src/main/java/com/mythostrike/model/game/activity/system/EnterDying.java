@@ -81,7 +81,7 @@ public class EnterDying extends Activity {
                 = "Player " + player.getUsername() + "is about to die, he needs " + count + "heal(s) to get alive"
                 + "if you want to heal him, pick heal and click confirm";
             HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null, 1,
-                1, 0, 0, hint, true, true);
+                1, 0, 0, hint, true, true, false);
             pickRequest = new PickRequest(player, gameManager, highlightMessage);
             gameManager.queueActivity(pickRequest);
         }

@@ -48,7 +48,7 @@ public class BlessOfHecate extends Card {
         //add targetAble enemy into targets
 
         HighlightMessage highlightMessage = new HighlightMessage(null, null, null, 0,
-                0, 1, 1, DESCRIPTION, true, true);
+                0, 1, 1, DESCRIPTION, true, true, false);
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
         gameManager.queueActivity(this);
         gameManager.queueActivity(pickRequest);

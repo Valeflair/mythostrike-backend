@@ -14,6 +14,7 @@ import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
+import com.mythostrike.model.game.activity.system.PickCardToPLay;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.activity.system.PlayCard;
 import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
@@ -112,15 +113,21 @@ public class GameManager {
             return;
         }
         Activity activity = currentActivity.getFirst();
+
         if (activity.getName().equals(PickRequest.NAME)) {
             currentActivity.removeFirst();
         }
         if (activity.getName().equals(PlayCard.NAME)) {
             currentActivity.removeFirst();
         }
+        if (activity.getName().equals(PickCardToPLay.NAME)) {
+            currentActivity.removeFirst();
+        }
         if (activity.getName().equals(ActiveTurn.NAME)) {
             currentActivity.removeFirst();
         }
+
+        proceed();
     }
     //----------------GameStart----------------
 
@@ -233,6 +240,7 @@ public class GameManager {
                 "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck, cards);
         cardManager.moveCard(cardMoveHandle);
         debug(hint.toString());
+        gameController.updateGame(lobbyId);
     }
 
     public void queueActivity(Activity activity) {

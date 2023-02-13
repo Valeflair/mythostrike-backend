@@ -13,12 +13,13 @@ public record HighlightMessage(List<Integer> cardsId,
                                int minPlayer,
                                int maxPlayer,
                                String reason,
-                               boolean optional,
-                               boolean needsConfirm) {
+                               boolean activateCancel,
+                               boolean activateConfirm,
+                               boolean activateEndTurn) {
 
     public HighlightMessage(List<Integer> cardsId, List<String> players, List<Integer> skillsId, int minCard,
                             int maxCard, int minPlayer, int maxPlayer, String reason,
-                            boolean optional, boolean needsConfirm) {
+                            boolean activateCancel, boolean activateConfirm, boolean activateEndTurn) {
 
         if (cardsId == null) {
             this.cardsId = new ArrayList<>();
@@ -41,8 +42,9 @@ public record HighlightMessage(List<Integer> cardsId,
         this.minPlayer = minPlayer;
         this.maxPlayer = maxPlayer;
         this.reason = reason;
-        this.optional = optional;
-        this.needsConfirm = needsConfirm;
+        this.activateCancel = activateCancel;
+        this.activateConfirm = activateConfirm;
+        this.activateEndTurn = activateEndTurn;
     }
 
     //make sure the lists are even with the builder not null

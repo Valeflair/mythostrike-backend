@@ -39,7 +39,7 @@ public class PickCardToPLay extends Activity {
             .minCard(1)
             .maxCard(1)
             .reason("Pick a Card to play")
-            .optional(true)
+            .activateEndTurn(true)
             .build();
 
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);

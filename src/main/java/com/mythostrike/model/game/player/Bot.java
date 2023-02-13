@@ -6,7 +6,6 @@ import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Card;
-import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
 
@@ -40,12 +39,17 @@ public class Bot extends Player {
     }
 
     public void highlight(HighlightMessage message) {
+
+        if (message.activateEndTurn()) {
+            gameManager.endTurn(getUsername());
+            return;
+        }
         //it does random shit
         List<Player> players;
         List<Card> cards;
         List<ActiveSkill> skills;
 
-        if (message.optional()) {
+        if (message.activateCancel()) {
             gameManager.cancelRequest(getUsername());
             return;
         }
@@ -66,7 +70,7 @@ public class Bot extends Player {
                 players = result.subList(0, n);
             }
             gameManager.selectPlayers(getUsername(), GameManager.convertPlayersToUsername(players));
-            if (message.needsConfirm()) {
+            if (message.activateConfirm()) {
                 gameManager.cancelRequest(getUsername());
             }
             return;
@@ -86,7 +90,7 @@ public class Bot extends Player {
                 cards = result.subList(0, n);
             }
             gameManager.selectCards(getUsername(), GameManager.convertCardsToInteger(cards));
-            if (message.needsConfirm()) {
+            if (message.activateConfirm()) {
                 gameManager.cancelRequest(getUsername());
             }
             return;
