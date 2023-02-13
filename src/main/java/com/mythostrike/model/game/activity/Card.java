@@ -56,7 +56,7 @@ public abstract class Card extends Activity {
     public void playOut() {
         gameManager = cardMoveHandle.getGameManager();
         gameManager.getCardManager().moveCard(cardMoveHandle);
-        HashMap<String, Integer> restrict = cardMoveHandle.getPlayer().getRestrict();
-        restrict.put(this.getName(), restrict.get(this.getName()) - 1);
+
+        cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }
 }

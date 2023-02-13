@@ -21,21 +21,23 @@ public class CardManager {
         this.gameManager = gameManager;
     }
 
+    /**
+     * move all cards from discard pile to draw pile. Shuffle the draw pile.
+     */
+    public void refillDrawPile() {
+        CardMoveHandle cardMoveHandle = new CardMoveHandle(
+            gameManager, "refill draw pile", null, null, gameManager.getGame().getThrowPile(),
+            gameManager.getGame().getDrawPile(), gameManager.getGame().getThrowPile().getCards()
+        );
 
-    public void shuffleDiscardPile() {
-        CardPile dummy = gameManager.getGame().getDrawPile();
-        gameManager.getGame().setDrawPile(gameManager.getGame().getThrowPile());
-        gameManager.getGame().setThrowPile(dummy);
+        moveCard(cardMoveHandle);
         gameManager.getGame().getDrawPile().shuffle();
         gameManager.output("Discard pile is shuffled");
-        /*CardMoveMessage
-        gameManager.getGameController().updateGame(gameManager.getLobbyId(),);*/
-        //TODO update it to frontend
     }
 
     public Card judge() {
         //TODO:use judgeHandle instead judge
-        Card judge = gameManager.getGame().getDrawPile().subtractCard(0);
+        Card judge = gameManager.getGame().getDrawPile().peekTop();
         moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
             gameManager.getGame().getThrowPile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
@@ -52,23 +54,20 @@ public class CardManager {
         Player player = cardDrawHandle.getPlayer();
         int count = cardDrawHandle.getCount();
         CardPile drawDeck = cardDrawHandle.getDrawPile();
-        List<Card> drawenCards = new ArrayList<>();
 
+
+        List<Card> drawenCards = drawDeck.peekTop(count);
+
+        //create a debug message
         StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",
             player.getUsername(), count, cardDrawHandle.getReason()));
-
-
-        for (int i = 0; i < cardDrawHandle.getCount(); i++) {
-            Card card = drawDeck.subtractCard(0);
-            player.getHandCards().add(card);
-            drawenCards.add(card);
+        for (Card card : drawenCards) {
             message.append(card.getName()).append(",");
         }
-
         //delete the last comma
         message.delete(message.length() - 1, message.length() - 1);
-
         gameManager.debug(message.toString());
+
 
         CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
             "player draws cards", player, null, drawDeck, player.getHandCards(), drawenCards);
@@ -82,12 +81,16 @@ public class CardManager {
         moveCard(cardMoveHandle);
     }
 
+    /**
+     * Move cards specified in cardMoveHandle from 'from' space to 'to' space. Also sends a message to the frontend.
+     * @param cardMoveHandle
+     */
     public void moveCard(CardMoveHandle cardMoveHandle) {
         List<Card> cards = cardMoveHandle.getCardsToMove();
         CardSpace from = cardMoveHandle.getFromSpace();
         CardSpace to = cardMoveHandle.getToSpace();
-        from.getCards().removeAll(cards);
-        to.getCards().addAll(cards);
+        from.removeAll(cards);
+        to.addAll(cards);
 
         String fromString = "Error";
         CardSpace space = cardMoveHandle.getFromSpace();

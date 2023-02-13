@@ -32,7 +32,7 @@ public class Attacked extends Activity {
     public void use() {
         Player attacker = attackHandle.getPlayer();
         Player defender = attackHandle.getOpponent();
-        if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().size() == 0) {
+        if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
             Card attack = attackHandle.getAttack();
             new DamageHandle(gameManager, attack, DESCRIPTION, attacker, defender,
                 attackHandle.getExtraDamage() + 1, DamageType.NORMAL);

@@ -209,7 +209,7 @@ public class GameController {
         for (String username : toUsernames) {
             String path = String.format("/games/%d/%s", lobbyId, username);
 
-            webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.UPDATE_GAME, message),
+            webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message),
                 "cardMovePrivate");
         }
     }

@@ -34,7 +34,9 @@ public class Player {
     private final HandCards handCards;
     private final CardSpaceRestrictedByType equipment;
     private final CardSpaceRestrictedByName delayedEffect;
+    @Getter(AccessLevel.NONE)
     private final HashMap<String, Integer> permanentRestrict;
+    @Getter(AccessLevel.NONE)
     private final HashMap<String, Boolean> permanentImmunity;
     private final List<ActiveSkill> activeSkills;
     private final List<PassiveSkill> passiveSkills;
@@ -45,7 +47,9 @@ public class Player {
     private int maxHp;
     @Setter
     private Identity identity;
+    @Getter(AccessLevel.NONE)
     private HashMap<String, Integer> restrict;
+    @Getter(AccessLevel.NONE)
     private HashMap<String, Boolean> immunity;
     @Setter
     private boolean isAlive;

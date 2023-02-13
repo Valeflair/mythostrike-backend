@@ -242,8 +242,6 @@ public class GameManager {
         CardPile tableDeck = game.getTablePile();
         for (Card card : tableDeck.getCards()) {
             hint.append(card.toString()).append(",");
-
-
         }
         List<Card> cards = throwDeck.getCards();
         CardMoveHandle cardMoveHandle = new CardMoveHandle(this,

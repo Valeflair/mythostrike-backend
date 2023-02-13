@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.activity.system;
 
+import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.management.GameManager;
@@ -25,13 +26,11 @@ public class PlayCard extends Activity {
 
     @Override
     public void use() {
-        if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().size() == 0) {
-
+        if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
+            throw new IllegalInputException("No card selected");
         } else {
             gameManager.getCurrentActivity().add(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
-                HashMap<String, Integer> restrict = pickRequest.getPlayer().getRestrict();
-                restrict.put(card.getName(), restrict.get(card.getName()) - 1);
                 card.activate();
             }
         }
