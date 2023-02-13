@@ -8,6 +8,7 @@ import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -94,12 +95,8 @@ public class GameManager {
     }
 
     public List<Card> convertIdToCards(List<Integer> cardIds) {
-        List<Card> cards = new ArrayList<>();
-        for (Integer id : cardIds) {
-            Optional<Card> find = game.getAllCards().getCards().stream().filter(card -> card.getId() == (id)).findFirst();
-            find.ifPresent(cards::add);
-        }
-        return cards;
+        CardList cardList = CardList.getCardList();
+        return cardIds.stream().map(cardList::getCard).toList();
     }
 
     //----------------GameRun----------------
@@ -238,12 +235,10 @@ public class GameManager {
             return;
         }
         StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
-        CardPile throwDeck = game.getThrowPile();
+        CardPile throwDeck = game.getDiscardPile();
         CardPile tableDeck = game.getTablePile();
         for (Card card : tableDeck.getCards()) {
             hint.append(card.toString()).append(",");
-
-
         }
         List<Card> cards = throwDeck.getCards();
         CardMoveHandle cardMoveHandle = new CardMoveHandle(this,

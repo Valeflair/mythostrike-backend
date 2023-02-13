@@ -27,13 +27,12 @@ public class Game {
     public final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
-    private final CardPile allCards;
     private final Mode mode;
     private String console;
     @Setter
     private CardPile drawPile;
     @Setter
-    private CardPile throwPile;
+    private CardPile discardPile;
     @Setter
     private CardPile tablePile;
 
@@ -44,10 +43,9 @@ public class Game {
         this.gameManager = gameManager;
         alivePlayers = new ArrayList<>(allPlayers);
 
-        drawPile = CardList.getFullCardDeck();
-        allCards = new CardPile(new ArrayList<>(drawPile.getCards()));
-        tablePile = new CardPile();
-        throwPile = new CardPile();
+        drawPile = new CardPile("drawPile", CardList.getCardList().getFullCardDeck());
+        tablePile = new CardPile("tablePile");
+        discardPile = new CardPile("discardPile");
     }
 
     public void nextPlayer() {

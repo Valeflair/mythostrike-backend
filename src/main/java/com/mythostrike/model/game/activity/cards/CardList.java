@@ -128,12 +128,8 @@ public final class CardList {
         return Collections.unmodifiableList(cards);
     }
 
-    public static CardPile getFullCardDeck() {
-        CardPile cardPile = new CardPile();
-        for (Card card : instance.cards) {
-            cardPile.add(card.deepCopy());
-        }
-        return cardPile;
+    public List<Card> getFullCardDeck() {
+        return cards.stream().map(Card::deepCopy).toList();
     }
 
     public Card getCard(int id) throws IllegalInputException {

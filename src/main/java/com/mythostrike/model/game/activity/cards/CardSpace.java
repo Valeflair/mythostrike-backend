@@ -4,19 +4,25 @@ import com.mythostrike.model.game.activity.Card;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class CardSpace {
 
-    @Getter
     protected final List<Card> cards;
 
-    public CardSpace() {
+    @Getter
+    private final String name;
+
+    public CardSpace(String name) {
+        this.name = name;
         cards = new ArrayList<>();
     }
 
-    public CardSpace(List<Card> cards) {
+    public CardSpace(String name, List<Card> cards) {
+        this.name = name;
         this.cards = new ArrayList<>(cards);
     }
 
@@ -24,6 +30,30 @@ public class CardSpace {
         cards.add(card);
     }
 
+    public void addAll(Collection<Card> cards) {
+        for (Card card : cards) {
+            add(card);
+        }
+    }
+
+    public void removeAll(List<Card> cards) {
+        for (Card card : cards) {
+            subtractCard(card);
+        }
+    }
+
+    /**
+     *  Returns a list of cards from the top of the pile. Does not remove them.
+     * @param count number of cards in the list
+     * @return list of cards
+     */
+    public List<Card> peekTop(int count) {
+        return Collections.unmodifiableList(cards.subList(0, count));
+    }
+
+    public Card peekTop() {
+        return cards.get(0);
+    }
 
     public void subtractCard(Card card) {
         cards.remove(card);
@@ -37,6 +67,10 @@ public class CardSpace {
 
     public int size() {
         return cards.size();
+    }
+
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(cards);
     }
 
     @Override

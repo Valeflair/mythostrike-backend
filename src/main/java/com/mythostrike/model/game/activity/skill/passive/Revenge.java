@@ -56,7 +56,7 @@ public class Revenge extends PassiveSkill {
             Card throwCard = throwCards.get(Game.RANDOM_SEED.nextInt(throwCards.size()));
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "drop because of Revenge",
                 damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards(),
-                gameManager.getGame().getThrowPile(), List.of(throwCard));
+                gameManager.getGame().getDiscardPile(), List.of(throwCard));
             gameManager.getCardManager().moveCard(cardMoveHandle);
 
         } else {

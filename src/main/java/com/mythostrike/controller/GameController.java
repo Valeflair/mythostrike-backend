@@ -19,6 +19,7 @@ import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
+import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.LobbyList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -178,9 +179,16 @@ public class GameController {
         if (gameManager == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        List<PlayerData> playerDatas = new ArrayList<>(
-            gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull).map(PlayerData::new).toList()
-        );
+
+        List<Player> players = gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull).toList();
+        List<PlayerData> playerDatas = new ArrayList<>();
+        boolean isCurrentPlayer;
+
+        for (Player player : players) {
+            isCurrentPlayer = player.equals(gameManager.getGame().getCurrentPlayer());
+            playerDatas.add(new PlayerData(player, isCurrentPlayer));
+        }
+
         updateGame(lobbyId, playerDatas);
     }
 
@@ -209,7 +217,7 @@ public class GameController {
         for (String username : toUsernames) {
             String path = String.format("/games/%d/%s", lobbyId, username);
 
-            webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.UPDATE_GAME, message),
+            webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message),
                 "cardMovePrivate");
         }
     }
