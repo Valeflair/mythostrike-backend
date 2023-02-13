@@ -56,13 +56,13 @@ public class CardManager {
         CardPile drawDeck = cardDrawHandle.getDrawPile();
 
 
-        List<Card> drawenCards = drawDeck.peekTop(count);
+        List<Card> drawedCards = drawDeck.peekTop(count);
 
         //create a debug message
         StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",
             player.getUsername(), count, cardDrawHandle.getReason()));
 
-        for (Card card : drawenCards) {
+        for (Card card : drawedCards) {
             message.append(card.getName()).append(",");
         }
         //delete the last comma
