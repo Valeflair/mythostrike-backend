@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,9 +93,10 @@ public class AuthenticationController {
         log.debug("get Ranklist request");
 
         List<User> users = userService.getAllUsers();
-        List<User> sortedUsers = users.stream().sorted(Comparator.comparingInt(User::getRankPoints)).toList();
+        //sort users by rankPoints
+        users.sort(Comparator.comparingInt(User::getRankPoints).reversed());
 
-        return ResponseEntity.ok(sortedUsers);
+        return ResponseEntity.ok(users);
     }
 
 }
