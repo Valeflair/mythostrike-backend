@@ -27,7 +27,8 @@ public class PlayCard extends Activity {
     @Override
     public void use() {
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
-            throw new IllegalInputException("No card selected");
+            //TODO: jack is fixing this
+            //throw new IllegalInputException("No card selected");
         } else {
             gameManager.getCurrentActivity().add(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {

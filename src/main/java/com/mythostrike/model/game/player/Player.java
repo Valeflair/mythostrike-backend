@@ -69,9 +69,9 @@ public class Player {
         HashMap<String, Integer> delayedEffectCards = new HashMap<>();
         delayedEffectCards.put(Drought.NAME, 1);
         delayedEffectCards.put(Nightmare.NAME, 1);
-        handCards = new HandCards();
-        equipment = new CardSpaceRestrictedByType(equipmentCards);
-        delayedEffect = new CardSpaceRestrictedByName(delayedEffectCards);
+        handCards = new HandCards(username);
+        equipment = new CardSpaceRestrictedByType("equipment-" + username, equipmentCards);
+        delayedEffect = new CardSpaceRestrictedByName("delayedEffect-" + username, delayedEffectCards);
         activeSkills = new ArrayList<>();
         passiveSkills = new ArrayList<>();
         this.username = username;

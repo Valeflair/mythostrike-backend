@@ -7,7 +7,8 @@ import java.util.HashMap;
 public class CardSpaceRestrictedByName extends CardSpace {
     private final HashMap<String, Integer> acceptedCards;
 
-    public CardSpaceRestrictedByName(HashMap<String, Integer> acceptedCards) {
+    public CardSpaceRestrictedByName(String name, HashMap<String, Integer> acceptedCards) {
+        super(name);
         this.acceptedCards = acceptedCards;
     }
 

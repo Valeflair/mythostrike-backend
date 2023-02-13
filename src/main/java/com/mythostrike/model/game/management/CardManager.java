@@ -26,8 +26,8 @@ public class CardManager {
      */
     public void refillDrawPile() {
         CardMoveHandle cardMoveHandle = new CardMoveHandle(
-            gameManager, "refill draw pile", null, null, gameManager.getGame().getThrowPile(),
-            gameManager.getGame().getDrawPile(), gameManager.getGame().getThrowPile().getCards()
+            gameManager, "refill draw pile", null, null, gameManager.getGame().getDiscardPile(),
+            gameManager.getGame().getDrawPile(), gameManager.getGame().getDiscardPile().getCards()
         );
 
         moveCard(cardMoveHandle);
@@ -39,7 +39,7 @@ public class CardManager {
         //TODO:use judgeHandle instead judge
         Card judge = gameManager.getGame().getDrawPile().peekTop();
         moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
-            gameManager.getGame().getThrowPile(), List.of(judge)));
+            gameManager.getGame().getDiscardPile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
         try {
             sleep(1000);
@@ -61,6 +61,7 @@ public class CardManager {
         //create a debug message
         StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",
             player.getUsername(), count, cardDrawHandle.getReason()));
+
         for (Card card : drawenCards) {
             message.append(card.getName()).append(",");
         }
@@ -77,13 +78,13 @@ public class CardManager {
     public void throwCard(Player player, List<Card> cards, CardSpace fromSpace) {
 
         CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
-            "player drops card", player, null, fromSpace, gameManager.getGame().getThrowPile(), cards);
+            "player drops card", player, null, fromSpace, gameManager.getGame().getDiscardPile(), cards);
         moveCard(cardMoveHandle);
     }
 
     /**
      * Move cards specified in cardMoveHandle from 'from' space to 'to' space. Also sends a message to the frontend.
-     * @param cardMoveHandle
+     * @param cardMoveHandle the handle that contains the information of the move
      */
     public void moveCard(CardMoveHandle cardMoveHandle) {
         List<Card> cards = cardMoveHandle.getCardsToMove();
@@ -92,59 +93,10 @@ public class CardManager {
         from.removeAll(cards);
         to.addAll(cards);
 
-        String fromString = "Error";
-        CardSpace space = cardMoveHandle.getFromSpace();
-        if (cardMoveHandle.getPlayer() == null) {
-
-            if (space.equals(gameManager.getGame().getDrawPile())) {
-                fromString = "drawPile";
-            }
-            if (space.equals(gameManager.getGame().getTablePile())) {
-                fromString = "tablePile";
-            }
-            if (space.equals(gameManager.getGame().getThrowPile())) {
-                fromString = "discardPile";
-            }
-        } else {
-            Player player = cardMoveHandle.getPlayer();
-            if (space.equals(player.getHandCards())) {
-                fromString = player.getUsername();
-            }
-            if (space.equals(player.getEquipment())) {
-                fromString = "equipment-" + player.getUsername();
-            }
-            if (space.equals(player.getDelayedEffect())) {
-                fromString = "delayEffect-" + player.getUsername();
-            }
-        }
-        String toString = "Error";
-        space = cardMoveHandle.getToSpace();
-        if (cardMoveHandle.getTo() == null) {
-
-            if (space.equals(gameManager.getGame().getDrawPile())) {
-                toString = "drawPile";
-            }
-            if (space.equals(gameManager.getGame().getTablePile())) {
-                toString = "tablePile";
-            }
-            if (space.equals(gameManager.getGame().getThrowPile())) {
-                toString = "discardPile";
-            }
-        } else {
-            Player player = cardMoveHandle.getTo();
-            if (space.equals(player.getHandCards())) {
-                toString = player.getUsername();
-            }
-            if (space.equals(player.getEquipment())) {
-                toString = "equipment-" + player.getUsername();
-            }
-            if (space.equals(player.getDelayedEffect())) {
-                toString = "delayEffect-" + player.getUsername();
-            }
-        }
-        CardMoveMessage cardMoveMessage
-            = new CardMoveMessage(fromString, toString, cardMoveHandle.getCardsToMove().size(),
-                GameManager.convertCardsToInteger(cardMoveHandle.getCardsToMove()));
+        CardMoveMessage cardMoveMessage = new CardMoveMessage(
+            from.getName(), to.getName(), cardMoveHandle.getCardsToMove().size(),
+            GameManager.convertCardsToInteger(cardMoveHandle.getCardsToMove())
+        );
 
         //send private message
         List<String> affectedPlayers = new ArrayList<>();
@@ -155,7 +107,6 @@ public class CardManager {
             affectedPlayers.add(cardMoveHandle.getTo().getUsername());
         }
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
-
 
         //send public message
         cardMoveMessage.cardsId().clear();

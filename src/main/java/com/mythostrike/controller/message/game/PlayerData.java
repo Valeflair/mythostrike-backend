@@ -6,10 +6,10 @@ import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 
 public record PlayerData(String username, int cardCount, boolean isAlive,
-                         Champion champion, int maxHp, int currentHp, Identity identity) {
-    public PlayerData(Player player) {
+                         Champion champion, int maxHp, int currentHp, Identity identity, boolean isCurrentPlayer) {
+    public PlayerData(Player player, boolean isCurrentPlayer) {
         this(player.getUsername(), player.getHandCards().size(), player.isAlive(),
-            player.getChampion(), player.getMaxHp(), player.getCurrentHp(), player.getIdentity());
+            player.getChampion(), player.getMaxHp(), player.getCurrentHp(), player.getIdentity(), isCurrentPlayer);
     }
 
     @JsonGetter("identity")

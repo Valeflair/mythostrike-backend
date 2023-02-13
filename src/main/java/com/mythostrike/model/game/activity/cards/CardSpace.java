@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.game.activity.Card;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,11 +13,16 @@ public class CardSpace {
 
     protected final List<Card> cards;
 
-    public CardSpace() {
+    @Getter
+    private final String name;
+
+    public CardSpace(String name) {
+        this.name = name;
         cards = new ArrayList<>();
     }
 
-    public CardSpace(List<Card> cards) {
+    public CardSpace(String name, List<Card> cards) {
+        this.name = name;
         this.cards = new ArrayList<>(cards);
     }
 

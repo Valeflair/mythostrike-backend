@@ -7,11 +7,12 @@ import java.util.List;
 
 public class CardPile extends CardSpace {
 
-    public CardPile() {
+    public CardPile(String name) {
+        super(name);
     }
 
-    public CardPile(List<Card> cards) {
-        super(cards);
+    public CardPile(String name, List<Card> cards) {
+        super(name, cards);
     }
 
     public void add(Card card, boolean onTop) {
