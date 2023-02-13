@@ -102,13 +102,24 @@ public class PlayerManager {
 
     public void killPlayer(Player player) {
         //TODO:update information to frontend
-        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "die",
-            player, null, player.getHandCards(), gameManager.getGame().getTablePile()));
-        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager,
-            "die", player, null, player.getEquipment(), gameManager.getGame().getTablePile()));
-        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "die",
-            player, null, player.getDelayedEffect(), gameManager.getGame().getTablePile()));
+        //move all cards from player to table pile
+        gameManager.getCardManager().moveCard(
+            new CardMoveHandle(gameManager, "die", player, null, player.getHandCards(),
+                gameManager.getGame().getTablePile(), player.getHandCards().getCards())
+        );
+
+        gameManager.getCardManager().moveCard(
+            new CardMoveHandle(gameManager, "die", player, null, player.getEquipment(),
+                gameManager.getGame().getTablePile(), player.getEquipment().getCards())
+        );
+
+        gameManager.getCardManager().moveCard(
+            new CardMoveHandle(gameManager, "die", player, null, player.getDelayedEffect(),
+                gameManager.getGame().getTablePile(), player.getDelayedEffect().getCards())
+        );
+
         gameManager.getGame().getAlivePlayers().remove(player);
+
         if (gameManager.getGame().getCurrentPlayer().equals(player)) {
             gameManager.setPhase(Phase.ROUND_START);
         }

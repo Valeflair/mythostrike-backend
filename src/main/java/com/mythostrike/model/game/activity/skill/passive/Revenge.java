@@ -13,7 +13,6 @@ import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Revenge extends PassiveSkill {
     public static final String NAME = "Revenge";
@@ -56,12 +55,12 @@ public class Revenge extends PassiveSkill {
             List<Card> throwCards = new ArrayList<>(damageHandle.getPlayer().getHandCards().getCards());
             Card throwCard = throwCards.get(Game.RANDOM_SEED.nextInt(throwCards.size()));
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "drop because of Revenge",
-                    damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards()
-                    ,gameManager.getGame().getThrowPile());
-            cardMoveHandle.setMoveCards(List.of(throwCard));
+                damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards(),
+                gameManager.getGame().getThrowPile(), List.of(throwCard));
             gameManager.getCardManager().moveCard(cardMoveHandle);
 
         } else {
+            //TODO: was hier los? für was damageHandleRevenge?
             DamageHandle damageHandleRevenge = new DamageHandle(gameManager, "damage by Revenge",
                     player, damageHandle.getPlayer());
             gameManager.getPlayerManager().applyDamage(damageHandle);

@@ -9,12 +9,13 @@ import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeCardDraw;
 import com.mythostrike.model.game.player.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class CardManager {
-    GameManager gameManager;
+    private final GameManager gameManager;
 
     public CardManager(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -36,7 +37,7 @@ public class CardManager {
         //TODO:use judgeHandle instead judge
         Card judge = gameManager.getGame().getDrawPile().subtractCard(0);
         moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
-            gameManager.getGame().getThrowPile()));
+            gameManager.getGame().getThrowPile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
         try {
             sleep(1000);
@@ -51,29 +52,38 @@ public class CardManager {
         Player player = cardDrawHandle.getPlayer();
         int count = cardDrawHandle.getCount();
         CardPile drawDeck = cardDrawHandle.getDrawPile();
+        List<Card> drawenCards = new ArrayList<>();
 
-        StringBuilder debug = new StringBuilder(
-            "Player " + player.getUsername() + " draws " + count + "card(s) because of " + cardDrawHandle.getReason()
-                + ", they are :");
+        StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",
+            player.getUsername(), count, cardDrawHandle.getReason()));
+
+
         for (int i = 0; i < cardDrawHandle.getCount(); i++) {
             Card card = drawDeck.subtractCard(0);
             player.getHandCards().add(card);
-            debug.append(card.getName()).append(",");
+            drawenCards.add(card);
+            message.append(card.getName()).append(",");
         }
-        debug.delete(debug.length() - 1, debug.length() - 1);
-        gameManager.debug(debug.toString());
+
+        //delete the last comma
+        message.delete(message.length() - 1, message.length() - 1);
+
+        gameManager.debug(message.toString());
+
+        CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
+            "player draws cards", player, null, drawDeck, player.getHandCards(), drawenCards);
+        moveCard(cardMoveHandle);
     }
 
     public void throwCard(Player player, List<Card> cards, CardSpace fromSpace) {
 
         CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
-            "player drops card", player, null, fromSpace, gameManager.getGame().getThrowPile());
+            "player drops card", player, null, fromSpace, gameManager.getGame().getThrowPile(), cards);
         moveCard(cardMoveHandle);
-
     }
 
     public void moveCard(CardMoveHandle cardMoveHandle) {
-        List<Card> cards = cardMoveHandle.getMoveCards();
+        List<Card> cards = cardMoveHandle.getCardsToMove();
         CardSpace from = cardMoveHandle.getFromSpace();
         CardSpace to = cardMoveHandle.getToSpace();
         from.getCards().removeAll(cards);
@@ -129,10 +139,23 @@ public class CardManager {
                 toString = "delayEffect-" + player.getUsername();
             }
         }
-        ///TODO update it DEPENDS ON who can see the cards and who doesn't
-        CardMoveMessage cardMoveMessage =
-            new CardMoveMessage(fromString, toString, cardMoveHandle.getMoveCards().size(),
-                GameManager.convertCardsToInteger(cardMoveHandle.getMoveCards()));
+        CardMoveMessage cardMoveMessage
+            = new CardMoveMessage(fromString, toString, cardMoveHandle.getCardsToMove().size(),
+                GameManager.convertCardsToInteger(cardMoveHandle.getCardsToMove()));
+
+        //send private message
+        List<String> affectedPlayers = new ArrayList<>();
+        if (cardMoveHandle.getPlayer() != null) {
+            affectedPlayers.add(cardMoveHandle.getPlayer().getUsername());
+        }
+        if (cardMoveHandle.getTo() != null) {
+            affectedPlayers.add(cardMoveHandle.getTo().getUsername());
+        }
+        gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
+
+
+        //send public message
+        cardMoveMessage.cardsId().clear();
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
     }
 

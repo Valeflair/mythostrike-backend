@@ -247,7 +247,7 @@ public class GameManager {
         }
         List<Card> cards = throwDeck.getCards();
         CardMoveHandle cardMoveHandle = new CardMoveHandle(this,
-                "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck);
+                "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck, cards);
         cardManager.moveCard(cardMoveHandle);
         debug(hint.toString());
     }

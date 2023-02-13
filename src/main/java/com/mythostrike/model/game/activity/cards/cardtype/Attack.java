@@ -105,9 +105,12 @@ public class Attack extends Card {
             if (pickRequest.getSelectedPlayers() != null
                 && !pickRequest.getSelectedPlayers().isEmpty()
                 && !pickRequest.isClickedCancel()) {
+
                 cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                    null, player.getHandCards(), gameManager.getGame().getTablePile());
+                    null, player.getHandCards(), gameManager.getGame().getTablePile(),
+                    List.of(cardUseHandle.getCard()));
                 playOut();
+
                 List<Player> targets = pickRequest.getSelectedPlayers();
                 cardUseHandle.setOpponents(targets);
                 attacksPlayer(targets.get(0));
@@ -155,5 +158,6 @@ public class Attack extends Card {
             attackHandle.getDefendAskHandle().getAmount(), attackHandle.getDefendAskHandle().getAmount(),
             0, 0, attackHandle.getDefendAskHandle().getReason(),
             attackHandle.getDefendAskHandle().isOptional(), true);
+        //TODO: was hier noch machen?
     }
 }

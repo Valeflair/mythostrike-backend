@@ -255,6 +255,7 @@ public class GameController {
                 return;
             }
             gameManager.allPlayersConnected();
+            updateGame(lobbyId);
         }
     }
 }

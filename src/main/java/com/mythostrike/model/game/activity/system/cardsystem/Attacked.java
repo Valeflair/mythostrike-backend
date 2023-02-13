@@ -38,8 +38,7 @@ public class Attacked extends Activity {
                 attackHandle.getExtraDamage() + 1, DamageType.NORMAL);
         } else {
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays defend", defender, null,
-                defender.getHandCards(), gameManager.getGame().getTablePile());
-            cardMoveHandle.setMoveCards(pickRequest.getSelectedCards());
+                defender.getHandCards(), gameManager.getGame().getTablePile(), pickRequest.getSelectedCards());
             gameManager.getCardManager().moveCard(cardMoveHandle);
         }
     }
