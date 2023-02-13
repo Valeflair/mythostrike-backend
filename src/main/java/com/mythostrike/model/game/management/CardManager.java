@@ -11,6 +11,8 @@ import com.mythostrike.model.game.player.Player;
 
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class CardManager {
     GameManager gameManager;
 
@@ -24,6 +26,7 @@ public class CardManager {
         gameManager.getGame().setDrawPile(gameManager.getGame().getThrowPile());
         gameManager.getGame().setThrowPile(dummy);
         gameManager.getGame().getDrawPile().shuffle();
+        gameManager.output("Discard pile is shuffled");
         /*CardMoveMessage
         gameManager.getGameController().updateGame(gameManager.getLobbyId(),);*/
         //TODO update it to frontend
@@ -31,7 +34,16 @@ public class CardManager {
 
     public Card judge() {
         //TODO:use judgeHandle instead judge
-        return gameManager.getGame().getDrawPile().subtractCard(0);
+        Card judge = gameManager.getGame().getDrawPile().subtractCard(0);
+        moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
+            gameManager.getGame().getThrowPile()));
+        //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return judge;
     }
 
     public void drawCard(CardDrawHandle cardDrawHandle) {
