@@ -13,6 +13,8 @@ import java.util.Map;
 public final class LobbyList {
     private static LobbyList instance;
     private final Map<Integer, Lobby> lobbyMap;
+
+    private final Map<Integer, Integer> userInGame;
     private int idCounter;
 
     /**
@@ -22,6 +24,7 @@ public final class LobbyList {
     private LobbyList() {
         idCounter = 1;
         this.lobbyMap = new HashMap<>();
+        this.userInGame = new HashMap<>();
 
     }
 
@@ -35,6 +38,7 @@ public final class LobbyList {
     public Lobby createLobby(User owner, Mode mode) {
         Lobby lobby = new Lobby(idCounter, mode, owner);
         lobbyMap.put(idCounter, lobby);
+        userInGame.put(idCounter, 0);
         idCounter++;
         return lobby;
     }
@@ -49,6 +53,14 @@ public final class LobbyList {
             lobbiesOverview.add(new LobbyOverview(lobby));
         }
         return lobbiesOverview;
+    }
+
+    public void increaseUserInGame(int id) {
+        userInGame.put(id, userInGame.get(id) + 1);
+    }
+
+    public boolean isInGameFull(int id) {
+        return userInGame.get(id) >= lobbyMap.get(id).getNumberHumans();
     }
 
     @Nullable

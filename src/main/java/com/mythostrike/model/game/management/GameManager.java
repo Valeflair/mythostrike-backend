@@ -1,7 +1,6 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
-import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
@@ -104,7 +103,10 @@ public class GameManager {
     }
 
     //----------------GameRun----------------
-    public void entTurn() {
+    public void endTurn(String username) {
+        if (!game.getCurrentPlayer().getUsername().equals(username)) {
+            throw new IllegalInputException("Player " + username + " is not the current player");
+        }
         if (currentActivity.peek() == null) {
             return;
         }
@@ -123,14 +125,30 @@ public class GameManager {
         }
     }
     //----------------GameStart----------------
+
+    /**
+     * has to be called when the lobby owner starts the game.
+     * it starts the ChampionSelectionPhase and sends to each player the list of champions to pick from.
+     * The game isn't started until all players have picked their champions.
+     * When all players subscribed to the game websocket the methode allPlayersConnected() is called and from there
+     */
     public void gameStart() {
 
         List<Player> players = game.getAlivePlayers();
+        //bot needs the gameManager to be set
         players.forEach(player -> player.initialize(this));
         //TODO:unterschiedliche dinge an frontend schicken
-        //identityDistribution(players);
         //TODO:extra panel machen
         selectChampionPhase(players);
+    }
+
+    /**
+     * has to be called when all players are connected to the game websocket.
+     * starts the actual game procedure and distributes the cards to the players.
+     * After that the first turn is started and to the first player a highlight message is sent.
+     */
+    public void allPlayersConnected() {
+        cardDistribution();
     }
 
     private void selectChampionPhase(List<Player> players) {
@@ -254,11 +272,13 @@ public class GameManager {
 
     public void selectChampion(String playerName, Champion champion) {
         playerManager.initializeChampionForPlayer(champion, getPlayerByName(playerName));
-
-        //if all players selected a champion, start game
-        if (game.getAlivePlayers().stream().map(Player::getChampion).allMatch(Objects::nonNull)) {
-            cardDistribution();
+        if (game.getAlivePlayers().stream().allMatch(player -> player.getChampion() != null)) {
+            log.debug("All players have selected their champion");
         }
+
+        //cardDistribution() is started when all players connected to the inGame (/games/{id}) Websocket
+        //the methode handleSessionSubscribeEvent in GameController is called when a client connects to the websocket.
+        //If all clients are connected, then the methode cardDistribution() is called.
     }
 
     public void selectCards(String playerName, List<Card> cards) {
@@ -282,7 +302,9 @@ public class GameManager {
         }
     }
 
-    public void selectSkill(String playerName, ActiveSkill skill) {
+    public void selectSkill(String playerName, int skillId) {
+        Player player = getPlayerByName(playerName);
+        ActiveSkill skill = player.getChampion().getActiveSkills().get(skillId);
         skill.activate();
     }
 

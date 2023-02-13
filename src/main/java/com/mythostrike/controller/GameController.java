@@ -142,6 +142,8 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
 
+        gameManager.selectSkill(principal.getName(), request.skillId());
+
 
         updateGame(request.lobbyId());
         return ResponseEntity
@@ -152,6 +154,13 @@ public class GameController {
     public ResponseEntity<Void> endTurn(Principal principal, @RequestBody LobbyIdRequest request) {
         log.debug("end turn request in '{}' from '{}'", request.lobbyId(), principal.getName());
 
+        //get objects from REST data
+        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
+        if (gameManager == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+
+        gameManager.endTurn(principal.getName());
 
         updateGame(request.lobbyId());
         return ResponseEntity
@@ -233,7 +242,19 @@ public class GameController {
         String idAsString = matcher.group(1);
         int lobbyId = Integer.parseInt(idAsString);
 
-        //send and game update to client
+        //send an game update to client
         updateGame(lobbyId);
+        lobbyList.increaseUserInGame(lobbyId);
+
+        //when all players are connected start the normal game procedure
+        if (lobbyList.isInGameFull(lobbyId)) {
+            log.debug("all players are connected");
+            GameManager gameManager = lobbyList.getGameManager(lobbyId);
+            if (gameManager == null) {
+                log.error("gameManager is null, but enough players are in game");
+                return;
+            }
+            gameManager.allPlayersConnected();
+        }
     }
 }
