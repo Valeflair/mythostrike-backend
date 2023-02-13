@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.management;
 
 
+import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -108,7 +109,7 @@ public class PlayerManager {
             player, null, player.getDelayedEffect(), gameManager.getGame().getTablePile()));
         gameManager.getGame().getAlivePlayers().remove(player);
         if (gameManager.getGame().getCurrentPlayer().equals(player)) {
-            //gameManager.setPhase(Phase.ROUNDSTART);
+            gameManager.setPhase(Phase.ROUND_START);
         }
 
         //TODO:implement

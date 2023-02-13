@@ -121,6 +121,7 @@ public class CardManager {
         CardMoveMessage cardMoveMessage =
             new CardMoveMessage(fromString, toString, cardMoveHandle.getMoveCards().size(),
                 GameManager.convertCardsToInteger(cardMoveHandle.getMoveCards()));
+        gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
     }
 
 }

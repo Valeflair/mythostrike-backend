@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
+import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
@@ -10,6 +11,7 @@ import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.system.NextPhase;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.activity.system.PlayCard;
@@ -197,15 +199,21 @@ public class GameManager {
     }
 
     public void cleanTable() {
+        if (game.getTablePile().getCards().isEmpty()) {
+            return;
+        }
         StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
         CardPile throwDeck = game.getThrowPile();
         CardPile tableDeck = game.getTablePile();
         for (Card card : tableDeck.getCards()) {
             hint.append(card.toString()).append(",");
 
-            throwDeck.getCards().add(card);
+
         }
-        tableDeck.getCards().clear();
+        List<Card> cards = throwDeck.getCards();
+        CardMoveHandle cardMoveHandle = new CardMoveHandle(this,
+                "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck);
+        cardManager.moveCard(cardMoveHandle);
         debug(hint.toString());
     }
 
@@ -250,7 +258,7 @@ public class GameManager {
             proceed();
         }
     }
-    
+
     public void selectSkill(String playerName, ActiveSkill skill) {
         skill.activate();
     }
