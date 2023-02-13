@@ -185,8 +185,8 @@ public class GameManager {
         //initial Cards for player
         output("Game Started, Player has following champions:");
         for (Player player : players) {
-            output(player.getUsername() + " as Seat " + players.indexOf(player) + " has "
-                + player.getChampion().getName() + " with skill:");
+            output(String.format("%s at Seat %d has %s with skills: %s", player.getUsername(), players.indexOf(player),
+                player.getChampion().getName(), player.getChampion().getActiveSkills()));
 
             cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
                 player, CARD_COUNT_START_UP, game.getDrawPile()));

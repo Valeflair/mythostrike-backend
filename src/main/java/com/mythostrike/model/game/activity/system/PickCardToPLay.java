@@ -32,10 +32,18 @@ public class PickCardToPLay extends Activity {
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> playableCards = getPlayableCards(player);
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);
-        HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
-            null, 1, 1, 0, 0, "Pick a Card to play", true, false);
-        PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
+        /*HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
+            null, 1, 1, 0, 0, "Pick a Card to play", true, false);*/
+        
+        HighlightMessage highlightMessage = HighlightMessage.builder()
+            .cardsId(cardIds)
+            .minCard(1)
+            .maxCard(1)
+            .reason("Pick a Card to play")
+            .optional(true)
+            .build();
 
+        PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
         PlayCard playCard = new PlayCard(gameManager, pickRequest);
         gameManager.queueActivity(playCard);
         gameManager.queueActivity(pickRequest);

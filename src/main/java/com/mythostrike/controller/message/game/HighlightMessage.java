@@ -1,7 +1,6 @@
 package com.mythostrike.controller.message.game;
 
 import lombok.Builder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public record HighlightMessage(List<Integer> cardsId,
         } else {
             this.skillsId = new ArrayList<>(skillsId);
         }
-        
+
         this.minCard = minCard;
         this.maxCard = maxCard;
         this.minPlayer = minPlayer;
@@ -44,5 +43,15 @@ public record HighlightMessage(List<Integer> cardsId,
         this.reason = reason;
         this.optional = optional;
         this.needsConfirm = needsConfirm;
+    }
+
+    //make sure the lists are even with the builder not null
+    public static class HighlightMessageBuilder {
+        public HighlightMessageBuilder builder() {
+            this.cardsId = new ArrayList<>();
+            this.players = new ArrayList<>();
+            this.skillsId = new ArrayList<>();
+            return this;
+        }
     }
 }
