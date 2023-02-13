@@ -128,9 +128,9 @@ public final class CardList {
         return Collections.unmodifiableList(cards);
     }
 
-    public CardPile getFullCardDeck() {
+    public static CardPile getFullCardDeck() {
         CardPile cardPile = new CardPile();
-        for (Card card : cards) {
+        for (Card card : instance.cards) {
             cardPile.add(card.deepCopy());
         }
         return cardPile;

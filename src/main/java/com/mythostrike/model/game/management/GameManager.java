@@ -27,12 +27,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 
 @Slf4j
 public class GameManager {
@@ -89,6 +84,23 @@ public class GameManager {
             playerNames.add(player.getUsername());
         }
         return playerNames;
+    }
+
+    public List<Player> convertUserNameToPlayers(List<String> playerNames) {
+        List<Player> players = new ArrayList<>();
+        for (String name : playerNames) {
+            players.add(game.getAllPlayers().stream().filter(player -> player.getUsername().equals(name)).findFirst().orElse(null));
+        }
+        return players;
+    }
+
+    public List<Card> convertIdToCards(List<Integer> cardIds) {
+        List<Card> cards = new ArrayList<>();
+        for (Integer id : cardIds) {
+            Optional<Card> find = game.getAllCards().getCards().stream().filter(card -> card.getId() == (id)).findFirst();
+            find.ifPresent(cards::add);
+        }
+        return cards;
     }
 
     //----------------GameRun----------------
@@ -233,7 +245,11 @@ public class GameManager {
     public void highlightPickRequest(PickRequest pickRequest) {
         lastPickRequest = pickRequest;
         proceeding = false;
-        gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
+        if (pickRequest.getPlayer() instanceof Bot bot) {
+            bot.highlight(pickRequest.getHighlightMessage());
+        } else {
+            gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
+        }
     }
 
     public void selectChampion(String playerName, Champion champion) {
@@ -254,6 +270,7 @@ public class GameManager {
         }
     }
 
+    //TODO: WICHTIG!!! was wenn der spieler gleichzeitig karte und spieler auswählen soll?
     public void selectPlayers(String playerName, List<String> targetUsernames) {
         Player player = getPlayerByName(playerName);
 

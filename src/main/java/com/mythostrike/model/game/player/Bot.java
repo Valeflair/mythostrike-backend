@@ -3,8 +3,16 @@ package com.mythostrike.model.game.player;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.model.game.Game;
+import com.mythostrike.model.game.activity.ActiveSkill;
+import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Getter
 public class Bot extends Player {
@@ -32,7 +40,56 @@ public class Bot extends Player {
     }
 
     public void highlight(HighlightMessage message) {
-        //TODO: what to do?
-    }
+        //it does random shit
+        List<Player> players;
+        List<Card> cards;
+        List<ActiveSkill> skills;
 
+        if (message.optional()) {
+            gameManager.cancelRequest(getUsername());
+            return;
+        }
+
+
+        if (message.players() != null && message.minPlayer() > 0) {
+            int min = message.minPlayer();
+            int max = message.maxPlayer();
+            List<Player> playerPickList = gameManager.convertUserNameToPlayers(message.players());
+            if (playerPickList.isEmpty() || max == 0) {
+                players = new ArrayList<>();
+            } else {
+                int n = Math.min(playerPickList.size(), max);
+                n = Math.max(min, n);
+                n = Game.RANDOM_SEED.nextInt(n + 1);
+                List<Player> result = new ArrayList<>(playerPickList);
+                Collections.shuffle(result, Game.RANDOM_SEED);
+                players = result.subList(0, n);
+            }
+            gameManager.selectPlayers(getUsername(), GameManager.convertPlayersToUsername(players));
+            if (message.needsConfirm()) {
+                gameManager.cancelRequest(getUsername());
+            }
+            return;
+        }
+        if (message.cardsId() != null && message.minCard() > 0) {
+            int min = message.minCard();
+            int max = message.maxCard();
+            List<Card> cardPickList = gameManager.convertIdToCards(message.cardsId());
+            if (cardPickList.isEmpty() || max == 0) {
+                cards = new ArrayList<>();
+            } else {
+                int n = Math.min(cardPickList.size(), max);
+                n = Math.max(min, n);
+                n = Game.RANDOM_SEED.nextInt(n + 1);
+                List<Card> result = new ArrayList<>(cardPickList);
+                Collections.shuffle(result, Game.RANDOM_SEED);
+                cards = result.subList(0, n);
+            }
+            gameManager.selectCards(getUsername(), cards);
+            if (message.needsConfirm()) {
+                gameManager.cancelRequest(getUsername());
+            }
+            return;
+        }
+    }
 }

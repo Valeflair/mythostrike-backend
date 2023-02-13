@@ -27,7 +27,7 @@ public class Game {
     public final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
-    private final CardList cardList;
+    private final CardPile allCards;
     private final Mode mode;
     private String console;
     @Setter
@@ -43,8 +43,9 @@ public class Game {
         this.mode = mode;
         this.gameManager = gameManager;
         alivePlayers = new ArrayList<>(allPlayers);
-        cardList = CardList.getCardList();
-        drawPile = new CardPile(cardList.getCards());
+
+        drawPile = CardList.getFullCardDeck();
+        allCards = new CardPile(new ArrayList<>(drawPile.getCards()));
         tablePile = new CardPile();
         throwPile = new CardPile();
     }
