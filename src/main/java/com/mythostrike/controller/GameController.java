@@ -35,6 +35,7 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,6 @@ public class GameController {
 
         gameManager.selectChampion(principal.getName(), champion);
 
-        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -179,7 +179,7 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
         List<PlayerData> playerDatas = new ArrayList<>(
-            gameManager.getGame().getAllPlayers().stream().map(PlayerData::new).toList()
+            gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull).map(PlayerData::new).toList()
         );
         updateGame(lobbyId, playerDatas);
     }

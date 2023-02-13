@@ -74,6 +74,7 @@ public class PlayerManager {
     public void initializeChampionForPlayer(Champion champion, Player player) {
         player.setChampion(champion);
         player.setMaxHp(champion.getMaxHp());
+        player.increaseCurrentHp(champion.getMaxHp());
         for (PassiveSkill passiveSkill : champion.getPassiveSkills()) {
             addSkillToPlayer(player, passiveSkill);
         }
