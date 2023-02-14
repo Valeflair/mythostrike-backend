@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.mythostrike.model.game.management.GameManager;
+import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 
 import java.util.List;
@@ -11,8 +13,8 @@ import java.util.List;
 
 @JsonFormat(shape = Shape.OBJECT)
 public enum Identity {
-    TEAM_RED("Team Red", false, true),
-    TEAM_BLUE("Team Blue", false, true),
+    TEAM_RED("Team Red", false, false),
+    TEAM_BLUE("Team Blue", false, false),
     GOD_KING("God King", false, true),
     GENERAL("General", true, false),
     REBEL("Rebel", true, false),
@@ -33,10 +35,12 @@ public enum Identity {
         GENERAL.hasToDie = List.of(REBEL, RENEGADE);
 
         REBEL.hasToSurvive = List.of(REBEL);
-        REBEL.hasToDie = List.of(GOD_KING, GENERAL, RENEGADE);
+        REBEL.hasToDie = List.of(GOD_KING);
 
         RENEGADE.hasToSurvive = List.of(RENEGADE);
         RENEGADE.hasToDie = List.of(GOD_KING, GENERAL, REBEL);
+
+        NONE.hasToDie = List.of(NONE);
     }
 
     @Getter
@@ -55,10 +59,46 @@ public enum Identity {
         this.playerNeedsToBeAlive = playerNeedsToBeAlive;
     }
 
-    //TODO: Implement this method
-    /*public boolean hasWon(Player player , GameManager gameManager) {
+    public boolean hasWon(Player player , GameManager gameManager) {
+        //check if player is alive if specified
+        if (playerNeedsToBeAlive && !player.isAlive()) {
+            return false;
+        }
+        //check if all identites that have to survive are alive
+        if (hasToSurvive != null) {
+            for (Identity identityToSurvive : hasToSurvive) {
+                List<Player> alivePlayers = gameManager.getGame().getAlivePlayers();
 
-    }*/
+                if (isIdentityDead(identityToSurvive, alivePlayers)) return false;
+            }
+        }
+        //check if all identites that have to die are dead
+        if (hasToDie != null) {
+            for (Identity identityToDie : hasToDie) {
+                List<Player> alivePlayers = gameManager.getGame().getAlivePlayers();
+
+                if (isIdentityAlive(player, identityToDie, alivePlayers)) return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isIdentityAlive(Player player, Identity identityToDie, List<Player> alivePlayers) {
+        for (Player alivePlayer : alivePlayers) {
+            //check if alivePlayer is not the player himself, because sometimes players also have to kill
+            //everyone with the same identity e.g. Free for all with Identity NONE
+            if (!alivePlayer.equals(player) && alivePlayer.getIdentity().equals(identityToDie)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isIdentityDead(Identity identityToSurvive, List<Player> alivePlayers) {
+        return alivePlayers.stream().noneMatch(
+            alivePlayer -> alivePlayer.getIdentity().equals(identityToSurvive)
+        );
+    }
 
     @Override
     public String toString() {

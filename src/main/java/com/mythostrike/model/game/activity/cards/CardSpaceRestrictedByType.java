@@ -3,13 +3,14 @@ package com.mythostrike.model.game.activity.cards;
 import com.mythostrike.model.game.activity.Card;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CardSpaceRestrictedByType extends CardSpace {
     private final HashMap<CardType, Integer> acceptedCards;
 
-    public CardSpaceRestrictedByType(String name, HashMap<CardType, Integer> acceptedCards) {
-        super(name);
-        this.acceptedCards = acceptedCards;
+    public CardSpaceRestrictedByType(CardSpaceType type, String owner, Map<CardType, Integer> acceptedCards) {
+        super(type, String.format("%s-%s", type.getName(), owner));
+        this.acceptedCards = new HashMap<>(acceptedCards);
     }
 
     @Override

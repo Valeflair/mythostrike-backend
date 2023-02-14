@@ -8,12 +8,12 @@ import java.util.Random;
 
 public class CardPile extends CardSpace {
 
-    public CardPile(String name) {
-        super(name);
+    public CardPile(CardSpaceType type) {
+        super(type, type.getName());
     }
 
-    public CardPile(String name, List<Card> cards) {
-        super(name, cards);
+    public CardPile(CardSpaceType type, List<Card> cards) {
+        super(type, type.getName(), cards);
     }
 
     public void add(Card card, boolean onTop) {

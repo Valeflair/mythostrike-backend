@@ -17,12 +17,17 @@ public class CardSpace {
     @Getter
     private final String name;
 
-    public CardSpace(String name) {
+    @Getter
+    private final CardSpaceType type;
+
+    public CardSpace(CardSpaceType type, String name) {
+        this.type = type;
         this.name = name;
         cards = new ArrayList<>();
     }
 
-    public CardSpace(String name, List<Card> cards) {
+    public CardSpace(CardSpaceType type, String name, List<Card> cards) {
+        this.type = type;
         this.name = name;
         this.cards = new ArrayList<>(cards);
     }
