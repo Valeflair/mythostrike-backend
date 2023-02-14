@@ -7,7 +7,6 @@ import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.AttackHandle;
-import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
@@ -28,7 +27,8 @@ public class Attack extends Card {
     public static final String NAME = Attack.class.getSimpleName();
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASIC_CARD;
-    public static final CardFilter FILTER = new CardFilter("Attack");
+    public static final CardFilter ATTACK_FILTER = new CardFilter("Attack");
+    public static final CardFilter DEFEND_FILTER = new CardFilter("Defend");
 
     private CardUseHandle cardUseHandle;
     private PickRequest pickRequest;
@@ -136,6 +136,9 @@ public class Attack extends Card {
             }
 
         } else {
+            if (targets == null || targets.isEmpty()) {
+                return;
+            }
             if (pickRequest.getPlayer().equals(cardUseHandle.getOpponents().get(0))) {
                 Player opponent = cardUseHandle.getOpponents().get(0);
                 if (pickRequest.getSelectedCards() != null) {
@@ -172,7 +175,7 @@ public class Attack extends Card {
         if (attackHandle.isPrevented()) {
             return;
         }
-        List<Integer> cardIds = GameManager.convertCardsToInteger(FILTER.filter(opponent.getHandCards().getCards()));
+        List<Integer> cardIds = GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
         HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null,
             attackHandle.getDefendAskHandle().getAmount(), attackHandle.getDefendAskHandle().getAmount(),
             0, 0, attackHandle.getDefendAskHandle().getReason(),
