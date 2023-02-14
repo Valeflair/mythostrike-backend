@@ -13,10 +13,7 @@ import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.system.NextPhase;
-import com.mythostrike.model.game.activity.system.PickCardToPLay;
-import com.mythostrike.model.game.activity.system.PickRequest;
-import com.mythostrike.model.game.activity.system.PlayCard;
+import com.mythostrike.model.game.activity.system.*;
 import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
 import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Champion;
@@ -143,9 +140,9 @@ public class GameManager {
 
         List<Player> players = game.getAlivePlayers();
         //bot needs the gameManager to be set
+        CheckDying checkDying = new CheckDying();
         players.forEach(player -> player.initialize(this));
-        //TODO:unterschiedliche dinge an frontend schicken
-        //TODO:extra panel machen
+        players.forEach(player -> checkDying.register(eventManager, player));
         selectChampionPhase(players);
     }
 
