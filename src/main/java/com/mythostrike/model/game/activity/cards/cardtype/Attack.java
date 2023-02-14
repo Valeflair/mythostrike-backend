@@ -137,6 +137,7 @@ public class Attack extends Card {
 
         } else {
             if (targets == null || targets.isEmpty()) {
+                end = true;
                 return;
             }
             if (pickRequest.getPlayer().equals(cardUseHandle.getOpponents().get(0))) {
@@ -155,7 +156,6 @@ public class Attack extends Card {
                 }
                 cardUseHandle.getOpponents().remove(0);
             }
-
         }
     }
 
