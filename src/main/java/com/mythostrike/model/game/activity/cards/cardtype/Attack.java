@@ -32,7 +32,7 @@ public class Attack extends Card {
     public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
 
     private CardUseHandle cardUseHandle;
-    private PickRequest pickRequest;
+
     private AttackHandle attackHandle;
 
     private List<Player> targets;
@@ -61,6 +61,7 @@ public class Attack extends Card {
         if (!targets.isEmpty() && !player.isRestricted(NAME)) {
             this.cardUseHandle = cardUseHandle;
             playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), 1, 1);
+
             return true;
         }
         return false;

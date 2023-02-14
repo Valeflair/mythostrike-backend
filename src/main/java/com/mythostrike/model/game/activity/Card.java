@@ -6,8 +6,10 @@ import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 
@@ -15,7 +17,8 @@ public abstract class Card extends Activity {
     protected CardType type;
     protected CardSymbol symbol;
     protected int point;
-
+    @Setter
+    protected PickRequest pickRequest;
     protected CardMoveHandle cardMoveHandle;
     protected GameManager gameManager;
     @Getter
