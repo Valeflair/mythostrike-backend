@@ -36,6 +36,7 @@ import java.util.concurrent.BlockingQueue;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -63,11 +64,7 @@ public class GameRunIntegrationTest {
     }
 
     @Test
-    void verifyGreetingIsReceived() throws Exception {
-
-        BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(1);
-
-
+    void verifyLobbyWebSocketConnection() throws Exception {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSession session = webSocketStompClient
@@ -88,16 +85,49 @@ public class GameRunIntegrationTest {
 
 
         //subscribe to the lobby
-        StompFrameHandler frameHandler = new SimpleStompFrameHandler<LobbyData>(LobbyData.class);
+        SimpleStompFrameHandler<LobbyData> frameHandler = new SimpleStompFrameHandler<LobbyData>(LobbyData.class);
         session.subscribe("/lobbies/1", frameHandler);
 
         //create the lobby and change the mode
         lobbyController.create(testUserPrincipal, new CreateLobbyRequest(1));
         lobbyController.changeMode(testUserPrincipal, new ChangeModeRequest(1, 1));
 
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
+    }
+
+    @Test
+    void startGame() throws Exception {
+        webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        StompSession session = webSocketStompClient
+            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {})
+            .get(1, SECONDS);
+
+
+        //generate a test user and lobby to compare with.
+        Principal testUserPrincipal = new SimplePrincipal("TestUser");
+        try {
+            authenticationController.register(new UserAuthRequest(testUserPrincipal.getName(), "TestPassword"));
+        } catch (ResponseStatusException e) {
+            System.out.println("User already exists, ignoring");
+        }
+        User testUser = userService.getUser(testUserPrincipal.getName());
+        Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
+
+
+
+        //subscribe to the lobby
+        SimpleStompFrameHandler<LobbyData> frameHandler = new SimpleStompFrameHandler<LobbyData>(LobbyData.class);
+        session.subscribe("/lobbies/1", frameHandler);
+
+        //create the lobby and change the mode
+        lobbyController.create(testUserPrincipal, new CreateLobbyRequest(1));
+        lobbyController.changeMode(testUserPrincipal, new ChangeModeRequest(1, 1));
 
         await()
-            .atMost(30, SECONDS)
-            .untilAsserted(() -> assertEquals(false, blockingQueue.isEmpty()));
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
     }
 }

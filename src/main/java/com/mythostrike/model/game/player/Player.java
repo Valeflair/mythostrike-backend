@@ -6,6 +6,7 @@ import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.CardSpaceRestrictedByName;
 import com.mythostrike.model.game.activity.cards.CardSpaceRestrictedByType;
+import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.cards.HandCards;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 
 @Getter
-public class Player {
+public abstract class Player {
     @Getter(AccessLevel.NONE)
     private static final Map<String, Integer> DEFAULT_RESTRICT = new HashMap<>();
     @Getter(AccessLevel.NONE)
@@ -35,9 +36,9 @@ public class Player {
     private final CardSpaceRestrictedByType equipment;
     private final CardSpaceRestrictedByName delayedEffect;
     @Getter(AccessLevel.NONE)
-    private final HashMap<String, Integer> permanentRestrict;
+    private final Map<String, Integer> permanentRestrict;
     @Getter(AccessLevel.NONE)
-    private final HashMap<String, Boolean> permanentImmunity;
+    private final Map<String, Boolean> permanentImmunity;
     private final List<ActiveSkill> activeSkills;
     private final List<PassiveSkill> passiveSkills;
     @Setter
@@ -48,14 +49,14 @@ public class Player {
     @Setter
     private Identity identity;
     @Getter(AccessLevel.NONE)
-    private HashMap<String, Integer> restrict;
+    private Map<String, Integer> restrict;
     @Getter(AccessLevel.NONE)
-    private HashMap<String, Boolean> immunity;
+    private Map<String, Boolean> immunity;
     @Setter
     private boolean isAlive;
     private int avatarNumber;
 
-    public Player(String username) {
+    protected Player(String username) {
         initilizeDefaultHashMaps();
         permanentRestrict = new HashMap<>(DEFAULT_RESTRICT);
         permanentImmunity = new HashMap<>(DEFAULT_IMMUNITY);
@@ -63,22 +64,22 @@ public class Player {
         resetImmunity();
 
         isAlive = true;
-        HashMap<CardType, Integer> equipmentCards = new HashMap<>();
+        Map<CardType, Integer> equipmentCards = new HashMap<>();
         equipmentCards.put(CardType.WEAPON, 1);
         equipmentCards.put(CardType.ARMOR, 1);
-        HashMap<String, Integer> delayedEffectCards = new HashMap<>();
+        Map<String, Integer> delayedEffectCards = new HashMap<>();
         delayedEffectCards.put(Drought.NAME, 1);
         delayedEffectCards.put(Nightmare.NAME, 1);
         handCards = new HandCards(username);
-        equipment = new CardSpaceRestrictedByType("equipment-" + username, equipmentCards);
-        delayedEffect = new CardSpaceRestrictedByName("delayedEffect-" + username, delayedEffectCards);
+        equipment = new CardSpaceRestrictedByType(CardSpaceType.EQUIPMENT, username, equipmentCards);
+        delayedEffect = new CardSpaceRestrictedByName(CardSpaceType.DELAYED_EFFECT, username, delayedEffectCards);
         activeSkills = new ArrayList<>();
         passiveSkills = new ArrayList<>();
         this.username = username;
         this.avatarNumber = 0;
     }
 
-    public Player(User user) {
+    protected Player(User user) {
         this(user.getUsername());
         this.avatarNumber = user.getAvatarNumber();
     }
@@ -122,6 +123,14 @@ public class Player {
         if (useTime != null && useTime > 0) {
             restrict.put(cardName, useTime - 1);
         }
+    }
+
+    public void addWinRewards() {
+        //only the human player needs this
+    }
+
+    public void deductLoosePenalty() {
+        //only the human player needs this
     }
 
     @Override

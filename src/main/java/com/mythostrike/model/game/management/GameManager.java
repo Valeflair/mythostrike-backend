@@ -248,56 +248,36 @@ public class GameManager {
     }
 
     public void checkGameOver() {
-        proceeding = false;
-        switch (game.getMode().data()) {
-            case FREE_FOR_ALL, ONE_VS_ONE -> {
-                if (game.getAlivePlayers().size() == 1) {
-                    output("Winner is " + game.getAlivePlayers().get(0).getUsername());
-                    List<PlayerResult> results = new ArrayList<>();
-                    for (Player player : game.getAllPlayers()) {
-                        results.add(new PlayerResult(player, player.isAlive()));
-                    }
-                    gameController.gameEnd(lobbyId, results);
-                    return;
-                }
-            }
-            case TWO_VS_TWO, THREE_VS_THREE, FOUR_VS_FOUR -> {
-                Set<Identity> aliveTeam = new HashSet<>();
-                for (Player player : game.getAlivePlayers()) {
-                    aliveTeam.add(player.getIdentity());
-                }
-                if (aliveTeam.size() == 1) {
-                    List<PlayerResult> results = new ArrayList<>();
-                    for (Player player : game.getAllPlayers()) {
-                        results.add(new PlayerResult(player, player.isAlive()));
-                    }
-                    gameController.gameEnd(lobbyId, results);
-                    return;
-                }
-            }
-            case IDENTITY_FOR_EIGHT, IDENTITY_FOR_FIVE -> {
-                List<Identity> aliveIdentities = new ArrayList<>();
-                for (Player player : game.getAlivePlayers()) {
-                    aliveIdentities.add(player.getIdentity());
-                }
-                if (!aliveIdentities.contains(Identity.GOD_KING)
-                        || (aliveIdentities.contains(Identity.REBEL) && aliveIdentities.contains(Identity.RENEGADE))) {
-                    List<PlayerResult> results = new ArrayList<>();
-                    for (Player player : game.getAllPlayers()) {
-                        switch (player.getIdentity()) {
-                            case GOD_KING, GENERAL -> results.add(new PlayerResult(player, aliveIdentities.contains(Identity.GOD_KING)
-                                    && (!aliveIdentities.contains(Identity.REBEL) && !aliveIdentities.contains(Identity.RENEGADE))));
-                            case REBEL -> results.add(new PlayerResult(player, !aliveIdentities.contains(Identity.GOD_KING)));
-                            case RENEGADE -> results.add(new PlayerResult(player, game.getAlivePlayers().size() == 1
-                                    && game.getAlivePlayers().contains(player)));
-                        }
-                    }
-                    gameController.gameEnd(lobbyId, results);
-                    return;
-                }
+
+        //before deducting check if anybody won
+        List<Player> winners = new ArrayList<>();
+        List<Player> losers = new ArrayList<>();
+        for (Player player : game.getAllPlayers()) {
+            if (player.getIdentity().hasWon(player, this)) {
+                winners.add(player);
+
+            } else {
+                losers.add(player);
             }
         }
-        proceeding = true;
+
+        //if nobody won, the game isn't over and the next round can start
+        if (winners.isEmpty()) return;
+
+        //if somebody won, the game is over and the winner gets the rewards
+        List<PlayerResult> results = new ArrayList<>();
+        for (Player winner : winners) {
+            winner.addWinRewards();
+            results.add(new PlayerResult(winner, true));
+        }
+        for (Player loser : losers) {
+            loser.deductLoosePenalty();
+            results.add(new PlayerResult(loser, false));
+        }
+        //TODO: check if values are updated in database
+        gameController.gameEnd(lobbyId, results);
+        //stop game
+        proceeding = false;
     }
 
     public void highlightPickRequest(PickRequest pickRequest) {

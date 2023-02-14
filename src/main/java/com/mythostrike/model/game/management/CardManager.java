@@ -5,17 +5,24 @@ import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.cards.CardSpace;
+import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeCardDraw;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.Thread.sleep;
 
 public class CardManager {
+
+    private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
+        = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
+
     private final GameManager gameManager;
 
     public CardManager(GameManager gameManager) {
@@ -102,18 +109,23 @@ public class CardManager {
             GameManager.convertCardsToInteger(cardMoveHandle.getCardsToMove())
         );
 
-        //send private message
-        List<String> affectedPlayers = new ArrayList<>();
-        if (cardMoveHandle.getPlayer() != null) {
-            affectedPlayers.add(cardMoveHandle.getPlayer().getUsername());
+        //if both from and to space are private, send the message with the cardIds only to the affected player
+        if (from.getType().isConcealed() && to.getType().isConcealed()) {
+            //send private message
+            List<String> affectedPlayers = new ArrayList<>();
+            if (cardMoveHandle.getPlayer() != null) {
+                affectedPlayers.add(cardMoveHandle.getPlayer().getUsername());
+            }
+            if (cardMoveHandle.getTo() != null) {
+                affectedPlayers.add(cardMoveHandle.getTo().getUsername());
+            }
+            gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
+
+            //clear the cardIds for the public message
+            cardMoveMessage.cardsId().clear();
         }
-        if (cardMoveHandle.getTo() != null) {
-            affectedPlayers.add(cardMoveHandle.getTo().getUsername());
-        }
-        gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
 
         //send public message
-        cardMoveMessage.cardsId().clear();
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
         gameManager.getGameController().updateGame(gameManager.getLobbyId());
     }

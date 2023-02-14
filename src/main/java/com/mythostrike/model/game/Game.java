@@ -2,6 +2,7 @@ package com.mythostrike.model.game;
 
 import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.activity.cards.CardPile;
+import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Mode;
@@ -45,10 +46,10 @@ public class Game {
         this.gameManager = gameManager;
         alivePlayers = new ArrayList<>(allPlayers);
 
-        drawPile = new CardPile("drawPile", CardList.getCardList().getFullCardDeck());
-        tablePile = new CardPile("tablePile");
-        discardPile = new CardPile("discardPile");
-        allCards = new CardPile("allCards", drawPile.getCards());
+        drawPile = new CardPile(CardSpaceType.DRAW_PILE, CardList.getCardList().getFullCardDeck());
+        tablePile = new CardPile(CardSpaceType.TABLE_PILE);
+        discardPile = new CardPile(CardSpaceType.DISCARD_PILE);
+        allCards = new CardPile(CardSpaceType.ALL_CARDS, drawPile.getCards());
         drawPile.shuffle(RANDOM_SEED);
     }
 
@@ -68,10 +69,5 @@ public class Game {
         List<Player> players = new ArrayList<>(alivePlayers);
         players.remove(player);
         return players;
-    }
-
-    public boolean isGameOver() {
-        //TODO implement
-        return false;
     }
 }

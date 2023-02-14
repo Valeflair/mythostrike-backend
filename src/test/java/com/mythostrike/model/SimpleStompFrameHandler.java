@@ -1,6 +1,7 @@
 package com.mythostrike.model;
 
 import com.mythostrike.model.lobby.Lobby;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -17,6 +18,7 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
 
     private final Type payloadType;
 
+    @Getter
     private final Queue<T> messages = new LinkedList<>();
 
     public SimpleStompFrameHandler(Type payloadType) {
