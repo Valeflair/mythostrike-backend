@@ -32,7 +32,7 @@ public class Attack extends Card {
     public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
 
     private CardUseHandle cardUseHandle;
-    private PickRequest pickRequest;
+
     private AttackHandle attackHandle;
 
     private List<Player> targets;

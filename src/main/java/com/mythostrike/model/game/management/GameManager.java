@@ -310,6 +310,7 @@ public class GameManager {
         Player player = getPlayerByName(playerName);
         if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
             lastPickRequest.setSelectedCards(cards);
+            cards.forEach(card -> card.setPickRequest(lastPickRequest));
             if (cards.size() == 1) {
                 lastPickRequest.setSelectedPlayers(targetPlayers);
             }
