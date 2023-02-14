@@ -124,11 +124,11 @@ public class Attack extends Card {
                 }
             } else {
                 // step 2 : click confirm after chose
-                /*
+
                 cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
                         null, player.getHandCards(), gameManager.getGame().getTablePile(),
                         List.of(cardUseHandle.getCard()));
-                */
+
                 playOut();
                 cardUseHandle.setOpponents(targets);
                 attacksPlayer(targets.get(0));
