@@ -115,6 +115,7 @@ public class CardManager {
         //send public message
         cardMoveMessage.cardsId().clear();
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
+        gameManager.getGameController().updateGame(gameManager.getLobbyId());
     }
 
 }
