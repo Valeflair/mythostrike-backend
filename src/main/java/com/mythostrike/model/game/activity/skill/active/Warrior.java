@@ -43,7 +43,7 @@ public class Warrior extends ActiveSkill {
 
         if (value) {
             this.playerHandle = playerHandle;
-            this.playerCondition = new PlayerCondition(null, 0, 0);
+            this.playerCondition = new PlayerCondition();
         }
         return value;
     }
@@ -63,7 +63,7 @@ public class Warrior extends ActiveSkill {
             }
         }
 
-        PlayerCondition playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), 1, 1);
+        PlayerCondition playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
 
         for (Card card : cards) {
             playerConditions.add(playerCondition);

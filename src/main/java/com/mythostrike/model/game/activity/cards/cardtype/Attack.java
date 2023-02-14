@@ -60,7 +60,7 @@ public class Attack extends Card {
         }
         if (!targets.isEmpty() && !player.isRestricted(NAME)) {
             this.cardUseHandle = cardUseHandle;
-            playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), 1, 1);
+            playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
             return true;
         }
         return false;

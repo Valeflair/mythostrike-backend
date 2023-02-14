@@ -31,7 +31,7 @@ public class BlessOfHecate extends Card {
         Player player = cardUseHandle.getPlayer();
         if (!player.isRestricted(NAME)) {
             this.cardUseHandle = cardUseHandle;
-            this.playerCondition = new PlayerCondition(null, 0, 0);
+            this.playerCondition = new PlayerCondition();
             return true;
         }
         return false;
