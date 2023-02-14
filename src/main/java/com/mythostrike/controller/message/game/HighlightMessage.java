@@ -6,44 +6,26 @@ import java.util.List;
 
 @Builder
 public record HighlightMessage(List<Integer> cardsId,
-                               List<String> players,
-                               List<Integer> skillsId,
-                               int minCard,
-                               int maxCard,
                                int minPlayer,
                                int maxPlayer,
+                               List<PlayerCondition> cardPlayerConditions,
+                               List<Integer> skillsId,
+                               List<PlayerCondition> skillPlayerConditions,
                                String reason,
-                               boolean activateCancel,
-                               boolean activateConfirm,
                                boolean activateEndTurn) {
 
-    public HighlightMessage(List<Integer> cardsId, List<String> players, List<Integer> skillsId, int minCard,
-                            int maxCard, int minPlayer, int maxPlayer, String reason,
-                            boolean activateCancel, boolean activateConfirm, boolean activateEndTurn) {
-
-        if (cardsId == null) {
-            this.cardsId = new ArrayList<>();
-        } else {
-            this.cardsId = new ArrayList<>(cardsId);
-        }
-        if (players == null) {
-            this.players = new ArrayList<>();
-        } else {
-            this.players = new ArrayList<>(players);
-        }
-        if (skillsId == null) {
-            this.skillsId = new ArrayList<>();
-        } else {
-            this.skillsId = new ArrayList<>(skillsId);
-        }
-
-        this.minCard = minCard;
-        this.maxCard = maxCard;
+    public HighlightMessage(List<Integer> cardsId, int minPlayer, int maxPlayer,
+                            List<PlayerCondition> cardPlayerConditions,
+                            List<Integer> skillsId, List<PlayerCondition> skillPlayerConditions, String reason,
+                            boolean activateEndTurn) {
+        //TODO: null checks
+        this.cardsId = cardsId;
         this.minPlayer = minPlayer;
         this.maxPlayer = maxPlayer;
+        this.cardPlayerConditions = cardPlayerConditions;
+        this.skillsId = skillsId;
+        this.skillPlayerConditions = skillPlayerConditions;
         this.reason = reason;
-        this.activateCancel = activateCancel;
-        this.activateConfirm = activateConfirm;
         this.activateEndTurn = activateEndTurn;
     }
 
@@ -51,7 +33,8 @@ public record HighlightMessage(List<Integer> cardsId,
     public static class HighlightMessageBuilder {
         public HighlightMessageBuilder builder() {
             this.cardsId = new ArrayList<>();
-            this.players = new ArrayList<>();
+            this.cardPlayerConditions = new ArrayList<>();
+            this.skillPlayerConditions = new ArrayList<>();
             this.skillsId = new ArrayList<>();
             return this;
         }

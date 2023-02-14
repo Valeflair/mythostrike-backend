@@ -335,7 +335,7 @@ paths:
         - Game
       operationId: playedCards
       summary: Play cards
-      description: Request to play the selected card(s)
+      description: Request to play the selected card(s) on the selected opponent(s).
       security:
         - bearerAuth: [ user ]
       requestBody:
@@ -348,48 +348,13 @@ paths:
           description: OK
         "400":
           description: Too many or too less cards are selected
-  /games/play/cancel:
-    post:
-      tags:
-        - Game
-      operationId: cancelSelection
-      summary: cancel current selection
-      description: cancel the current selection of cards and targets. Reset to start the selection from the beginning
-        again
-      security:
-        - bearerAuth: [ user ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LobbyId"
-      responses:
-        "200":
-          description: OK
-  /games/play/targets:
-    post:
-      tags:
-        - Game
-      operationId: selectedTargets
-      summary: Select targets
-      description: Request to use the selected card(s) on the selected opponent(s).
-      security:
-        - bearerAuth: [ user ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SelectTargetsRequest"
-      responses:
-        "200":
-          description: OK
   /games/play/skills:
     post:
       tags:
         - Game
       operationId: usedSkills
       summary: Use skills
-      description: Request to use the selected skill from the champion
+      description: Request to use the selected skill on the selected opponent(s).
       security:
         - bearerAuth: [ user ]
       requestBody:
@@ -620,6 +585,11 @@ components:
           items:
             type: integer
           example: [ 1000 ]
+        targets:
+          type: array
+          items:
+            type: string
+          example: [ "Hyumin281", "Till", "Hong" ]
     PlaySkillRequest:
       type: object
       properties:
@@ -631,6 +601,11 @@ components:
           type: integer
           format: int32
           example: 2
+        targets:
+          type: array
+          items:
+            type: string
+          example: [ "Hyumin281", "Till", "Hong" ]
     ActiveSkill:
       type: object
       properties:
