@@ -59,7 +59,24 @@ public enum Identity {
         this.playerNeedsToBeAlive = playerNeedsToBeAlive;
     }
 
-    public boolean hasWon(Player player , GameManager gameManager) {
+    private static boolean isIdentityAlive(Player player, Identity identityToDie, List<Player> alivePlayers) {
+        for (Player alivePlayer : alivePlayers) {
+            //check if alivePlayer is not the player himself, because sometimes players also have to kill
+            //everyone with the same identity e.g. Free for all with Identity NONE
+            if (!alivePlayer.equals(player) && alivePlayer.getIdentity().equals(identityToDie)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isIdentityDead(Identity identityToSurvive, List<Player> alivePlayers) {
+        return alivePlayers.stream().noneMatch(
+            alivePlayer -> alivePlayer.getIdentity().equals(identityToSurvive)
+        );
+    }
+
+    public boolean hasWon(Player player, GameManager gameManager) {
         //check if player is alive if specified
         if (playerNeedsToBeAlive && !player.isAlive()) {
             return false;
@@ -81,23 +98,6 @@ public enum Identity {
             }
         }
         return true;
-    }
-
-    private static boolean isIdentityAlive(Player player, Identity identityToDie, List<Player> alivePlayers) {
-        for (Player alivePlayer : alivePlayers) {
-            //check if alivePlayer is not the player himself, because sometimes players also have to kill
-            //everyone with the same identity e.g. Free for all with Identity NONE
-            if (!alivePlayer.equals(player) && alivePlayer.getIdentity().equals(identityToDie)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean isIdentityDead(Identity identityToSurvive, List<Player> alivePlayers) {
-        return alivePlayers.stream().noneMatch(
-            alivePlayer -> alivePlayer.getIdentity().equals(identityToSurvive)
-        );
     }
 
     @Override

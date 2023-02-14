@@ -82,10 +82,10 @@ public class EnterDying extends Activity {
                 + "if you want to heal him, pick heal and click confirm";
 
             HighlightMessage highlightMessage = HighlightMessage.builder()
-                    .cardIds(cardIds)
-                    .cardCount(List.of(1))
-                    .reason(hint)
-                    .build();
+                .cardIds(cardIds)
+                .cardCount(List.of(1))
+                .reason(hint)
+                .build();
             pickRequest = new PickRequest(player, gameManager, highlightMessage);
             gameManager.queueActivity(pickRequest);
         }

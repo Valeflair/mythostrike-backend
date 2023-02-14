@@ -9,11 +9,14 @@ import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
-import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.system.*;
+import com.mythostrike.model.game.activity.system.CheckDying;
+import com.mythostrike.model.game.activity.system.NextPhase;
+import com.mythostrike.model.game.activity.system.PickCardToPLay;
+import com.mythostrike.model.game.activity.system.PickRequest;
+import com.mythostrike.model.game.activity.system.PlayCard;
 import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
 import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Champion;
@@ -21,13 +24,16 @@ import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Mode;
-import com.mythostrike.model.lobby.ModeData;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 public class GameManager {
@@ -88,7 +94,8 @@ public class GameManager {
     public List<Player> convertUserNameToPlayers(@NotNull List<String> playerNames) {
         List<Player> players = new ArrayList<>();
         for (String name : playerNames) {
-            players.add(game.getAllPlayers().stream().filter(player -> player.getUsername().equals(name)).findFirst().orElse(null));
+            players.add(game.getAllPlayers().stream().filter(player -> player.getUsername().equals(name)).findFirst()
+                .orElse(null));
         }
         return players;
     }
@@ -135,7 +142,6 @@ public class GameManager {
      * When all players subscribed to the game websocket the methode allPlayersConnected() is called and from there
      */
     public void gameStart() {
-
 
 
         List<Player> players = game.getAlivePlayers();
@@ -234,7 +240,7 @@ public class GameManager {
         }
         List<Card> cards = throwDeck.getCards();
         CardMoveHandle cardMoveHandle = new CardMoveHandle(this,
-                "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck, cards);
+            "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck, cards);
         cardManager.moveCard(cardMoveHandle);
         debug(hint.toString());
         gameController.updateGame(lobbyId);

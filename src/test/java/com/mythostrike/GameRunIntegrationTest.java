@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,14 +29,10 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class GameRunIntegrationTest {
@@ -68,7 +63,8 @@ public class GameRunIntegrationTest {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSession session = webSocketStompClient
-            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {})
+            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {
+            })
             .get(1, SECONDS);
 
 
@@ -81,7 +77,6 @@ public class GameRunIntegrationTest {
         }
         User testUser = userService.getUser(testUserPrincipal.getName());
         Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
-
 
 
         //subscribe to the lobby
@@ -102,7 +97,8 @@ public class GameRunIntegrationTest {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSession session = webSocketStompClient
-            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {})
+            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {
+            })
             .get(1, SECONDS);
 
 
@@ -115,7 +111,6 @@ public class GameRunIntegrationTest {
         }
         User testUser = userService.getUser(testUserPrincipal.getName());
         Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
-
 
 
         //subscribe to the lobby

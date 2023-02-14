@@ -1,18 +1,12 @@
 package com.mythostrike.model.game.activity.cards.cardtype;
 
-import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
-import com.mythostrike.model.game.activity.events.handle.*;
-import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
-import com.mythostrike.model.game.activity.system.PickRequest;
-import com.mythostrike.model.game.management.GameManager;
+import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.player.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BlessOfHecate extends Card {
     public static final String NAME = "Bless of Hecate";
@@ -25,6 +19,7 @@ public class BlessOfHecate extends Card {
     public BlessOfHecate(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
+
     @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         gameManager = cardUseHandle.getGameManager();
@@ -45,8 +40,8 @@ public class BlessOfHecate extends Card {
     @Override
     public void activate() {
         CardDrawHandle cardDrawHandle = new CardDrawHandle(cardUseHandle.getGameManager(),
-                "draw because of using bless of hecate", cardUseHandle.getPlayer(), 2,
-                cardUseHandle.getGameManager().getGame().getDrawPile());
+            "draw because of using bless of hecate", cardUseHandle.getPlayer(), 2,
+            cardUseHandle.getGameManager().getGame().getDrawPile());
         gameManager.getCardManager().drawCard(cardDrawHandle);
     }
 

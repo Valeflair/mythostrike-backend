@@ -4,8 +4,6 @@ import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.ActiveSkill;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
 

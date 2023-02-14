@@ -79,18 +79,17 @@ public class Attack extends Card {
     public void activate() {
         Player player = cardUseHandle.getPlayer();
         if (pickRequest.getSelectedPlayers() != null
-                && !pickRequest.getSelectedPlayers().isEmpty()) {
+            && !pickRequest.getSelectedPlayers().isEmpty()) {
             targets = pickRequest.getSelectedPlayers();
             cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                    null, player.getHandCards(), gameManager.getGame().getTablePile(),
-                    List.of(cardUseHandle.getCard()));
+                null, player.getHandCards(), gameManager.getGame().getTablePile(),
+                List.of(cardUseHandle.getCard()));
             cardUseHandle.setOpponents(targets);
             playOut();
             attacksPlayer(targets.get(0));
             end = false;
         } else {
             end = true;
-            return;
         }
     }
 
@@ -107,24 +106,24 @@ public class Attack extends Card {
             end = true;
             return;
         }
-            Player opponent = cardUseHandle.getOpponents().get(0);
-            if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
-                CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
-                        null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
-                        pickRequest.getSelectedCards());
-                gameManager.getCardManager().moveCard(cardMoveHandle);
-                attackHandle.setPrevented(true);
-                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
-            } else {
-                attackHandle.setPrevented(false);
-                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
-                DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
-                        "attack damaged", player, opponent, 1 + attackHandle.getExtraDamage(),
-                        DamageType.NORMAL);
-                attackHandle.setDamageHandle(damageHandle);
-                gameManager.getPlayerManager().applyDamage(damageHandle);
-            }
-            cardUseHandle.getOpponents().remove(0);
+        Player opponent = cardUseHandle.getOpponents().get(0);
+        if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
+            CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
+                null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
+                pickRequest.getSelectedCards());
+            gameManager.getCardManager().moveCard(cardMoveHandle);
+            attackHandle.setPrevented(true);
+            gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
+        } else {
+            attackHandle.setPrevented(false);
+            gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
+            DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
+                "attack damaged", player, opponent, 1 + attackHandle.getExtraDamage(),
+                DamageType.NORMAL);
+            attackHandle.setDamageHandle(damageHandle);
+            gameManager.getPlayerManager().applyDamage(damageHandle);
+        }
+        cardUseHandle.getOpponents().remove(0);
         if (targets != null && !targets.isEmpty()) {
             attacksPlayer(targets.get(0));
         }
@@ -147,12 +146,13 @@ public class Attack extends Card {
         if (attackHandle.isPrevented()) {
             return;
         }
-        List<Integer> cardIds = GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
+        List<Integer> cardIds =
+            GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
         HighlightMessage highlightMessage = HighlightMessage.builder()
-                .cardIds(cardIds)
-                .cardCount(List.of(0, attackHandle.getDefendAskHandle().getAmount()))
-                .reason(attackHandle.getDefendAskHandle().getReason())
-                .build();
+            .cardIds(cardIds)
+            .cardCount(List.of(0, attackHandle.getDefendAskHandle().getAmount()))
+            .reason(attackHandle.getDefendAskHandle().getReason())
+            .build();
         pickRequest = new PickRequest(opponent, gameManager, highlightMessage);
         gameManager.queueActivity(pickRequest);
     }

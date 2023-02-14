@@ -52,14 +52,14 @@ public class PickCardToPLay extends Activity {
 
 
         HighlightMessage highlightMessage = HighlightMessage.builder()
-                .cardIds(cardIds)
-                .cardPlayerConditions(playerConditions)
-                .cardCount(List.of(1))
-                .skillIds(skillIds)
-                .skillPlayerConditions(skillPlayerConditions)
-                .reason("Pick a Card to play")
-                .activateEndTurn(true)
-                .build();
+            .cardIds(cardIds)
+            .cardPlayerConditions(playerConditions)
+            .cardCount(List.of(1))
+            .skillIds(skillIds)
+            .skillPlayerConditions(skillPlayerConditions)
+            .reason("Pick a Card to play")
+            .activateEndTurn(true)
+            .build();
 
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
         PlayCard playCard = new PlayCard(gameManager, pickRequest);

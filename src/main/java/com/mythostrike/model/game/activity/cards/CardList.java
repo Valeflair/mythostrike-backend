@@ -2,7 +2,11 @@ package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.Card;
-import com.mythostrike.model.game.activity.cards.cardtype.*;
+import com.mythostrike.model.game.activity.cards.cardtype.Attack;
+import com.mythostrike.model.game.activity.cards.cardtype.BlessOfHecate;
+import com.mythostrike.model.game.activity.cards.cardtype.Defend;
+import com.mythostrike.model.game.activity.cards.cardtype.Heal;
+import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 

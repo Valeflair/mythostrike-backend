@@ -3,18 +3,14 @@ package com.mythostrike.model.game.activity.skill.active;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
-import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
-import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
-import com.mythostrike.model.game.activity.skill.passive.Strength;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -38,8 +34,8 @@ public class Warrior extends ActiveSkill {
     @Override
     public boolean checkCondition(PlayerHandle playerHandle) {
         boolean value = attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
-                "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false))
-                && playerHandle.getPlayer().getHandCards().getCards().stream().anyMatch(DEFEND_FILTER::match);
+            "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false))
+            && playerHandle.getPlayer().getHandCards().getCards().stream().anyMatch(DEFEND_FILTER::match);
 
         if (value) {
             this.playerHandle = playerHandle;
@@ -63,7 +59,8 @@ public class Warrior extends ActiveSkill {
             }
         }
 
-        PlayerCondition playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
+        PlayerCondition playerCondition =
+            new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
 
         for (Card card : cards) {
             playerConditions.add(playerCondition);
@@ -71,13 +68,13 @@ public class Warrior extends ActiveSkill {
 
 
         HighlightMessage highlightMessage = HighlightMessage.builder()
-                .cardIds(GameManager.convertCardsToInteger(cards))
-                //0 for not use skill and not play card, 1 for play defend as attack
-                .cardCount(List.of(0, 1))
-                //for each defend need an individual playerCondition, but they are identical
-                .cardPlayerConditions(playerConditions)
-                .reason("choose defend to play as attack, and then choose player to attack")
-                .build();
+            .cardIds(GameManager.convertCardsToInteger(cards))
+            //0 for not use skill and not play card, 1 for play defend as attack
+            .cardCount(List.of(0, 1))
+            //for each defend need an individual playerCondition, but they are identical
+            .cardPlayerConditions(playerConditions)
+            .reason("choose defend to play as attack, and then choose player to attack")
+            .build();
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
 
         gameManager.queueActivity(pickRequest);

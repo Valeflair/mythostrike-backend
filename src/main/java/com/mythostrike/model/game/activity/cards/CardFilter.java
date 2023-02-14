@@ -46,10 +46,8 @@ public class CardFilter {
 
     public boolean match(Card card) {
         String name = card.getName();
-        if (includeList.isEmpty() || includeList.contains(name)) {
-            return excludeList.isEmpty() || !excludeList.contains(name);
-        }
-        return false;
+        return (includeList.isEmpty() || includeList.contains(name)) &&
+            (excludeList.isEmpty() || !excludeList.contains(name));
     }
 
     public List<Card> filter(List<Card> cards) {

@@ -1,12 +1,9 @@
 package com.mythostrike.model.game.activity.system;
 
-import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
-
-import java.util.HashMap;
 
 @Getter
 public class PlayCard extends Activity {

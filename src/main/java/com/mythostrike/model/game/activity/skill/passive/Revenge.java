@@ -62,7 +62,7 @@ public class Revenge extends PassiveSkill {
         } else {
             //TODO: was hier los? für was damageHandleRevenge?
             DamageHandle damageHandleRevenge = new DamageHandle(gameManager, "damage by Revenge",
-                    player, damageHandle.getPlayer());
+                player, damageHandle.getPlayer());
             gameManager.getPlayerManager().applyDamage(damageHandle);
         }
 

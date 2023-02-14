@@ -24,7 +24,9 @@ public class Game {
      */
     public static final int DRAWCARDCOUNT = 4;
 
+    //TODO: make a static singelton list of random seeds from all games
     public static final Random RANDOM_SEED = new Random(42);
+
     public final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
@@ -37,7 +39,7 @@ public class Game {
     @Setter
     private CardPile tablePile;
     @Getter
-    private CardPile allCards;
+    private final CardPile allCards;
 
 
     public Game(List<Player> players, Mode mode, GameManager gameManager) {
