@@ -3,16 +3,16 @@ package com.mythostrike.controller.message.game;
 import java.util.ArrayList;
 import java.util.List;
 
-public record CardMoveMessage(String source, String destination, int count, List<Integer> cardsId) {
+public record CardMoveMessage(String source, String destination, int count, List<Integer> cardIds) {
 
-    public CardMoveMessage(String source, String destination, int count, List<Integer> cardsId) {
+    public CardMoveMessage(String source, String destination, int count, List<Integer> cardIds) {
         this.source = source;
         this.destination = destination;
         this.count = count;
-        if (cardsId == null) {
-            this.cardsId = new ArrayList<>();
+        if (cardIds == null) {
+            this.cardIds = new ArrayList<>();
         } else {
-            this.cardsId = new ArrayList<>(cardsId);
+            this.cardIds = new ArrayList<>(cardIds);
         }
     }
 }

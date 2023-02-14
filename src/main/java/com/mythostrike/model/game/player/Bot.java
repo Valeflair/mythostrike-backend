@@ -45,55 +45,19 @@ public class Bot extends Player {
             return;
         }
         //it does random shit
-        List<Player> players;
-        List<Card> cards;
-        List<ActiveSkill> skills;
-
-        if (message.activateCancel()) {
-            gameManager.cancelRequest(getUsername());
-            return;
-        }
+        List<Integer> pickedCards = new ArrayList<>();
 
 
-        if (message.players() != null && message.minPlayer() > 0) {
-            int min = message.minPlayer();
-            int max = message.maxPlayer();
-            List<Player> playerPickList = gameManager.convertUserNameToPlayers(message.players());
-            if (playerPickList.isEmpty() || max == 0) {
-                players = new ArrayList<>();
-            } else {
-                int n = Math.min(playerPickList.size(), max);
-                n = Math.max(min, n);
-                n = Game.RANDOM_SEED.nextInt(n + 1);
-                List<Player> result = new ArrayList<>(playerPickList);
-                Collections.shuffle(result, Game.RANDOM_SEED);
-                players = result.subList(0, n);
+        if (message.cardIds() != null && message.cardCount() != null && !message.cardCount().contains(0)) {
+            List<Integer> shuffleCount = new ArrayList<>(message.cardCount());
+            List<Integer> shuffleIds = new ArrayList<>(message.cardIds());
+            Collections.shuffle(shuffleCount, Game.RANDOM_SEED);
+            Collections.shuffle(shuffleIds, Game.RANDOM_SEED);
+
+            for (int i = 0; i < shuffleCount.get(0); i++) {
+                pickedCards.add(shuffleIds.get(i));
             }
-            gameManager.selectPlayers(getUsername(), GameManager.convertPlayersToUsername(players));
-            if (message.activateConfirm()) {
-                gameManager.cancelRequest(getUsername());
-            }
-            return;
         }
-        if (message.cardsId() != null && message.minCard() > 0) {
-            int min = message.minCard();
-            int max = message.maxCard();
-            List<Card> cardPickList = gameManager.convertIdToCards(message.cardsId());
-            if (cardPickList.isEmpty() || max == 0) {
-                cards = new ArrayList<>();
-            } else {
-                int n = Math.min(cardPickList.size(), max);
-                n = Math.max(min, n);
-                n = Game.RANDOM_SEED.nextInt(n + 1);
-                List<Card> result = new ArrayList<>(cardPickList);
-                Collections.shuffle(result, Game.RANDOM_SEED);
-                cards = result.subList(0, n);
-            }
-            gameManager.selectCards(getUsername(), GameManager.convertCardsToInteger(cards));
-            if (message.activateConfirm()) {
-                gameManager.cancelRequest(getUsername());
-            }
-            return;
-        }
+        gameManager.selectCards(getUsername(), pickedCards, new ArrayList<>());
     }
 }

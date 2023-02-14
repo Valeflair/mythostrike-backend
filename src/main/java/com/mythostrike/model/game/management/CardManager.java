@@ -122,7 +122,7 @@ public class CardManager {
             gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
 
             //clear the cardIds for the public message
-            cardMoveMessage.cardsId().clear();
+            cardMoveMessage.cardIds().clear();
         }
 
         //send public message

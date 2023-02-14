@@ -2,15 +2,10 @@ package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.Card;
-import com.mythostrike.model.game.activity.cards.cardtype.Attack;
-import com.mythostrike.model.game.activity.cards.cardtype.Defend;
-import com.mythostrike.model.game.activity.cards.cardtype.Heal;
-import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
+import com.mythostrike.model.game.activity.cards.cardtype.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,10 +67,10 @@ public final class CardList {
         cards.put(++id, new Attack(id, CardSymbol.SPADE, 9)); //doppelt
         cards.put(++id, new Attack(id, CardSymbol.SPADE, 10));
         cards.put(++id, new Attack(id, CardSymbol.SPADE, 10)); //doppelt
-        /*cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 7));
+        cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 7));
         cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 8));
         cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 9));
-        cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 11));*/
+        cards.put(++id, new BlessOfHecate(id, CardSymbol.HEART, 11));
         cards.put(++id, new Defend(id, CardSymbol.HEART, 2));
         cards.put(++id, new Defend(id, CardSymbol.HEART, 2)); //doppelt
         cards.put(++id, new Defend(id, CardSymbol.HEART, 13));

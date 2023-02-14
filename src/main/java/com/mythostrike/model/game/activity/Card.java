@@ -1,10 +1,13 @@
 package com.mythostrike.model.game.activity;
 
 
+import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.management.GameManager;
+import lombok.Getter;
 
 import java.util.HashMap;
 
@@ -15,6 +18,8 @@ public abstract class Card extends Activity {
 
     protected CardMoveHandle cardMoveHandle;
     protected GameManager gameManager;
+    @Getter
+    protected PlayerCondition playerCondition;
 
 
     protected Card(int id, String name, String description, CardType type, CardSymbol symbol, int point) {

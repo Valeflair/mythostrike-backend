@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.activity.cards.cardtype;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
@@ -31,6 +32,7 @@ public class BlessOfHecate extends Card {
         Player player = cardUseHandle.getPlayer();
         if (!player.isRestricted(NAME)) {
             this.cardUseHandle = cardUseHandle;
+            this.playerCondition = new PlayerCondition(null, 0, 0);
             return true;
         }
         return false;
@@ -43,24 +45,11 @@ public class BlessOfHecate extends Card {
 
     @Override
     public void activate() {
-        Player player = cardUseHandle.getPlayer();
-        GameManager gameManager = cardUseHandle.getGameManager();
-        //add targetAble enemy into targets
-
-        HighlightMessage highlightMessage = new HighlightMessage(null, null, null, 0,
-                0, 1, 1, DESCRIPTION, true, true, false);
-        pickRequest = new PickRequest(player, gameManager, highlightMessage);
-        gameManager.queueActivity(this);
-        gameManager.queueActivity(pickRequest);
-    }
-
-
-    @Override
-    public void use() {
         CardDrawHandle cardDrawHandle = new CardDrawHandle(cardUseHandle.getGameManager(),
                 "draw because of using bless of hecate", cardUseHandle.getPlayer(), 2,
                 cardUseHandle.getGameManager().getGame().getDrawPile());
         gameManager.getCardManager().drawCard(cardDrawHandle);
     }
+
 
 }

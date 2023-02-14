@@ -5,25 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-public record HighlightMessage(List<Integer> cardsId,
-                               int minPlayer,
-                               int maxPlayer,
+public record HighlightMessage(List<Integer> cardIds,
+                               List<Integer> cardCount,
                                List<PlayerCondition> cardPlayerConditions,
-                               List<Integer> skillsId,
+                               List<Integer> skillIds,
                                List<PlayerCondition> skillPlayerConditions,
                                String reason,
                                boolean activateEndTurn) {
 
-    public HighlightMessage(List<Integer> cardsId, int minPlayer, int maxPlayer,
+    public HighlightMessage(List<Integer> cardIds, List<Integer> cardCount,
                             List<PlayerCondition> cardPlayerConditions,
-                            List<Integer> skillsId, List<PlayerCondition> skillPlayerConditions, String reason,
+                            List<Integer> skillIds, List<PlayerCondition> skillPlayerConditions, String reason,
                             boolean activateEndTurn) {
         //TODO: null checks
-        this.cardsId = cardsId;
-        this.minPlayer = minPlayer;
-        this.maxPlayer = maxPlayer;
+        this.cardIds = cardIds;
+        this.cardCount = cardCount;
         this.cardPlayerConditions = cardPlayerConditions;
-        this.skillsId = skillsId;
+        this.skillIds = skillIds;
         this.skillPlayerConditions = skillPlayerConditions;
         this.reason = reason;
         this.activateEndTurn = activateEndTurn;
@@ -32,10 +30,10 @@ public record HighlightMessage(List<Integer> cardsId,
     //make sure the lists are even with the builder not null
     public static class HighlightMessageBuilder {
         public HighlightMessageBuilder builder() {
-            this.cardsId = new ArrayList<>();
+            this.cardIds = new ArrayList<>();
             this.cardPlayerConditions = new ArrayList<>();
             this.skillPlayerConditions = new ArrayList<>();
-            this.skillsId = new ArrayList<>();
+            this.skillIds = new ArrayList<>();
             return this;
         }
     }

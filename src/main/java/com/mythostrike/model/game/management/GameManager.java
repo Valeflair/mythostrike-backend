@@ -298,32 +298,26 @@ public class GameManager {
         //If all clients are connected, then the methode cardDistribution() is called.
     }
 
-    public void selectCards(String playerName, List<Integer> cardIds) {
+    public void selectCards(String playerName, List<Integer> cardIds, List<String> targets) {
         List<Card> cards = convertIdToCards(cardIds);
+        List<Player> targetPlayers = convertUserNameToPlayers(targets);
         Player player = getPlayerByName(playerName);
         if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
             lastPickRequest.setSelectedCards(cards);
+            if (cards.size() == 1) {
+                lastPickRequest.setSelectedPlayers(targetPlayers);
+            }
             lastPickRequest = null;
             proceed();
         }
     }
 
-    //TODO: WICHTIG!!! was wenn der spieler gleichzeitig karte und spieler auswählen soll?
-    public void selectPlayers(String playerName, List<String> targetUsernames) {
+    public void selectSkill(String playerName, int skillId, List<String> targets) {
         Player player = getPlayerByName(playerName);
-
-        List<Player> targets = new ArrayList<>(targetUsernames.stream().map(this::getPlayerByName).toList());
-        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
-            lastPickRequest.setSelectedPlayers(targets);
-            lastPickRequest = null;
-            proceed();
-        }
-    }
-
-    public void selectSkill(String playerName, int skillId) {
-        Player player = getPlayerByName(playerName);
+        List<Player> targetPlayers = convertUserNameToPlayers(targets);
         ActiveSkill skill = player.getChampion().getActiveSkills().get(skillId);
         skill.activate();
+        //TODO: check if skill is activated within using the selected Targets
     }
 
     public void cancelRequest(String playerName) {

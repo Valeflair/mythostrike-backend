@@ -2,6 +2,7 @@ package com.mythostrike.model.game.activity.cards.cardtype;
 
 
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
@@ -59,6 +60,7 @@ public class Attack extends Card {
         }
         if (!targets.isEmpty() && !player.isRestricted(NAME)) {
             this.cardUseHandle = cardUseHandle;
+            playerCondition = new PlayerCondition(GameManager.convertPlayersToUsername(targets), 1, 1);
             return true;
         }
         return false;
@@ -76,21 +78,20 @@ public class Attack extends Card {
     @Override
     public void activate() {
         Player player = cardUseHandle.getPlayer();
-        GameManager gameManager = cardUseHandle.getGameManager();
-        //add targetAble enemy into targets
-        List<Player> targets = new ArrayList<>();
-        for (Player target : gameManager.getGame().getOtherPlayers(player)) {
-            if (!target.equals(player) && target.isAlive() && Boolean.FALSE.equals(target.isImmune(NAME))) {
-                targets.add(target);
-            }
+        if (pickRequest.getSelectedPlayers() != null
+                && !pickRequest.getSelectedPlayers().isEmpty()) {
+            targets = pickRequest.getSelectedPlayers();
+            cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
+                    null, player.getHandCards(), gameManager.getGame().getTablePile(),
+                    List.of(cardUseHandle.getCard()));
+            cardUseHandle.setOpponents(targets);
+            playOut();
+            attacksPlayer(targets.get(0));
+            end = false;
+        } else {
+            end = true;
+            return;
         }
-        List<String> playerNames = GameManager.convertPlayersToUsername(targets);
-
-        HighlightMessage highlightMessage = new HighlightMessage(null, playerNames, null, 0,
-            0, 1, 1, DESCRIPTION, true, true, false);
-        pickRequest = new PickRequest(player, gameManager, highlightMessage);
-        gameManager.queueActivity(this);
-        gameManager.queueActivity(pickRequest);
     }
 
     /**
@@ -102,66 +103,30 @@ public class Attack extends Card {
     public void use() {
         Player player = cardUseHandle.getPlayer();
 
-        if (pickRequest.getPlayer().equals(cardUseHandle.getPlayer())) {
-            if (pickRequest.isClickedCancel()) {
-                end = true;
-                return;
-            }
-            if (pickRequest.getHighlightMessage().minPlayer() > 0) {
-                cardUseHandle.setOpponents(new ArrayList<>());
-                //step 1 : chose target enemy
-                if (pickRequest.getSelectedPlayers() != null
-                        && !pickRequest.getSelectedPlayers().isEmpty()) {
-                    targets = pickRequest.getSelectedPlayers();
-
-                    /*
-                    pickRequest = new PickRequest(player, gameManager,
-                            new HighlightMessage(null, null, null, 0, 0, 0, 0,
-                                    "click confirm button to use attack", true, true, false));
-                    gameManager.queueActivity(pickRequest);
-                     */
-
-                    cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                            null, player.getHandCards(), gameManager.getGame().getTablePile(),
-                            List.of(cardUseHandle.getCard()));
-                    cardUseHandle.setOpponents(targets);
-                    playOut();
-                    
-                    attacksPlayer(targets.get(0));
-
-                    end = false;
-                } else {
-                    end = true;
-                    return;
-                }
-            }
-
-        } else {
-            if (targets == null || targets.isEmpty()) {
-                end = true;
-                return;
-            }
-            if (pickRequest.getPlayer().equals(cardUseHandle.getOpponents().get(0))) {
-                Player opponent = cardUseHandle.getOpponents().get(0);
-                if (pickRequest.getSelectedCards() != null) {
-                    CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
-                            null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
-                            pickRequest.getSelectedCards());
-                    gameManager.getCardManager().moveCard(cardMoveHandle);
-                    attackHandle.setPrevented(true);
-                    gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
-                } else {
-                    attackHandle.setPrevented(false);
-                    gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
-                    DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
-                            "attack damaged", player, opponent, 1 + attackHandle.getExtraDamage(),
-                            DamageType.NORMAL);
-                    attackHandle.setDamageHandle(damageHandle);
-                    gameManager.getPlayerManager().applyDamage(damageHandle);
-                }
-                cardUseHandle.getOpponents().remove(0);
-            }
+        if (targets == null || targets.isEmpty()) {
+            end = true;
+            return;
         }
+            Player opponent = cardUseHandle.getOpponents().get(0);
+            if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
+                CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
+                        null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
+                        pickRequest.getSelectedCards());
+                gameManager.getCardManager().moveCard(cardMoveHandle);
+                attackHandle.setPrevented(true);
+                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
+            } else {
+                attackHandle.setPrevented(false);
+                gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
+                DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
+                        "attack damaged", player, opponent, 1 + attackHandle.getExtraDamage(),
+                        DamageType.NORMAL);
+                attackHandle.setDamageHandle(damageHandle);
+                gameManager.getPlayerManager().applyDamage(damageHandle);
+            }
+            cardUseHandle.getOpponents().remove(0);
+
+
     }
 
     @Override
@@ -181,10 +146,11 @@ public class Attack extends Card {
             return;
         }
         List<Integer> cardIds = GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
-        HighlightMessage highlightMessage = new HighlightMessage(cardIds, null, null,
-            attackHandle.getDefendAskHandle().getAmount(), attackHandle.getDefendAskHandle().getAmount(),
-            0, 0, attackHandle.getDefendAskHandle().getReason(),
-            attackHandle.getDefendAskHandle().isOptional(), true, false);
+        HighlightMessage highlightMessage = HighlightMessage.builder()
+                .cardIds(cardIds)
+                .cardCount(List.of(0, attackHandle.getDefendAskHandle().getAmount()))
+                .reason(attackHandle.getDefendAskHandle().getReason())
+                .build();
         pickRequest = new PickRequest(opponent, gameManager, highlightMessage);
         gameManager.queueActivity(pickRequest);
     }

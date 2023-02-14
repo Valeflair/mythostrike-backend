@@ -1,6 +1,8 @@
 package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.game.PlayerCondition;
+import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
@@ -33,14 +35,21 @@ public class PickCardToPLay extends Activity {
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);
         /*HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
             null, 1, 1, 0, 0, "Pick a Card to play", true, false);*/
+        List<PlayerCondition> playerConditions = new ArrayList<>();
+        for (Card card : playableCards) {
+            playerConditions.add(card.getPlayerCondition());
+        }
+
+        List<ActiveSkill> skills = new ArrayList<>(player.getActiveSkills());
+
 
         HighlightMessage highlightMessage = HighlightMessage.builder()
-            .cardsId(cardIds)
-            .minCard(1)
-            .maxCard(1)
-            .reason("Pick a Card to play")
-            .activateEndTurn(true)
-            .build();
+                .cardIds(cardIds)
+                .cardPlayerConditions(playerConditions)
+                .cardCount(List.of(1))
+                .reason("Pick a Card to play")
+                .activateEndTurn(true)
+                .build();
 
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
         PlayCard playCard = new PlayCard(gameManager, pickRequest);

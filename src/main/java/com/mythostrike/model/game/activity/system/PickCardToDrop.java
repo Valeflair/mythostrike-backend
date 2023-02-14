@@ -32,8 +32,11 @@ public class PickCardToDrop extends Activity {
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> cards = player.getHandCards().getCards();
         List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
-        HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
-            null, amount, amount, 0, 0, "Pick Card to drop", false, true, false);
+        HighlightMessage highlightMessage = HighlightMessage.builder()
+                .cardIds(cardIds)
+                .cardCount(List.of(amount))
+                .reason("Pick %d Cards to drop".formatted(amount))
+                .build();
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
         Activity dropCard = new DropCard(gameManager, pickRequest);
         gameManager.queueActivity(dropCard);
