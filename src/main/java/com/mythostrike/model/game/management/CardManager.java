@@ -127,7 +127,6 @@ public class CardManager {
 
         //send public message
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
-        gameManager.getGameController().updateGame(gameManager.getLobbyId());
     }
 
 }

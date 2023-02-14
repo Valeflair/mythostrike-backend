@@ -27,8 +27,8 @@ public class Attack extends Card {
     public static final String NAME = Attack.class.getSimpleName();
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASIC_CARD;
-    public static final CardFilter ATTACK_FILTER = new CardFilter("Attack");
-    public static final CardFilter DEFEND_FILTER = new CardFilter("Defend");
+    public static final CardFilter ATTACK_FILTER = new CardFilter(NAME);
+    public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
 
     private CardUseHandle cardUseHandle;
     private PickRequest pickRequest;
@@ -87,7 +87,7 @@ public class Attack extends Card {
         List<String> playerNames = GameManager.convertPlayersToUsername(targets);
 
         HighlightMessage highlightMessage = new HighlightMessage(null, playerNames, null, 0,
-            0, 1, 1, DESCRIPTION, true, false, false);
+            0, 1, 1, DESCRIPTION, true, true, false);
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
         gameManager.queueActivity(this);
         gameManager.queueActivity(pickRequest);
@@ -113,26 +113,27 @@ public class Attack extends Card {
                 if (pickRequest.getSelectedPlayers() != null
                         && !pickRequest.getSelectedPlayers().isEmpty()) {
                     targets = pickRequest.getSelectedPlayers();
+
+                    /*
                     pickRequest = new PickRequest(player, gameManager,
                             new HighlightMessage(null, null, null, 0, 0, 0, 0,
                                     "click confirm button to use attack", true, true, false));
                     gameManager.queueActivity(pickRequest);
+                     */
+
+                    cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
+                            null, player.getHandCards(), gameManager.getGame().getTablePile(),
+                            List.of(cardUseHandle.getCard()));
+                    cardUseHandle.setOpponents(targets);
+                    playOut();
+                    
+                    attacksPlayer(targets.get(0));
+
                     end = false;
                 } else {
                     end = true;
                     return;
                 }
-            } else {
-                // step 2 : click confirm after chose
-
-                cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                        null, player.getHandCards(), gameManager.getGame().getTablePile(),
-                        List.of(cardUseHandle.getCard()));
-
-                playOut();
-                cardUseHandle.setOpponents(targets);
-                attacksPlayer(targets.get(0));
-
             }
 
         } else {
@@ -143,6 +144,10 @@ public class Attack extends Card {
             if (pickRequest.getPlayer().equals(cardUseHandle.getOpponents().get(0))) {
                 Player opponent = cardUseHandle.getOpponents().get(0);
                 if (pickRequest.getSelectedCards() != null) {
+                    CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
+                            null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
+                            pickRequest.getSelectedCards());
+                    gameManager.getCardManager().moveCard(cardMoveHandle);
                     attackHandle.setPrevented(true);
                     gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
                 } else {
