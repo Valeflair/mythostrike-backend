@@ -44,6 +44,14 @@ public class CardFilter {
         includeList.remove(name);
     }
 
+    public boolean match(Card card) {
+        String name = card.getName();
+        if (includeList.isEmpty() || includeList.contains(name)) {
+            return excludeList.isEmpty() || !excludeList.contains(name);
+        }
+        return false;
+    }
+
     public List<Card> filter(List<Card> cards) {
         if (includeList.isEmpty()) {
             return new ArrayList<>(cards);

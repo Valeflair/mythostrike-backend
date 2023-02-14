@@ -61,9 +61,15 @@ public abstract class Card extends Activity {
     }
 
     public void playOut() {
+
+        //do not play out if it's skill invoked fictional card
+        if (point < 0 || id < 0 || symbol.equals(CardSymbol.NO_SYMBOL)) {
+            return;
+        }
+
+
         gameManager = cardMoveHandle.getGameManager();
         gameManager.getCardManager().moveCard(cardMoveHandle);
-
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }
 }

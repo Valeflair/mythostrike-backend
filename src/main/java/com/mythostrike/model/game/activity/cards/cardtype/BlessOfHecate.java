@@ -20,7 +20,6 @@ public class BlessOfHecate extends Card {
     public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle cardUseHandle;
-    private PickRequest pickRequest;
 
 
     public BlessOfHecate(int id, CardSymbol symbol, int point) {

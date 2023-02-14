@@ -125,7 +125,9 @@ public class Attack extends Card {
                 gameManager.getPlayerManager().applyDamage(damageHandle);
             }
             cardUseHandle.getOpponents().remove(0);
-
+        if (targets != null && !targets.isEmpty()) {
+            attacksPlayer(targets.get(0));
+        }
 
     }
 
@@ -134,7 +136,7 @@ public class Attack extends Card {
         return end;
     }
 
-    private void attacksPlayer(Player opponent) {
+    public void attacksPlayer(Player opponent) {
         Player player = cardUseHandle.getPlayer();
         attackHandle = new AttackHandle(gameManager, cardUseHandle.getCard(), "", player, opponent);
         gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_EFFECTED, attackHandle);
