@@ -21,9 +21,9 @@ public record HighlightMessage(List<Integer> cardIds,
         //TODO: null checks
         this.cardIds = new ArrayList<>(cardIds);
         this.cardCount = new ArrayList<>(cardCount);
-        this.cardPlayerConditions = new ArrayList<>(cardPlayerConditions);
-        this.skillPlayerConditions = new ArrayList<>(skillPlayerConditions);
-        this.skillIds = new ArrayList<>(skillIds);
+        this.cardPlayerConditions = cardPlayerConditions;
+        this.skillPlayerConditions = skillPlayerConditions;
+        this.skillIds = skillIds;
         this.reason = reason;
         this.activateEndTurn = activateEndTurn;
 
