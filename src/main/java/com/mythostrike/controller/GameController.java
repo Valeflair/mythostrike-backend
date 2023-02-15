@@ -13,6 +13,7 @@ import com.mythostrike.controller.message.game.WebSocketGameMessage;
 import com.mythostrike.controller.message.game.WebSocketGameMessageType;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.exception.IllegalInputException;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Champion;
@@ -74,8 +75,10 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
         throws IllegalInputException {
-        List<String> cardNames = request.cardIds().stream().map(cardList::getCard)
-            .map(card -> card.toString()).toList();
+        List<String> cardNames = new ArrayList<>();
+        if (request.cardIds() != null) {
+            cardNames = request.cardIds().stream().map(cardList::getCard).map(Card::toString).toList();
+        }
 
         log.debug("play card '{}' request in '{}' from '{}'", cardNames, request.lobbyId(),
             principal.getName());
