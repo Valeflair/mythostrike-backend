@@ -13,7 +13,6 @@ public class BlessOfHecate extends Card {
     public static final String DESCRIPTION = "Draw 2 cards instantly";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
-    private CardUseHandle cardUseHandle;
 
 
     public BlessOfHecate(int id, CardSymbol symbol, int point) {
@@ -39,6 +38,7 @@ public class BlessOfHecate extends Card {
 
     @Override
     public void activate() {
+        playOut();
         CardDrawHandle cardDrawHandle = new CardDrawHandle(cardUseHandle.getGameManager(),
             "draw because of using bless of hecate", cardUseHandle.getPlayer(), 2,
             cardUseHandle.getGameManager().getGame().getDrawPile());

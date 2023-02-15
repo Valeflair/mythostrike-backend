@@ -31,7 +31,6 @@ public class Attack extends Card {
     public static final CardFilter ATTACK_FILTER = new CardFilter(NAME);
     public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
 
-    private CardUseHandle cardUseHandle;
 
     private AttackHandle attackHandle;
 
@@ -86,6 +85,7 @@ public class Attack extends Card {
                 List.of(cardUseHandle.getCard()));
             cardUseHandle.setOpponents(targets);
             playOut();
+            gameManager.queueActivity(this);
             attacksPlayer(targets.get(0));
             end = false;
         } else {

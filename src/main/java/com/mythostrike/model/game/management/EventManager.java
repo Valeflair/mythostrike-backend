@@ -24,6 +24,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class EventManager {
 
@@ -80,16 +81,21 @@ public class EventManager {
 
 
     public void addToMap(List<PassiveEffect> list, PassiveSkill passiveSkill, Player player, boolean permanent) {
-        list.stream()
-            .filter(passiveEffect -> passiveEffect.getSkill().getName().equals(passiveSkill.getName()))
-            .findFirst()
-            .ifPresent(passiveEffect -> {
-                if (permanent) {
-                    passiveEffect.addPermanentTo(player);
-                } else {
-                    passiveEffect.addTemporaryTo(player);
-                }
-            });
+        Optional<PassiveEffect> optionalEffect = list.stream()
+                .filter(effect -> effect.getSkill().equals(passiveSkill))
+                .findFirst();
+        PassiveEffect effect;
+        if (optionalEffect.isPresent()) {
+            effect = optionalEffect.get();
+        } else {
+            effect = new PassiveEffect(passiveSkill);
+            list.add(effect);
+        }
+        if (permanent) {
+            effect.addPermanentTo(player);
+        } else {
+            effect.addTemporaryTo(player);
+        }
     }
 
     public void cleanAllTemporary() {

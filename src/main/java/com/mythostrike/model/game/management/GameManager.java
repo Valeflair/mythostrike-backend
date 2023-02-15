@@ -9,6 +9,7 @@ import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -195,8 +196,17 @@ public class GameManager {
         //initial Cards for player
         output("Game Started, Player has following champions:");
         for (Player player : players) {
-            output(String.format("%s at Seat %d has %s with skills: %s", player.getUsername(), players.indexOf(player),
-                player.getChampion().getName(), player.getChampion().getActiveSkills()));
+            StringBuilder hint = new StringBuilder("%s at Seat %d has %s with skills:".formatted(player.getUsername(), players.indexOf(player),
+                    player.getChampion().getName()));
+            for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
+                hint.append(String.format("%n%s", skill.getName()));
+            }
+
+            for (PassiveSkill skill : player.getChampion().getPassiveSkills()) {
+                hint.append(String.format("%n%s", skill.getName()));
+            }
+
+            output(hint.toString());
 
             cardManager.drawCard(new CardDrawHandle(this, "Draw 4 cards at game start",
                 player, CARD_COUNT_START_UP, game.getDrawPile()));

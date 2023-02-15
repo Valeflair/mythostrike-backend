@@ -18,8 +18,17 @@ public record HighlightMessage(List<Integer> cardIds,
                             List<PlayerCondition> cardPlayerConditions,
                             List<Integer> skillIds, List<PlayerCondition> skillPlayerConditions, String reason,
                             boolean activateEndTurn) {
-        this.cardIds = new ArrayList<>(cardIds);
-        this.cardCount = new ArrayList<>(cardCount);
+
+        if (cardIds == null) {
+            this.cardIds = new ArrayList<>();
+        } else {
+            this.cardIds = new ArrayList<>(cardIds);
+        }
+        if (cardCount == null) {
+            this.cardCount = new ArrayList<>(0);
+        } else {
+            this.cardCount = new ArrayList<>(cardCount);
+        }
         if (cardPlayerConditions == null) {
             this.cardPlayerConditions = new ArrayList<>();
         } else {

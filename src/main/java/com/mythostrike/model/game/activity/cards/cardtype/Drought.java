@@ -15,7 +15,6 @@ public class Drought extends Card {
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
-    private CardUseHandle handle;
 
 
     public Drought(int id, CardSymbol symbol, int point) {
@@ -34,7 +33,7 @@ public class Drought extends Card {
             }
         }
         if (!targets.isEmpty() && !player.isRestricted(NAME)) {
-            handle = cardUseHandle;
+            this.cardUseHandle = cardUseHandle;
             return true;
         }
         return false;
