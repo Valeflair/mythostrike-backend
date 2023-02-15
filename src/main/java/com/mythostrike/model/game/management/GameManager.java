@@ -262,7 +262,7 @@ public class GameManager {
 
     public void checkGameOver() {
 
-        //before deducting check if anybody won
+        //check if anybody won
         List<Player> winners = new ArrayList<>();
         List<Player> losers = new ArrayList<>();
         for (Player player : game.getAllPlayers()) {

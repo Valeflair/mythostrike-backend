@@ -51,6 +51,7 @@ public class Revenge extends PassiveSkill {
         HighlightMessage highlightMessage = HighlightMessage.builder()
                 .reason("you can click skill \"revenge\" to activate it")
                 .skillIds(List.of(id))
+                .skillCount(List.of(0, 1))
                 .skillPlayerConditions(List.of())
                 .cardCount(List.of(0))
                 .build();

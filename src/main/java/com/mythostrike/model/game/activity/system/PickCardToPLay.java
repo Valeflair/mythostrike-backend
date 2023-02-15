@@ -50,12 +50,12 @@ public class PickCardToPLay extends Activity {
             }
         }
 
-
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardPlayerConditions(playerConditions)
             .cardCount(List.of(1))
             .skillIds(skillIds)
+            .skillCount(List.of(1))
             .skillPlayerConditions(skillPlayerConditions)
             .reason("Pick a Card to play")
             .activateEndTurn(true)

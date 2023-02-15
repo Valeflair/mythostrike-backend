@@ -10,14 +10,16 @@ public record HighlightMessage(List<Integer> cardIds,
                                List<Integer> cardCount,
                                List<PlayerCondition> cardPlayerConditions,
                                List<Integer> skillIds,
+                               List<Integer> skillCount,
                                List<PlayerCondition> skillPlayerConditions,
                                String reason,
                                boolean activateEndTurn) {
 
     public HighlightMessage(List<Integer> cardIds, List<Integer> cardCount,
                             List<PlayerCondition> cardPlayerConditions,
-                            List<Integer> skillIds, List<PlayerCondition> skillPlayerConditions, String reason,
-                            boolean activateEndTurn) {
+                            List<Integer> skillIds, List<Integer> skillCount,
+                            List<PlayerCondition> skillPlayerConditions,
+                            String reason, boolean activateEndTurn) {
 
         if (cardIds == null) {
             this.cardIds = new ArrayList<>();
@@ -45,11 +47,20 @@ public record HighlightMessage(List<Integer> cardIds,
         } else {
             this.skillIds = new ArrayList<>(skillIds);
         }
+        if (skillCount == null) {
+            this.skillCount = new ArrayList<>();
+        } else {
+            this.skillCount = new ArrayList<>(skillCount);
+        }
+
         this.reason = reason;
         this.activateEndTurn = activateEndTurn;
 
         //make sure lists are not empty
         if (this.cardCount.isEmpty()) {
+            this.cardCount.add(0);
+        }
+        if (this.skillCount.isEmpty()) {
             this.cardCount.add(0);
         }
         if (this.cardPlayerConditions.isEmpty()) {
@@ -68,6 +79,7 @@ public record HighlightMessage(List<Integer> cardIds,
             this.cardPlayerConditions = new ArrayList<>();
             this.skillPlayerConditions = new ArrayList<>();
             this.skillIds = new ArrayList<>();
+            this.skillCount = new ArrayList<>();
             return this;
         }
     }
