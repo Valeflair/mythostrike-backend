@@ -79,4 +79,9 @@ public abstract class Card extends Activity {
         gameManager.getCardManager().moveCard(cardMoveHandle);
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s%d)", name, symbol.getShort(), point);
+    }
 }

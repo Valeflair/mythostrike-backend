@@ -6,8 +6,16 @@ import java.util.List;
 public record PlayerCondition(List<String> players, List<Integer> count) {
 
     public PlayerCondition(List<String> players, List<Integer> count) {
-        this.players = new ArrayList<>(players);
-        this.count = new ArrayList<>(count);
+        if (players == null) {
+            this.players = new ArrayList<>();
+        } else {
+            this.players = new ArrayList<>(players);
+        }
+        if (count == null) {
+            this.count = new ArrayList<>();
+        } else {
+            this.count = new ArrayList<>(count);
+        }
         if (this.count.isEmpty()) {
             this.count.add(0);
         }

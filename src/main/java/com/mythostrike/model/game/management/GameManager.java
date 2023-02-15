@@ -243,14 +243,14 @@ public class GameManager {
             return;
         }
         StringBuilder hint = new StringBuilder("Cards from TableDeck after calculation will get into ThrowDeck :");
-        CardPile throwDeck = game.getDiscardPile();
+        CardPile discardDeck = game.getDiscardPile();
         CardPile tableDeck = game.getTablePile();
         for (Card card : tableDeck.getCards()) {
             hint.append(card.toString()).append(",");
         }
-        List<Card> cards = throwDeck.getCards();
+        List<Card> cards = tableDeck.getCards();
         CardMoveHandle cardMoveHandle = new CardMoveHandle(this,
-            "Move cards from tableDeck to throwDeck", null, null, tableDeck, throwDeck, cards);
+            "Move cards from tableDeck to throwDeck", null, null, tableDeck, discardDeck, cards);
         cardManager.moveCard(cardMoveHandle);
         debug(hint.toString());
         gameController.updateGame(lobbyId);
