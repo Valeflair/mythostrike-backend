@@ -55,20 +55,6 @@ public record HighlightMessage(List<Integer> cardIds,
 
         this.reason = reason;
         this.activateEndTurn = activateEndTurn;
-
-        //make sure lists are not empty
-        if (this.cardCount.isEmpty()) {
-            this.cardCount.add(0);
-        }
-        if (this.skillCount.isEmpty()) {
-            this.skillCount.add(0);
-        }
-        if (this.cardPlayerConditions.isEmpty()) {
-            this.cardPlayerConditions.add(new PlayerCondition());
-        }
-        if (this.skillPlayerConditions.isEmpty()) {
-            this.skillPlayerConditions.add(new PlayerCondition());
-        }
     }
 
     //make sure the lists are even with the builder not null
