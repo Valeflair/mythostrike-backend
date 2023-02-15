@@ -2,8 +2,9 @@
 - Rest:
     * variablen namen in jsons verbessert
     * create und join Lobby geben eine Lobby zurück
-    * cancel Lobby request
     * discardCards request entfernt --> alles über /cards (hier mehrer Karten möglich)
+    * selectTargets und selectCards zusammengelegt zu /cards
+    * selectSkill erweitert sodass auch targets mitgeschickt werden können
 - neue Klassen:
     * WebSocketConfiguration
     * RestExceptionHandler

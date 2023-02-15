@@ -61,7 +61,7 @@ public record HighlightMessage(List<Integer> cardIds,
             this.cardCount.add(0);
         }
         if (this.skillCount.isEmpty()) {
-            this.cardCount.add(0);
+            this.skillCount.add(0);
         }
         if (this.cardPlayerConditions.isEmpty()) {
             this.cardPlayerConditions.add(new PlayerCondition());

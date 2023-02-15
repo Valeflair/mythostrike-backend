@@ -74,7 +74,10 @@ public class GameController {
     @PostMapping("/cards")
     public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
         throws IllegalInputException {
-        log.debug("play card '{}' request in '{}' from '{}'", request.cardIds(), request.lobbyId(),
+        List<String> cardNames = request.cardIds().stream().map(cardList::getCard)
+            .map(card -> card.toString()).toList();
+
+        log.debug("play card '{}' request in '{}' from '{}'", cardNames, request.lobbyId(),
             principal.getName());
 
         //get objects from REST data
@@ -90,43 +93,6 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<Void> cancelRequest(Principal principal, @RequestBody LobbyIdRequest request) {
-        log.debug("cancel request in '{}' from '{}'", request.lobbyId(), principal.getName());
-
-        //get objects from REST data
-        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
-        if (gameManager == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
-        }
-
-        gameManager.cancelRequest(principal.getName());
-
-        updateGame(request.lobbyId());
-        return ResponseEntity
-            .status(HttpStatus.OK).build();
-    }
-
-    //TODO: safe delete it, since it already merged to selectCards and selectSkills
-    /*
-    @PostMapping("/targets")
-    public ResponseEntity<Void> selectTargets(Principal principal, @RequestBody SelectTargetRequest request) {
-        log.debug("select '{}' as targets request in '{}' from '{}'", request.targets(), request.lobbyId(),
-            principal.getName());
-
-        //get objects from REST data
-        GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
-        if (gameManager == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
-        }
-
-        gameManager.selectPlayers(principal.getName(), request.targets());
-
-        updateGame(request.lobbyId());
-        return ResponseEntity
-            .status(HttpStatus.OK).build();
-    }
-    */
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
         log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
