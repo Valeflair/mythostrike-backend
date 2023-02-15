@@ -1,9 +1,8 @@
-package com.mythostrike.model.game.activity;
+package com.mythostrike.model.game.activity.cards;
 
 
 import com.mythostrike.controller.message.game.PlayerCondition;
-import com.mythostrike.model.game.activity.cards.CardSymbol;
-import com.mythostrike.model.game.activity.cards.CardType;
+import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
@@ -34,14 +33,11 @@ public abstract class Card extends Activity {
         this.symbol = symbol;
         this.point = point;
         this.id = id;
+        this.playerCondition = new PlayerCondition();
     }
 
     protected Card(Card card) {
-        super(card.getName(), card.getDescription());
-        this.type = card.getType();
-        this.symbol = card.getSymbol();
-        this.point = card.getPoint();
-        this.id = card.getId();
+        this(card.id, card.name, card.description, card.type, card.symbol, card.point);
     }
 
     public CardType getType() {

@@ -4,7 +4,7 @@ import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
 import com.mythostrike.model.game.management.GameManager;

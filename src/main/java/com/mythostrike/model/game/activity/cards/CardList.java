@@ -1,7 +1,6 @@
 package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.exception.IllegalInputException;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.BlessOfHecate;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;

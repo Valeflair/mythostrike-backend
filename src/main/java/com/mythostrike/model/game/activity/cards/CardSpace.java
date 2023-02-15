@@ -1,6 +1,5 @@
 package com.mythostrike.model.game.activity.cards;
 
-import com.mythostrike.model.game.activity.Card;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 

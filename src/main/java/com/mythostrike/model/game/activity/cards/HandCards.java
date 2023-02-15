@@ -1,7 +1,6 @@
 package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.Card;
 
 public class HandCards extends CardSpace {
 

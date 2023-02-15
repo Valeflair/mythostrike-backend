@@ -3,7 +3,7 @@ package com.mythostrike.model.game.activity.skill.passive;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;

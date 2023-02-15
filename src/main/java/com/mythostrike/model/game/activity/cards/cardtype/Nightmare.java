@@ -1,7 +1,7 @@
 package com.mythostrike.model.game.activity.cards.cardtype;
 
 
-import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;

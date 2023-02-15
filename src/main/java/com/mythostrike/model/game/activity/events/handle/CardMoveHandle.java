@@ -1,7 +1,7 @@
 package com.mythostrike.model.game.activity.events.handle;
 
 
-import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardSpace;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;

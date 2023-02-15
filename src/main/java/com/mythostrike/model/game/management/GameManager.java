@@ -8,7 +8,7 @@ import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.Card;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;

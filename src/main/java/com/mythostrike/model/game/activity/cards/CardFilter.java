@@ -1,7 +1,5 @@
 package com.mythostrike.model.game.activity.cards;
 
-import com.mythostrike.model.game.activity.Card;
-
 import java.util.ArrayList;
 import java.util.List;
 
