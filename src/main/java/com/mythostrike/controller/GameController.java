@@ -8,13 +8,11 @@ import com.mythostrike.controller.message.game.PlayerData;
 import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.SelectTargetRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.game.WebSocketGameMessage;
 import com.mythostrike.controller.message.game.WebSocketGameMessageType;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.exception.IllegalInputException;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.cards.CardList;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Champion;
@@ -85,7 +83,7 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
 
-        gameManager.selectCards(principal.getName(), request.cardIds());
+        gameManager.selectCards(principal.getName(), request.cardIds(), request.targets());
 
         updateGame(request.lobbyId());
         return ResponseEntity
@@ -109,6 +107,8 @@ public class GameController {
             .status(HttpStatus.OK).build();
     }
 
+    //TODO: safe delete it, since it already merged to selectCards and selectSkills
+    /*
     @PostMapping("/targets")
     public ResponseEntity<Void> selectTargets(Principal principal, @RequestBody SelectTargetRequest request) {
         log.debug("select '{}' as targets request in '{}' from '{}'", request.targets(), request.lobbyId(),
@@ -126,7 +126,7 @@ public class GameController {
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
-
+    */
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
         log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
@@ -138,7 +138,7 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
 
-        gameManager.selectSkill(principal.getName(), request.skillId());
+        gameManager.selectSkill(principal.getName(), request.skillId(), request.targets());
 
 
         updateGame(request.lobbyId());

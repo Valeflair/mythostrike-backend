@@ -123,7 +123,6 @@ public class PlayerManager {
         gameManager.getGame().getAlivePlayers().remove(player);
 
 
-
         gameManager.checkGameOver();
 
     }

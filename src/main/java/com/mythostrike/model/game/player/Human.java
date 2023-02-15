@@ -8,7 +8,7 @@ public class Human extends Player {
     private final User user;
 
     public Human(User user) {
-        super(user.getUsername());
+        super(user);
         this.user = user;
     }
 

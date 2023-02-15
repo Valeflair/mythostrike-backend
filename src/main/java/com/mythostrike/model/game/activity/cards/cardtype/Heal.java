@@ -15,7 +15,6 @@ public class Heal extends Card {
         + " heal him 1 hp";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
-    private CardUseHandle cardUseHandle;
 
     public Heal(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
@@ -30,7 +29,7 @@ public class Heal extends Card {
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         this.cardUseHandle = cardUseHandle;
         return cardUseHandle.getPlayer().getCurrentHp() < cardUseHandle.getPlayer().getMaxHp()
-            && cardUseHandle.getPlayer().isRestricted(NAME);
+            && !cardUseHandle.getPlayer().isRestricted(NAME);
     }
 
     @Override

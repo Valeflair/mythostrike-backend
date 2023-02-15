@@ -1,20 +1,31 @@
 package com.mythostrike.model.game.activity;
 
 
+import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
+import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.List;
 
 public abstract class Card extends Activity {
     protected CardType type;
     protected CardSymbol symbol;
     protected int point;
-
+    @Setter
+    protected PickRequest pickRequest;
     protected CardMoveHandle cardMoveHandle;
     protected GameManager gameManager;
+    @Getter
+    protected PlayerCondition playerCondition;
+
+    @Getter
+    protected CardUseHandle cardUseHandle;
 
 
     protected Card(int id, String name, String description, CardType type, CardSymbol symbol, int point) {
@@ -56,9 +67,16 @@ public abstract class Card extends Activity {
     }
 
     public void playOut() {
+
+        //do not play out if it's skill invoked fictional card
+        if (point < 0 || id < 0 || symbol.equals(CardSymbol.NO_SYMBOL)) {
+            return;
+        }
+        if (cardMoveHandle == null) {
+            cardMoveHandle = new CardMoveHandle(gameManager, "plays card out", cardUseHandle.getPlayer(), null, cardUseHandle.getPlayer().getHandCards(), gameManager.getGame().getTablePile(), List.of(this) );
+        }
         gameManager = cardMoveHandle.getGameManager();
         gameManager.getCardManager().moveCard(cardMoveHandle);
-
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }
 }

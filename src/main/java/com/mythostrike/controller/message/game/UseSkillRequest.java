@@ -1,4 +1,6 @@
 package com.mythostrike.controller.message.game;
 
-public record UseSkillRequest(int lobbyId, int skillId) {
+import java.util.List;
+
+public record UseSkillRequest(int lobbyId, int skillId, List<String> targets) {
 }

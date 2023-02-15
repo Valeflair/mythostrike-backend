@@ -17,14 +17,14 @@ import java.util.Objects;
 @Getter
 public abstract class Activity {
     private static int idCounter = 100;
-
-    protected int id;
     protected final String name;
     protected final String description;
+    protected int id;
 
 
     protected Activity(String name, String description) {
-        this.id = idCounter++;
+        this.id = idCounter;
+        idCounter++;
         this.name = name;
         this.description = description;
     }

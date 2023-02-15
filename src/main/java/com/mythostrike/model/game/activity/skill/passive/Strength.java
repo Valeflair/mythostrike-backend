@@ -1,19 +1,10 @@
 package com.mythostrike.model.game.activity.skill.passive;
 
-import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.Card;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.AttackHandle;
-import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
-import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
 import com.mythostrike.model.game.management.EventManager;
-import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Strength extends PassiveSkill {
 

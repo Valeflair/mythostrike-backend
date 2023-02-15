@@ -95,6 +95,7 @@ public class CardManager {
 
     /**
      * Move cards specified in cardMoveHandle from 'from' space to 'to' space. Also sends a message to the frontend.
+     *
      * @param cardMoveHandle the handle that contains the information of the move
      */
     public void moveCard(CardMoveHandle cardMoveHandle) {
@@ -122,7 +123,7 @@ public class CardManager {
             gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
 
             //clear the cardIds for the public message
-            cardMoveMessage.cardsId().clear();
+            cardMoveMessage.cardIds().clear();
         }
 
         //send public message

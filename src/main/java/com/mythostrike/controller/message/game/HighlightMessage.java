@@ -1,58 +1,73 @@
 package com.mythostrike.controller.message.game;
 
 import lombok.Builder;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-public record HighlightMessage(List<Integer> cardsId,
-                               List<String> players,
-                               List<Integer> skillsId,
-                               int minCard,
-                               int maxCard,
-                               int minPlayer,
-                               int maxPlayer,
+public record HighlightMessage(List<Integer> cardIds,
+                               List<Integer> cardCount,
+                               List<PlayerCondition> cardPlayerConditions,
+                               List<Integer> skillIds,
+                               List<PlayerCondition> skillPlayerConditions,
                                String reason,
-                               boolean activateCancel,
-                               boolean activateConfirm,
                                boolean activateEndTurn) {
 
-    public HighlightMessage(List<Integer> cardsId, List<String> players, List<Integer> skillsId, int minCard,
-                            int maxCard, int minPlayer, int maxPlayer, String reason,
-                            boolean activateCancel, boolean activateConfirm, boolean activateEndTurn) {
+    public HighlightMessage(List<Integer> cardIds, List<Integer> cardCount,
+                            List<PlayerCondition> cardPlayerConditions,
+                            List<Integer> skillIds, List<PlayerCondition> skillPlayerConditions, String reason,
+                            boolean activateEndTurn) {
 
-        if (cardsId == null) {
-            this.cardsId = new ArrayList<>();
+        if (cardIds == null) {
+            this.cardIds = new ArrayList<>();
         } else {
-            this.cardsId = new ArrayList<>(cardsId);
+            this.cardIds = new ArrayList<>(cardIds);
         }
-        if (players == null) {
-            this.players = new ArrayList<>();
+        if (cardCount == null) {
+            this.cardCount = new ArrayList<>(0);
         } else {
-            this.players = new ArrayList<>(players);
+            this.cardCount = new ArrayList<>(cardCount);
         }
-        if (skillsId == null) {
-            this.skillsId = new ArrayList<>();
+        if (cardPlayerConditions == null) {
+            this.cardPlayerConditions = new ArrayList<>();
         } else {
-            this.skillsId = new ArrayList<>(skillsId);
+            this.cardPlayerConditions = new ArrayList<>(cardPlayerConditions);
         }
 
-        this.minCard = minCard;
-        this.maxCard = maxCard;
-        this.minPlayer = minPlayer;
-        this.maxPlayer = maxPlayer;
+        if (skillPlayerConditions == null) {
+            this.skillPlayerConditions = new ArrayList<>();
+        } else {
+            this.skillPlayerConditions = new ArrayList<>(skillPlayerConditions);
+        }
+        if (skillIds == null) {
+            this.skillIds = new ArrayList<>();
+        } else {
+            this.skillIds = new ArrayList<>(skillIds);
+        }
         this.reason = reason;
-        this.activateCancel = activateCancel;
-        this.activateConfirm = activateConfirm;
         this.activateEndTurn = activateEndTurn;
+
+        //make sure lists are not empty
+        if (this.cardCount.isEmpty()) {
+            this.cardCount.add(0);
+        }
+        if (this.cardPlayerConditions.isEmpty()) {
+            this.cardPlayerConditions.add(new PlayerCondition());
+        }
+        if (this.skillPlayerConditions.isEmpty()) {
+            this.skillPlayerConditions.add(new PlayerCondition());
+        }
     }
 
     //make sure the lists are even with the builder not null
     public static class HighlightMessageBuilder {
         public HighlightMessageBuilder builder() {
-            this.cardsId = new ArrayList<>();
-            this.players = new ArrayList<>();
-            this.skillsId = new ArrayList<>();
+            this.cardIds = new ArrayList<>();
+            this.cardCount = new ArrayList<>();
+            this.cardPlayerConditions = new ArrayList<>();
+            this.skillPlayerConditions = new ArrayList<>();
+            this.skillIds = new ArrayList<>();
             return this;
         }
     }

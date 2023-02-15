@@ -25,5 +25,4 @@ public class Defend extends Card {
     public Defend deepCopy() {
         return new Defend(id, symbol, point);
     }
-    //TODO:implement
 }

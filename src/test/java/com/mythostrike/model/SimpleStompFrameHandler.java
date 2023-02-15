@@ -1,6 +1,5 @@
 package com.mythostrike.model;
 
-import com.mythostrike.model.lobby.Lobby;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -11,7 +10,6 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 @Slf4j
 public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {

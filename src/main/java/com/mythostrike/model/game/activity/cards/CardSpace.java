@@ -49,7 +49,8 @@ public class CardSpace {
     }
 
     /**
-     *  Returns a list of cards from the top of the pile. Does not remove them.
+     * Returns a list of cards from the top of the pile. Does not remove them.
+     *
      * @param count number of cards in the list
      * @return list of cards, returns null if count > size of pile
      */
