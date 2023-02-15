@@ -53,7 +53,6 @@ public class Revenge extends PassiveSkill {
                 .skillIds(List.of(id))
                 .skillCount(List.of(0, 1))
                 .skillPlayerConditions(List.of())
-                .cardCount(List.of(0))
                 .build();
         pickRequest = new PickRequest(damageHandle.getTo(), gameManager, highlightMessage);
         gameManager.highlightPickRequest(pickRequest);
