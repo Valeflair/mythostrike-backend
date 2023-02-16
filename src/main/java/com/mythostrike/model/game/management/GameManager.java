@@ -117,19 +117,15 @@ public class GameManager {
         if (!phase.equals(Phase.ACTIVE_TURN)) {
             return;
         }
-        Activity activity = currentActivity.getFirst();
 
-        if (activity.getName().equals(PickRequest.NAME)) {
-            currentActivity.removeFirst();
-        }
-        if (activity.getName().equals(PlayCard.NAME)) {
-            currentActivity.removeFirst();
-        }
-        if (activity.getName().equals(PickCardToPLay.NAME)) {
-            currentActivity.removeFirst();
-        }
-        if (activity.getName().equals(ActiveTurn.NAME)) {
-            currentActivity.removeFirst();
+        List<String> removeList = List.of(PickRequest.NAME, PlayCard.NAME, PickCardToPLay.NAME, ActiveTurn.NAME);
+        for (String name : removeList) {
+            if (currentActivity.isEmpty()) {
+                break;
+            }
+            if (currentActivity.getFirst().getName().equals(name)) {
+                currentActivity.removeFirst();
+            }
         }
 
         proceed();
@@ -304,7 +300,7 @@ public class GameManager {
     }
 
     public void selectChampion(String playerName, Champion champion) {
-        playerManager.initializeChampionForPlayer(champion, getPlayerByName(playerName));
+        playerManager .initializeChampionForPlayer(champion, getPlayerByName(playerName));
         if (game.getAlivePlayers().stream().allMatch(player -> player.getChampion() != null)) {
             log.debug("All players have selected their champion");
         }
