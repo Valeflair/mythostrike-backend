@@ -14,14 +14,13 @@ public class Seat {
     private final int id;
     @Setter
     private Player player;
+    @Setter
+    private Identity identity;
 
-    public Seat(int id, Player player) {
+    public Seat(int id, Player player, Identity identity) {
         this.id = id;
         this.player = player;
-    }
-
-    public Seat(int id) {
-        this(id, null);
+        this.identity = identity;
     }
 
     @JsonGetter("player")

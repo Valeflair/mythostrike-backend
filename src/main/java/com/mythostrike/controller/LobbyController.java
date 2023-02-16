@@ -142,7 +142,9 @@ public class LobbyController {
         }
 
         //change mode in lobby
-        lobby.changeMode(mode, user);
+        if (!lobby.changeMode(mode, user)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "to many players for new mode");
+        }
 
         updateLobby(request.lobbyId());
         return ResponseEntity

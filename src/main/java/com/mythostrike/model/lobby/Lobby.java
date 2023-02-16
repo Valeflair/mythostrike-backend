@@ -23,7 +23,7 @@ import java.util.Objects;
 public class Lobby {
     private static final int MAX_PLAYERS = 8;
     private final int id;
-    private final Seat[] seats;
+    private final List<Seat> seats;
     private Mode mode;
     private Player owner;
     @JsonIgnore
@@ -47,11 +47,12 @@ public class Lobby {
         this.numberPlayers = 1;
         this.numberHumans = 1;
         //initialize seats array
-        this.seats = new Seat[MAX_PLAYERS];
-        for (int i = 0; i < MAX_PLAYERS; i++) {
-            this.seats[i] = new Seat(i);
+        this.seats = new ArrayList<>(mode.maxPlayer());
+        List<Identity> identities = mode.getIdentityList();
+        for (int i = 0; i < mode.maxPlayer(); i++) {
+            seats.add(new Seat(i, null, identities.get(i)));
         }
-        seats[0].setPlayer(this.owner);
+        seats.get(0).setPlayer(this.owner);
     }
 
     @JsonGetter("mode")
@@ -93,26 +94,29 @@ public class Lobby {
     }
 
     public boolean removeUser(User user) {
-        for (int i = 0; i < MAX_PLAYERS; i++) {
-            //check if in which seat the user is
-            if (seats[i].getPlayer() != null && seats[i].getPlayer().getUsername().equals(user.getUsername())) {
-                seats[i].setPlayer(null);
-                this.numberPlayers--;
-                this.numberHumans--;
+        Seat seatOfUser  = seats.stream().filter(
+            seat -> seat.getPlayer() != null && seat.getPlayer().getUsername().equals(user.getUsername())
+        ).findFirst().orElse(null);
 
-                //select new owner if the owner left
-                if (user.getUsername().equals(owner.getUsername())) {
-                    selectNewOwner();
-                }
-                //if the lobby is empty, close it
-                if (numberHumans == 0) {
-                    status = LobbyStatus.CLOSED;
-                }
-                updateLobbyStatus();
-                return true;
-            }
+        //user not found
+        if (seatOfUser == null) {
+            return false;
         }
-        return false;
+
+        seatOfUser.setPlayer(null);
+        this.numberPlayers--;
+        this.numberHumans--;
+
+        //select new owner if the owner left
+        if (user.getUsername().equals(owner.getUsername())) {
+            selectNewOwner();
+        }
+        //if the lobby is empty, close it
+        if (numberHumans == 0) {
+            status = LobbyStatus.CLOSED;
+        }
+        updateLobbyStatus();
+        return true;
     }
 
     @JsonIgnore
@@ -122,15 +126,15 @@ public class Lobby {
 
     private void selectNewOwner() {
         for (int i = 0; i < MAX_PLAYERS; i++) {
-            if (seats[i].getPlayer() instanceof Human) {
-                owner = seats[i].getPlayer();
+            if (seats.get(i).getPlayer() instanceof Human) {
+                owner = seats.get(i).getPlayer();
                 return;
             }
         }
     }
 
     private void updateLobbyStatus() {
-        if (numberPlayers >= mode.maxPlayer()) {
+        if (numberPlayers == mode.maxPlayer()) {
             status = LobbyStatus.FULL;
         } else {
             status = LobbyStatus.OPEN;
@@ -144,16 +148,17 @@ public class Lobby {
         if (isFull()) {
             return false;
         }
-        //TODO: echten Bot erstellen
-        for (int i = 0; i < MAX_PLAYERS; i++) {
-            if (seats[i].getPlayer() == null) {
-                seats[i].setPlayer(new Bot("Bot" + i, 1));
-                numberPlayers++;
-                updateLobbyStatus();
-                return true;
-            }
+        Seat seatToAddBot = seats.stream().filter(seat -> seat.getPlayer() == null).findFirst().orElse(null);
+
+        //no free seat found
+        if (seatToAddBot == null) {
+            return false;
         }
-        return false;
+
+        seatToAddBot.setPlayer(new Bot("Bot" + seatToAddBot.getId(), 1));
+        numberPlayers++;
+        updateLobbyStatus();
+        return true;
     }
 
     public boolean changeSeat(int seatId, User user) throws IllegalInputException {
@@ -162,31 +167,64 @@ public class Lobby {
             throw new IllegalInputException("seatId is not in bounds");
         }
         //check if seat is already taken
-        if (seats[seatId].getPlayer() != null) {
+        if (seats.get(seatId).getPlayer() != null) {
             return false;
         }
 
-        //check if user is in the lobby and move him to the new seat
-        for (int i = 0; i < MAX_PLAYERS; i++) {
-            if (seats[i].getPlayer() != null && seats[i].getPlayer().getUsername().equals(user.getUsername())) {
-                seats[seatId].setPlayer(seats[i].getPlayer());
-                seats[i].setPlayer(null);
-                return true;
-            }
+        //check if user is in the lobby and get the old seat of the user
+        Seat oldSeat = seats.stream().filter(
+            seat -> seat.getPlayer() != null && seat.getPlayer().getUsername().equals(user.getUsername())
+        ).findFirst().orElse(null);
+
+        //user not found
+        if (oldSeat == null) {
+            throw new IllegalInputException("user is not in lobby");
         }
-        throw new IllegalInputException("user is not in lobby");
+
+        seats.get(seatId).setPlayer(oldSeat.getPlayer());
+        oldSeat.setPlayer(null);
+        return true;
+
     }
 
-    public void changeMode(Mode mode, User user) throws IllegalInputException {
+    public boolean changeMode(Mode newMode, User user) throws IllegalInputException {
         if (isNotOwner(user)) {
             throw new IllegalInputException("user is not the owner");
         }
-
         if (gameManager != null) {
             throw new IllegalInputException("lobby is not in Lobby Screen");
         }
+        if (numberPlayers > newMode.maxPlayer()) {
+            return false;
+        }
         updateLobbyStatus();
-        this.mode = mode;
+        this.mode = newMode;
+
+        //update seats
+        //if we have too many seats, remove all empty seats
+        if (seats.size() > mode.maxPlayer()) {
+            List<Seat> newSeats = new ArrayList<>(newMode.maxPlayer());
+            int index = 0;
+            for (Seat seat : seats) {
+                if (seat.getPlayer() != null) {
+                    newSeats.add(new Seat(index, seat.getPlayer(), null));
+                }
+            }
+            this.seats.clear();
+            this.seats.addAll(newSeats);
+        }
+
+        //update identities and add empty seats if necessary
+        List<Identity> identities = mode.getIdentityList();
+        for (int i = 0; i < mode.maxPlayer(); i++) {
+            if (i < seats.size()) {
+                seats.get(i).setIdentity(identities.get(i));
+            } else {
+                //if we have too few seats, add empty seats
+                seats.add(new Seat(i, null, identities.get(i)));
+            }
+        }
+        return true;
     }
 
     public boolean createGame(User user, GameController gameController) throws IllegalInputException {
@@ -200,7 +238,7 @@ public class Lobby {
         status = LobbyStatus.GAME_RUNNING;
 
         List<Player> players = new ArrayList<>(
-            Arrays.stream(seats).map(Seat::getPlayer).filter(Objects::nonNull).toList()
+            seats.stream().map(Seat::getPlayer).filter(Objects::nonNull).toList()
         );
 
         //randomize positions if mode is Identity (except God King)
