@@ -2,7 +2,9 @@ package com.mythostrike.model.game.activity.cards;
 
 
 import com.mythostrike.controller.message.game.PlayerCondition;
+import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
+import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
@@ -13,6 +15,7 @@ import lombok.Setter;
 import java.util.List;
 
 public abstract class Card extends Activity {
+    @Getter
     protected CardType type;
     protected CardSymbol symbol;
     protected int point;
@@ -75,6 +78,14 @@ public abstract class Card extends Activity {
 
         gameManager.getCardManager().moveCard(cardMoveHandle);
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
+    }
+
+    public PassiveSkill getPassiveSkill() {
+        return null;
+    }
+
+    public ActiveSkill getActiveSkill() {
+        return null;
     }
 
     @Override

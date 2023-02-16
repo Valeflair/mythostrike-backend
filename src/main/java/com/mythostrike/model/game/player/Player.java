@@ -109,19 +109,38 @@ public abstract class Player {
     }
 
     public boolean isRestricted(String cardName) {
+        if (!restrict.containsKey(cardName)) {
+            return false;
+        }
         Integer useTime = restrict.get(cardName);
         return useTime != null && useTime <= 0;
     }
 
     public boolean isImmune(String cardName) {
+        if (!restrict.containsKey(cardName)) {
+            return false;
+        }
         Boolean isImmune = immunity.get(cardName);
         return isImmune != null && isImmune;
     }
 
     public void decreaseUseTime(String cardName) {
+        if (!restrict.containsKey(cardName)) {
+            return;
+        }
         Integer useTime = restrict.get(cardName);
         if (useTime != null && useTime > 0) {
             restrict.put(cardName, useTime - 1);
+        }
+    }
+
+    public void increaseUseTime(String cardName) {
+        if (!restrict.containsKey(cardName)) {
+            return;
+        }
+        Integer useTime = restrict.get(cardName);
+        if (useTime != null) {
+            restrict.put(cardName, useTime + 1);
         }
     }
 

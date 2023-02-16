@@ -84,6 +84,10 @@ public class PlayerManager {
     }
 
     public void addSkillToPlayer(Player player, PassiveSkill skill) {
+        if (skill == null) {
+            return;
+        }
+
         List<PassiveSkill> skills = player.getPassiveSkills();
         if (!skills.contains(skill)) {
             skills.add(skill);
@@ -93,12 +97,36 @@ public class PlayerManager {
     }
 
     public void addSkillToPlayer(Player player, ActiveSkill skill) {
+        if (skill == null) {
+            return;
+        }
+
         List<ActiveSkill> skills = player.getActiveSkills();
         if (!skills.contains(skill)) {
             skills.add(skill);
             //TODO:add output message
         }
     }
+
+    public void removeSkillFromPlayer(Player player, ActiveSkill skill) {
+        if (skill == null) {
+            return;
+        }
+
+        List<ActiveSkill> skills = player.getActiveSkills();
+        skills.remove(skill);
+    }
+
+    public void removeSkillFromPlayer(Player player, PassiveSkill skill) {
+        if (skill == null) {
+            return;
+        }
+
+        List<PassiveSkill> skills = player.getPassiveSkills();
+        skills.remove(skill);
+    }
+
+
 
     public void killPlayer(Player player) {
 
