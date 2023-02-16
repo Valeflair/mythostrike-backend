@@ -3,6 +3,7 @@ package com.mythostrike.model.lobby;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
+import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
@@ -33,12 +34,15 @@ public class Lobby {
     private int numberHumans;
     @JsonIgnore
     private GameManager gameManager;
+    @JsonIgnore
+    private final UserService userService;
 
-    public Lobby(int id, Mode mode, User owner) {
+    public Lobby(int id, Mode mode, User owner, UserService userService) {
         this.id = id;
         this.mode = mode;
-        this.owner = new Human(owner);
+        this.owner = new Human(owner, userService);
         this.status = LobbyStatus.OPEN;
+        this.userService = userService;
 
         this.numberPlayers = 1;
         this.numberHumans = 1;
@@ -78,7 +82,7 @@ public class Lobby {
         //add user to the first free seat
         for (Seat seat : seats) {
             if (seat.getPlayer() == null) {
-                seat.setPlayer(new Human(user));
+                seat.setPlayer(new Human(user, this.userService));
                 this.numberPlayers++;
                 this.numberHumans++;
                 break;

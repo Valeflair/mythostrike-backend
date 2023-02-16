@@ -268,7 +268,6 @@ public class GameManager {
         for (Player player : game.getAllPlayers()) {
             if (player.getIdentity().hasWon(player, this)) {
                 winners.add(player);
-
             } else {
                 losers.add(player);
             }

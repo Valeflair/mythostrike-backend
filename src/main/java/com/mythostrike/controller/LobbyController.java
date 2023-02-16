@@ -34,7 +34,6 @@ import java.util.List;
 public class LobbyController {
 
     private static final String LOBBY_NOT_FOUND_MESSAGE = "Lobby not found";
-    private final UserService userService;
 
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
@@ -44,6 +43,10 @@ public class LobbyController {
 
     //@Autowired didnt work in GameManager so i used @RequiredArgsConstructor and handed it through to the GameManager
     private final GameController gameController;
+
+    //same goes for userService and Human. Sothat autwired works, the objekt hast to be a component, but we dont want
+    //that there, because the object has a state.
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<LobbyOverview>> getLobbies() {
@@ -66,7 +69,7 @@ public class LobbyController {
         Mode mode = modeList.getMode(request.modeId());
 
         //create lobby
-        Lobby lobby = lobbyList.createLobby(user, mode);
+        Lobby lobby = lobbyList.createLobby(user, mode, userService);
         log.debug("created lobby '{}' with  mode '{}", lobby.getId(), request.modeId());
 
         updateLobby(lobby.getId());

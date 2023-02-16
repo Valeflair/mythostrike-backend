@@ -3,6 +3,7 @@ package com.mythostrike.account.service;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.repository.UserRepository;
 import com.mythostrike.controller.message.authentication.UserAuthRequest;
+import com.mythostrike.model.game.player.Player;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

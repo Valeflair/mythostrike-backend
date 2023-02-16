@@ -1,6 +1,7 @@
 package com.mythostrike.model.game.player;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
@@ -131,6 +132,16 @@ public abstract class Player {
 
     public void deductLoosePenalty() {
         //only the human player needs this
+    }
+
+    @JsonIgnore
+    public int getDrachma() {
+        return 0;
+    }
+
+    @JsonIgnore
+    public int getRankPoints() {
+        return 0;
     }
 
     @Override
