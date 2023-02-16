@@ -33,10 +33,11 @@ public class Heal extends Card {
     }
 
     @Override
-    public void use() {
+    public void activate() {
         DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), this,
             "use heal to heal hp", cardUseHandle.getPlayer(), cardUseHandle.getPlayer(),
             -1, DamageType.HEAL);
         cardUseHandle.getGameManager().getPlayerManager().applyDamage(damageHandle);
+        playOut();
     }
 }
