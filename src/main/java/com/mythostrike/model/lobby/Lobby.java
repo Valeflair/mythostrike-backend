@@ -21,7 +21,6 @@ import java.util.Objects;
 
 @Getter
 public class Lobby {
-    private static final int MAX_PLAYERS = 8;
     private final int id;
     private List<Seat> seats;
     private Mode mode;
@@ -125,7 +124,7 @@ public class Lobby {
     }
 
     private void selectNewOwner() {
-        for (int i = 0; i < MAX_PLAYERS; i++) {
+        for (int i = 0; i < seats.size(); i++) {
             if (seats.get(i).getPlayer() instanceof Human) {
                 owner = seats.get(i).getPlayer();
                 return;
@@ -163,7 +162,7 @@ public class Lobby {
 
     public boolean changeSeat(int seatId, User user) throws IllegalInputException {
         //check if seatId is valid
-        if (seatId < 0 || seatId >= MAX_PLAYERS) {
+        if (seatId < 0 || seatId >= seats.size()) {
             throw new IllegalInputException("seatId is not in bounds");
         }
         //check if seat is already taken
