@@ -218,7 +218,9 @@ public class Lobby {
         }
 
         //remove unnecessary seats at the end
-        seats = seats.subList(0, newMode.maxPlayer());
+        if (seats.size() > newMode.maxPlayer()) {
+            seats = seats.subList(0, newMode.maxPlayer());
+        }
 
         //update identities and add empty seats if necessary
         List<Identity> identities = mode.getIdentityList();
