@@ -4,6 +4,7 @@ import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.BlessOfHecate;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
+import com.mythostrike.model.game.activity.cards.cardtype.Drought;
 import com.mythostrike.model.game.activity.cards.cardtype.Heal;
 import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
 import org.jetbrains.annotations.NotNull;
@@ -110,6 +111,9 @@ public final class CardList {
         cards.put(++id, new Nightmare(id, CardSymbol.HEART, 6));
         cards.put(++id, new Nightmare(id, CardSymbol.CLUB, 6));
         cards.put(++id, new Nightmare(id, CardSymbol.SPADE, 6));
+        cards.put(++id, new Drought(id, CardSymbol.HEART, 6)); //fix symbol and number
+        cards.put(++id, new Drought(id, CardSymbol.CLUB, 6)); //fix symbol and number
+        cards.put(++id, new Drought(id, CardSymbol.SPADE, 6)); //fix symbol and number
         /*cards.put(++id, new VolcanicEruption(id, CardSymbol.DIAMOND, 12));
         cards.put(++id, new VolcanicEruption(id, CardSymbol.HEART, 13));
         cards.put(++id, new VolcanicEruption(id, CardSymbol.CLUB, 13));
