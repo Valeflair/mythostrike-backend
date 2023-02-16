@@ -25,7 +25,7 @@ public class Strength extends PassiveSkill {
 
     @Override
     public boolean checkCondition(AttackHandle attackHandle) {
-        if (attackHandle.getPlayer().getPassiveSkills().stream().anyMatch(passiveSkill -> name.equals(NAME))) {
+        if (attackHandle.getPlayer().getPassiveSkills().stream().anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))) {
             this.attackHandle = attackHandle;
             return true;
         }

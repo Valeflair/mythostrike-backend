@@ -333,12 +333,13 @@ public class GameManager {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         lastPickRequest.setSelectedPlayers(targetPlayers);
-        Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
-        if (id == null || id < 0) {
+        if (skillId < 0) {
             lastPickRequest.setClickedCancel(true);
             proceed();
             return;
         }
+        Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
+
 
 
         lastPickRequest.setClickedCancel(true);
