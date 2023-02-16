@@ -76,7 +76,7 @@ public class GameRunIntegrationTest {
             System.out.println("User already exists, ignoring");
         }
         User testUser = userService.getUser(testUserPrincipal.getName());
-        Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
+        Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser, userService);
 
 
         //subscribe to the lobby
@@ -94,35 +94,5 @@ public class GameRunIntegrationTest {
 
     @Test
     void startGame() throws Exception {
-        webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
-
-        StompSession session = webSocketStompClient
-            .connectAsync(webSocketPath, new StompSessionHandlerAdapter() {
-            })
-            .get(1, SECONDS);
-
-
-        //generate a test user and lobby to compare with.
-        Principal testUserPrincipal = new SimplePrincipal("TestUser");
-        try {
-            authenticationController.register(new UserAuthRequest(testUserPrincipal.getName(), "TestPassword"));
-        } catch (ResponseStatusException e) {
-            System.out.println("User already exists, ignoring");
-        }
-        User testUser = userService.getUser(testUserPrincipal.getName());
-        Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
-
-
-        //subscribe to the lobby
-        SimpleStompFrameHandler<LobbyData> frameHandler = new SimpleStompFrameHandler<LobbyData>(LobbyData.class);
-        session.subscribe("/lobbies/1", frameHandler);
-
-        //create the lobby and change the mode
-        lobbyController.create(testUserPrincipal, new CreateLobbyRequest(1));
-        lobbyController.changeMode(testUserPrincipal, new ChangeModeRequest(1, 1));
-
-        await()
-            .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
     }
 }

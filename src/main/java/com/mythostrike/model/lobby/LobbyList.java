@@ -1,6 +1,7 @@
 package com.mythostrike.model.lobby;
 
 import com.mythostrike.account.repository.User;
+import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.game.management.GameManager;
 import org.jetbrains.annotations.Nullable;
@@ -35,8 +36,8 @@ public final class LobbyList {
         return instance;
     }
 
-    public Lobby createLobby(User owner, Mode mode) {
-        Lobby lobby = new Lobby(idCounter, mode, owner);
+    public Lobby createLobby(User owner, Mode mode, UserService userService) {
+        Lobby lobby = new Lobby(idCounter, mode, owner, userService);
         lobbyMap.put(idCounter, lobby);
         userInGame.put(idCounter, 0);
         idCounter++;

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Drought extends Card {
     public static final String NAME = "Drought";
-    public static final String DESCRIPTION = "pick a player as target, put nightmare under his delayed effect," +
+    public static final String DESCRIPTION = "pick a player as target, put drought under his delayed effect," +
             "at his judge turn he must judge, by not judging a Spade he will skip his Draw Turn";
     public static final CardType TYPE = CardType.SKILL_CARD;
 

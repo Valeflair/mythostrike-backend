@@ -90,7 +90,7 @@ class WebsocketConnectIntegrationTest {
 
         Lobby testLobby;
         try {
-            testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser);
+            testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser, userService);
         } catch (IllegalInputException e) {
             fail("Failed to create test lobby");
             return;
