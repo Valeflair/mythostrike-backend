@@ -12,7 +12,7 @@ import java.util.Optional;
 public abstract class WeaponCard extends Card {
 
 
-    protected WeaponCard(int id, String name, String description, CardSymbol symbol, int point, PassiveSkill passiveSkill) {
+    protected WeaponCard(int id, String name, String description, CardSymbol symbol, int point) {
         super(id, name, description, CardType.WEAPON,  symbol, point);
     }
 
