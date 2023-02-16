@@ -23,7 +23,7 @@ import java.util.Objects;
 public class Lobby {
     private static final int MAX_PLAYERS = 8;
     private final int id;
-    private final List<Seat> seats;
+    private List<Seat> seats;
     private Mode mode;
     private Player owner;
     @JsonIgnore
@@ -201,18 +201,25 @@ public class Lobby {
         this.mode = newMode;
 
         //update seats
-        //if we have too many seats, remove all empty seats
-        if (seats.size() > mode.maxPlayer()) {
-            List<Seat> newSeats = new ArrayList<>(newMode.maxPlayer());
-            int index = 0;
-            for (Seat seat : seats) {
-                if (seat.getPlayer() != null) {
-                    newSeats.add(new Seat(index, seat.getPlayer(), null));
-                }
+        //if we have too many seats, move players from the seats that are not in the new mode to empty seats in front
+        List<Seat> seatsToMove = new ArrayList<>();
+        for (int i = newMode.maxPlayer(); i < seats.size(); i++) {
+            if (seats.get(i).getPlayer() != null) {
+                seatsToMove.add(seats.get(i));
             }
-            this.seats.clear();
-            this.seats.addAll(newSeats);
         }
+        //add to remove players to empty seats
+        int index = 0;
+        for (Seat seat : seatsToMove) {
+            //find next empty seat
+            while (seats.get(index).getPlayer() != null) {
+                index++;
+            }
+            seats.get(index).setPlayer(seat.getPlayer());
+        }
+
+        //remove unnecessary seats at the end
+        seats = seats.subList(0, newMode.maxPlayer());
 
         //update identities and add empty seats if necessary
         List<Identity> identities = mode.getIdentityList();
