@@ -22,22 +22,24 @@ public abstract class WeaponCard extends Card {
         gameManager = cardUseHandle.getGameManager();
         Optional<Card> weaponFirst = player.getEquipment().getCards().stream()
                 .filter(card -> card.getType().equals(CardType.WEAPON)).findFirst();
+        //remove old weapon
         if (weaponFirst.isPresent()) {
             Card weapon = weaponFirst.get();
             CardMoveHandle throwWeapon = new CardMoveHandle(gameManager, "throw weapon"
-                    , player, null, player.getEquipment(),
-                    gameManager.getGame().getTablePile(), List.of(weapon));
+                , player, null, player.getEquipment(),
+                gameManager.getGame().getTablePile(), List.of(weapon));
             gameManager.getCardManager().moveCard(throwWeapon);
             gameManager.getPlayerManager().removeSkillFromPlayer(player, weapon.getPassiveSkill());
             gameManager.getPlayerManager().removeSkillFromPlayer(player, weapon.getActiveSkill());
-            CardMoveHandle equipWeapon = new CardMoveHandle(gameManager, "equip weapon"
-                    , player, player,player.getHandCards(),
-                    player.getEquipment(), List.of(this));
-            gameManager.getCardManager().moveCard(equipWeapon);
-            gameManager.getPlayerManager().addSkillToPlayer(player, getPassiveSkill());
-            gameManager.getPlayerManager().addSkillToPlayer(player, getActiveSkill());
         }
+
+        //equip new weapon
+        CardMoveHandle equipWeapon = new CardMoveHandle(gameManager, "equip weapon"
+                , player, player, player.getHandCards(),
+                player.getEquipment(), List.of(this));
+        gameManager.getCardManager().moveCard(equipWeapon);
+        gameManager.getPlayerManager().addSkillToPlayer(player, getPassiveSkill());
+        gameManager.getPlayerManager().addSkillToPlayer(player, getActiveSkill());
     }
-
-
 }
+

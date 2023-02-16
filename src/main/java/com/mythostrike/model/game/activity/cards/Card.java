@@ -61,10 +61,6 @@ public abstract class Card extends Activity {
 
     public abstract Card deepCopy();
 
-    @Override
-    public void activate() {
-    }
-
     public void playOut() {
 
         //do not play out if it's skill invoked fictional card

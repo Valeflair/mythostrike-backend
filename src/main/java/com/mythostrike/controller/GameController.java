@@ -80,7 +80,7 @@ public class GameController {
             cardNames = request.cardIds().stream().map(cardList::getCard).map(Card::toString).toList();
         }
 
-        log.debug("play card '{}' request in '{}' from '{}' to '{}'", cardNames, request.lobbyId(),
+        log.debug("play card '{}' request in '{}' from '{}' to targets '{}'", cardNames, request.lobbyId(),
             principal.getName(), request.targets());
 
         //get objects from REST data
@@ -98,7 +98,7 @@ public class GameController {
 
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
-        log.debug("use skill '{}' request in '{}' from '{}' to '{}'", request.skillId(), request.lobbyId(),
+        log.debug("use skill '{}' request in '{}' from '{}' to targets '{}'", request.skillId(), request.lobbyId(),
             principal.getName(), request.targets());
 
         //get objects from REST data
@@ -195,6 +195,9 @@ public class GameController {
 
     public void gameEnd(int lobbyId, List<PlayerResult> results) {
         String path = String.format("/games/%d", lobbyId);
+
+        //remove game from lobby list
+        lobbyList.removeLobby(lobbyId);
 
         webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.GAME_END, results),
             "gameEnd");
