@@ -4,6 +4,7 @@ package com.mythostrike.model.game.activity.cards.cardtype;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.cards.Card;
+import com.mythostrike.model.game.activity.cards.CardSpace;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -23,7 +24,6 @@ public class Nightmare extends Card {
     public static final CardType TYPE = CardType.SKILL_CARD;
 
     private CardUseHandle handle;
-    private List<Player> target;
 
     public Nightmare(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
@@ -33,6 +33,7 @@ public class Nightmare extends Card {
     public Nightmare deepCopy() {
         return new Nightmare(id, symbol, point);
     }
+
     @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         gameManager = cardUseHandle.getGameManager();
@@ -67,12 +68,16 @@ public class Nightmare extends Card {
     public void use() {
         Card judge = gameManager.getCardManager().judge();
         if (judge.getSymbol().equals(CardSymbol.HEART)) {
-            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "lucky, nightmare doesnt effect",
-                    cardUseHandle.getOpponents().get(0),
-                    null,
-                    cardUseHandle.getOpponents().get(0).getDelayedEffect(),
-                    gameManager.getGame().getTablePile(),
-                    List.of(judge)));
+            String reason = "lucky, nightmare doesnt effect";
+            //from is always the opponent player because Nightmare and Drought are initily played from the opponent
+            Player from = pickRequest.getSelectedPlayers().get(0);
+            Player to = null;
+            CardSpace fromSpace = from.getDelayedEffect();
+            CardSpace toSpace = gameManager.getGame().getTablePile();
+            List<Card> cards = List.of(this);
+
+            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, reason, from, to,
+                fromSpace, toSpace, cards));
         }
     }
 }

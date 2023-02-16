@@ -74,7 +74,7 @@ public class CardManager {
             player.getUsername(), count, cardDrawHandle.getReason()));
 
         for (Card card : drawedCards) {
-            message.append(card.getName()).append(",");
+            message.append(card).append(",");
         }
         //delete the last comma
         message.delete(message.length() - 1, message.length() - 1);

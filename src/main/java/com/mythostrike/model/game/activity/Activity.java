@@ -67,9 +67,11 @@ public abstract class Activity {
     }
 
     public void use() {
+        throw new RuntimeException("Activity " + name + " has no use() method implemented");
     }
 
     public void activate() {
+        throw new RuntimeException("Activity " + name + " has no use() method implemented");
     }
 
     /**

@@ -3,6 +3,7 @@ package com.mythostrike.model.game.activity.cards.cardtype;
 
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.cards.Card;
+import com.mythostrike.model.game.activity.cards.CardSpace;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -47,9 +48,9 @@ public class Drought extends Card {
     @Override
     public void activate() {
         cardMoveHandle = new CardMoveHandle(gameManager, "use card", cardUseHandle.getPlayer(),
-                cardUseHandle.getOpponents().get(0),
+                pickRequest.getSelectedPlayers().get(0),
                 cardUseHandle.getPlayer().getHandCards(),
-                cardUseHandle.getOpponents().get(0).getDelayedEffect(),
+                pickRequest.getSelectedPlayers().get(0).getDelayedEffect(),
                 List.of(this));
         playOut();
     }
@@ -59,12 +60,16 @@ public class Drought extends Card {
     public void use() {
         Card judge = gameManager.getCardManager().judge();
         if (judge.getSymbol().equals(CardSymbol.SPADE)) {
-            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "lucky, drought doesnt effect",
-                    cardUseHandle.getOpponents().get(0),
-                    null,
-                    cardUseHandle.getOpponents().get(0).getDelayedEffect(),
-                    gameManager.getGame().getTablePile(),
-                    List.of(judge)));
+            String reason = "lucky, drought doesnt effect";
+            //from is always the opponent player because Nightmare and Drought are initily played from the opponent
+            Player from = pickRequest.getSelectedPlayers().get(0);
+            Player to = null;
+            CardSpace fromSpace = from.getDelayedEffect();
+            CardSpace toSpace = gameManager.getGame().getTablePile();
+            List<Card> cards = List.of(this);
+
+            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, reason, from, to,
+                fromSpace, toSpace, cards));
         }
     }
 

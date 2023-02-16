@@ -45,13 +45,16 @@ public class EnterDying extends Activity {
 
     @Override
     public void activate() {
-
         //TODO:update message to frontend, that this player is about to die
+        gameManager.queueActivity(this);
     }
 
     @Override
     public void use() {
-        if (pickRequest != null) {
+        gameManager.getPlayerManager().killPlayer(player);
+        end = true;
+
+        /*if (pickRequest != null) {
             Player healer = pickRequest.getPlayer();
             if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
                 DamageHandle damageHandle = new DamageHandle(gameManager, null,
@@ -88,7 +91,7 @@ public class EnterDying extends Activity {
                 .build();
             pickRequest = new PickRequest(player, gameManager, highlightMessage);
             gameManager.queueActivity(pickRequest);
-        }
+        }*/
     }
 
     @Override

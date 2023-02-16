@@ -13,38 +13,32 @@ public class CardSpaceRestrictedByType extends CardSpace {
 
     @Override
     public void add(Card card) {
+        if ((!accepts(card))) throw new AssertionError();
         CardType type = card.getType();
         cards.add(card);
-        acceptedCards.put(type, acceptedCards.get(type) + 1);
+        acceptedCards.put(type, acceptedCards.get(type) - 1);
     }
 
     public boolean accepts(Card card) {
-        if (!acceptedCards.containsKey(card.getType())) {
-            return false;
-        }
         CardType type = card.getType();
-        int count = 0;
-        for (Card cardInstance : cards) {
-            if (cardInstance.getType().equals(type)) {
-                count++;
-            }
-        }
-        return count < acceptedCards.get(type);
+        return acceptedCards.containsKey(type) && acceptedCards.get(type) > 0;
     }
 
     @Override
-    public void subtractCard(Card card) {
-        cards.remove(card);
-        CardType type = card.getType();
-        acceptedCards.put(type, Math.max(0, acceptedCards.get(type) - 1));
+    public boolean subtractCard(Card card) {
+        if (cards.remove(card)) {
+            CardType type = card.getType();
+            if (acceptedCards.get(type) == null) throw new AssertionError();
+            acceptedCards.put(type, acceptedCards.get(type) + 1);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Card subtractCard(int index) {
         Card card = cards.get(index);
-        cards.remove(card);
-        CardType type = card.getType();
-        acceptedCards.put(type, Math.max(0, acceptedCards.get(type) - 1));
+        if (!subtractCard(card)) throw new AssertionError();
         return card;
     }
 }

@@ -13,11 +13,6 @@ public abstract class PassiveSkill extends Activity {
         super(name, description);
     }
 
-
     public abstract void register(EventManager eventManager, Player player);
-
-    @Override
-    public void activate() {
-    }
 
 }

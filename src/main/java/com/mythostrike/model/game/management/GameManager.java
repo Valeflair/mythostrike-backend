@@ -143,9 +143,13 @@ public class GameManager {
 
         List<Player> players = game.getAlivePlayers();
         //bot needs the gameManager to be set
-        CheckDying checkDying = new CheckDying();
         players.forEach(player -> player.initialize(this));
-        players.forEach(player -> checkDying.register(eventManager, player));
+
+        CheckDying checkDying;
+        for (Player player : players) {
+            checkDying = new CheckDying();
+            checkDying.register(eventManager, player);
+        }
         selectChampionPhase(players);
     }
 

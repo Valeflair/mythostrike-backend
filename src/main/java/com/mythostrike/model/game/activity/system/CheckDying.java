@@ -17,13 +17,13 @@ public class CheckDying extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
+        this.damageHandle = damageHandle;
         return damageHandle.getTo().getCurrentHp() < 1;
     }
 
     @Override
-    public void use() {
+    public void activate() {
         EnterDying enterDying = new EnterDying(damageHandle.getTo(), damageHandle.getGameManager());
-        damageHandle.getGameManager().queueActivity(enterDying);
         enterDying.activate();
     }
 
@@ -35,8 +35,6 @@ public class CheckDying extends PassiveSkill {
      */
     @Override
     public void register(EventManager eventManager, Player player) {
-        for (Player allPlayer : eventManager.getGameManager().getGame().getAllPlayers()) {
-            eventManager.registerEvent(EventTypeDamage.DAMAGE_COMPLETE, this, allPlayer, true);
-        }
+        eventManager.registerEvent(EventTypeDamage.DAMAGE_COMPLETE, this, player, true);
     }
 }

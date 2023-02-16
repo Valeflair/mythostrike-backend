@@ -43,7 +43,7 @@ public class CardSpace {
 
     public void removeAll(List<Card> cards) {
         for (Card card : cards) {
-            subtractCard(card);
+            if ((!subtractCard(card))) throw new AssertionError("card not found");
         }
     }
 
@@ -65,11 +65,11 @@ public class CardSpace {
         return cards.get(0);
     }
 
-    public void subtractCard(Card card) {
-        cards.remove(card);
+    public boolean subtractCard(Card card) {
+        return cards.remove(card);
     }
 
-    public Card subtractCard(int index) {
+    public @Nullable Card subtractCard(int index) {
         Card card = cards.get(index);
         cards.remove(card);
         return card;
