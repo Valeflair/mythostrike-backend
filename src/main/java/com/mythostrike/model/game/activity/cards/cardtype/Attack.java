@@ -24,6 +24,9 @@ import java.util.List;
 
 @Getter
 @Setter
+/**
+ * Attack card, player can choose a target to attack
+ */
 public class Attack extends Card {
     public static final String NAME = Attack.class.getSimpleName();
     public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
@@ -128,8 +131,14 @@ public class Attack extends Card {
             attacksPlayer(targets.get(0));
         }
 
+
     }
 
+
+    /**
+     * check if the activity is finished
+     * @return
+     */
     @Override
     public boolean end() {
         return end;

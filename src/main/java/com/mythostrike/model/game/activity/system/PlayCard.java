@@ -34,6 +34,7 @@ public class PlayCard extends Activity {
         } else {
             gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
+                card.setPickRequest(pickRequest);
                 card.activate();
             }
         }

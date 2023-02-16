@@ -4,6 +4,7 @@ import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
+import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
 
@@ -36,8 +37,9 @@ public class Bot extends Player {
         gameManager.selectChampion(getUsername(), message.champions().get(0));
     }
 
-    public void highlight(HighlightMessage message) {
+    public void highlight(PickRequest pickRequest) {
 
+        HighlightMessage message = pickRequest.getHighlightMessage();
         if (message.activateEndTurn()) {
             gameManager.endTurn(getUsername());
             return;
@@ -56,6 +58,7 @@ public class Bot extends Player {
                 pickedCards.add(shuffleIds.get(i));
             }
         }
+        gameManager.getCurrentActivity().remove(pickRequest);
         gameManager.selectCards(getUsername(), pickedCards, new ArrayList<>());
     }
 }

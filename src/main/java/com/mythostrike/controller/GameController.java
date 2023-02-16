@@ -80,8 +80,8 @@ public class GameController {
             cardNames = request.cardIds().stream().map(cardList::getCard).map(Card::toString).toList();
         }
 
-        log.debug("play card '{}' request in '{}' from '{}'", cardNames, request.lobbyId(),
-            principal.getName());
+        log.debug("play card '{}' request in '{}' from '{}' to '{}'", cardNames, request.lobbyId(),
+            principal.getName(), request.targets());
 
         //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
@@ -98,8 +98,8 @@ public class GameController {
 
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
-        log.debug("use skill '{}' request in '{}' from '{}'", request.skillId(), request.lobbyId(),
-            principal.getName());
+        log.debug("use skill '{}' request in '{}' from '{}' to '{}'", request.skillId(), request.lobbyId(),
+            principal.getName(), request.targets());
 
         //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());

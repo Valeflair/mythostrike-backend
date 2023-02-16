@@ -293,7 +293,7 @@ public class GameManager {
         lastPickRequest = pickRequest;
         proceeding = false;
         if (pickRequest.getPlayer() instanceof Bot bot) {
-            bot.highlight(pickRequest.getHighlightMessage());
+            bot.highlight(pickRequest);
         } else {
             gameController.highlight(lobbyId, pickRequest.getPlayer().getUsername(), pickRequest.getHighlightMessage());
         }
@@ -328,9 +328,29 @@ public class GameManager {
     public void selectSkill(String playerName, int skillId, List<String> targets) {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
-        ActiveSkill skill = player.getChampion().getActiveSkills().get(skillId);
-        skill.activate();
-        //TODO: check if skill is activated within using the selected Targets
+        lastPickRequest.setSelectedPlayers(targetPlayers);
+        Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
+        if (id == null || id < 0) {
+            lastPickRequest.setClickedCancel(true);
+            proceed();
+            return;
+        }
+
+
+        lastPickRequest.setClickedCancel(true);
+        for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
+            if (skill.getId() == id) {
+                lastPickRequest.setClickedCancel(false);
+                break;
+            }
+        }
+        for (PassiveSkill skill : player.getChampion().getPassiveSkills()) {
+            if (skill.getId() == id) {
+                lastPickRequest.setClickedCancel(false);
+                break;
+            }
+        }
+        proceed();
     }
 
     public void cancelRequest(String playerName) {

@@ -17,7 +17,8 @@ import java.util.List;
 @Getter
 public class PickCardToPLay extends Activity {
     public static final String NAME = PickCardToPLay.class.getSimpleName();
-    public static final String DESCRIPTION = "pick card to play";
+    public static final String DESCRIPTION = "pick card to play or skill to invoke," +
+            " or end turn if no card/skill can/want be played";
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
@@ -57,7 +58,7 @@ public class PickCardToPLay extends Activity {
             .skillIds(skillIds)
             .skillCount(List.of(1))
             .skillPlayerConditions(skillPlayerConditions)
-            .reason("Pick a Card to play")
+            .reason(DESCRIPTION)
             .activateEndTurn(true)
             .build();
 

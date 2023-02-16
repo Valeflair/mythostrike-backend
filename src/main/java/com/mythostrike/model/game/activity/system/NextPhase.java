@@ -2,6 +2,10 @@ package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.SystemAction;
+import com.mythostrike.model.game.activity.cards.Card;
+import com.mythostrike.model.game.activity.cards.cardtype.Drought;
+import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypePhase;
@@ -13,6 +17,9 @@ import com.mythostrike.model.game.activity.system.phase.DropTurn;
 import com.mythostrike.model.game.activity.system.phase.RoundStartTurn;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class NextPhase extends SystemAction {
@@ -32,8 +39,48 @@ public class NextPhase extends SystemAction {
             .getCurrentPlayer(), before);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
         Phase after = Phase.nextPhase(before);
+
+
+        //Nightmare and Drought
+
+        Optional<Card> firstDroughtCard = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+                .filter(card -> card.getName().equals(Drought.NAME))
+                .findFirst();
+
+        if (firstDroughtCard.isPresent() && after.equals(Phase.DRAW)) {
+            Card drought = firstDroughtCard.get();
+            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "drought effected!",
+                    gameManager.getGame().getCurrentPlayer(), null,
+                    gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
+                    gameManager.getGame().getTablePile(),
+                    List.of(drought)));
+            after = Phase.ACTIVE_TURN;
+        }
+
+
+        Optional<Card> firstNightmareCard = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+                .filter(card -> card.getName().equals(Nightmare.NAME))
+                .findFirst();
+
+        if (firstNightmareCard.isPresent() && after.equals(Phase.ACTIVE_TURN)) {
+            Card nightmare = firstNightmareCard.get();
+            gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "nightmare effected!",
+                    gameManager.getGame().getCurrentPlayer(), null,
+                    gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
+                    gameManager.getGame().getTablePile(),
+                    List.of(nightmare)));
+            after = Phase.DISCARD;
+        }
+
+
+
+
+
+
+
         PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
             .getCurrentPlayer(), after);
+
 
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(
             gameManager, "switch phase", gameManager.getGame().getCurrentPlayer(), before, after);
@@ -50,6 +97,12 @@ public class NextPhase extends SystemAction {
             default -> {
             }
         }
+
+
+
+
+
+
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, afterPhaseHandle);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, afterPhaseHandle);
         gameManager.setPhase(after);

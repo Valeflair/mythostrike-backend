@@ -37,7 +37,7 @@ public class Revenge extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
-        if (damageHandle.getTo().getPassiveSkills().stream().anyMatch(passiveSkill -> name.equals(NAME))) {
+        if (damageHandle.getTo().getPassiveSkills().stream().anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))) {
             this.damageHandle = damageHandle;
             return true;
         }
@@ -79,7 +79,6 @@ public class Revenge extends PassiveSkill {
             gameManager.getCardManager().moveCard(cardMoveHandle);
 
         } else {
-            //TODO: was hier los? für was damageHandleRevenge?
             DamageHandle damageHandleRevenge = new DamageHandle(gameManager, "damage by Revenge",
                     damageHandle.getTo(), damageHandle.getPlayer());
             gameManager.getPlayerManager().applyDamage(damageHandleRevenge);

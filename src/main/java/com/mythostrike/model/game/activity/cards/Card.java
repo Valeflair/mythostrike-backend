@@ -69,9 +69,10 @@ public abstract class Card extends Activity {
             return;
         }
         if (cardMoveHandle == null) {
+            gameManager = cardUseHandle.getGameManager();
             cardMoveHandle = new CardMoveHandle(gameManager, "plays card out", cardUseHandle.getPlayer(), null, cardUseHandle.getPlayer().getHandCards(), gameManager.getGame().getTablePile(), List.of(this) );
         }
-        gameManager = cardMoveHandle.getGameManager();
+
         gameManager.getCardManager().moveCard(cardMoveHandle);
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }
