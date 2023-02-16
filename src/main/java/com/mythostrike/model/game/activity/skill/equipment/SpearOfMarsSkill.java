@@ -15,7 +15,7 @@ public class SpearOfMarsSkill extends PassiveSkill {
     private AttackHandle attackHandle;
 
 
-    protected SpearOfMarsSkill() {
+    public SpearOfMarsSkill() {
         super(NAME, DESCRIPTION);
     }
 
