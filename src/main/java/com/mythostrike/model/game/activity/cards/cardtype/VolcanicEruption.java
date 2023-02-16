@@ -37,6 +37,8 @@ public class VolcanicEruption extends Card {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
 
+
+
     /**
      * call in active turn, check if there is availble target to attack
      *

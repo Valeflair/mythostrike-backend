@@ -55,9 +55,9 @@ public class Revenge extends PassiveSkill {
                 .skillPlayerConditions(List.of())
                 .build();
         pickRequest = new PickRequest(damageHandle.getTo(), gameManager, highlightMessage);
-
-        gameManager.queueActivity(pickRequest);
         gameManager.queueActivity(this);
+        gameManager.queueActivity(pickRequest);
+
     }
 
     public void use() {
