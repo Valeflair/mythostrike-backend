@@ -14,7 +14,8 @@ public enum ChampionData {
     Achilles("Achilles", 4, List.of(), List.of(new Revenge())),
     HERACLES("Heracles", 4, List.of(), List.of(new DivineJustice())),
     TERPSICHORE("Terpsichore", 3, List.of(), List.of(new InfinityDance(), new SongOfLullaby())),
-    KRATOS("Kratos", 5, List.of(), List.of(new DeadlyCrusher(), new EndlessHunger()));
+    KRATOS("Kratos", 5, List.of(), List.of(new DeadlyCrusher(), new EndlessHunger())),
+    NYX("Nyx", 3, List.of(), List.of(new VisionOfNight(), new DarkIllusion()));
 
     private final String name;
     private final int maxHp;

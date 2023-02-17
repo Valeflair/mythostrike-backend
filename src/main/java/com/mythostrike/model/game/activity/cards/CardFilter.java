@@ -7,10 +7,12 @@ public class CardFilter {
 
     private final List<String> includeList;
     private final List<String> excludeList;
+    private final List<CardSymbol> includeSymbols;
 
     public CardFilter() {
         includeList = new ArrayList<>();
         excludeList = new ArrayList<>();
+        includeSymbols = new ArrayList<>();
     }
 
     /**
@@ -19,6 +21,7 @@ public class CardFilter {
     public CardFilter(String filter) {
         includeList = new ArrayList<>();
         excludeList = new ArrayList<>();
+        includeSymbols = new ArrayList<>();
         String[] filters = filter.split("\\|");
         for (String include : filters) {
             addIncludeFilter(include);
@@ -28,6 +31,10 @@ public class CardFilter {
 
     public void addIncludeFilter(String name) {
         includeList.add(name);
+    }
+
+    public void addIncludeSymbol(CardSymbol symbol) {
+        includeSymbols.add(symbol);
     }
 
     public void addExcludeFilter(String name) {
@@ -44,7 +51,7 @@ public class CardFilter {
 
     public boolean match(Card card) {
         String name = card.getName();
-        return (includeList.isEmpty() || includeList.contains(name)) &&
+        return (includeList.isEmpty() || includeList.contains(name) || includeSymbols.contains(card.getSymbol())) &&
             (excludeList.isEmpty() || !excludeList.contains(name));
     }
 
@@ -55,7 +62,7 @@ public class CardFilter {
         List<Card> result = new ArrayList<>();
         for (Card card : cards) {
             String name = card.getName();
-            if (includeList.isEmpty() || includeList.contains(name)) {
+            if (includeList.isEmpty() || includeList.contains(name) || includeSymbols.contains(card.getSymbol())) {
                 if (excludeList.isEmpty() || !excludeList.contains(name)) {
                     result.add(card);
                 }

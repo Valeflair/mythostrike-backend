@@ -20,17 +20,23 @@ public abstract class ArmorCard extends Card {
     public void activate() {
         Player player = cardUseHandle.getPlayer();
         gameManager = cardUseHandle.getGameManager();
-        Optional<Card> armorFirst = player.getEquipment().getCards().stream()
-                .filter(card -> card.getType().equals(CardType.ARMOR)).findFirst();
+
         //remove old armor
-        if (armorFirst.isPresent()) {
-            Card armor = armorFirst.get();
-            CardMoveHandle throwArmor = new CardMoveHandle(gameManager, "throw armor"
+        Card armorFirst = null;
+        for (Card card : player.getEquipment().getCards()) {
+            if (card.getType().equals(CardType.ARMOR)) {
+                armorFirst =  card;
+                break;
+            }
+        }
+
+        if (armorFirst != null) {
+            CardMoveHandle throwWeapon = new CardMoveHandle(gameManager, "throw weapon"
                     , player, null, player.getEquipment(),
-                    gameManager.getGame().getTablePile(), List.of(armor));
-            gameManager.getCardManager().moveCard(throwArmor);
-            gameManager.getPlayerManager().removeSkillFromPlayer(player, armor.getPassiveSkill());
-            gameManager.getPlayerManager().removeSkillFromPlayer(player, armor.getActiveSkill());
+                    gameManager.getGame().getTablePile(), List.of(armorFirst));
+            gameManager.getCardManager().moveCard(throwWeapon);
+            gameManager.getPlayerManager().removeSkillFromPlayer(player, armorFirst.getPassiveSkill());
+            gameManager.getPlayerManager().removeSkillFromPlayer(player, armorFirst.getActiveSkill());
         }
 
         //equip new armor
