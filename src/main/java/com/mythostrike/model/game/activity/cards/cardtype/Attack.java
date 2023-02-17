@@ -160,7 +160,8 @@ public class Attack extends Card {
             return;
         }
         List<Integer> cardIds =
-            GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
+            GameManager.convertCardsToInteger(gameManager.getCardManager()
+                    .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, attackHandle.getDefendAskHandle().getAmount()))

@@ -36,7 +36,9 @@ public class Warrior extends ActiveSkill {
     public boolean checkCondition(PlayerHandle playerHandle) {
         boolean value = attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
             "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false))
-            && playerHandle.getPlayer().getHandCards().getCards().stream().anyMatch(DEFEND_FILTER::match);
+            && playerHandle.getGameManager().getCardManager()
+                .filterCard(playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER,
+                        playerHandle.getPlayer()).size() > 0;
 
         if (value) {
             this.playerHandle = playerHandle;
@@ -51,7 +53,7 @@ public class Warrior extends ActiveSkill {
         GameManager gameManager = playerHandle.getGameManager();
 
         List<Player> targets = new ArrayList<>();
-        List<Card> cards = DEFEND_FILTER.filter(player.getHandCards().getCards());
+        List<Card> cards = gameManager.getCardManager().filterCard(player.getHandCards().getCards(), DEFEND_FILTER, player);
         List<PlayerCondition> playerConditions = new ArrayList<>();
 
         for (Player target : playerHandle.getGameManager().getGame().getOtherPlayers(player)) {

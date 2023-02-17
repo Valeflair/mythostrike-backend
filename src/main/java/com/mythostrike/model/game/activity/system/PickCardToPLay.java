@@ -5,8 +5,10 @@ import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.cards.Card;
+import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardAsk;
 import com.mythostrike.model.game.activity.events.type.EventTypeRequest;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -35,6 +37,13 @@ public class PickCardToPLay extends Activity {
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> playableCards = getPlayableCards(player);
+
+        CardAskHandle cardAskHandle = new CardAskHandle(gameManager, "ask for play card", player,
+                List.of(), player.getHandCards(), gameManager.getGame().getTablePile(), 1,
+                false, true);
+
+        gameManager.getEventManager().triggerEvent(EventTypeCardAsk.CARD_ASKED, cardAskHandle);
+
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);
         /*HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,
             null, 1, 1, 0, 0, "Pick a Card to play", true, false);*/

@@ -145,6 +145,10 @@ public abstract class Player {
         }
     }
 
+    public void setUseTime(String cardName, int count) {
+        restrict.put(cardName, count);
+    }
+
     public void setPermanentRestrict(String cardName, int count) {
         permanentRestrict.put(cardName, count);
     }

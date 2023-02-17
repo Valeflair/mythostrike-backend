@@ -133,7 +133,7 @@ public class GodArena extends Card {
 
     public void attacksPlayer(Player opponent) {
         List<Integer> cardIds =
-            GameManager.convertCardsToInteger(ATTACK_FILTER.filter(opponent.getHandCards().getCards()));
+            GameManager.convertCardsToInteger(gameManager.getCardManager().filterCard(opponent.getHandCards().getCards(), ATTACK_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, 1))

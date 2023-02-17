@@ -63,4 +63,14 @@ public class CardFilter {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (String include : includeList) {
+            result.append(include).append("|");
+        }
+        result.delete(result.length() - 1, result.length());
+        return result.toString();
+    }
 }

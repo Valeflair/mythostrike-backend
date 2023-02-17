@@ -55,11 +55,11 @@ public class PlayerManager {
             } else {
                 eventManager.triggerEvent(EventTypeDamage.BEFORE_HP_RECOVER, damageHandle);
                 //increase HP
-                if (damageHandle.getDamage() > 0) {
+                if (damageHandle.getDamage() > 0 ) {
 
                     continue;
                 }
-                if (damageHandle.getDamage() == 0) {
+                if (damageHandle.getDamage() == 0 || damageHandle.isPrevented()) {
                     return;
                 }
                 damageHandle.getTo().increaseCurrentHp(Math.abs(damageHandle.getDamage()));

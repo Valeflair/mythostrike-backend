@@ -135,7 +135,8 @@ public class VolcanicEruption extends Card {
 
     public void attacksPlayer(Player opponent) {
         List<Integer> cardIds =
-            GameManager.convertCardsToInteger(DEFEND_FILTER.filter(opponent.getHandCards().getCards()));
+            GameManager.convertCardsToInteger(gameManager.getCardManager()
+                    .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, 1))
