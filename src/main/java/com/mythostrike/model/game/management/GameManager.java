@@ -342,18 +342,25 @@ public class GameManager {
 
 
         lastPickRequest.setClickedCancel(true);
-        for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
-            if (skill.getId() == id) {
-                lastPickRequest.setClickedCancel(false);
-                break;
+        if (lastPickRequest.getHighlightMessage().activateEndTurn()) {
+            for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
+                if (skill.getId() == id) {
+                    lastPickRequest.setClickedCancel(false);
+                    lastPickRequest.setSelectedActiveSkill(skill);
+                    break;
+                }
+            }
+        } else {
+            for (PassiveSkill skill : player.getChampion().getPassiveSkills()) {
+                if (skill.getId() == id) {
+                    lastPickRequest.setClickedCancel(false);
+                    lastPickRequest.setSelectedPassiveSkill(skill);
+                    break;
+                }
             }
         }
-        for (PassiveSkill skill : player.getChampion().getPassiveSkills()) {
-            if (skill.getId() == id) {
-                lastPickRequest.setClickedCancel(false);
-                break;
-            }
-        }
+
+
         proceed();
     }
 

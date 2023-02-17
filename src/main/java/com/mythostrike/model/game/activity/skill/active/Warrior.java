@@ -78,6 +78,7 @@ public class Warrior extends ActiveSkill {
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
 
         gameManager.queueActivity(pickRequest);
+        gameManager.queueActivity(this);
     }
 
     @Override

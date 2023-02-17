@@ -23,8 +23,12 @@ public class PlayCard extends Activity {
 
     @Override
     public void use() {
+        gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
         if (pickRequest.isClickedCancel()) {
-            gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
+            return;
+        }
+        if (pickRequest.getSelectedActiveSkill() != null) {
+            pickRequest.getSelectedActiveSkill().activate();
             return;
         }
 

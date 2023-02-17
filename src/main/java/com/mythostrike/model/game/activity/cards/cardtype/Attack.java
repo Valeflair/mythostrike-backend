@@ -90,6 +90,8 @@ public class Attack extends Card {
             playOut();
             gameManager.queueActivity(this);
             attacksPlayer(targets.get(0));
+            gameManager.output(String.format("player %s uses attack! target: %s", player.getUsername(),
+                    targets.get(0).getUsername()));
             end = false;
         } else {
             end = true;
@@ -111,6 +113,8 @@ public class Attack extends Card {
         }
         Player opponent = cardUseHandle.getOpponents().get(0);
         if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
+            gameManager.output(String.format("player %s uses attack! target: %s", player.getUsername(),
+                    targets.get(0).getUsername()));
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
                 null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
                 pickRequest.getSelectedCards());

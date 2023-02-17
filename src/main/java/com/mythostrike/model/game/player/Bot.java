@@ -59,7 +59,17 @@ public class Bot extends Player {
             Collections.shuffle(shuffleCount, Game.RANDOM_SEED);
             Collections.shuffle(shuffleIds, Game.RANDOM_SEED);
 
-            for (int i = 0; i < shuffleCount.get(0); i++) {
+            int amount = 0;
+            for (Integer i : shuffleCount) {
+                if (i < message.cardIds().size()){
+                    amount = i;
+                    break;
+                }
+
+            }
+
+
+            for (int i = 0; i < amount; i++) {
                 pickedCardIds.add(shuffleIds.get(i));
             }
             //get player condition if only one card is selected

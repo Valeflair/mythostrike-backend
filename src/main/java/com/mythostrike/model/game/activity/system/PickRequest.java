@@ -1,7 +1,9 @@
 package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
+import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -26,6 +28,10 @@ public class PickRequest extends Activity {
     private boolean clickedCancel;
     @Setter
     private HighlightMessage highlightMessage;
+    @Setter
+    private PassiveSkill selectedPassiveSkill;
+    @Setter
+    private ActiveSkill selectedActiveSkill;
 
     public PickRequest(Player player, GameManager gameManager, HighlightMessage highlightMessage) {
         super(NAME, DESCRIPTION);
