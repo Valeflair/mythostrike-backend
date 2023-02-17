@@ -118,6 +118,10 @@ public final class CardList {
         cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
         cards.put(++id, new SpearOfAres(id, CardSymbol.HEART, 13));
         cards.put(++id, new SpearOfAres(id, CardSymbol.CLUB, 13));
+        cards.put(++id, new ProtectionOfDiana(id, CardSymbol.DIAMOND, 13));
+        cards.put(++id, new ProtectionOfDiana(id, CardSymbol.HEART, 13));
+        cards.put(++id, new HeartOfTerra(id, CardSymbol.CLUB, 13));
+        cards.put(++id, new HeartOfTerra(id, CardSymbol.SPADE, 13));
     }
 
     public static CardList getCardList() {
