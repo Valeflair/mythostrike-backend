@@ -7,6 +7,7 @@ import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardFilterHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeCardDraw;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardMove;
 import com.mythostrike.model.game.activity.events.type.EventTypeFilter;
 import com.mythostrike.model.game.player.Player;
 
@@ -98,16 +99,20 @@ public class CardManager {
      * @param cardMoveHandle the handle that contains the information of the move
      */
     public void moveCard(CardMoveHandle cardMoveHandle) {
+        gameManager.getEventManager().triggerEvent(EventTypeCardMove.BEFORE_CARD_MOVE, cardMoveHandle);
         List<Card> cards = cardMoveHandle.getCardsToMove();
         CardSpace from = cardMoveHandle.getFromSpace();
         CardSpace to = cardMoveHandle.getToSpace();
+
         from.removeAll(cards);
         to.addAll(cards);
 
+        gameManager.getEventManager().triggerEvent(EventTypeCardMove.AFTER_CARD_MOVE, cardMoveHandle);
         CardMoveMessage cardMoveMessage = new CardMoveMessage(
             from.getName(), to.getName(), cardMoveHandle.getCardsToMove().size(),
             GameManager.convertCardsToInteger(cardMoveHandle.getCardsToMove())
         );
+
 
         //if both from and to space are private, send the message with the cardIds only to the affected player
         if (from.getType().isConcealed() && to.getType().isConcealed()) {

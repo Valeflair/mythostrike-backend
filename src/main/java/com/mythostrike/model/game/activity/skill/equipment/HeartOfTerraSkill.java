@@ -34,7 +34,7 @@ public class HeartOfTerraSkill extends PassiveSkill {
     public void register(EventManager eventManager, Player player) {
         eventManager.registerEvent(EventTypeDamage.DAMAGE_FORESEEN, this, player, false);
     }
-
+    
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
 
