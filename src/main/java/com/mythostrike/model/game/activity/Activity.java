@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
+import com.mythostrike.model.game.activity.system.PickRequest;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -63,6 +64,10 @@ public abstract class Activity {
     }
 
     public boolean checkCondition(PlayerHandle phaseHandle) {
+        return false;
+    }
+
+    public boolean checkCondition(PickRequest pickRequest) {
         return false;
     }
 

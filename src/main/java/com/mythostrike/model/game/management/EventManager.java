@@ -10,14 +10,8 @@ import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
 import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
-import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
-import com.mythostrike.model.game.activity.events.type.EventTypeCardAsk;
-import com.mythostrike.model.game.activity.events.type.EventTypeCardDraw;
-import com.mythostrike.model.game.activity.events.type.EventTypeCardMove;
-import com.mythostrike.model.game.activity.events.type.EventTypeCardUse;
-import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
-import com.mythostrike.model.game.activity.events.type.EventTypePhase;
-import com.mythostrike.model.game.activity.events.type.EventTypePhaseChange;
+import com.mythostrike.model.game.activity.events.type.*;
+import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 
@@ -39,6 +33,7 @@ public class EventManager {
     private final HashMap<EventTypeCardAsk, List<PassiveEffect>> mapCardAskHandle;
     private final HashMap<EventTypeCardMove, List<PassiveEffect>> mapCardMoveHandle;
     private final HashMap<EventTypeAttack, List<PassiveEffect>> mapAttackHandle;
+    private final HashMap<EventTypeRequest, List<PassiveEffect>> mapRequestHandle;
 
 
     public EventManager(GameManager gameManager) {
@@ -76,6 +71,10 @@ public class EventManager {
         mapAttackHandle = new HashMap<>();
         for (EventTypeAttack eventType : EventTypeAttack.values()) {
             mapAttackHandle.put(eventType, new ArrayList<>());
+        }
+        mapRequestHandle = new HashMap<>();
+        for (EventTypeRequest eventType : EventTypeRequest.values()) {
+            mapRequestHandle.put(eventType, new ArrayList<>());
         }
     }
 
@@ -165,6 +164,11 @@ public class EventManager {
         addToMap(list, passiveSkill, player, permanent);
     }
 
+    public void registerEvent(EventTypeRequest type, PassiveSkill passiveSkill, Player player, boolean permanent) {
+        List<PassiveEffect> list = mapRequestHandle.get(type);
+        addToMap(list, passiveSkill, player, permanent);
+    }
+
     public void triggerEvent(EventTypeDamage type, DamageHandle handle) {
         mapDamageHandle.get(type).forEach(passiveEffect -> {
             if (passiveEffect.getSkill().checkCondition(handle)) {
@@ -223,6 +227,13 @@ public class EventManager {
 
     public void triggerEvent(EventTypeAttack type, AttackHandle handle) {
         mapAttackHandle.get(type).forEach(passiveEffect -> {
+            if (passiveEffect.getSkill().checkCondition(handle)) {
+                passiveEffect.getSkill().activate();
+            }
+        });
+    }
+    public void triggerEvent(EventTypeRequest type, PickRequest handle) {
+        mapRequestHandle.get(type).forEach(passiveEffect -> {
             if (passiveEffect.getSkill().checkCondition(handle)) {
                 passiveEffect.getSkill().activate();
             }

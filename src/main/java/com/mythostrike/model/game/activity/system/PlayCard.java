@@ -33,11 +33,9 @@ public class PlayCard extends Activity {
         }
 
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
-            gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
             //TODO: jack is fixing this
             //throw new IllegalInputException("No card selected");
         } else {
-            gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
 
                 card.setPickRequest(pickRequest);

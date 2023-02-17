@@ -116,8 +116,8 @@ public final class CardList {
         cards.put(++id, new VolcanicEruption(id, CardSymbol.SPADE, 11));
         cards.put(++id, new SpearOfMars(id, CardSymbol.DIAMOND, 12));
         cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
-        cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
-
+        cards.put(++id, new SpearOfAres(id, CardSymbol.HEART, 13));
+        cards.put(++id, new SpearOfAres(id, CardSymbol.CLUB, 13));
     }
 
     public static CardList getCardList() {

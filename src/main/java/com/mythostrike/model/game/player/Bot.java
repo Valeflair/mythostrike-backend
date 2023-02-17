@@ -74,7 +74,11 @@ public class Bot extends Player {
             }
             //get player condition if only one card is selected
             if (pickedCardIds.size() == 1) {
-                playerCondition = message.cardPlayerConditions().get(message.cardIds().indexOf(pickedCardIds.get(0)));
+                List<PlayerCondition> list = message.cardPlayerConditions();
+                if (!list.isEmpty()) {
+                    playerCondition = list.get(message.cardIds().indexOf(pickedCardIds.get(0)));
+                }
+
             }
             selectedCards = true;
         //otherwise select a skill
@@ -87,7 +91,10 @@ public class Bot extends Player {
             //select skill and get player conditions if possible
             if (shuffleCount.get(0) == 1) {
                 pickedSkillId = shuffleIds.get(0);
-                playerCondition = message.cardPlayerConditions().get(message.cardIds().indexOf(pickedSkillId));
+                List<PlayerCondition> list = message.skillPlayerConditions();
+                if (!list.isEmpty()) {
+                    playerCondition = list.get(message.skillIds().indexOf(pickedSkillId));
+                }
             }
         }
 

@@ -337,8 +337,8 @@ public class GameManager {
             proceed();
             return;
         }
-        Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
-
+        //Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
+        int id = skillId;
 
 
         lastPickRequest.setClickedCancel(true);

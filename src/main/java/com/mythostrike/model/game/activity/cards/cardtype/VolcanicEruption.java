@@ -94,16 +94,23 @@ public class VolcanicEruption extends Card {
     @Override
     public void use() {
         Player player = cardUseHandle.getPlayer();
+        PickRequest answer = pickRequest;
 
         if (targets == null || targets.isEmpty()) {
             end = true;
             return;
         }
         Player opponent = cardUseHandle.getOpponents().get(0);
-        if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
+        cardUseHandle.getOpponents().remove(opponent);
+        if (targets != null && !targets.isEmpty()) {
+            attacksPlayer(targets.get(0));
+        }
+
+
+        if (answer.getSelectedCards() != null && !answer.getSelectedCards().isEmpty()) {
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
                 null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
-                pickRequest.getSelectedCards());
+                    answer.getSelectedCards());
             gameManager.getCardManager().moveCard(cardMoveHandle);
         } else {
             DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
@@ -111,10 +118,7 @@ public class VolcanicEruption extends Card {
                 DamageType.NORMAL);
             gameManager.getPlayerManager().applyDamage(damageHandle);
         }
-        cardUseHandle.getOpponents().remove(0);
-        if (targets != null && !targets.isEmpty()) {
-            attacksPlayer(targets.get(0));
-        }
+
 
 
     }

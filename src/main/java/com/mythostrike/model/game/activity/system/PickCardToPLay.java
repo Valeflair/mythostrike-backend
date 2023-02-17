@@ -7,6 +7,7 @@ import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
+import com.mythostrike.model.game.activity.events.type.EventTypeRequest;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
@@ -63,6 +64,7 @@ public class PickCardToPLay extends Activity {
             .build();
 
         PickRequest pickRequest = new PickRequest(player, gameManager, highlightMessage);
+        gameManager.getEventManager().triggerEvent(EventTypeRequest.ACTIVE_TURN_REQUEST, pickRequest);
         PlayCard playCard = new PlayCard(gameManager, pickRequest);
         gameManager.queueActivity(playCard);
         gameManager.queueActivity(pickRequest);

@@ -9,6 +9,7 @@ import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
@@ -76,9 +77,9 @@ public class Warrior extends ActiveSkill {
             .reason("choose defend to play as attack, and then choose player to attack")
             .build();
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
-
-        gameManager.queueActivity(pickRequest);
         gameManager.queueActivity(this);
+        gameManager.queueActivity(pickRequest);
+
     }
 
     @Override
@@ -87,9 +88,16 @@ public class Warrior extends ActiveSkill {
             return;
         }
         attack.getCardUseHandle().setOpponents(pickRequest.getSelectedPlayers());
+        attack.setTargets(pickRequest.getSelectedPlayers());
         attack.setPickRequest(pickRequest);
         playerHandle.getGameManager().queueActivity(attack);
         attack.attacksPlayer(pickRequest.getSelectedPlayers().get(0));
+        CardMoveHandle cardMoveHandle = new CardMoveHandle(pickRequest.getGameManager(),
+                "play defend as attack cause of warrior", pickRequest.getPlayer(), null,
+                pickRequest.getPlayer().getHandCards(), pickRequest.getGameManager().getGame().getTablePile(),
+                pickRequest.getSelectedCards());
+        pickRequest.getGameManager().getCardManager().moveCard(cardMoveHandle);
+        pickRequest.getPlayer().decreaseUseTime(Attack.NAME);
     }
 
 }
