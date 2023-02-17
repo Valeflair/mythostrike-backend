@@ -34,7 +34,7 @@ public class SynergyOrder extends ActiveSkill {
     public boolean checkCondition(PlayerHandle playerHandle) {
         boolean value = playerHandle.getPlayer().getActiveSkills().stream()
                 .anyMatch(skill -> skill.getName().equals(NAME)
-                && playerHandle.getPlayer().isImmune(NAME));
+                && !playerHandle.getPlayer().isImmune(NAME));
 
 
         if (value) {

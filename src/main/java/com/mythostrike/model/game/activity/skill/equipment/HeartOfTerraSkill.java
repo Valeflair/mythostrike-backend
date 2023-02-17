@@ -9,6 +9,7 @@ import com.mythostrike.model.game.activity.events.handle.AttackHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
+import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
 import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -31,7 +32,7 @@ public class HeartOfTerraSkill extends PassiveSkill {
 
     @Override
     public void register(EventManager eventManager, Player player) {
-        eventManager.registerEvent(EventTypeAttack.ATTACK_MISSED, this, player, false);
+        eventManager.registerEvent(EventTypeDamage.DAMAGE_FORESEEN, this, player, false);
     }
 
     @Override
