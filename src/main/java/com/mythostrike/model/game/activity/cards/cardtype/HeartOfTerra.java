@@ -11,7 +11,7 @@ import com.mythostrike.model.game.activity.skill.equipment.SpearOfMarsSkill;
 import com.mythostrike.model.game.player.Player;
 
 public class HeartOfTerra extends ArmorCard {
-    public static final String NAME = "Spear of Mars";
+    public static final String NAME = "Heart of Terra";
     public static final String DESCRIPTION = "use to equip this armor, it can absorb the first damage you get," +
             " then throw this armor away";
     public static final CardType TYPE = CardType.ARMOR;

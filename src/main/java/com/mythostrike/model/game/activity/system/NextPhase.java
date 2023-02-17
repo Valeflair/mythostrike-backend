@@ -33,11 +33,15 @@ public class NextPhase extends SystemAction {
 
     @Override
     public void use() {
-        gameManager.cleanTable();
         Phase before = gameManager.getPhase();
         PhaseHandle phaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
-            .getCurrentPlayer(), before);
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
+                .getCurrentPlayer(), before);
+        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, phaseHandle);
+        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, phaseHandle);
+        gameManager.cleanTable();
+
+
+
         Phase after = Phase.nextPhase(before);
 
 
@@ -78,8 +82,7 @@ public class NextPhase extends SystemAction {
 
 
 
-        PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
-            .getCurrentPlayer(), after);
+
 
 
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(
@@ -88,6 +91,8 @@ public class NextPhase extends SystemAction {
         if (before.equals(Phase.FINISH)) {
             gameManager.getGame().nextPlayer();
         }
+        PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
+                .getCurrentPlayer(), after);
         switch (after) {
             case ROUND_START -> gameManager.queueActivity(new RoundStartTurn(gameManager));
             case DELAYED_EFFECT -> gameManager.queueActivity(new DelayedEffectTurn(gameManager));
@@ -103,8 +108,7 @@ public class NextPhase extends SystemAction {
 
 
 
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, afterPhaseHandle);
-        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, afterPhaseHandle);
+        gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
         gameManager.setPhase(after);
     }
 }

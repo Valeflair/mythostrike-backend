@@ -2,6 +2,7 @@ package com.mythostrike.model.game.player;
 
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
+import com.mythostrike.model.game.activity.skill.active.SynergyOrder;
 import com.mythostrike.model.game.activity.skill.active.Warrior;
 import com.mythostrike.model.game.activity.skill.passive.*;
 import lombok.Getter;
@@ -15,7 +16,8 @@ public enum ChampionData {
     HERACLES("Heracles", 4, List.of(), List.of(new DivineJustice())),
     TERPSICHORE("Terpsichore", 3, List.of(), List.of(new InfinityDance(), new SongOfLullaby())),
     KRATOS("Kratos", 5, List.of(), List.of(new DeadlyCrusher(), new EndlessHunger())),
-    NYX("Nyx", 3, List.of(), List.of(new VisionOfNight(), new DarkIllusion()));
+    NYX("Nyx", 3, List.of(), List.of(new VisionOfNight(), new DarkIllusion())),
+    HESTIA("Hestia", 4, List.of(new SynergyOrder()), List.of());
 
     private final String name;
     private final int maxHp;

@@ -157,6 +157,10 @@ public abstract class Player {
         permanentImmunity.put(cardName, immune);
     }
 
+    public void setTemporaryImmunity(String cardName, boolean immune) {
+        immunity.put(cardName, immune);
+    }
+
     /**
      *
      * @param cardName the name of the card

@@ -36,13 +36,15 @@ public class PickCardToPLay extends Activity {
     @Override
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
-        List<Card> playableCards = getPlayableCards(player);
-
         CardAskHandle cardAskHandle = new CardAskHandle(gameManager, "ask for play card", player,
                 List.of(), player.getHandCards(), gameManager.getGame().getTablePile(), 1,
                 false, true);
-
         gameManager.getEventManager().triggerEvent(EventTypeCardAsk.CARD_ASKED, cardAskHandle);
+
+        List<Card> playableCards = getPlayableCards(player);
+
+
+
 
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);
         /*HighlightMessage highlightMessage = new HighlightMessage(cardIds, null,

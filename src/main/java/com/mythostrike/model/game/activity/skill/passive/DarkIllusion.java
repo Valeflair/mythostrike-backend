@@ -19,7 +19,7 @@ import java.util.List;
 
 public class DarkIllusion extends PassiveSkill {
 
-    public static final String NAME = "Vision of Night";
+    public static final String NAME = "Dark Illusion";
     public static final String DESCRIPTION = "You can play black card as defend";
     CardFilterHandle cardFilterHandle;
     public DarkIllusion() {

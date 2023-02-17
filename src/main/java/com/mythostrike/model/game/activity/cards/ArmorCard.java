@@ -31,10 +31,10 @@ public abstract class ArmorCard extends Card {
         }
 
         if (armorFirst != null) {
-            CardMoveHandle throwWeapon = new CardMoveHandle(gameManager, "throw weapon"
+            CardMoveHandle throwArmor = new CardMoveHandle(gameManager, "throw armor"
                     , player, null, player.getEquipment(),
                     gameManager.getGame().getTablePile(), List.of(armorFirst));
-            gameManager.getCardManager().moveCard(throwWeapon);
+            gameManager.getCardManager().moveCard(throwArmor);
             gameManager.getPlayerManager().removeSkillFromPlayer(player, armorFirst.getPassiveSkill());
             gameManager.getPlayerManager().removeSkillFromPlayer(player, armorFirst.getActiveSkill());
         }

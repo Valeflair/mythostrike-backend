@@ -19,6 +19,7 @@ import com.mythostrike.model.game.activity.system.PickCardToPLay;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.activity.system.PlayCard;
 import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
+import com.mythostrike.model.game.activity.system.phase.RoundStartTurn;
 import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.ChampionList;
@@ -213,6 +214,7 @@ public class GameManager {
         }
 
         phase = Phase.ROUND_START;
+        queueActivity(new RoundStartTurn(this));
         proceed();
     }
 

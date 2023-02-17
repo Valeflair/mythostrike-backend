@@ -133,7 +133,7 @@ public class CardManager {
         CardFilterHandle cardFilterHandle = new CardFilterHandle(gameManager, player, cardFilter, cards);
         gameManager.getEventManager().triggerEvent(EventTypeFilter.CARD_FILTER, cardFilterHandle);
 
-        return cardFilter.filter(cards);
+        return cardFilterHandle.getCardFilter().filter(cards);
     }
 
     public boolean cardMatchFilter(Card card, CardFilter cardFilter, Player player) {

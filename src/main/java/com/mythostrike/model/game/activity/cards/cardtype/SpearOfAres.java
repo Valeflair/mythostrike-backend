@@ -24,6 +24,8 @@ public class SpearOfAres extends WeaponCard {
         skill = new SpearOfAresSkill();
     }
 
+
+
     @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         gameManager = cardUseHandle.getGameManager();
