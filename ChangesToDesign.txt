@@ -1,17 +1,26 @@
-- ChampionSelectionController und GameController zusammengelegt
+- Allgemeines:
+    * ChampionSelectionController und GameController zusammengelegt
+    * log Fenster im Frontend und übertragung der Nachrichten per Websocket hinzugefügt
+    * paket struktur wurde angepasst und verbessert
 - Rest:
     * variablen namen in jsons verbessert
     * create und join Lobby geben eine Lobby zurück
     * discardCards request entfernt --> alles über /cards (hier mehrer Karten möglich)
     * selectTargets und selectCards zusammengelegt zu /cards
     * selectSkill erweitert sodass auch targets mitgeschickt werden können
-- neue Klassen:
-    * WebSocketConfiguration
-    * RestExceptionHandler
-    * IllegalInputException
-    * WebSocketService
-    * message records for json conversion and communication
+    * POST /users/avatar und GET /users/ranklist hinzugefügt
 - WebSocket:
     * selectChampion Message zu /lobbies/{lobbyId}/{username} senden statt /games/{lobbyId}/{username}/selectChampion
     * game Nachrichten in einheitlichem Schema 'WebSocketGameMessage' versenden (type + payload)
-- log Fenster in Frontend und übertragung der Nachrichten per Websocket hinzugefügt
+    * Nachrichten angepasst:
+        - Update Lobby: schicke Sitzplätze anstatt user
+        - Update Game: schicke pro Spieler zusätzlich Equipment und DelayedEffects mit
+        - Highlight Message: angepasst auf One-Hand-Shake: sende für jede Karte und skill mit ob und welche Spieler ausgewählt werden müssen/können
+        - Card Move Message: from und to auf Englisch übersetzt und vereinheitlicht, private und public Nachricht angepasst, sodass bei public nicht die Ids mitgesendet werden
+- neue Klassen für Lobby Verwaltung und Kommunikation:
+    * WebConfig: ändert Cors einstellung und speichert Password Verschlüssler ab
+    * WebSocketConfiguration: stellt WebSockets ein
+    * RestExceptionHandler: Fängt Exceptions in REST methoden ab und sendet vereinheitliche errors
+    * IllegalInputException: Exception wenn eingaben über REST anfragen nicht ok sind
+    * WebSocketService: Service Klasse um Websocket Meldungen mit logger zu schicken
+    * für viele Anfragen und Antworten wurde ein Record erstellt zum automatischen json parsing (sollte nicht in den Entwurf)
