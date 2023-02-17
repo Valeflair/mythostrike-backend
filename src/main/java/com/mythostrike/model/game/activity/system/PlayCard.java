@@ -2,6 +2,7 @@ package com.mythostrike.model.game.activity.system;
 
 import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.cards.Card;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardUse;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
 
@@ -34,8 +35,12 @@ public class PlayCard extends Activity {
         } else {
             gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
             for (Card card : pickRequest.getSelectedCards()) {
+
                 card.setPickRequest(pickRequest);
+                gameManager.getEventManager().triggerEvent(EventTypeCardUse.BEFORE_CARD_USE, card.getCardUseHandle());
                 card.activate();
+                gameManager.getEventManager().triggerEvent(EventTypeCardUse.CARD_USED, card.getCardUseHandle());
+
             }
         }
     }

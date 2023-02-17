@@ -3,8 +3,7 @@ package com.mythostrike.model.game.player;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.skill.active.Warrior;
-import com.mythostrike.model.game.activity.skill.passive.Revenge;
-import com.mythostrike.model.game.activity.skill.passive.Strength;
+import com.mythostrike.model.game.activity.skill.passive.*;
 import lombok.Getter;
 
 import java.util.List;
@@ -12,7 +11,9 @@ import java.util.List;
 @Getter
 public enum ChampionData {
     ARES("Ares", 4, List.of(new Warrior()), List.of(new Strength())),
-    Achilles("Achilles", 4, List.of(), List.of(new Revenge()));
+    Achilles("Achilles", 4, List.of(), List.of(new Revenge())),
+    HERACLES("Heracles", 4, List.of(), List.of(new DivineJustice())),
+    TERPSICHORE("Terpsichore", 4, List.of(), List.of(new InfinityDance(), new SongOfLullaby()));
 
     private final String name;
     private final int maxHp;

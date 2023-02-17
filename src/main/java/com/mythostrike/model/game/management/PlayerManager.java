@@ -128,6 +128,7 @@ public class PlayerManager {
 
 
 
+
     public void killPlayer(Player player) {
 
         gameManager.getCardManager().moveCard(

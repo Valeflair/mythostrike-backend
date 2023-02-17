@@ -118,7 +118,7 @@ public abstract class Player {
     }
 
     public boolean isImmune(String cardName) {
-        if (!restrict.containsKey(cardName)) {
+        if (!immunity.containsKey(cardName)) {
             return false;
         }
         Boolean isImmune = immunity.get(cardName);
@@ -143,6 +143,38 @@ public abstract class Player {
         if (useTime != null) {
             restrict.put(cardName, useTime + 1);
         }
+    }
+
+    public void setPermanentRestrict(String cardName, int count) {
+        permanentRestrict.put(cardName, count);
+    }
+
+    public void setPermanentImmunity(String cardName, boolean immune) {
+        permanentImmunity.put(cardName, immune);
+    }
+
+    /**
+     *
+     * @param cardName the name of the card
+     * @return 1000 if the card is not restricted
+     */
+    public int getPermanentRestrict(String cardName) {
+        if (!permanentRestrict.containsKey(cardName)) {
+            return 1000;
+        }
+        return permanentRestrict.get(cardName);
+    }
+
+    /**
+     *
+     * @param cardName the name of the card
+     * @return false if the card is not immune
+     */
+    public boolean isPermanentImmune(String cardName) {
+        if (!permanentImmunity.containsKey(cardName)) {
+            return false;
+        }
+        return permanentImmunity.get(cardName);
     }
 
     public void addWinRewards() {

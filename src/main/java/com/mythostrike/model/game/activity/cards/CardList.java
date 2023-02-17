@@ -30,11 +30,11 @@ public final class CardList {
         /*cards.put(++id, new GoldenApple(id, CardSymbol.HEART, 1));
         cards.put(++id, new GoldenApple(id, CardSymbol.HEART, 3));
         cards.put(++id, new GoldenApple(id, CardSymbol.HEART, 4));*/
-        /*cards.put(++id, new GodArena(id, CardSymbol.CLUB, 7));
+        cards.put(++id, new GodArena(id, CardSymbol.CLUB, 7));
         cards.put(++id, new GodArena(id, CardSymbol.CLUB, 13));
         cards.put(++id, new GodArena(id, CardSymbol.CLUB, 12));
         cards.put(++id, new GodArena(id, CardSymbol.SPADE, 7));
-        cards.put(++id, new GodArena(id, CardSymbol.SPADE, 13));*/
+        cards.put(++id, new GodArena(id, CardSymbol.SPADE, 13));
         cards.put(++id, new Attack(id, CardSymbol.HEART, 10));
         cards.put(++id, new Attack(id, CardSymbol.HEART, 10)); //doppelt
         cards.put(++id, new Attack(id, CardSymbol.HEART, 12));
@@ -90,11 +90,11 @@ public final class CardList {
         cards.put(++id, new Duel(id, CardSymbol.DIAMOND, 1));
         cards.put(++id, new Duel(id, CardSymbol.CLUB, 1));
         cards.put(++id, new Duel(id, CardSymbol.SPADE, 1));*/
-        /*cards.put(++id, new Extort(id, CardSymbol.DIAMOND, 3));
+        cards.put(++id, new Extort(id, CardSymbol.DIAMOND, 3));
         cards.put(++id, new Extort(id, CardSymbol.DIAMOND, 4));
         cards.put(++id, new Extort(id, CardSymbol.SPADE, 3));
         cards.put(++id, new Extort(id, CardSymbol.SPADE, 4));
-        cards.put(++id, new Extort(id, CardSymbol.SPADE, 11));*/
+        cards.put(++id, new Extort(id, CardSymbol.SPADE, 11));
         cards.put(++id, new Heal(id, CardSymbol.HEART, 3));
         cards.put(++id, new Heal(id, CardSymbol.HEART, 4));
         cards.put(++id, new Heal(id, CardSymbol.HEART, 6));
@@ -115,9 +115,6 @@ public final class CardList {
         cards.put(++id, new VolcanicEruption(id, CardSymbol.CLUB, 12));
         cards.put(++id, new VolcanicEruption(id, CardSymbol.SPADE, 11));
         cards.put(++id, new SpearOfMars(id, CardSymbol.DIAMOND, 12));
-        cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
-        cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
-        cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
         cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
         cards.put(++id, new SpearOfMars(id, CardSymbol.HEART, 13));
 
