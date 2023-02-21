@@ -31,4 +31,13 @@ public class Seat {
         }
         return new SeatMessage(player);
     }
+
+    @JsonGetter("identity")
+    private String identityToString() {
+        if (identity.isIncognito()) {
+            return Identity.NONE.getName();
+        } else {
+            return identity.getName();
+        }
+    }
 }
