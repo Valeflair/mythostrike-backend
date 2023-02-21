@@ -9,10 +9,12 @@ import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
+import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Card extends Activity {
     @Getter
@@ -78,7 +80,9 @@ public abstract class Card extends Activity {
             && (cardUseHandle.getOpponents().size() != 1
             || !cardUseHandle.getOpponents().contains(cardUseHandle.getPlayer()))) {
             gameManager.output(String.format("targets are %s",
-                cardUseHandle.getOpponents().stream().toString()));
+                cardUseHandle.getOpponents().stream()
+                    .map(Player::getUsername)
+                    .collect(Collectors.joining(", "))));
         }
         gameManager.getCardManager().moveCard(cardMoveHandle);
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());

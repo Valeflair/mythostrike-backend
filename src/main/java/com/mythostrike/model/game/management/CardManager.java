@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 
@@ -115,6 +116,17 @@ public class CardManager {
 
 
         //if both from and to space are private, send the message with the cardIds only to the affected player
+
+        if (cardMoveHandle.getPlayer() == null) {
+            gameManager.output(String.format("%d card(s) move from %s to %s",
+                cardMoveMessage.cardIds().size(), from.getName(), to.getName()));
+        } else {
+            gameManager.output(String.format("Player %s moves %d card(s) from %s to %s",
+                cardMoveHandle.getPlayer().getUsername(), cardMoveMessage.cardIds().size(),
+                from.getName(), to.getName()));
+        }
+
+
         if (from.getType().isConcealed() && to.getType().isConcealed()) {
             //send private message
             List<String> affectedPlayers = new ArrayList<>();
@@ -128,6 +140,11 @@ public class CardManager {
 
             //clear the cardIds for the public message
             cardMoveMessage.cardIds().clear();
+        } else {
+            gameManager.output(String.format("They are: %s",
+                cardMoveHandle.getCardsToMove().stream()
+                    .map(Card::toString)
+                    .collect(Collectors.joining(","))));
         }
 
         //send public message
