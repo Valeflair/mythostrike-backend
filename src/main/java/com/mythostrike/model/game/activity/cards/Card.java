@@ -63,7 +63,9 @@ public abstract class Card extends Activity {
 
     public void playOut() {
 
-        //do not play out if it's skill invoked fictional card
+        //do not play out if it's skill invoked fictional card or delayed effect and so on
+
+
         if (point < 0 || id < 0 || symbol.equals(CardSymbol.NO_SYMBOL)) {
             return;
         }
@@ -71,7 +73,13 @@ public abstract class Card extends Activity {
             gameManager = cardUseHandle.getGameManager();
             cardMoveHandle = new CardMoveHandle(gameManager, "plays card out", cardUseHandle.getPlayer(), null, cardUseHandle.getPlayer().getHandCards(), gameManager.getGame().getTablePile(), List.of(this) );
         }
-
+        gameManager.output(String.format("%s plays %s out", cardMoveHandle.getPlayer().getUsername(), this.toString()));
+        if (!cardUseHandle.getOpponents().isEmpty()
+            && (cardUseHandle.getOpponents().size() != 1
+            || !cardUseHandle.getOpponents().contains(cardUseHandle.getPlayer()))) {
+            gameManager.output(String.format("targets are %s",
+                cardUseHandle.getOpponents().stream().toString()));
+        }
         gameManager.getCardManager().moveCard(cardMoveHandle);
         cardMoveHandle.getPlayer().decreaseUseTime(this.getName());
     }

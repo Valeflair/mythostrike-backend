@@ -112,16 +112,19 @@ public class Attack extends Card {
             return;
         }
         Player opponent = cardUseHandle.getOpponents().get(0);
-        if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
-            gameManager.output(String.format("player %s uses attack! target: %s", player.getUsername(),
-                    targets.get(0).getUsername()));
-            CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
-                null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
-                pickRequest.getSelectedCards());
-            gameManager.getCardManager().moveCard(cardMoveHandle);
-            attackHandle.setPrevented(true);
+        if ( attackHandle.isPrevented()
+            || (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty())) {
+            if (!attackHandle.isPrevented()) {
+                CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card as Defend", opponent,
+                    null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
+                    pickRequest.getSelectedCards());
+                gameManager.getCardManager().moveCard(cardMoveHandle);
+                attackHandle.setPrevented(true);
+            }
+            gameManager.output(String.format("%s avoided the attack", targets.get(0).getUsername()));
             gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
         } else {
+            gameManager.output(String.format("attack hits %s", player.getUsername()));
             attackHandle.setPrevented(false);
             gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
             DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),

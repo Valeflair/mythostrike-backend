@@ -39,6 +39,8 @@ public class ProtectionOfDianaSkill extends PassiveSkill {
 
     @Override
     public void activate() {
+        attackHandle.getGameManager().output("attack avoided, because it it's a black attack against" +
+            "Protection of Diana");
         this.attackHandle.setPrevented(true);
     }
 

@@ -109,6 +109,9 @@ public class NextPhase extends SystemAction {
 
 
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
+        gameManager.output(String.format("%s start its %s",
+                gameManager.getGame().getCurrentPlayer().getUsername(),
+                after.name().toLowerCase()));
         gameManager.setPhase(after);
     }
 }

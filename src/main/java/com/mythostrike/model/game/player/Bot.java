@@ -94,6 +94,7 @@ public class Bot extends Player {
                 List<PlayerCondition> list = message.skillPlayerConditions();
                 if (!list.isEmpty()) {
                     playerCondition = list.get(message.skillIds().indexOf(pickedSkillId));
+                    pickedSkillId = message.skillIds().indexOf(shuffleIds.get(0));
                 }
             }
         }
