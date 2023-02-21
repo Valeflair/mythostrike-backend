@@ -10,6 +10,7 @@ import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.Player;
+import com.mythostrike.model.lobby.Identity;
 
 import java.util.List;
 
@@ -74,6 +75,9 @@ public class PlayerManager {
     public void initializeChampionForPlayer(Champion champion, Player player) {
         player.setChampion(champion);
         player.setMaxHp(champion.getMaxHp());
+        if (player.getIdentity().equals(Identity.GOD_KING)) {
+            player.setMaxHp(player.getMaxHp() + 1);
+        }
         player.increaseCurrentHp(champion.getMaxHp());
         for (PassiveSkill passiveSkill : champion.getPassiveSkills()) {
             addSkillToPlayer(player, passiveSkill);
