@@ -58,8 +58,14 @@ public class GameRunIntegrationTest {
         webSocketPath = "ws://localhost:" + port + "/updates";
     }
 
+    /**
+     * Integration tests if we can connect to the Websocket after creating a Lobby.
+     * Not using rest-assuard.
+     *
+     * @throws Exception
+     */
     @Test
-    void verifyLobbyWebSocketConnection() throws Exception {
+    void testLobbyWebSocketConnection() throws Exception {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSession session = webSocketStompClient

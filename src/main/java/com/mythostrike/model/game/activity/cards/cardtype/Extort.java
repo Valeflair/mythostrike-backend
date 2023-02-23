@@ -36,7 +36,7 @@ public class Extort extends Card {
         List<Player> targets = new ArrayList<>();
         for (Player target : cardUseHandle.getGameManager().getGame().getOtherPlayers(player)) {
             if (!target.equals(player) && target.isAlive() && Boolean.FALSE.equals(target.isImmune(NAME))
-                    && target.getHandCards().size() > 0) {
+                && target.getHandCards().size() > 0) {
                 targets.add(target);
             }
         }
@@ -55,10 +55,10 @@ public class Extort extends Card {
         }
 
         cardMoveHandle = new CardMoveHandle(gameManager, "use card", cardUseHandle.getPlayer(),
-                pickRequest.getSelectedPlayers().get(0),
-                cardUseHandle.getPlayer().getHandCards(),
-                gameManager.getGame().getTablePile(),
-                List.of(this));
+            pickRequest.getSelectedPlayers().get(0),
+            cardUseHandle.getPlayer().getHandCards(),
+            gameManager.getGame().getTablePile(),
+            List.of(this));
         playOut();
         Player player = cardUseHandle.getPlayer();
         for (Player target : pickRequest.getSelectedPlayers()) {
@@ -67,8 +67,9 @@ public class Extort extends Card {
             Card extort = list.get(0);
 
             gameManager.getCardManager().moveCard(
-                    new CardMoveHandle(gameManager, "extort", target, player, target.getHandCards(), player.getHandCards(), List.of(extort)
-            ));
+                new CardMoveHandle(gameManager, "extort", target, player, target.getHandCards(), player.getHandCards(),
+                    List.of(extort)
+                ));
         }
 
 

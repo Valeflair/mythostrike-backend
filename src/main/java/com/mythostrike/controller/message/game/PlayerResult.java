@@ -1,7 +1,5 @@
 package com.mythostrike.controller.message.game;
 
-import com.mythostrike.model.game.player.Bot;
-import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 

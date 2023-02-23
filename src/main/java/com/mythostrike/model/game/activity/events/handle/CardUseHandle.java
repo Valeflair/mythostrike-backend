@@ -3,7 +3,6 @@ package com.mythostrike.model.game.activity.events.handle;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +32,6 @@ public class CardUseHandle extends EventHandle {
         this.opponents.add(opponent);
         this.card = card;
     }
-
 
 
 }

@@ -4,7 +4,15 @@ import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.skill.active.SynergyOrder;
 import com.mythostrike.model.game.activity.skill.active.Warrior;
-import com.mythostrike.model.game.activity.skill.passive.*;
+import com.mythostrike.model.game.activity.skill.passive.DarkIllusion;
+import com.mythostrike.model.game.activity.skill.passive.DeadlyCrusher;
+import com.mythostrike.model.game.activity.skill.passive.DivineJustice;
+import com.mythostrike.model.game.activity.skill.passive.EndlessHunger;
+import com.mythostrike.model.game.activity.skill.passive.InfinityDance;
+import com.mythostrike.model.game.activity.skill.passive.Revenge;
+import com.mythostrike.model.game.activity.skill.passive.SongOfLullaby;
+import com.mythostrike.model.game.activity.skill.passive.Strength;
+import com.mythostrike.model.game.activity.skill.passive.VisionOfNight;
 import lombok.Getter;
 
 import java.util.List;

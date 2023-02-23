@@ -21,7 +21,7 @@ import java.util.List;
 public class PickCardToPLay extends Activity {
     public static final String NAME = PickCardToPLay.class.getSimpleName();
     public static final String DESCRIPTION = "pick card to play or skill to invoke," +
-            " or end turn if no card/skill can/want be played";
+        " or end turn if no card/skill can/want be played";
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
@@ -37,13 +37,11 @@ public class PickCardToPLay extends Activity {
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
         CardAskHandle cardAskHandle = new CardAskHandle(gameManager, "ask for play card", player,
-                List.of(), player.getHandCards(), gameManager.getGame().getTablePile(), 1,
-                false, true);
+            List.of(), player.getHandCards(), gameManager.getGame().getTablePile(), 1,
+            false, true);
         gameManager.getEventManager().triggerEvent(EventTypeCardAsk.CARD_ASKED, cardAskHandle);
 
         List<Card> playableCards = getPlayableCards(player);
-
-
 
 
         List<Integer> cardIds = GameManager.convertCardsToInteger(playableCards);

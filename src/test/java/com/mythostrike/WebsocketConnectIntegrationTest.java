@@ -45,6 +45,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+
+/**
+ * complicated Test for Websockets. Groundwork from the Example to Websockets from spring.io.
+ *
+ * @author Till
+ * @version 1.0
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
 class WebsocketConnectIntegrationTest {

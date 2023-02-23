@@ -2,7 +2,6 @@ package com.mythostrike.controller.message.game;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;

@@ -2,17 +2,12 @@ package com.mythostrike.model.game.activity.skill.passive;
 
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
-import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
 import com.mythostrike.model.game.activity.cards.cardtype.Heal;
-import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
 import com.mythostrike.model.game.activity.events.handle.CardFilterHandle;
-import com.mythostrike.model.game.activity.events.type.EventTypeCardAsk;
 import com.mythostrike.model.game.activity.events.type.EventTypeFilter;
 import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.player.Player;
-
-import java.util.List;
 
 public class EndlessHunger extends PassiveSkill {
 
@@ -34,8 +29,9 @@ public class EndlessHunger extends PassiveSkill {
 
     @Override
     public boolean checkCondition(CardFilterHandle cardFilterHandle) {
-        if (cardFilterHandle.getPlayer().getPassiveSkills().stream().anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
-                && cardFilterHandle.getCardFilter().match((new Defend(-1, CardSymbol.NO_SYMBOL, 0)))) {
+        if (cardFilterHandle.getPlayer().getPassiveSkills().stream()
+            .anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
+            && cardFilterHandle.getCardFilter().match((new Defend(-1, CardSymbol.NO_SYMBOL, 0)))) {
             this.cardFilterHandle = cardFilterHandle;
             return true;
         }

@@ -2,8 +2,25 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.model.game.activity.PassiveEffect;
 import com.mythostrike.model.game.activity.PassiveSkill;
-import com.mythostrike.model.game.activity.events.handle.*;
-import com.mythostrike.model.game.activity.events.type.*;
+import com.mythostrike.model.game.activity.events.handle.AttackHandle;
+import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
+import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.activity.events.handle.CardFilterHandle;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
+import com.mythostrike.model.game.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
+import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
+import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardAsk;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardDraw;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardMove;
+import com.mythostrike.model.game.activity.events.type.EventTypeCardUse;
+import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
+import com.mythostrike.model.game.activity.events.type.EventTypeFilter;
+import com.mythostrike.model.game.activity.events.type.EventTypePhase;
+import com.mythostrike.model.game.activity.events.type.EventTypePhaseChange;
+import com.mythostrike.model.game.activity.events.type.EventTypeRequest;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
@@ -79,8 +96,8 @@ public class EventManager {
 
     public void addToMap(List<PassiveEffect> list, PassiveSkill passiveSkill, Player player, boolean permanent) {
         Optional<PassiveEffect> optionalEffect = list.stream()
-                .filter(effect -> effect.getSkill().equals(passiveSkill))
-                .findFirst();
+            .filter(effect -> effect.getSkill().equals(passiveSkill))
+            .findFirst();
         PassiveEffect effect;
         if (optionalEffect.isPresent()) {
             effect = optionalEffect.get();
@@ -235,6 +252,7 @@ public class EventManager {
             }
         });
     }
+
     public void triggerEvent(EventTypeRequest type, PickRequest handle) {
         mapRequestHandle.get(type).forEach(passiveEffect -> {
             if (passiveEffect.getSkill().checkCondition(handle)) {

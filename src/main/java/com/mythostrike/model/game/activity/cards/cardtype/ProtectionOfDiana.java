@@ -6,7 +6,6 @@ import com.mythostrike.model.game.activity.cards.ArmorCard;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
-import com.mythostrike.model.game.activity.skill.equipment.HeartOfTerraSkill;
 import com.mythostrike.model.game.activity.skill.equipment.ProtectionOfDianaSkill;
 import com.mythostrike.model.game.player.Player;
 
@@ -35,6 +34,7 @@ public class ProtectionOfDiana extends ArmorCard {
         return false;
     }
 
+    @Override
     public ProtectionOfDiana deepCopy() {
         return new ProtectionOfDiana(id, symbol, point);
     }

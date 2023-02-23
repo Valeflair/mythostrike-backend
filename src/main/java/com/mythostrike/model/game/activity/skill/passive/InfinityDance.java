@@ -27,8 +27,8 @@ public class InfinityDance extends PassiveSkill {
     @Override
     public boolean checkCondition(CardUseHandle cardUseHandle) {
         if (cardUseHandle.getPlayer().getPassiveSkills().stream()
-                .anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
-        && cardUseHandle.getCard().getType().equals(CardType.SKILL_CARD)) {
+            .anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
+            && cardUseHandle.getCard().getType().equals(CardType.SKILL_CARD)) {
             this.cardUseHandle = cardUseHandle;
             return true;
         }
@@ -39,11 +39,11 @@ public class InfinityDance extends PassiveSkill {
     @Override
     public void activate() {
         cardUseHandle.getGameManager().getCardManager().drawCard(new CardDrawHandle(
-                cardUseHandle.getGameManager(),
-                "activate InfinityDance",
-                cardUseHandle.getPlayer(),
-                1,
-                cardUseHandle.getGameManager().getGame().getDrawPile()
+            cardUseHandle.getGameManager(),
+            "activate InfinityDance",
+            cardUseHandle.getPlayer(),
+            1,
+            cardUseHandle.getGameManager().getGame().getDrawPile()
         ));
     }
 }

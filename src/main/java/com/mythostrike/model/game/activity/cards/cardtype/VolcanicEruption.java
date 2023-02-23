@@ -7,8 +7,10 @@ import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.CardType;
-import com.mythostrike.model.game.activity.events.handle.*;
-import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
+import com.mythostrike.model.game.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
@@ -36,7 +38,6 @@ public class VolcanicEruption extends Card {
     public VolcanicEruption(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }
-
 
 
     /**
@@ -78,8 +79,8 @@ public class VolcanicEruption extends Card {
         Player player = cardUseHandle.getPlayer();
         targets = cardUseHandle.getOpponents();
         cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                null, player.getHandCards(), gameManager.getGame().getTablePile(),
-                List.of(cardUseHandle.getCard()));
+            null, player.getHandCards(), gameManager.getGame().getTablePile(),
+            List.of(cardUseHandle.getCard()));
         playOut();
         gameManager.queueActivity(this);
         attacksPlayer(targets.get(0));
@@ -110,7 +111,7 @@ public class VolcanicEruption extends Card {
         if (answer.getSelectedCards() != null && !answer.getSelectedCards().isEmpty()) {
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card", opponent,
                 null, opponent.getHandCards(), gameManager.getGame().getTablePile(),
-                    answer.getSelectedCards());
+                answer.getSelectedCards());
             gameManager.getCardManager().moveCard(cardMoveHandle);
         } else {
             DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
@@ -120,12 +121,12 @@ public class VolcanicEruption extends Card {
         }
 
 
-
     }
 
 
     /**
      * check if the activity is finished
+     *
      * @return
      */
     @Override
@@ -136,7 +137,7 @@ public class VolcanicEruption extends Card {
     public void attacksPlayer(Player opponent) {
         List<Integer> cardIds =
             GameManager.convertCardsToInteger(gameManager.getCardManager()
-                    .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
+                .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, 1))

@@ -14,7 +14,6 @@ public class BlessOfHecate extends Card {
     public static final CardType TYPE = CardType.BASIC_CARD;
 
 
-
     public BlessOfHecate(int id, CardSymbol symbol, int point) {
         super(id, NAME, DESCRIPTION, TYPE, symbol, point);
     }

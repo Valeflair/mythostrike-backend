@@ -8,6 +8,8 @@ import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 public class Seat {
     @JsonIgnore
@@ -39,5 +41,23 @@ public class Seat {
         } else {
             return identity.getName();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Seat seat = (Seat) o;
+
+        return id == seat.id && Objects.equals(player, seat.player) && identity == seat.identity;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (player != null ? player.hashCode() : 0);
+        result = 31 * result + identity.hashCode();
+        return result;
     }
 }

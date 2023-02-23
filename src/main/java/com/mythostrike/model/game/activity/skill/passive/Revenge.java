@@ -3,8 +3,8 @@ package com.mythostrike.model.game.activity.skill.passive;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.Game;
-import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.PassiveSkill;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
@@ -37,7 +37,8 @@ public class Revenge extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
-        if (damageHandle.getTo().getPassiveSkills().stream().anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))) {
+        if (damageHandle.getTo().getPassiveSkills().stream()
+            .anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))) {
             this.damageHandle = damageHandle;
             return true;
         }
@@ -49,17 +50,18 @@ public class Revenge extends PassiveSkill {
         Player player = damageHandle.getTo();
         GameManager gameManager = damageHandle.getGameManager();
         HighlightMessage highlightMessage = HighlightMessage.builder()
-                .reason("you can click skill \"revenge\" to activate it")
-                .skillIds(List.of(id))
-                .skillCount(List.of(0, 1))
-                .skillPlayerConditions(List.of())
-                .build();
+            .reason("you can click skill \"revenge\" to activate it")
+            .skillIds(List.of(id))
+            .skillCount(List.of(0, 1))
+            .skillPlayerConditions(List.of())
+            .build();
         pickRequest = new PickRequest(damageHandle.getTo(), gameManager, highlightMessage);
         gameManager.queueActivity(this);
         gameManager.queueActivity(pickRequest);
 
     }
 
+    @Override
     public void use() {
         if (pickRequest.isClickedCancel()) {
             return;
@@ -74,13 +76,13 @@ public class Revenge extends PassiveSkill {
             List<Card> throwCards = new ArrayList<>(damageHandle.getPlayer().getHandCards().getCards());
             Card throwCard = throwCards.get(Game.RANDOM_SEED.nextInt(throwCards.size()));
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "drop because of Revenge",
-                    damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards(),
-                    gameManager.getGame().getDiscardPile(), List.of(throwCard));
+                damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards(),
+                gameManager.getGame().getDiscardPile(), List.of(throwCard));
             gameManager.getCardManager().moveCard(cardMoveHandle);
 
         } else {
             DamageHandle damageHandleRevenge = new DamageHandle(gameManager, "damage by Revenge",
-                    damageHandle.getTo(), damageHandle.getPlayer());
+                damageHandle.getTo(), damageHandle.getPlayer());
             gameManager.getPlayerManager().applyDamage(damageHandleRevenge);
         }
     }

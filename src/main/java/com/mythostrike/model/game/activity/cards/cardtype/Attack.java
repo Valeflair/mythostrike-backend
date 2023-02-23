@@ -91,7 +91,7 @@ public class Attack extends Card {
             gameManager.queueActivity(this);
             attacksPlayer(targets.get(0));
             gameManager.output(String.format("player %s uses attack! target: %s", player.getUsername(),
-                    targets.get(0).getUsername()));
+                targets.get(0).getUsername()));
             end = false;
         } else {
             end = true;
@@ -112,7 +112,7 @@ public class Attack extends Card {
             return;
         }
         Player opponent = cardUseHandle.getOpponents().get(0);
-        if ( attackHandle.isPrevented()
+        if (attackHandle.isPrevented()
             || (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty())) {
             if (!attackHandle.isPrevented()) {
                 CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "plays card as Defend", opponent,
@@ -144,6 +144,7 @@ public class Attack extends Card {
 
     /**
      * check if the activity is finished
+     *
      * @return
      */
     @Override
@@ -164,7 +165,7 @@ public class Attack extends Card {
         }
         List<Integer> cardIds =
             GameManager.convertCardsToInteger(gameManager.getCardManager()
-                    .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
+                .filterCard(opponent.getHandCards().getCards(), DEFEND_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, attackHandle.getDefendAskHandle().getAmount()))

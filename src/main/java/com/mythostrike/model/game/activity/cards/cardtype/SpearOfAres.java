@@ -7,12 +7,12 @@ import com.mythostrike.model.game.activity.cards.CardType;
 import com.mythostrike.model.game.activity.cards.WeaponCard;
 import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
 import com.mythostrike.model.game.activity.skill.equipment.SpearOfAresSkill;
-import com.mythostrike.model.game.activity.skill.equipment.SpearOfMarsSkill;
 import com.mythostrike.model.game.player.Player;
 
 public class SpearOfAres extends WeaponCard {
     public static final String NAME = "Spear of Ares";
-    public static final String DESCRIPTION = "use to equip this weapon, if your attack is the last card you have in your hand, " +
+    public static final String DESCRIPTION =
+        "use to equip this weapon, if your attack is the last card you have in your hand, " +
             "then this attack can target up to 3 players";
     public static final CardType TYPE = CardType.WEAPON;
 
@@ -23,7 +23,6 @@ public class SpearOfAres extends WeaponCard {
         super(id, NAME, DESCRIPTION, symbol, point);
         skill = new SpearOfAresSkill();
     }
-
 
 
     @Override
@@ -38,6 +37,7 @@ public class SpearOfAres extends WeaponCard {
         return false;
     }
 
+    @Override
     public SpearOfAres deepCopy() {
         return new SpearOfAres(id, symbol, point);
     }

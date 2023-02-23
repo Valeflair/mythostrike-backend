@@ -40,7 +40,6 @@ public class GodArena extends Card {
     }
 
 
-
     /**
      * call in active turn, check if there is availble target to attack
      *
@@ -80,8 +79,8 @@ public class GodArena extends Card {
         Player player = cardUseHandle.getPlayer();
         targets = cardUseHandle.getOpponents();
         cardMoveHandle = new CardMoveHandle(gameManager, "plays card", cardUseHandle.getPlayer(),
-                null, player.getHandCards(), gameManager.getGame().getTablePile(),
-                List.of(cardUseHandle.getCard()));
+            null, player.getHandCards(), gameManager.getGame().getTablePile(),
+            List.of(cardUseHandle.getCard()));
         playOut();
         gameManager.queueActivity(this);
         attacksPlayer(targets.get(0));
@@ -124,6 +123,7 @@ public class GodArena extends Card {
 
     /**
      * check if the activity is finished
+     *
      * @return
      */
     @Override
@@ -133,7 +133,8 @@ public class GodArena extends Card {
 
     public void attacksPlayer(Player opponent) {
         List<Integer> cardIds =
-            GameManager.convertCardsToInteger(gameManager.getCardManager().filterCard(opponent.getHandCards().getCards(), ATTACK_FILTER, opponent));
+            GameManager.convertCardsToInteger(
+                gameManager.getCardManager().filterCard(opponent.getHandCards().getCards(), ATTACK_FILTER, opponent));
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, 1))

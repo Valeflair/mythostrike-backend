@@ -1,7 +1,16 @@
 package com.mythostrike.model.game.activity;
 
 
-import com.mythostrike.model.game.activity.events.handle.*;
+import com.mythostrike.model.game.activity.events.handle.AttackHandle;
+import com.mythostrike.model.game.activity.events.handle.CardAskHandle;
+import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
+import com.mythostrike.model.game.activity.events.handle.CardFilterHandle;
+import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
+import com.mythostrike.model.game.activity.events.handle.CardUseHandle;
+import com.mythostrike.model.game.activity.events.handle.DamageHandle;
+import com.mythostrike.model.game.activity.events.handle.PhaseChangeHandle;
+import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
+import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import lombok.Getter;
 
@@ -62,6 +71,7 @@ public abstract class Activity {
     public boolean checkCondition(PickRequest pickRequest) {
         return false;
     }
+
     public boolean checkCondition(CardFilterHandle handle) {
         return false;
     }

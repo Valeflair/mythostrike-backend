@@ -1,11 +1,7 @@
 package com.mythostrike.model.game.activity.system;
 
-import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
-import com.mythostrike.model.game.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.activity.events.handle.DamageType;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;

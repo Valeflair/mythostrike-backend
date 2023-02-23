@@ -56,7 +56,7 @@ public class PlayerManager {
             } else {
                 eventManager.triggerEvent(EventTypeDamage.BEFORE_HP_RECOVER, damageHandle);
                 //increase HP
-                if (damageHandle.getDamage() > 0 ) {
+                if (damageHandle.getDamage() > 0) {
 
                     continue;
                 }
@@ -129,8 +129,6 @@ public class PlayerManager {
         List<PassiveSkill> skills = player.getPassiveSkills();
         skills.remove(skill);
     }
-
-
 
 
     public void killPlayer(Player player) {

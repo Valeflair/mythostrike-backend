@@ -37,8 +37,8 @@ public class Warrior extends ActiveSkill {
         boolean value = attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
             "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false))
             && playerHandle.getGameManager().getCardManager()
-                .filterCard(playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER,
-                        playerHandle.getPlayer()).size() > 0;
+            .filterCard(playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER,
+                playerHandle.getPlayer()).size() > 0;
 
         if (value) {
             this.playerHandle = playerHandle;
@@ -53,7 +53,8 @@ public class Warrior extends ActiveSkill {
         GameManager gameManager = playerHandle.getGameManager();
 
         List<Player> targets = new ArrayList<>();
-        List<Card> cards = gameManager.getCardManager().filterCard(player.getHandCards().getCards(), DEFEND_FILTER, player);
+        List<Card> cards =
+            gameManager.getCardManager().filterCard(player.getHandCards().getCards(), DEFEND_FILTER, player);
         List<PlayerCondition> playerConditions = new ArrayList<>();
 
         for (Player target : playerHandle.getGameManager().getGame().getOtherPlayers(player)) {
@@ -95,9 +96,9 @@ public class Warrior extends ActiveSkill {
         playerHandle.getGameManager().queueActivity(attack);
         attack.attacksPlayer(pickRequest.getSelectedPlayers().get(0));
         CardMoveHandle cardMoveHandle = new CardMoveHandle(pickRequest.getGameManager(),
-                "play defend as attack cause of warrior", pickRequest.getPlayer(), null,
-                pickRequest.getPlayer().getHandCards(), pickRequest.getGameManager().getGame().getTablePile(),
-                pickRequest.getSelectedCards());
+            "play defend as attack cause of warrior", pickRequest.getPlayer(), null,
+            pickRequest.getPlayer().getHandCards(), pickRequest.getGameManager().getGame().getTablePile(),
+            pickRequest.getSelectedCards());
         pickRequest.getGameManager().getCardManager().moveCard(cardMoveHandle);
         pickRequest.getPlayer().decreaseUseTime(Attack.NAME);
     }

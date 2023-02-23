@@ -1,14 +1,10 @@
 package com.mythostrike.model.game.activity.skill.equipment;
 
-import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.Card;
-import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.HeartOfTerra;
-import com.mythostrike.model.game.activity.events.handle.AttackHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
-import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
 import com.mythostrike.model.game.management.EventManager;
 import com.mythostrike.model.game.management.GameManager;
@@ -20,9 +16,9 @@ public class HeartOfTerraSkill extends PassiveSkill {
 
     public static final String NAME = "Heart Of TerraSkill Skill";
     public static final String DESCRIPTION = "it can absorb the first damage you get," +
-            " then throw this armor away";
+        " then throw this armor away";
+    private final Card armor;
     private DamageHandle damageHandle;
-    private Card armor;
 
 
     public HeartOfTerraSkill(HeartOfTerra armor) {
@@ -34,7 +30,7 @@ public class HeartOfTerraSkill extends PassiveSkill {
     public void register(EventManager eventManager, Player player) {
         eventManager.registerEvent(EventTypeDamage.DAMAGE_FORESEEN, this, player, false);
     }
-    
+
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
 
@@ -54,12 +50,12 @@ public class HeartOfTerraSkill extends PassiveSkill {
         Player player = damageHandle.getTo();
 
         gameManager.output("Heart of Terra absorbed the damage for %s, and threw armor away"
-                .formatted(player.getUsername()));
+            .formatted(player.getUsername()));
 
 
         CardMoveHandle throwArmor = new CardMoveHandle(gameManager, "throw armor"
-                , player, null, player.getEquipment(),
-                gameManager.getGame().getTablePile(), List.of(armor));
+            , player, null, player.getEquipment(),
+            gameManager.getGame().getTablePile(), List.of(armor));
         gameManager.getCardManager().moveCard(throwArmor);
         gameManager.getPlayerManager().removeSkillFromPlayer(player, armor.getPassiveSkill());
         gameManager.getPlayerManager().removeSkillFromPlayer(player, armor.getActiveSkill());

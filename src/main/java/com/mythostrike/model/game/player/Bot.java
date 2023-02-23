@@ -61,7 +61,7 @@ public class Bot extends Player {
 
             int amount = 0;
             for (Integer i : shuffleCount) {
-                if (i < message.cardIds().size()){
+                if (i < message.cardIds().size()) {
                     amount = i;
                     break;
                 }
@@ -81,7 +81,7 @@ public class Bot extends Player {
 
             }
             selectedCards = true;
-        //otherwise select a skill
+            //otherwise select a skill
         } else if (!message.skillIds().isEmpty() && !message.skillCount().isEmpty()) {
             List<Integer> shuffleCount = new ArrayList<>(message.skillCount());
             List<Integer> shuffleIds = new ArrayList<>(message.skillIds());
@@ -101,7 +101,7 @@ public class Bot extends Player {
         }
 
         //select players if needed
-        if ( !playerCondition.players().isEmpty() && !playerCondition.count().isEmpty()) {
+        if (!playerCondition.players().isEmpty() && !playerCondition.count().isEmpty()) {
             List<Integer> shuffleCount = new ArrayList<>(playerCondition.count());
             List<String> shufflePlayers = new ArrayList<>(playerCondition.players());
             Collections.shuffle(shuffleCount, Game.RANDOM_SEED);

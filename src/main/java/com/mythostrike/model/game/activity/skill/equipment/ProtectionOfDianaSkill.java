@@ -1,8 +1,6 @@
 package com.mythostrike.model.game.activity.skill.equipment;
 
 import com.mythostrike.model.game.activity.PassiveSkill;
-import com.mythostrike.model.game.activity.cards.ArmorCard;
-import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.events.handle.AttackHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeAttack;
 import com.mythostrike.model.game.management.EventManager;
@@ -29,7 +27,7 @@ public class ProtectionOfDianaSkill extends PassiveSkill {
     public boolean checkCondition(AttackHandle attackHandle) {
 
         if (attackHandle.getOpponent().getPassiveSkills().contains(this)
-        && !attackHandle.getAttack().isRed()) {
+            && !attackHandle.getAttack().isRed()) {
             this.attackHandle = attackHandle;
             return true;
         }

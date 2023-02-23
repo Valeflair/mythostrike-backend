@@ -8,8 +8,8 @@ import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.Activity;
-import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.PassiveSkill;
+import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -197,7 +197,8 @@ public class GameManager {
         //initial Cards for player
         output("Game Started, Player has following champions:");
         for (Player player : players) {
-            StringBuilder hint = new StringBuilder("%s at Seat %d has %s with skills:".formatted(player.getUsername(), players.indexOf(player),
+            StringBuilder hint = new StringBuilder(
+                "%s at Seat %d has %s with skills:".formatted(player.getUsername(), players.indexOf(player),
                     player.getChampion().getName()));
             for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
                 hint.append(String.format("%n%s", skill.getName()));
@@ -305,7 +306,7 @@ public class GameManager {
     }
 
     public void selectChampion(String playerName, Champion champion) {
-        playerManager .initializeChampionForPlayer(champion, getPlayerByName(playerName));
+        playerManager.initializeChampionForPlayer(champion, getPlayerByName(playerName));
         if (game.getAlivePlayers().stream().allMatch(player -> player.getChampion() != null)) {
             log.debug("All players have selected their champion");
         }

@@ -10,12 +10,13 @@ import lombok.Setter;
 import java.util.List;
 
 @Setter
-public class CardFilterHandle extends EventHandle{
+public class CardFilterHandle extends EventHandle {
 
     @Getter
     CardFilter cardFilter;
     @Getter
     List<Card> cards;
+
     public CardFilterHandle(GameManager gameManager, Player player, CardFilter cardFilter, List<Card> cards) {
         super(gameManager, "filtering card", player);
         this.cardFilter = new CardFilter(cardFilter.toString());

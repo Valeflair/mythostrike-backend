@@ -14,7 +14,6 @@ import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +21,8 @@ import java.util.Objects;
 @Getter
 public class Lobby {
     private final int id;
+    @JsonIgnore
+    private final UserService userService;
     private List<Seat> seats;
     private Mode mode;
     private Player owner;
@@ -33,8 +34,6 @@ public class Lobby {
     private int numberHumans;
     @JsonIgnore
     private GameManager gameManager;
-    @JsonIgnore
-    private final UserService userService;
 
     public Lobby(int id, Mode mode, User owner, UserService userService) {
         this.id = id;
@@ -93,7 +92,7 @@ public class Lobby {
     }
 
     public boolean removeUser(User user) {
-        Seat seatOfUser  = seats.stream().filter(
+        Seat seatOfUser = seats.stream().filter(
             seat -> seat.getPlayer() != null && seat.getPlayer().getUsername().equals(user.getUsername())
         ).findFirst().orElse(null);
 

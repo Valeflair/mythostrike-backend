@@ -35,11 +35,10 @@ public class NextPhase extends SystemAction {
     public void use() {
         Phase before = gameManager.getPhase();
         PhaseHandle phaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
-                .getCurrentPlayer(), before);
+            .getCurrentPlayer(), before);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_START, phaseHandle);
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_PROCEEDING, phaseHandle);
         gameManager.cleanTable();
-
 
 
         Phase after = Phase.nextPhase(before);
@@ -47,42 +46,36 @@ public class NextPhase extends SystemAction {
 
         //Nightmare and Drought
 
-        Optional<Card> firstDroughtCard = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+        Optional<Card> firstDroughtCard =
+            gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
                 .filter(card -> card.getName().equals(Drought.NAME))
                 .findFirst();
 
         if (firstDroughtCard.isPresent() && after.equals(Phase.DRAW)) {
             Card drought = firstDroughtCard.get();
             gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "drought effected!",
-                    gameManager.getGame().getCurrentPlayer(), null,
-                    gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
-                    gameManager.getGame().getTablePile(),
-                    List.of(drought)));
+                gameManager.getGame().getCurrentPlayer(), null,
+                gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
+                gameManager.getGame().getTablePile(),
+                List.of(drought)));
             after = Phase.ACTIVE_TURN;
         }
 
 
-        Optional<Card> firstNightmareCard = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+        Optional<Card> firstNightmareCard =
+            gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
                 .filter(card -> card.getName().equals(Nightmare.NAME))
                 .findFirst();
 
         if (firstNightmareCard.isPresent() && after.equals(Phase.ACTIVE_TURN)) {
             Card nightmare = firstNightmareCard.get();
             gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "nightmare effected!",
-                    gameManager.getGame().getCurrentPlayer(), null,
-                    gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
-                    gameManager.getGame().getTablePile(),
-                    List.of(nightmare)));
+                gameManager.getGame().getCurrentPlayer(), null,
+                gameManager.getGame().getCurrentPlayer().getDelayedEffect(),
+                gameManager.getGame().getTablePile(),
+                List.of(nightmare)));
             after = Phase.DISCARD;
         }
-
-
-
-
-
-
-
-
 
 
         PhaseChangeHandle phaseChangeHandle = new PhaseChangeHandle(
@@ -92,7 +85,7 @@ public class NextPhase extends SystemAction {
             gameManager.getGame().nextPlayer();
         }
         PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
-                .getCurrentPlayer(), after);
+            .getCurrentPlayer(), after);
         switch (after) {
             case ROUND_START -> gameManager.queueActivity(new RoundStartTurn(gameManager));
             case DELAYED_EFFECT -> gameManager.queueActivity(new DelayedEffectTurn(gameManager));
@@ -104,14 +97,10 @@ public class NextPhase extends SystemAction {
         }
 
 
-
-
-
-
         gameManager.getEventManager().triggerEvent(EventTypePhase.PHASE_END, phaseHandle);
         gameManager.output(String.format("%s start its %s",
-                gameManager.getGame().getCurrentPlayer().getUsername(),
-                after.name().toLowerCase()));
+            gameManager.getGame().getCurrentPlayer().getUsername(),
+            after.name().toLowerCase()));
         gameManager.setPhase(after);
     }
 }

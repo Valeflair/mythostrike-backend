@@ -162,7 +162,6 @@ public abstract class Player {
     }
 
     /**
-     *
      * @param cardName the name of the card
      * @return 1000 if the card is not restricted
      */
@@ -174,15 +173,11 @@ public abstract class Player {
     }
 
     /**
-     *
      * @param cardName the name of the card
      * @return false if the card is not immune
      */
     public boolean isPermanentImmune(String cardName) {
-        if (!permanentImmunity.containsKey(cardName)) {
-            return false;
-        }
-        return permanentImmunity.get(cardName);
+        return permanentImmunity.containsKey(cardName) && permanentImmunity.get(cardName);
     }
 
     public void addWinRewards() {

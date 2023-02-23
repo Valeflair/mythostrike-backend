@@ -25,8 +25,9 @@ public class Unhealable extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
-        if (damageHandle.getTo().getPassiveSkills().stream().anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
-                && damageHandle.getDamage() < 0) {
+        if (damageHandle.getTo().getPassiveSkills().stream()
+            .anyMatch(passiveSkill -> passiveSkill.getName().equals(NAME))
+            && damageHandle.getDamage() < 0) {
             this.damageHandle = damageHandle;
             return true;
         }

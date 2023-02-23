@@ -1,7 +1,19 @@
 package com.mythostrike.model.game.activity.cards;
 
 import com.mythostrike.model.exception.IllegalInputException;
-import com.mythostrike.model.game.activity.cards.cardtype.*;
+import com.mythostrike.model.game.activity.cards.cardtype.Attack;
+import com.mythostrike.model.game.activity.cards.cardtype.BlessOfHecate;
+import com.mythostrike.model.game.activity.cards.cardtype.Defend;
+import com.mythostrike.model.game.activity.cards.cardtype.Drought;
+import com.mythostrike.model.game.activity.cards.cardtype.Extort;
+import com.mythostrike.model.game.activity.cards.cardtype.GodArena;
+import com.mythostrike.model.game.activity.cards.cardtype.Heal;
+import com.mythostrike.model.game.activity.cards.cardtype.HeartOfTerra;
+import com.mythostrike.model.game.activity.cards.cardtype.Nightmare;
+import com.mythostrike.model.game.activity.cards.cardtype.ProtectionOfDiana;
+import com.mythostrike.model.game.activity.cards.cardtype.SpearOfAres;
+import com.mythostrike.model.game.activity.cards.cardtype.SpearOfMars;
+import com.mythostrike.model.game.activity.cards.cardtype.VolcanicEruption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 

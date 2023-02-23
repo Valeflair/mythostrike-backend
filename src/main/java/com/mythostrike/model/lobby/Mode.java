@@ -2,7 +2,6 @@ package com.mythostrike.model.lobby;
 
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.ArrayList;

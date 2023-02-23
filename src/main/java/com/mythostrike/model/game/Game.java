@@ -31,6 +31,8 @@ public class Game {
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
     private final Mode mode;
+    @Getter
+    private final CardPile allCards;
     private String console;
     @Setter
     private CardPile drawPile;
@@ -38,8 +40,6 @@ public class Game {
     private CardPile discardPile;
     @Setter
     private CardPile tablePile;
-    @Getter
-    private final CardPile allCards;
 
 
     public Game(List<Player> players, Mode mode, GameManager gameManager) {

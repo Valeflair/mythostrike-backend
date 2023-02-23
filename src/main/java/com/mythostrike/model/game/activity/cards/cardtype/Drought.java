@@ -17,9 +17,8 @@ import java.util.List;
 public class Drought extends Card {
     public static final String NAME = "Drought";
     public static final String DESCRIPTION = "pick a player as target, put drought under his delayed effect," +
-            "at his judge turn he must judge, by not judging a Spade he will skip his Draw Turn";
+        "at his judge turn he must judge, by not judging a Spade he will skip his Draw Turn";
     public static final CardType TYPE = CardType.SKILL_CARD;
-
 
 
     public Drought(int id, CardSymbol symbol, int point) {
@@ -33,7 +32,7 @@ public class Drought extends Card {
         List<Player> targets = new ArrayList<>();
         for (Player target : cardUseHandle.getGameManager().getGame().getOtherPlayers(player)) {
             if (!target.equals(player) && target.isAlive() && Boolean.FALSE.equals(target.isImmune(NAME))
-                    && target.getDelayedEffect().accepts(this)) {
+                && target.getDelayedEffect().accepts(this)) {
                 targets.add(target);
             }
         }
@@ -48,10 +47,10 @@ public class Drought extends Card {
     @Override
     public void activate() {
         cardMoveHandle = new CardMoveHandle(gameManager, "use card", cardUseHandle.getPlayer(),
-                pickRequest.getSelectedPlayers().get(0),
-                cardUseHandle.getPlayer().getHandCards(),
-                pickRequest.getSelectedPlayers().get(0).getDelayedEffect(),
-                List.of(this));
+            pickRequest.getSelectedPlayers().get(0),
+            cardUseHandle.getPlayer().getHandCards(),
+            pickRequest.getSelectedPlayers().get(0).getDelayedEffect(),
+            List.of(this));
         playOut();
     }
 
