@@ -27,7 +27,7 @@ public class ProtectionOfDianaSkill extends PassiveSkill {
     public boolean checkCondition(AttackHandle attackHandle) {
 
         if (attackHandle.getOpponent().getPassiveSkills().contains(this)
-            && !attackHandle.getAttack().isRed()) {
+            && attackHandle.getAttack().isRed()) {
             this.attackHandle = attackHandle;
             return true;
         }
