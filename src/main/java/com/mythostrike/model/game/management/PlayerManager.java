@@ -78,7 +78,7 @@ public class PlayerManager {
         if (player.getIdentity().equals(Identity.GOD_KING)) {
             player.setMaxHp(player.getMaxHp() + 1);
         }
-        player.increaseCurrentHp(champion.getMaxHp());
+        player.increaseCurrentHp(player.getMaxHp());
         for (PassiveSkill passiveSkill : champion.getPassiveSkills()) {
             addSkillToPlayer(player, passiveSkill);
         }
