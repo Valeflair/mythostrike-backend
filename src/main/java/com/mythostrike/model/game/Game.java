@@ -33,7 +33,6 @@ public class Game {
     private final Mode mode;
     @Getter
     private final CardPile allCards;
-    private String console;
     @Setter
     private CardPile drawPile;
     @Setter

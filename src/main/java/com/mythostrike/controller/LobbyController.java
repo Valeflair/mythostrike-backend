@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -56,7 +57,10 @@ public class LobbyController {
         list.add(new LobbyOverview(2, "Hyuman123", "active", "FFA", 5));
         list.add(new LobbyOverview(3, "Hyuman123", "active", "1 vs. 1", 5));
         list.add(new LobbyOverview(4, "Till", "active", "4 vs. 4", 5));*/
-        return ResponseEntity.ok(lobbyList.getLobbiesOverview());
+        //sort the list by the id
+        return ResponseEntity.ok(
+            lobbyList.getLobbiesOverview().stream().sorted(Comparator.comparingInt(LobbyOverview::id)).toList()
+        );
     }
 
     @PostMapping
