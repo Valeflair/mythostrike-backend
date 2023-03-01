@@ -131,9 +131,9 @@ public class CardManager {
         }
 
 
+        List<String> affectedPlayers = new ArrayList<>();
         if (from.getType().isConcealed() && to.getType().isConcealed()) {
-            //send private message
-            List<String> affectedPlayers = new ArrayList<>();
+            //send message with infos to the affected player
             if (cardMoveHandle.getPlayer() != null) {
                 affectedPlayers.add(cardMoveHandle.getPlayer().getUsername());
             }
@@ -142,17 +142,19 @@ public class CardManager {
             }
             gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
 
-            //clear the cardIds for the public message
+            //clear the card ids for other players if they were private
             cardMoveMessage.cardIds().clear();
         } else {
             gameManager.output(String.format("They are: %s",
-                cardMoveHandle.getCardsToMove().stream()
-                    .map(Card::toString)
-                    .collect(Collectors.joining(","))));
+                cardMoveHandle.getCardsToMove().stream().map(Card::toString).collect(Collectors.joining(",")))
+            );
         }
 
-        //send public message
-        gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
+
+        //send message to all / not affected players, card ids are empty if they were concealed
+        List<String> notAffectedPlayers = gameManager.getGame().getAllPlayers().stream()
+            .map(Player::getUsername).filter(username -> !affectedPlayers.contains(username)).toList();
+        gameManager.getGameController().cardMove(gameManager.getLobbyId(), notAffectedPlayers, cardMoveMessage);
     }
 
     public List<Card> filterCard(List<Card> cards, CardFilter cardFilter, Player player) {
