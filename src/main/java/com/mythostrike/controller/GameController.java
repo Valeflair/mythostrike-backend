@@ -202,35 +202,4 @@ public class GameController {
         webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.GAME_END, results),
             "gameEnd");
     }
-
-    @EventListener
-    private void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
-        //get path where client subscribed
-        String path = (String) event.getMessage().getHeaders().get("simpDestination");
-        if (path == null) return;
-        log.debug("client subscribed to '{}'", path);
-
-        //check if path matches /games/{lobbyId} and extract lobbyId
-        Pattern pattern = Pattern.compile("/games/(\\d+)");
-        Matcher matcher = pattern.matcher(path);
-        if (!matcher.matches()) return;
-        String idAsString = matcher.group(1);
-        int lobbyId = Integer.parseInt(idAsString);
-
-        //send an game update to client
-        updateGame(lobbyId);
-        lobbyList.increaseUserInGame(lobbyId);
-
-        //when all players are connected start the normal game procedure
-        if (lobbyList.isInGameFull(lobbyId)) {
-            log.debug("all players are connected");
-            GameManager gameManager = lobbyList.getGameManager(lobbyId);
-            if (gameManager == null) {
-                log.error("gameManager is null, but enough players are in game");
-                return;
-            }
-            gameManager.allPlayersConnected();
-            updateGame(lobbyId);
-        }
-    }
 }

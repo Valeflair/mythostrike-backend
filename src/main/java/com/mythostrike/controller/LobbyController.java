@@ -233,7 +233,7 @@ public class LobbyController {
         return ResponseEntity.ok(lobby);
     }
 
-    private void updateLobby(int lobbyId) {
+    public void updateLobby(int lobbyId) {
         Lobby lobby = lobbyList.getLobby(lobbyId);
         if (lobby == null) {
             return;

@@ -12,6 +12,7 @@ import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class Lobby {
     private Mode mode;
     private Player owner;
     @JsonIgnore
+    @Setter
     private LobbyStatus status;
     @JsonIgnore
     private int numberPlayers;
@@ -64,13 +66,16 @@ public class Lobby {
     }
 
     @JsonIgnore
-    public boolean isFull() {
+    private boolean isFull() {
         return numberPlayers >= mode.maxPlayer();
     }
 
     public boolean addUser(User user) throws IllegalInputException {
         if (isFull()) {
             return false;
+        }
+        if (status != LobbyStatus.OPEN) {
+            throw new IllegalInputException("lobby is not open for new players");
         }
         //check if user is already in the lobby
         for (Seat seat : seats) {
@@ -89,6 +94,10 @@ public class Lobby {
         }
         updateLobbyStatus();
         return true;
+    }
+
+    public boolean removeUser(String username) {
+        return removeUser(userService.getUser(username));
     }
 
     public boolean removeUser(User user) {
@@ -242,7 +251,7 @@ public class Lobby {
         if (numberPlayers < mode.minPlayer() || numberPlayers > mode.maxPlayer()) {
             return false;
         }
-        status = LobbyStatus.GAME_RUNNING;
+        status = LobbyStatus.CHAMPION_SELECTION;
 
         List<Player> players = new ArrayList<>(
             seats.stream().map(Seat::getPlayer).filter(Objects::nonNull).toList()

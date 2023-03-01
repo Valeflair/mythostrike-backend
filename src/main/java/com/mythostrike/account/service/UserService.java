@@ -6,6 +6,7 @@ import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +25,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public User getUser(String username) throws EntityNotFoundException {
+    public @NotNull User getUser(String username) throws EntityNotFoundException {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException(username + " not found"));
     }

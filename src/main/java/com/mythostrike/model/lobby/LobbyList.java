@@ -3,6 +3,7 @@ package com.mythostrike.model.lobby;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
+import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.management.GameManager;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,8 +61,19 @@ public final class LobbyList {
         userInGame.put(id, userInGame.get(id) + 1);
     }
 
-    public boolean isInGameFull(int id) {
-        return userInGame.get(id) >= lobbyMap.get(id).getNumberHumans();
+    public void decreaseUserInGame(int id) {
+        userInGame.put(id, userInGame.get(id) - 1);
+    }
+
+    public boolean isGameReadyToStart(int id) {
+        return (userInGame.get(id) >= lobbyMap.get(id).getNumberHumans())
+            && (lobbyMap.get(id).getStatus() == LobbyStatus.FULL);
+    }
+
+    public void setLobbyGameRunning(int id) {
+        Lobby lobby = lobbyMap.get(id);
+        if (lobby == null) throw new IllegalInputException("Lobby not found");
+        lobby.setStatus(LobbyStatus.GAME_RUNNING);
     }
 
     @Nullable
