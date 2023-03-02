@@ -3,11 +3,14 @@ package com.mythostrike.controller;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.model.game.activity.cards.HandCards;
 import com.mythostrike.model.game.management.GameManager;
+import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.LobbyList;
+import com.mythostrike.model.lobby.LobbyStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
@@ -136,11 +139,55 @@ public class WebsocketEventHandler {
      */
     private void handleSessionUnsubscribeEvent(SessionUnsubscribeEvent event) {
         //get path where client subscribed
-        String path = (String) event.getMessage().getHeaders().get("simpDestination");
+        String path = (String) event.getMessage().getHeaders().get("simpSubscriptionId");
         if (path == null) return;
         log.debug("client unsubscribed from '{}'", path);
 
         //check if path matches /lobbies/{lobbyId}/{username} and extract lobbyId and username
+        Pattern lobbyPrivatePattern = Pattern.compile("/lobbies/(\\d+)/(.+)");
+        Matcher lobbyPrivateMatcher = lobbyPrivatePattern.matcher(path);
+        //or if it matches /games/{lobbyId} and extract lobbyId
+        Pattern gamePattern = Pattern.compile("/games/(\\d+)");
+        Matcher gameMatcher = gamePattern.matcher(path);
+
+
+        if (lobbyPrivateMatcher.matches()) {
+            //remove player from lobby
+            int lobbyId = Integer.parseInt(lobbyPrivateMatcher.group(1));
+            String username = lobbyPrivateMatcher.group(2);
+            Lobby lobby = lobbyList.getLobby(lobbyId);
+
+            //lobby could be closed if player left the lobby
+            //don't remove player from lobby if champion selection is running,
+            //because client disconnects and reconnects to the game websocket
+            if (lobby == null || lobby.getStatus() == LobbyStatus.CHAMPION_SELECTION) {
+                return;
+            }
+            //otherwise remove player from lobby, if he was removed from the lobby, send an update to the client
+            if (!lobbyList.removeUser(lobbyId, username)) {
+                lobbyController.updateLobby(lobbyId);
+            }
+        } else if (gameMatcher.matches()) {
+            //decrease number of connected players
+            int lobbyId = Integer.parseInt(gameMatcher.group(1));
+            lobbyList.decreaseUserInGame(lobbyId);
+        }
+    }
+
+    @EventListener
+    /**
+     * If a client unsubscribes from a lobby, the client is removed from the lobby.
+     * If a client unsubscribes from a game, the client still stays in the game and can reconnect.
+     *   While he is disconnected, the game will continue without him. His rounds will be terminated with the timebar.
+     *   The number of connected players is counted down. If no players are connected, the game will be terminated.
+     */
+    private void handleSessionDisconnectEvent(SessionDisconnectEvent event) {
+        //get path where client subscribed
+        String path = (String) event.getMessage().getHeaders().get("simpDestination");
+        if (path == null) return;
+        log.debug("client disconnected from '{}'", path);
+
+        /*//check if path matches /lobbies/{lobbyId}/{username} and extract lobbyId and username
         Pattern lobbyPrivatePattern = Pattern.compile("/lobbies/(\\d+)/(.+)");
         Matcher lobbyPrivateMatcher = lobbyPrivatePattern.matcher(path);
         //or if it matches /games/{lobbyId} and extract lobbyId
@@ -159,7 +206,6 @@ public class WebsocketEventHandler {
             //decrease number of connected players
             int lobbyId = Integer.parseInt(gameMatcher.group(1));
             lobbyList.decreaseUserInGame(lobbyId);
-        }
+        }*/
     }
-
 }
