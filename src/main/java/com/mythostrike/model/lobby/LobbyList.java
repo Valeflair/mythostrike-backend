@@ -6,11 +6,15 @@ import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.management.GameManager;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.mythostrike.controller.LobbyController.LOBBY_NOT_FOUND_MESSAGE;
 
 public final class LobbyList {
     private static LobbyList instance;
@@ -43,6 +47,50 @@ public final class LobbyList {
         userInGame.put(idCounter, 0);
         idCounter++;
         return lobby;
+    }
+
+    /**
+     * removes the user from the lobby and removes the lobby if it is empty
+     * @param lobbyId id of the lobby to remove the user from
+     * @param user user to remove
+     * @return true if the lobby was removed
+     */
+    public boolean removeUser(int lobbyId, User user) {
+        Lobby lobby = getLobby(lobbyId);
+        if (lobby == null) {
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
+        }
+
+        //leave user from lobby
+        if (!lobby.removeUser(user)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not in lobby");
+        }
+
+        //remove lobby if empty
+        if (lobby.canBeDeleted()) {
+            removeLobby(lobbyId);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeUser(int lobbyId, String username) {
+        Lobby lobby = getLobby(lobbyId);
+        if (lobby == null) {
+            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
+        }
+
+        //leave user from lobby
+        if (!lobby.removeUser(username)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not in lobby");
+        }
+
+        //remove lobby if empty
+        if (lobby.canBeDeleted()) {
+            removeLobby(lobbyId);
+            return true;
+        }
+        return false;
     }
 
     public void removeLobby(int id) {

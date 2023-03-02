@@ -34,7 +34,7 @@ import java.util.List;
 @Slf4j
 public class LobbyController {
 
-    private static final String LOBBY_NOT_FOUND_MESSAGE = "Lobby not found";
+    public static final String LOBBY_NOT_FOUND_MESSAGE = "Lobby not found";
 
     private final LobbyList lobbyList = LobbyList.getLobbyList();
 
@@ -110,20 +110,7 @@ public class LobbyController {
 
         //get objects from REST data
         User user = userService.getUser(principal.getName());
-        Lobby lobby = lobbyList.getLobby(request.lobbyId());
-        if (lobby == null) {
-            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
-        }
-
-        //leave user from lobby
-        if (!lobby.removeUser(user)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not in lobby");
-        }
-
-        //remove lobby if empty
-        if (lobby.canBeDeleted()) {
-            lobbyList.removeLobby(request.lobbyId());
-        } else {
+        if (!lobbyList.removeUser(request.lobbyId(), user)) {
             updateLobby(request.lobbyId());
         }
 
