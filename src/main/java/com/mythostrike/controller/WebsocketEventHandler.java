@@ -63,11 +63,11 @@ public class WebsocketEventHandler {
             lobbyController.updateLobby(lobbyId);
         } else if (gameMatcher.matches()) {
             //send update Game message to client and increase the number of connected players
-            int lobbyId = Integer.parseInt(lobbyMatcher.group(1));
+            int lobbyId = Integer.parseInt(gameMatcher.group(1));
             updateGame(lobbyId);
         } else if (gamePrivateMatcher.matches()) {
             //send current Handcards to client
-            int lobbyId = Integer.parseInt(lobbyMatcher.group(1));
+            int lobbyId = Integer.parseInt(gamePrivateMatcher.group(1));
             String username = gamePrivateMatcher.group(2);
             sendCurrentHandcards(lobbyId, username);
         }
