@@ -95,6 +95,7 @@ public final class LobbyList {
 
     public void removeLobby(int id) {
         lobbyMap.remove(id);
+        userInGame.remove(id);
     }
 
     public List<LobbyOverview> getLobbiesOverview() {
@@ -114,8 +115,10 @@ public final class LobbyList {
     }
 
     public boolean isGameReadyToStart(int id) {
-        return (userInGame.get(id) >= lobbyMap.get(id).getNumberHumans())
-            && (lobbyMap.get(id).getStatus() == LobbyStatus.FULL);
+        Lobby lobby = lobbyMap.get(id);
+        if (lobby == null) throw new IllegalInputException("Lobby not found");
+        return (userInGame.get(id) >= lobby.getNumberHumans())
+            && (lobby.getStatus() == LobbyStatus.CHAMPION_SELECTION);
     }
 
     public void setLobbyGameRunning(int id) {

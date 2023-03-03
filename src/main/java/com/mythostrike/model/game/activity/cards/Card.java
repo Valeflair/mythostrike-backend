@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 public abstract class Card extends Activity {
     @Getter
     protected CardType type;
+    @Getter
     protected CardSymbol symbol;
+    @Getter
     protected int point;
     @Setter
     protected PickRequest pickRequest;
@@ -45,20 +47,8 @@ public abstract class Card extends Activity {
         this(card.id, card.name, card.description, card.type, card.symbol, card.point);
     }
 
-    public CardType getType() {
-        return type;
-    }
-
-    public CardSymbol getSymbol() {
-        return symbol;
-    }
-
     public boolean isRed() {
         return symbol.equals(CardSymbol.DIAMOND) || symbol.equals(CardSymbol.HEART);
-    }
-
-    public int getPoint() {
-        return point;
     }
 
     public abstract Card deepCopy();

@@ -136,8 +136,9 @@ public class GameController {
 
     public void updateGame(int lobbyId) {
         GameManager gameManager = lobbyList.getGameManager(lobbyId);
+        //game could have ended, so check if it still exists
         if (gameManager == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+            log.debug("Game {} not found", lobbyId);
         }
 
         List<Player> players = gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull).toList();

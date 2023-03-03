@@ -82,10 +82,11 @@ public class WebsocketEventHandler {
         //TODO: in thread
         //shortly wait, sometimes the client is not ready to receive the game update
         try {
-            sleep(100);
+            sleep(50);
         } catch (InterruptedException e) {
             log.error("could not sleep", e);
         }
+
         //send an game update to client
         gameController.updateGame(lobbyId);
         lobbyList.increaseUserInGame(lobbyId);
@@ -113,7 +114,7 @@ public class WebsocketEventHandler {
         //TODO: in thread
         //shortly wait, sometimes the client is not ready to receive the game update
         try {
-            sleep(100);
+            sleep(50);
         } catch (InterruptedException e) {
             log.error("could not sleep", e);
         }
@@ -121,7 +122,10 @@ public class WebsocketEventHandler {
         if (gameManager == null) throw new IllegalStateException("gameManager is null, but game is running");
 
         HandCards handCards = gameManager.getPlayerByName(username).getHandCards();
+        //if no handcards are available, return
+        if (handCards.size() == 0) return;
 
+        //otherwise send his current handcards to the client
         CardMoveMessage cardMoveMessage = new CardMoveMessage(
             username, username, handCards.size(),
             GameManager.convertCardsToInteger(handCards.getCards())
