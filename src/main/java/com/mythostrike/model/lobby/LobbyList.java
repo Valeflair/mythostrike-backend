@@ -106,12 +106,24 @@ public final class LobbyList {
         return lobbiesOverview;
     }
 
+    /**
+     * increases the number of users in game by one
+     * @param id the id of the lobby
+     */
     public void increaseUserInGame(int id) {
         userInGame.put(id, userInGame.get(id) + 1);
     }
 
+    /**
+     * decreases the number of users in game by one.
+     * If the number of users in game is 0, then the game gets stopped and deleted.
+     * @param id the id of the lobby
+     */
     public void decreaseUserInGame(int id) {
         userInGame.put(id, userInGame.get(id) - 1);
+        if (userInGame.get(id) == 0) {
+            removeLobby(id);
+        }
     }
 
     public boolean isGameReadyToStart(int id) {
