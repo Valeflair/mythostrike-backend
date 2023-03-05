@@ -113,7 +113,9 @@ public final class LobbyList {
      * @param id the id of the lobby
      */
     public void increaseUserInGame(int id) {
-        userInGame.put(id, userInGame.get(id) + 1);
+        Integer usersInGame = userInGame.get(id);
+        if (usersInGame == null) return;
+        userInGame.put(id, usersInGame + 1);
     }
 
     /**
@@ -122,10 +124,15 @@ public final class LobbyList {
      * @param id the id of the lobby
      */
     public void decreaseUserInGame(int id) {
-        userInGame.put(id, userInGame.get(id) - 1);
-        if (userInGame.get(id) == 0) {
+        Integer usersInGame = userInGame.get(id);
+        if (usersInGame == null) return;
+        usersInGame--;
+
+        if (usersInGame == 0) {
             log.debug("removeing game, because no user subscribed anymore");
             removeLobby(id);
+        } else {
+            userInGame.put(id, usersInGame);
         }
     }
 
