@@ -279,6 +279,8 @@ public class GameManager {
         //if nobody won, the game isn't over and the next round can start
         if (winners.isEmpty()) return;
 
+        gameController.updateGame(this.lobbyId);
+
         //if somebody won, the game is over and the winner gets the rewards
         List<PlayerResult> results = new ArrayList<>();
         for (Player winner : winners) {
