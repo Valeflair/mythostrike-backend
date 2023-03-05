@@ -150,9 +150,9 @@ public class WebsocketEventHandler {
         //check if path matches /lobbies/{lobbyId}/{username} and extract lobbyId and username
         Pattern lobbyPrivatePattern = Pattern.compile("/lobbies/(\\d+)/(.+)");
         Matcher lobbyPrivateMatcher = lobbyPrivatePattern.matcher(path);
-        //or if it matches /games/{lobbyId} and extract lobbyId
-        Pattern gamePattern = Pattern.compile("/games/(\\d+)");
-        Matcher gameMatcher = gamePattern.matcher(path);
+        //or if it matches /games/{lobbyId}/{username} and extract lobbyId
+        Pattern gamePrivatePattern = Pattern.compile("/games/(\\d+)/(.+)");
+        Matcher gamePrivateMatcher = gamePrivatePattern.matcher(path);
 
 
         if (lobbyPrivateMatcher.matches()) {
@@ -171,9 +171,9 @@ public class WebsocketEventHandler {
             if (!lobbyList.removeUser(lobbyId, username)) {
                 lobbyController.updateLobby(lobbyId);
             }
-        } else if (gameMatcher.matches()) {
+        } else if (gamePrivateMatcher.matches()) {
             //decrease number of connected players
-            int lobbyId = Integer.parseInt(gameMatcher.group(1));
+            int lobbyId = Integer.parseInt(gamePrivateMatcher.group(1));
             lobbyList.decreaseUserInGame(lobbyId);
         }
     }

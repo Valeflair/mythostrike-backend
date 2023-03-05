@@ -291,7 +291,6 @@ public class GameManager {
             loser.deductLoosePenalty();
             results.add(new PlayerResult(loser, false));
         }
-        //TODO: check if values are updated in database
         gameController.gameEnd(lobbyId, results);
         //stop game
         proceeding = false;

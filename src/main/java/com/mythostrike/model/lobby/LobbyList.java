@@ -5,6 +5,7 @@ import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.management.GameManager;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import static com.mythostrike.controller.LobbyController.LOBBY_NOT_FOUND_MESSAGE;
 
+@Slf4j
 public final class LobbyList {
     private static LobbyList instance;
     private final Map<Integer, Lobby> lobbyMap;
@@ -122,6 +124,7 @@ public final class LobbyList {
     public void decreaseUserInGame(int id) {
         userInGame.put(id, userInGame.get(id) - 1);
         if (userInGame.get(id) == 0) {
+            log.debug("removeing game, because no user subscribed anymore");
             removeLobby(id);
         }
     }
