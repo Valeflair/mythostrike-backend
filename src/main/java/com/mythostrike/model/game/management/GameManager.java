@@ -36,6 +36,8 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 public class GameManager {
@@ -46,6 +48,8 @@ public class GameManager {
 
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
+
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(20);
     @Getter
     private final Game game;
     @Getter
@@ -65,6 +69,7 @@ public class GameManager {
     private Phase phase;
     private boolean proceeding;
     private PickRequest lastPickRequest;
+
 
     public GameManager(List<Player> players, Mode mode, int lobbyId, GameController gameController) {
         game = new Game(players, mode, this);
@@ -107,6 +112,20 @@ public class GameManager {
         return game.getAllCards().getCards().stream().filter(card -> cardIds.contains(card.getId())).toList();
     }
 
+    /**
+     * check parameters from a REST call before adding the activity to the queue to do async. That way there won't be
+     * any errors when the activity is actually executed and the REST call will finish faster for the client.
+     * After the runnable is finished, the game will be updated with updateGame(lobbyId).
+     *
+     * @param runnable the activity to be executed
+     */
+    private void submitRunnable(Runnable runnable) {
+        EXECUTOR.submit(() -> {
+            runnable.run();
+            gameController.updateGame(lobbyId);
+        });
+    }
+
     //----------------GameRun----------------
     public void endTurn(String username) {
         if (!game.getCurrentPlayer().getUsername().equals(username)) {
@@ -129,7 +148,7 @@ public class GameManager {
             }
         }
 
-        proceed();
+        submitRunnable(this::proceed);
     }
     //----------------GameStart----------------
 
@@ -151,7 +170,8 @@ public class GameManager {
             checkDying = new CheckDying();
             checkDying.register(eventManager, player);
         }
-        selectChampionPhase(players);
+
+        submitRunnable(() -> selectChampionPhase(players));
     }
 
     /**
@@ -229,7 +249,6 @@ public class GameManager {
             Activity activity = currentActivity.getFirst();
             debug("running activity:" + activity.getName());
             runActivity(activity);
-
         }
     }
 
@@ -307,10 +326,14 @@ public class GameManager {
     }
 
     public void selectChampion(String playerName, Champion champion) {
-        playerManager.initializeChampionForPlayer(champion, getPlayerByName(playerName));
-        if (game.getAlivePlayers().stream().allMatch(player -> player.getChampion() != null)) {
-            log.debug("All players have selected their champion");
-        }
+        Player player = getPlayerByName(playerName);
+
+        submitRunnable(() -> {
+            playerManager.initializeChampionForPlayer(champion, player);
+            if (game.getAlivePlayers().stream().allMatch(player1 -> player1.getChampion() != null)) {
+                log.debug("All players have selected their champion");
+            }
+        });
 
         //cardDistribution() is started when all players connected to the inGame (/games/{id}) Websocket
         //the methode handleSessionSubscribeEvent in GameController is called when a client connects to the websocket.
@@ -321,15 +344,20 @@ public class GameManager {
         List<Card> cards = convertIdToCards(cardIds);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         Player player = getPlayerByName(playerName);
-        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
-            lastPickRequest.setSelectedCards(cards);
-            cards.forEach(card -> card.setPickRequest(lastPickRequest));
-            if (cards.size() == 1) {
-                lastPickRequest.setSelectedPlayers(targetPlayers);
-            }
-            lastPickRequest = null;
-            proceed();
+
+        if (lastPickRequest == null || !lastPickRequest.getPlayer().equals(player)) {
+            log.warn("Player {} tried to select cards without a pick request", playerName);
+            return;
         }
+
+        lastPickRequest.setSelectedCards(cards);
+        cards.forEach(card -> card.setPickRequest(lastPickRequest));
+        if (cards.size() == 1) {
+            lastPickRequest.setSelectedPlayers(targetPlayers);
+        }
+        lastPickRequest = null;
+
+        submitRunnable(this::proceed);
     }
 
     public void selectSkill(String playerName, int skillId, List<String> targets) {
@@ -342,8 +370,6 @@ public class GameManager {
             return;
         }
         Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
-        //int id = skillId;
-
 
         lastPickRequest.setClickedCancel(true);
         if (lastPickRequest.getHighlightMessage().activateEndTurn()) {
@@ -365,7 +391,7 @@ public class GameManager {
         }
 
 
-        proceed();
+        submitRunnable(this::proceed);
     }
 
     public void cancelRequest(String playerName) {

@@ -87,7 +87,6 @@ public class GameController {
 
         gameManager.selectCards(principal.getName(), request.cardIds(), request.targets());
 
-        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -105,8 +104,6 @@ public class GameController {
 
         gameManager.selectSkill(principal.getName(), request.skillId(), request.targets());
 
-
-        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -123,7 +120,6 @@ public class GameController {
 
         gameManager.endTurn(principal.getName());
 
-        updateGame(request.lobbyId());
         return ResponseEntity
             .status(HttpStatus.OK).build();
     }
@@ -154,7 +150,7 @@ public class GameController {
         updateGame(lobbyId, playerDatas);
     }
 
-    public void updateGame(int lobbyId, List<PlayerData> playerDatas) {
+    private void updateGame(int lobbyId, List<PlayerData> playerDatas) {
         String path = String.format("/games/%d", lobbyId);
 
         webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.UPDATE_GAME, playerDatas),
