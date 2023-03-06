@@ -21,11 +21,14 @@ import lombok.Getter;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Thread.sleep;
+
 @Getter
 public class NextPhase extends SystemAction {
 
     public static final String NAME = NextPhase.class.getSimpleName();
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
+    public static final int DELAY_BEFORE_SWITCH_PLAYER = 1500;
 
     public NextPhase(GameManager gameManager) {
         super(NAME, DESCRIPTION, gameManager);
@@ -82,7 +85,13 @@ public class NextPhase extends SystemAction {
             gameManager, "switch phase", gameManager.getGame().getCurrentPlayer(), before, after);
         gameManager.getEventManager().triggerEvent(EventTypePhaseChange.PHASE_CHANGING, phaseChangeHandle);
         if (before.equals(Phase.FINISH)) {
+            try {
+                sleep(DELAY_BEFORE_SWITCH_PLAYER);
+            } catch (InterruptedException e) {
+                //ignore
+            }
             gameManager.getGame().nextPlayer();
+
         }
         PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
             .getCurrentPlayer(), after);
