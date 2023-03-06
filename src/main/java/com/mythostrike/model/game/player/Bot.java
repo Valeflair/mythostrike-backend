@@ -18,6 +18,8 @@ import static java.lang.Thread.sleep;
 @Getter
 public class Bot extends Player {
 
+    public static final int DELAY_BEFORE_ACTION = 1500;
+
     //TODO: add diffrent difficulty (placeholder(current), random, normal, cheater)
     private int difficulty;
     private GameManager gameManager;
@@ -38,7 +40,7 @@ public class Bot extends Player {
 
     public void selectChampionFrom(ChampionSelectionMessage message) {
         try {
-            sleep(500);
+            sleep(DELAY_BEFORE_ACTION);
         } catch (InterruptedException e) {
             //ignore
         }
@@ -47,7 +49,7 @@ public class Bot extends Player {
 
     public void highlight(PickRequest pickRequest) {
         try {
-            sleep(500);
+            sleep(DELAY_BEFORE_ACTION);
         } catch (InterruptedException e) {
             //ignore
         }

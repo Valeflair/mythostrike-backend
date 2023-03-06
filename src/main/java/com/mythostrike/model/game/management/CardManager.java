@@ -27,6 +27,7 @@ public class CardManager {
 
     private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
         = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
+    public static final int JUDGE_PAUSE_BETWEEN_MOVEMENT = 2000;
 
     private final GameManager gameManager;
 
@@ -75,7 +76,7 @@ public class CardManager {
             gameManager.getGame().getTablePile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
         try {
-            sleep(1000);
+            sleep(JUDGE_PAUSE_BETWEEN_MOVEMENT);
         } catch (InterruptedException e) {
             //ignore
         }
