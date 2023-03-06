@@ -45,7 +45,6 @@ public abstract class Player {
     @Setter
     private Champion champion;
     private int currentHp;
-    @Setter
     private int maxHp;
     @Setter
     private Identity identity;
@@ -95,6 +94,7 @@ public abstract class Player {
 
     public void increaseCurrentHp(int value) {
         currentHp += value;
+        currentHp = Math.min(currentHp, maxHp);
     }
 
     public void decreaseCurrentHp(int value) {
@@ -186,6 +186,11 @@ public abstract class Player {
 
     public void deductLoosePenalty() {
         //only the human player needs this
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+        this.currentHp = Math.min(this.currentHp, maxHp);
     }
 
     @JsonIgnore
