@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 @Getter
 public class Bot extends Player {
 
@@ -35,10 +37,21 @@ public class Bot extends Player {
 
 
     public void selectChampionFrom(ChampionSelectionMessage message) {
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            //ignore
+        }
         gameManager.selectChampion(getUsername(), message.champions().get(0));
     }
 
     public void highlight(PickRequest pickRequest) {
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            //ignore
+        }
+
 
         HighlightMessage message = pickRequest.getHighlightMessage();
         if (message.activateEndTurn()) {

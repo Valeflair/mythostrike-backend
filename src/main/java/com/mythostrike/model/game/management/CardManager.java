@@ -37,7 +37,7 @@ public class CardManager {
     /**
      * move all cards from discard pile to draw pile. Shuffle the draw pile.
      */
-    public void refillDrawPile() {
+    private void refillDrawPile() {
         CardMoveHandle cardMoveHandle = new CardMoveHandle(
             gameManager, "refill draw pile", null, null, gameManager.getGame().getDiscardPile(),
             gameManager.getGame().getDrawPile(), gameManager.getGame().getDiscardPile().getCards()
@@ -48,17 +48,41 @@ public class CardManager {
         gameManager.output("Discard pile is shuffled");
     }
 
+    public List<Card> peekTopDrawPile(int count) {
+        List<Card> cards = gameManager.getGame().getDrawPile().peekTop(count);
+        if (cards == null) {
+            cards = new ArrayList<>(gameManager.getGame().getDrawPile().getCards());
+            refillDrawPile();
+            List<Card> extraCards = gameManager.getGame().getDrawPile().peekTop(count - cards.size());
+            if (extraCards == null) {
+                throw new IllegalArgumentException("draw pile is not big enough");
+            }
+            cards.addAll(extraCards);
+        }
+        return cards;
+    }
+
+    /**
+     * draw the top card from draw pile and put it on the table pile,
+     * wait 1 second and then move the card to the discard pile.
+     *
+     * @return the card that is drawn
+     */
     public Card judge() {
         //TODO:use judgeHandle instead judge
-        Card judge = gameManager.getGame().getDrawPile().peekTop();
+        Card judge = peekTopDrawPile(1).get(0);
         moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
-            gameManager.getGame().getDiscardPile(), List.of(judge)));
+            gameManager.getGame().getTablePile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
         try {
             sleep(1000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            //ignore
         }
+
+        moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getTablePile(),
+            gameManager.getGame().getDiscardPile(), List.of(judge)));
+
         return judge;
     }
 
@@ -69,10 +93,8 @@ public class CardManager {
         CardPile drawDeck = cardDrawHandle.getDrawPile();
 
 
-        if (drawDeck.peekTop(count) == null) {
-            refillDrawPile();
-        }
-        List<Card> drawedCards = drawDeck.peekTop(count);
+
+        List<Card> drawedCards = peekTopDrawPile(count);
 
         //create a debug message
         StringBuilder message = new StringBuilder(String.format("Player %s draws %d card(s) because of %s, they are :",

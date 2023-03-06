@@ -52,6 +52,7 @@ public class GameManager {
     //player start up with 4 cards and draw 2 cards at each turn start
     public static final int CARD_COUNT_START_UP = 4;
 
+    //TODO: print out exceptions to console
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(20);
     @Getter
     private final Game game;
@@ -123,7 +124,7 @@ public class GameManager {
      * @param runnable the activity to be executed
      */
     private void submitRunnable(Runnable runnable) {
-        EXECUTOR.submit(() -> {
+        EXECUTOR.execute(() -> {
             runnable.run();
             gameController.updateGame(lobbyId);
         });
@@ -183,7 +184,7 @@ public class GameManager {
      * After that the first turn is started and to the first player a highlight message is sent.
      */
     public void allPlayersConnected() {
-        cardDistribution();
+        submitRunnable(this::cardDistribution);
     }
 
     private void selectChampionPhase(List<Player> players) {

@@ -11,7 +11,10 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 public class VisionOfNight extends PassiveSkill {
 
@@ -42,17 +45,36 @@ public class VisionOfNight extends PassiveSkill {
     @Override
     public void activate() {
         GameManager gameManager = phaseHandle.getGameManager();
-        for (int i = 0; i < 2; i++) {
-            Card card = gameManager.getCardManager().judge();
-            List<Card> cards = new ArrayList<>();
-            if (!card.isRed()) {
-                cards.add(card);
+
+        //TODO: make with judge???
+        List<Card> cardsToJudge = Collections.unmodifiableList(gameManager.getCardManager().peekTopDrawPile(2));
+
+        List<Card> blackCards = new ArrayList<>();
+        List<Card> redCards = new ArrayList<>();
+        for (Card card : cardsToJudge) {
+            if (card.isRed()) {
+                redCards.add(card);
+            } else {
+                blackCards.add(card);
             }
-            CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "get card by judging black",
-                null, phaseHandle.getPlayer(), gameManager.getGame().getDiscardPile(),
-                phaseHandle.getPlayer().getHandCards(), cards);
-            gameManager.getCardManager().moveCard(cardMoveHandle);
         }
+
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "vision of night judge", null, null,
+            gameManager.getGame().getDrawPile(), gameManager.getGame().getTablePile(), cardsToJudge));
+
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            //ignore
+        }
+
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "get card by judging black",
+            null, phaseHandle.getPlayer(), gameManager.getGame().getTablePile(),
+            phaseHandle.getPlayer().getHandCards(), blackCards));
+
+        gameManager.getCardManager().moveCard(new CardMoveHandle(gameManager, "red card to discard pile",
+            null, null, gameManager.getGame().getTablePile(),
+            gameManager.getGame().getDiscardPile(), redCards));
 
     }
 }
