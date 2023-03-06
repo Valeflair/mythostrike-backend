@@ -97,6 +97,7 @@ build/
 ## Special
 ##############################
 .VSCodeCounter
+logs/
 
 ### STS ###
 .apt_generated

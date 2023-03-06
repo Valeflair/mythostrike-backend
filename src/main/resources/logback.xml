@@ -2,18 +2,12 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
+    <!-- will be used if nothing other specified -->
     <springProfile name="default">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="prod">
-
         <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>app.log</file>
+            <file>logs/app.log</file>
 
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
@@ -26,13 +20,18 @@
             </rollingPolicy>
 
             <encoder>
-                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+                <pattern>
+                    %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n%wEx
+                </pattern>
+                <charset>utf8</charset>
             </encoder>
         </appender>
 
         <logger name="org.springframework" level="INFO"/>
         <logger name="com.mythostrike" level="DEBUG"/>
-        <root level="ERROR">
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE-ROLLING"/>
         </root>
     </springProfile>
