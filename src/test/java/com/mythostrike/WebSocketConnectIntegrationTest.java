@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RequiredArgsConstructor
-class WebsocketConnectIntegrationTest {
+class WebSocketConnectIntegrationTest {
 
     private final WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
 

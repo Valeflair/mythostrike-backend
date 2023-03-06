@@ -1,5 +1,7 @@
 package com.mythostrike.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
@@ -164,13 +166,47 @@ public class GameController {
             "highlight");
     }
 
+    /**
+     * send a card move message to all players in the game
+     * @param lobbyId id of the game
+     * @param message the card move message to send
+     */
     public void cardMove(int lobbyId, CardMoveMessage message) {
         String path = String.format("/games/%d", lobbyId);
 
-        webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message),
-            "cardMove");
+        //get all usernames to send to
+        GameManager gameManager = lobbyList.getGameManager(lobbyId);
+        if (gameManager == null) {
+            log.debug("Game {} not found, can't update", lobbyId);
+            return;
+        }
+        List<String> toUsernames = gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull)
+            .map(Player::getUsername).toList();
+
+        //make only one log message
+        WebSocketGameMessage payload = new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(payload);
+            log.debug("public card move to '{}': {}", path, json);
+        } catch (JsonProcessingException e) {
+            log.error("could not convert public card move to json {}", e.toString());
+        }
+
+        //send message to all players without logging
+        for (String username : toUsernames) {
+            path = String.format("/games/%d/%s", lobbyId, username);
+            webSocketService.sendMessageWithoutLog(path, payload);
+        }
     }
 
+    /**
+     * send a card move message to the specified players
+     * log for each player separately
+     * @param lobbyId id of the game
+     * @param toUsernames usernames of the players to send to
+     * @param message the card move message to send
+     */
     public void cardMove(int lobbyId, List<String> toUsernames, CardMoveMessage message) {
         for (String username : toUsernames) {
             String path = String.format("/games/%d/%s", lobbyId, username);

@@ -46,13 +46,11 @@ import java.util.concurrent.Executors;
 public class GameManager {
 
     //player has 3 champions to pick in game, god-king has 5
-    public static final int PICK_CHAMPION_COUNT = 3;
-    public static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
+    private static final int PICK_CHAMPION_COUNT = 3;
+    private static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
 
     //player start up with 4 cards and draw 2 cards at each turn start
-    public static final int CARD_COUNT_START_UP = 4;
-
-    //TODO: print out exceptions to console
+    private static final int CARD_COUNT_START_UP = 4;
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(20);
     @Getter
     private final Game game;
@@ -125,7 +123,11 @@ public class GameManager {
      */
     private void submitRunnable(Runnable runnable) {
         EXECUTOR.execute(() -> {
-            runnable.run();
+            try {
+                runnable.run();
+            } catch (RuntimeException e) {
+                log.error("Error in runnable", e);
+            }
             gameController.updateGame(lobbyId);
         });
     }
@@ -428,7 +430,6 @@ public class GameManager {
                 }
             }
         }
-
 
         submitRunnable(this::proceed);
     }

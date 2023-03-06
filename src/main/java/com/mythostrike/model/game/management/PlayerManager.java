@@ -4,7 +4,6 @@ package com.mythostrike.model.game.management;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
-import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.handle.DamageType;
@@ -14,6 +13,9 @@ import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.lobby.Identity;
 
 import java.util.List;
+
+import static com.mythostrike.model.game.management.CardManager.CARD_MOVE_PAUSE_AFTER_MOVEMENT;
+import static java.lang.Thread.sleep;
 
 public class PlayerManager {
 
@@ -132,28 +134,46 @@ public class PlayerManager {
     }
 
 
+    /**
+     * Kill a player, move all cards to table pile
+     * Dont sleep after one card movement, only sleep once after all cards are moved
+     * @param player
+     */
     public void killPlayer(Player player) {
+        //needs to be false to not sleep after each card movement
+        player.setAlive(false);
 
-        gameManager.getCardManager().moveCard(
-            new CardMoveHandle(gameManager, "die", player, null, player.getHandCards(),
-                gameManager.getGame().getTablePile(), player.getHandCards().getCards())
-        );
+        if (player.getHandCards().size() > 0) {
+            gameManager.getCardManager().moveCard(
+                new CardMoveHandle(gameManager, "die", player, null, player.getHandCards(),
+                    gameManager.getGame().getTablePile(), player.getHandCards().getCards())
+            );
+        }
 
-        gameManager.getCardManager().moveCard(
-            new CardMoveHandle(gameManager, "die", player, null, player.getEquipment(),
-                gameManager.getGame().getTablePile(), player.getEquipment().getCards())
-        );
+        if (player.getEquipment().size() > 0) {
+            gameManager.getCardManager().moveCard(
+                new CardMoveHandle(gameManager, "die", player, null, player.getEquipment(),
+                    gameManager.getGame().getTablePile(), player.getEquipment().getCards())
+            );
+        }
 
-        gameManager.getCardManager().moveCard(
-            new CardMoveHandle(gameManager, "die", player, null, player.getDelayedEffect(),
-                gameManager.getGame().getTablePile(), player.getDelayedEffect().getCards())
-        );
+        if (player.getDelayedEffect().size() > 0) {
+            gameManager.getCardManager().moveCard(
+                new CardMoveHandle(gameManager, "die", player, null, player.getDelayedEffect(),
+                    gameManager.getGame().getTablePile(), player.getDelayedEffect().getCards())
+            );
+        }
 
         if (gameManager.getGame().getCurrentPlayer().equals(player)) {
             gameManager.setPhase(Phase.ROUND_START);
         }
         gameManager.getGame().getAlivePlayers().remove(player);
 
+        try {
+            sleep(CARD_MOVE_PAUSE_AFTER_MOVEMENT);
+        } catch (InterruptedException e) {
+            //ignore
+        }
 
         gameManager.checkGameOver();
     }

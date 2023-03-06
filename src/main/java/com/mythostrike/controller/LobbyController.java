@@ -207,19 +207,6 @@ public class LobbyController {
             .status(HttpStatus.CREATED).build();
     }
 
-    //TODO: remove
-    @PostMapping("/lobby")
-    public ResponseEntity<Lobby> getLobby(Principal principal, @RequestBody LobbyIdRequest request)
-        throws IllegalInputException {
-        log.debug("get lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
-        //get objects from REST data
-        Lobby lobby = lobbyList.getLobby(request.lobbyId());
-        if (lobby == null) {
-            throw new IllegalInputException(LOBBY_NOT_FOUND_MESSAGE);
-        }
-        return ResponseEntity.ok(lobby);
-    }
-
     public void updateLobby(int lobbyId) {
         Lobby lobby = lobbyList.getLobby(lobbyId);
         if (lobby == null) {

@@ -14,18 +14,18 @@ public final class WebSocketService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-
-
     public void sendMessage(String path, Object payload, String messageName) {
-
-        log.debug("{} to '{}'", messageName, path);
         simpMessagingTemplate.convertAndSend(path, payload);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(payload);
-            log.debug("sent to frontend: {}", json);
+            log.debug("{} to '{}': {}", messageName, path, json);
         } catch (JsonProcessingException e) {
             log.error("could not convert {} to json {}", messageName, e);
         }
+    }
+
+    public void sendMessageWithoutLog(String path, Object payload) {
+        simpMessagingTemplate.convertAndSend(path, payload);
     }
 }

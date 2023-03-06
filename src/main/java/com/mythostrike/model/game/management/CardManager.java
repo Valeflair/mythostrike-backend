@@ -26,7 +26,7 @@ import static java.lang.Thread.sleep;
 public class CardManager {
 
     public static final int JUDGE_PAUSE_ON_TABLE_PILE = 1000;
-    private static final int CARD_MOVE_PAUSE_BETWEEN_MOVEMENT = 1000;
+    public static final int CARD_MOVE_PAUSE_AFTER_MOVEMENT = 1000;
 
     private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
         = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
@@ -155,16 +155,16 @@ public class CardManager {
         }
 
 
-        List<String> affectedPlayers = new ArrayList<>();
+        List<String> privateMessageTo = new ArrayList<>();
         if (from.getType().isConcealed() && to.getType().isConcealed()) {
             //send message with infos to the affected player
             if (cardMoveHandle.getPlayer() != null) {
-                affectedPlayers.add(cardMoveHandle.getPlayer().getUsername());
+                privateMessageTo.add(cardMoveHandle.getPlayer().getUsername());
             }
             if (cardMoveHandle.getTo() != null) {
-                affectedPlayers.add(cardMoveHandle.getTo().getUsername());
+                privateMessageTo.add(cardMoveHandle.getTo().getUsername());
             }
-            gameManager.getGameController().cardMove(gameManager.getLobbyId(), affectedPlayers, cardMoveMessage);
+            gameManager.getGameController().cardMove(gameManager.getLobbyId(), privateMessageTo, cardMoveMessage);
 
             //clear the card ids for other players if they were private
             cardMoveMessage.cardIds().clear();
@@ -175,15 +175,26 @@ public class CardManager {
         }
 
 
-        //send message to all / not affected players, card ids are empty if they were concealed
-        List<String> notAffectedPlayers = gameManager.getGame().getAllPlayers().stream()
-            .map(Player::getUsername).filter(username -> !affectedPlayers.contains(username)).toList();
-        gameManager.getGameController().cardMove(gameManager.getLobbyId(), notAffectedPlayers, cardMoveMessage);
-        try {
-            sleep(CARD_MOVE_PAUSE_BETWEEN_MOVEMENT);
-        } catch (InterruptedException e) {
-            //ignore
+
+        if (privateMessageTo.isEmpty()) {
+            //send message to all players
+            gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
+        } else {
+            //send message to not affected players, card ids are empty if they were concealed
+            List<String> notAffectedPlayers = gameManager.getGame().getAllPlayers().stream()
+                .map(Player::getUsername).filter(username -> !privateMessageTo.contains(username)).toList();
+            gameManager.getGameController().cardMove(gameManager.getLobbyId(), notAffectedPlayers, cardMoveMessage);
         }
+
+        //only sleep if the current player is alive
+        if ( gameManager.getGame().getCurrentPlayer().isAlive()) {
+            try {
+                sleep(CARD_MOVE_PAUSE_AFTER_MOVEMENT);
+            } catch (InterruptedException e) {
+                //ignore
+            }
+        }
+
     }
 
     public List<Card> filterCard(List<Card> cards, CardFilter cardFilter, Player player) {

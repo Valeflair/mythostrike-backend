@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class WebsocketEventHandler {
+public class WebSocketEventHandler {
 
     private final GameController gameController;
 
