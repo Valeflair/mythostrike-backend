@@ -10,6 +10,7 @@ public class CheckDying extends PassiveSkill {
     public static final String NAME = CheckDying.class.getSimpleName();
     public static final String DESCRIPTION = "if player has low hp";
     private DamageHandle damageHandle;
+    private Player player;
 
     public CheckDying() {
         super(NAME, DESCRIPTION);
@@ -17,6 +18,9 @@ public class CheckDying extends PassiveSkill {
 
     @Override
     public boolean checkCondition(DamageHandle damageHandle) {
+        if (!player.equals(damageHandle.getTo())) {
+            return false;
+        }
         this.damageHandle = damageHandle;
         return damageHandle.getTo().getCurrentHp() < 1;
     }
@@ -35,6 +39,7 @@ public class CheckDying extends PassiveSkill {
      */
     @Override
     public void register(EventManager eventManager, Player player) {
+        this.player = player;
         eventManager.registerEvent(EventTypeDamage.DAMAGE_COMPLETE, this, player, true);
     }
 }
