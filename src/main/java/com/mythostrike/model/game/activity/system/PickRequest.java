@@ -12,8 +12,6 @@ import lombok.Setter;
 
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 @Getter
 public class PickRequest extends Activity {
     public static final String NAME = PickRequest.class.getSimpleName();
@@ -46,11 +44,6 @@ public class PickRequest extends Activity {
 
     @Override
     public void use() {
-        try {
-            sleep(DELAY_BEFORE_HIGHLIGHT);
-        } catch (InterruptedException e) {
-            //ignore
-        }
         gameManager.highlightPickRequest(this);
     }
 

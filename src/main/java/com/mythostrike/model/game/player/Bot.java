@@ -18,7 +18,7 @@ import static java.lang.Thread.sleep;
 @Getter
 public class Bot extends Player {
 
-    public static final int DELAY_BEFORE_ACTION = 1500;
+    public static final int DELAY_BEFORE_ACTION = 500;
 
     //TODO: add diffrent difficulty (placeholder(current), random, normal, cheater)
     private int difficulty;

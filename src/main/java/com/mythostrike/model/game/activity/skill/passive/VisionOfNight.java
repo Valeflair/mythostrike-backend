@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.mythostrike.model.game.management.CardManager.JUDGE_PAUSE_BETWEEN_MOVEMENT;
+import static com.mythostrike.model.game.management.CardManager.JUDGE_PAUSE_ON_TABLE_PILE;
 import static java.lang.Thread.sleep;
 
 public class VisionOfNight extends PassiveSkill {
@@ -64,7 +64,7 @@ public class VisionOfNight extends PassiveSkill {
             gameManager.getGame().getDrawPile(), gameManager.getGame().getTablePile(), cardsToJudge));
 
         try {
-            sleep(JUDGE_PAUSE_BETWEEN_MOVEMENT);
+            sleep(JUDGE_PAUSE_ON_TABLE_PILE);
         } catch (InterruptedException e) {
             //ignore
         }

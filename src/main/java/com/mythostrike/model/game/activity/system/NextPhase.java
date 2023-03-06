@@ -28,7 +28,7 @@ public class NextPhase extends SystemAction {
 
     public static final String NAME = NextPhase.class.getSimpleName();
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
-    public static final int DELAY_BEFORE_SWITCH_PLAYER = 1500;
+    public static final int DELAY_BEFORE_SWITCH_PLAYER = 500;
 
     public NextPhase(GameManager gameManager) {
         super(NAME, DESCRIPTION, gameManager);

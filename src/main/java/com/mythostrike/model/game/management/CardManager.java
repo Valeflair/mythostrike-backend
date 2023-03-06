@@ -25,10 +25,11 @@ import static java.lang.Thread.sleep;
 
 public class CardManager {
 
+    public static final int JUDGE_PAUSE_ON_TABLE_PILE = 1000;
+    private static final int CARD_MOVE_PAUSE_BETWEEN_MOVEMENT = 1000;
+
     private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
         = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
-    public static final int JUDGE_PAUSE_BETWEEN_MOVEMENT = 2000;
-
     private final GameManager gameManager;
 
     public CardManager(GameManager gameManager) {
@@ -76,7 +77,7 @@ public class CardManager {
             gameManager.getGame().getTablePile(), List.of(judge)));
         //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
         try {
-            sleep(JUDGE_PAUSE_BETWEEN_MOVEMENT);
+            sleep(JUDGE_PAUSE_ON_TABLE_PILE);
         } catch (InterruptedException e) {
             //ignore
         }
@@ -178,6 +179,11 @@ public class CardManager {
         List<String> notAffectedPlayers = gameManager.getGame().getAllPlayers().stream()
             .map(Player::getUsername).filter(username -> !affectedPlayers.contains(username)).toList();
         gameManager.getGameController().cardMove(gameManager.getLobbyId(), notAffectedPlayers, cardMoveMessage);
+        try {
+            sleep(CARD_MOVE_PAUSE_BETWEEN_MOVEMENT);
+        } catch (InterruptedException e) {
+            //ignore
+        }
     }
 
     public List<Card> filterCard(List<Card> cards, CardFilter cardFilter, Player player) {
