@@ -2,6 +2,7 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
@@ -34,8 +35,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -340,41 +343,76 @@ public class GameManager {
         //If all clients are connected, then the methode cardDistribution() is called.
     }
 
+    private boolean isTargetSelectionValid(int index, List<PlayerCondition> playerConditions, List<String> targets) {
+        Set<String> allowedPlayers;
+        if (playerConditions.size() > index) {
+            allowedPlayers
+                = new HashSet<>(playerConditions.get(index).players());
+        } else {
+            allowedPlayers = new HashSet<>();
+        }
+        return allowedPlayers.containsAll(targets);
+    }
+
     public void selectCards(String playerName, List<Integer> cardIds, List<String> targets) {
         List<Card> cards = convertIdToCards(cardIds);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         Player player = getPlayerByName(playerName);
 
         if (lastPickRequest == null || !lastPickRequest.getPlayer().equals(player)) {
-            log.warn("Player {} tried to select cards without a pick request", playerName);
-            return;
+            throw new IllegalArgumentException("Player is not allowed to select cards");
+        }
+
+        //check if the player selected the valid cards
+        if (!new HashSet<>(lastPickRequest.getHighlightMessage().cardIds()).containsAll(cardIds)) {
+            throw new IllegalArgumentException("Player selected not allowed cards");
         }
 
         lastPickRequest.setSelectedCards(cards);
-        cards.forEach(card -> card.setPickRequest(lastPickRequest));
+
         if (cards.size() == 1) {
+            int index = lastPickRequest.getHighlightMessage().cardIds().indexOf(cardIds.get(0));
+            if (!isTargetSelectionValid(index, lastPickRequest.getHighlightMessage().cardPlayerConditions(), targets)) {
+                throw new IllegalArgumentException("Selected card is not allowed for this player");
+            }
+
             lastPickRequest.setSelectedPlayers(targetPlayers);
+        } else {
+            //only one card can be selected with targets
+            if (!targets.isEmpty()) {
+                throw new IllegalArgumentException("Only one card can be selected with targets");
+            }
         }
+        cards.forEach(card -> card.setPickRequest(lastPickRequest));
         lastPickRequest = null;
 
         submitRunnable(this::proceed);
     }
 
-    public void selectSkill(String playerName, int skillId, List<String> targets) {
+    public void selectSkill(String playerName, int skillIndex, List<String> targets) {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         lastPickRequest.setSelectedPlayers(targetPlayers);
-        if (skillId < 0) {
+        if (skillIndex < 0) {
             lastPickRequest.setClickedCancel(true);
             proceed();
             return;
         }
-        Integer id = lastPickRequest.getHighlightMessage().skillIds().get(skillId);
+        //TODO: change skill Index to real skill id
+        Integer skillId = lastPickRequest.getHighlightMessage().skillIds().get(skillIndex);
+
+        //check if the player selected the valid players
+        //int index = lastPickRequest.getHighlightMessage().skillIds().indexOf(skillId);
+        if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(), targets))
+        {
+            throw new IllegalArgumentException("Selected skill is not allowed for this player");
+        }
+
 
         lastPickRequest.setClickedCancel(true);
         if (lastPickRequest.getHighlightMessage().activateEndTurn()) {
             for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
-                if (skill.getId() == id) {
+                if (skill.getId() == skillId) {
                     lastPickRequest.setClickedCancel(false);
                     lastPickRequest.setSelectedActiveSkill(skill);
                     break;
@@ -382,7 +420,7 @@ public class GameManager {
             }
         } else {
             for (PassiveSkill skill : player.getChampion().getPassiveSkills()) {
-                if (skill.getId() == id) {
+                if (skill.getId() == skillId) {
                     lastPickRequest.setClickedCancel(false);
                     lastPickRequest.setSelectedPassiveSkill(skill);
                     break;

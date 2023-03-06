@@ -89,6 +89,7 @@ public class WebsocketEventHandler {
 
         //send an game update to client
         lobbyList.increaseUserInGame(lobbyId);
+        gameController.updateGame(lobbyId);
 
         //when all players are connected start the normal game procedure
         if (lobbyList.isGameReadyToStart(lobbyId)) {
@@ -100,8 +101,9 @@ public class WebsocketEventHandler {
                 return;
             }
             gameManager.allPlayersConnected();
+            gameController.updateGame(lobbyId);
         }
-        gameController.updateGame(lobbyId);
+
     }
 
     /**
