@@ -8,11 +8,13 @@ public class CardFilter {
     private final List<String> includeList;
     private final List<String> excludeList;
     private final List<CardSymbol> includeSymbols;
+    private final List<CardType> includeTypes;
 
     public CardFilter() {
         includeList = new ArrayList<>();
         excludeList = new ArrayList<>();
         includeSymbols = new ArrayList<>();
+        includeTypes = new ArrayList<>();
     }
 
     /**
@@ -22,6 +24,7 @@ public class CardFilter {
         includeList = new ArrayList<>();
         excludeList = new ArrayList<>();
         includeSymbols = new ArrayList<>();
+        includeTypes = new ArrayList<>();
         String[] filters = filter.split("\\|");
         for (String include : filters) {
             addIncludeFilter(include);
@@ -37,12 +40,21 @@ public class CardFilter {
         includeSymbols.add(symbol);
     }
 
+    public void addIncludeType(CardType type) {
+        includeTypes.add(type);
+    }
+
+
     public void addExcludeFilter(String name) {
         excludeList.add(name);
     }
 
     public void removeIncludeFilter(String name) {
         includeList.remove(name);
+    }
+
+    public void removeIncludeSymbol(CardSymbol symbol) {
+        includeSymbols.remove(symbol);
     }
 
     public void removeExcludeFilter(String name) {
