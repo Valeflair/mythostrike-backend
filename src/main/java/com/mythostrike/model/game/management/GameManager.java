@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
@@ -125,8 +126,9 @@ public class GameManager {
         EXECUTOR.execute(() -> {
             try {
                 runnable.run();
-            } catch (RuntimeException e) {
-                log.error("Error in runnable", e);
+            } catch (Exception exception) {
+                List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
+                log.error("Error in runnable: '{}' at '{}'", exception.getMessage(), limitedStackTrace);
             }
             gameController.updateGame(lobbyId);
         });

@@ -31,8 +31,11 @@
         <logger name="com.mythostrike" level="DEBUG"/>
 
         <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE-ROLLING"/>
+        </root>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 
