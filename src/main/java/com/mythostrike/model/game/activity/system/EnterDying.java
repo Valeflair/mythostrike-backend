@@ -86,8 +86,8 @@ public class EnterDying extends Activity {
             List<Integer> cardIds = GameManager.convertCardsToInteger(cards);
             //TODO implement
             String hint
-                = player.getUsername() + " is about to die, he needs " + count + "heal(s) to get alive"
-                + "if you want to heal him, pick one heal and click confirm";
+                = player.getUsername() + " is about to die. He needs " + count + " heal(s) to be resurrected."
+                + "If you want to heal him, pick a heal card and click confirm";
 
             HighlightMessage highlightMessage = HighlightMessage.builder()
                 .cardIds(cardIds)

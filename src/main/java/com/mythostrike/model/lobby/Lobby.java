@@ -257,7 +257,7 @@ public class Lobby {
             seats.stream().map(Seat::getPlayer).filter(Objects::nonNull).toList()
         );
 
-        //randomize positions if mode is Identity (except God King)
+        //randomize positions for identity distribution if mode is Identity (except God King)
         if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
             Player godKing = players.remove(0);
             Collections.shuffle(players, Game.RANDOM_SEED);
@@ -267,6 +267,15 @@ public class Lobby {
         //set identities depending on position
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setIdentity(mode.identityList().get(i));
+        }
+
+        //randomize positions except God King, God King is always first
+        if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
+            Player godKing = players.remove(0);
+            Collections.shuffle(players, Game.RANDOM_SEED);
+            players.add(0, godKing);
+        } else {
+            Collections.shuffle(players, Game.RANDOM_SEED);
         }
 
         gameManager = new GameManager(players, mode, id, gameController);
