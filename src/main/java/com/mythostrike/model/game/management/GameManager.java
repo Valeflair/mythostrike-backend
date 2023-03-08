@@ -51,7 +51,7 @@ public class GameManager {
 
     //player start up with 4 cards and draw 2 cards at each turn start
     private static final int CARD_COUNT_START_UP = 4;
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(20);
+    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     @Getter
     private final Game game;
     @Getter
