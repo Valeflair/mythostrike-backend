@@ -60,6 +60,9 @@ public class CardManager {
                 throw new IllegalArgumentException("draw pile is not big enough");
             }
             cards.addAll(extraCards);
+            for (Card card : cards) {
+                gameManager.getGame().getDrawPile().add(card, true);
+            }
         }
         return cards;
     }
