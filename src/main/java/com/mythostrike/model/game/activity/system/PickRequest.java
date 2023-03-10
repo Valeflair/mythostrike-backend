@@ -17,8 +17,6 @@ public class PickRequest extends Activity {
     public static final String NAME = PickRequest.class.getSimpleName();
     public static final String DESCRIPTION = "you have to pick a card";
     public static final int CARD_COUNT_TURN_START = 2;
-    public static final int DELAY_BEFORE_ACTION = 500;
-
     private final GameManager gameManager;
     private final Player player;
     @Setter

@@ -13,6 +13,7 @@ import com.mythostrike.model.game.activity.events.handle.PhaseHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import lombok.Getter;
+import org.hibernate.cfg.NotYetImplementedException;
 
 import java.util.Objects;
 
@@ -30,6 +31,7 @@ public abstract class Activity {
         this.name = name;
         this.description = description;
     }
+
 
 
     public boolean checkCondition(AttackHandle attackHandle) {
@@ -77,11 +79,11 @@ public abstract class Activity {
     }
 
     public void use() {
-        throw new RuntimeException("Activity " + name + " has no use() method implemented");
+        throw new NotYetImplementedException("Activity " + name + " has no use() method implemented");
     }
 
     public void activate() {
-        throw new RuntimeException("Activity " + name + " has no use() method implemented");
+        throw new NotYetImplementedException("Activity " + name + " has no activate() method implemented");
     }
 
     /**

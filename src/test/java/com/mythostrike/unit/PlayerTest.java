@@ -1,11 +1,14 @@
-package com.mythostrike.model.game;
+package com.mythostrike.unit;
 
 import com.mythostrike.account.repository.User;
-import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Human;
+import com.mythostrike.model.game.player.PlaceholderBot;
 import com.mythostrike.model.game.player.Player;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlayerTest {
     private Player player;
@@ -14,7 +17,7 @@ public class PlayerTest {
 
     public void setUp() {
         human = new Human(new User("test1", "test"), null);
-        player = new Bot("test2", 1);
+        player = new PlaceholderBot("test2");
         attributeAssertion();
         healthAssertion();
         equalityAssertion();
@@ -48,10 +51,10 @@ public class PlayerTest {
     }
 
     private void equalityAssertion() {
-        assertEquals(player, new Bot("test2", 1));
+        assertEquals(player, new PlaceholderBot("test2"));
         assertEquals(human, new Human(new User("test1", "test"), null));
         assertNotEquals(player, human);
-        assertNotEquals(player, new Bot("test3", 2));
+        assertNotEquals(player, new PlaceholderBot("test3"));
         assertNotEquals(human, new Human(new User("test2", "test"), null));
     }
 

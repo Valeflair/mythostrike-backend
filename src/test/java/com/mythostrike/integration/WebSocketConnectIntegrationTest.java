@@ -1,4 +1,4 @@
-package com.mythostrike;
+package com.mythostrike.integration;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
@@ -7,10 +7,10 @@ import com.mythostrike.controller.LobbyController;
 import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
-import com.mythostrike.model.SimplePrincipal;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.ModeList;
+import com.mythostrike.support.SimplePrincipal;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.AssertionFailure;
 import org.jetbrains.annotations.NotNull;

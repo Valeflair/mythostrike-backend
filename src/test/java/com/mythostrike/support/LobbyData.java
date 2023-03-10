@@ -1,4 +1,4 @@
-package com.mythostrike.model;
+package com.mythostrike.support;
 
 import com.mythostrike.controller.message.lobby.SeatMessage;
 

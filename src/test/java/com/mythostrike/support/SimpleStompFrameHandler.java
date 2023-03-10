@@ -1,4 +1,4 @@
-package com.mythostrike.model;
+package com.mythostrike.support;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +26,12 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        System.out.println("Connected");
+        log.debug("Connected");
     }
 
     @Override
-    public void handleException(StompSession session, StompCommand command, StompHeaders
-        headers, byte[] payload, Throwable exception) {
+    public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload,
+                                Throwable exception) {
         log.error("Got an exception", exception);
     }
 
@@ -44,6 +44,6 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
     public void handleFrame(StompHeaders headers, Object payload) {
         T message = (T) payload;
         messages.add(message);
-        log.info("Received : " + message);
+        log.debug("Received : " + message);
     }
 }

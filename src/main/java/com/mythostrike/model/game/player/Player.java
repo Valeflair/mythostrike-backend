@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Getter
@@ -205,6 +206,16 @@ public abstract class Player {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Player other && this.username.equals(other.username);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Player player = (Player) obj;
+
+        return username.equals(player.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this);
     }
 }

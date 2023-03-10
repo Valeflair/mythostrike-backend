@@ -6,7 +6,6 @@ import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardType;
-import com.mythostrike.model.game.activity.cards.cardtype.Defend;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.events.handle.PlayerHandle;

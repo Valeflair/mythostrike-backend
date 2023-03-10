@@ -1,4 +1,4 @@
-package com.mythostrike;
+package com.mythostrike.unit;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;

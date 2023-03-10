@@ -1,4 +1,4 @@
-package com.mythostrike;
+package com.mythostrike.integration;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
@@ -7,11 +7,11 @@ import com.mythostrike.controller.LobbyController;
 import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
-import com.mythostrike.model.LobbyData;
-import com.mythostrike.model.SimplePrincipal;
-import com.mythostrike.model.SimpleStompFrameHandler;
 import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.ModeList;
+import com.mythostrike.support.LobbyData;
+import com.mythostrike.support.SimplePrincipal;
+import com.mythostrike.support.SimpleStompFrameHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

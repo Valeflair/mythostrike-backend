@@ -8,9 +8,9 @@ import com.mythostrike.controller.GameController;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.management.GameManager;
-import com.mythostrike.model.game.player.Bot;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
+import com.mythostrike.model.game.player.RandomBot;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -162,7 +162,7 @@ public class Lobby {
             return false;
         }
 
-        seatToAddBot.setPlayer(new Bot("Bot" + seatToAddBot.getId(), 1));
+        seatToAddBot.setPlayer(new RandomBot("Bot" + seatToAddBot.getId()));
         numberPlayers++;
         updateLobbyStatus();
         return true;
