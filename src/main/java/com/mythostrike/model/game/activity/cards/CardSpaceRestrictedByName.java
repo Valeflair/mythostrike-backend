@@ -14,6 +14,8 @@ public class CardSpaceRestrictedByName extends CardSpace {
 
     @Override
     public void add(Card card) {
+        if (card == null) throw new NullPointerException("card is null");
+        if (cards.contains(card)) return;
         if ((!accepts(card))) throw new AssertionError();
         String name = card.getName();
         cards.add(card);

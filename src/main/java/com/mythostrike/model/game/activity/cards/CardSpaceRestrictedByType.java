@@ -13,6 +13,8 @@ public class CardSpaceRestrictedByType extends CardSpace {
 
     @Override
     public void add(Card card) {
+        if (card == null) throw new NullPointerException("card is null");
+        if (cards.contains(card)) return;
         if ((!accepts(card))) throw new AssertionError();
         CardType type = card.getType();
         cards.add(card);

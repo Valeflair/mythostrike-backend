@@ -32,6 +32,8 @@ public class CardSpace {
     }
 
     public void add(Card card) {
+        if (card == null) throw new NullPointerException("card is null");
+        if (cards.contains(card)) return;
         cards.add(card);
     }
 
