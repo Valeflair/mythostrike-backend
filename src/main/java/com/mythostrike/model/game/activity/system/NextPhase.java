@@ -91,6 +91,7 @@ public class NextPhase extends SystemAction {
                 //ignore
             }
             gameManager.getGame().nextPlayer();
+            gameManager.getGameController().updateGame(gameManager.getLobbyId());
 
         }
         PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()

@@ -100,7 +100,7 @@ class LobbyIntegrationTest {
         LobbyMessage expected = LobbyUtils.createLobby(modeId, users.get(0));
 
         await()
-            .atMost(40, SECONDS)
+            .atMost(1, SECONDS)
             .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
         assertEquals(expected, frameHandler.getNextMessage());
     }
