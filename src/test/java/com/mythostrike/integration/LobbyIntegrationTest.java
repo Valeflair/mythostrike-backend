@@ -1,10 +1,7 @@
 package com.mythostrike.integration;
 
 
-import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
-import com.mythostrike.model.lobby.Mode;
-import com.mythostrike.model.lobby.ModeList;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
 import com.mythostrike.support.utility.LobbyUtils;
@@ -33,7 +30,6 @@ import java.util.concurrent.TimeoutException;
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -42,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class LobbyIntegrationTest {
 
     private static final Integer PORT = 8080;
+    public static final String WEB_SOCKET_WRONG_MESSAGE = "Web Socket did not receive the correct message";
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -90,18 +87,23 @@ class LobbyIntegrationTest {
      */
     @Test
     void testLobbyWebSocketConnection() {
-        int modeId = 0;
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> frameHandler = new SimpleStompFrameHandler<>(LobbyMessage.class);
         session.subscribe("/lobbies/1", frameHandler);
 
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(modeId, users.get(0));
-
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201);
         await()
             .atMost(1, SECONDS)
             .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
-        assertEquals(expected, frameHandler.getNextMessage());
+        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        //join the lobby
+        expected = LobbyUtils.joinLobby(users.get(1), expected, 200);
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
+        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
     }
 }

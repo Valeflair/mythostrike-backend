@@ -1,5 +1,6 @@
 package com.mythostrike.controller;
 
+import com.mythostrike.controller.message.ErrorMessage;
 import com.mythostrike.model.exception.IllegalInputException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,10 @@ import java.util.List;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
-    public void handleResponseStatusException(ResponseStatusException exception) {
+    public void handleResponseStatusException(ResponseStatusException exception, WebRequest request) {
         List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
         log.error("ResponseStatusException: '{}' at '{}'", exception.getReason(), limitedStackTrace);
+
         throw exception;
     }
 
@@ -32,9 +34,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
         log.error("IllegalArgumentException: '{}' at '{}'", exception.getMessage(), limitedStackTrace);
 
+        String path = request.getDescription(false).substring(4);
+        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, path, exception.getMessage());
 
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
-            HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(exception, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -43,8 +46,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
         log.error("EntityNotFoundException: '{}' at '{}'", exception.getMessage(), limitedStackTrace);
 
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
-            HttpStatus.CONFLICT, request);
+        String path = request.getDescription(false).substring(4);
+        ErrorMessage message = new ErrorMessage(HttpStatus.CONFLICT, path, exception.getMessage());
+
+        return handleExceptionInternal(exception, message, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(IllegalInputException.class)
@@ -53,7 +58,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
         log.error("IllegalInputException: '{}' at '{}'", exception.getMessage(), limitedStackTrace);
 
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
-            HttpStatus.BAD_REQUEST, request);
+        String path = request.getDescription(false).substring(4);
+        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, path, exception.getMessage());
+
+        return handleExceptionInternal(exception, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
 }

@@ -196,7 +196,7 @@ paths:
         "201":
           description: Successfully created lobby
           content:
-            integer:
+            application/json:
               schema:
                 $ref: "#/components/schemas/Lobby"
 
@@ -213,10 +213,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Lobby"
+              $ref: "#/components/schemas/LobbyId"
       responses:
         "200":
           description: Successfully joined lobby
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lobby"
         "400":
           description: Lobby already full
         "404":
