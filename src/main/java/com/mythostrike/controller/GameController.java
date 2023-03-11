@@ -168,6 +168,7 @@ public class GameController {
 
     /**
      * send a card move message to all players in the game
+     *
      * @param lobbyId id of the game
      * @param message the card move message to send
      */
@@ -203,9 +204,10 @@ public class GameController {
     /**
      * send a card move message to the specified players
      * log for each player separately
-     * @param lobbyId id of the game
+     *
+     * @param lobbyId     id of the game
      * @param toUsernames usernames of the players to send to
-     * @param message the card move message to send
+     * @param message     the card move message to send
      */
     public void cardMove(int lobbyId, List<String> toUsernames, CardMoveMessage message) {
         for (String username : toUsernames) {

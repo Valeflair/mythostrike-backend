@@ -98,7 +98,6 @@ public class CardManager {
         CardPile drawDeck = cardDrawHandle.getDrawPile();
 
 
-
         List<Card> drawedCards = peekTopDrawPile(count);
 
         //create a debug message
@@ -178,7 +177,6 @@ public class CardManager {
         }
 
 
-
         if (privateMessageTo.isEmpty()) {
             //send message to all players
             gameManager.getGameController().cardMove(gameManager.getLobbyId(), cardMoveMessage);
@@ -190,7 +188,7 @@ public class CardManager {
         }
 
         //only sleep if the current player is alive
-        if ( gameManager.getGame().getCurrentPlayer().isAlive()) {
+        if (gameManager.getGame().getCurrentPlayer().isAlive()) {
             try {
                 sleep(CARD_MOVE_PAUSE_AFTER_MOVEMENT);
             } catch (InterruptedException e) {

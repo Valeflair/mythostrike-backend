@@ -49,7 +49,7 @@ public class PlaceholderBot extends Bot {
         int amount = 0;
         do {
             amount = Bot.selectRandomValue(tempCardCount, true);
-        } while(amount > cardIds.size());
+        } while (amount > cardIds.size());
 
         //select amount random cards from cardIds
         return new ArrayList<>(Bot.selectRandomValues(cardIds, amount));
@@ -68,7 +68,7 @@ public class PlaceholderBot extends Bot {
         int amount = 0;
         do {
             amount = Bot.selectRandomValue(tempCardCount, true);
-        } while(amount >  skillIds.size());
+        } while (amount > skillIds.size());
 
         if (amount < 0 || amount > 1) {
             throw new IllegalArgumentException("you should only be able to select one skill");
@@ -94,7 +94,7 @@ public class PlaceholderBot extends Bot {
         int amount = 0;
         do {
             amount = Bot.selectRandomValue(tempCardCount, true);
-        } while(amount > players.size());
+        } while (amount > players.size());
 
         //select amount random cards from cardIds
         return new ArrayList<>(Bot.selectRandomValues(players, amount));

@@ -408,8 +408,8 @@ public class GameManager {
 
         //check if the player selected the valid players
         //int index = lastPickRequest.getHighlightMessage().skillIds().indexOf(skillId);
-        if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(), targets))
-        {
+        if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(),
+            targets)) {
             throw new IllegalArgumentException("Selected skill is not allowed for this player");
         }
 

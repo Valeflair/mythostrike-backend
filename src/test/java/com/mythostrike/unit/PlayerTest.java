@@ -4,28 +4,27 @@ import com.mythostrike.account.repository.User;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.PlaceholderBot;
 import com.mythostrike.model.game.player.Player;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PlayerTest {
+class PlayerTest {
     private Player player;
     private Human human;
 
-
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         human = new Human(new User("test1", "test"), null);
         player = new PlaceholderBot("test2");
-        attributeAssertion();
-        healthAssertion();
-        equalityAssertion();
-        restrictionAssertion();
     }
 
 
-    private void attributeAssertion() {
+    @Test
+    void attributeAssertion() {
         assertEquals(human.getUsername(), "test1");
         assertEquals(player.getUsername(), "test2");
         assertEquals(human.getDrachma(), 0);
@@ -35,7 +34,8 @@ public class PlayerTest {
         assertEquals(human.getUser().getAvatarNumber(), 1);
     }
 
-    private void healthAssertion() {
+    @Test
+    void healthAssertion() {
         human.setMaxHp(100);
         human.increaseCurrentHp(500);
         assertEquals(human.getCurrentHp(), 100);
@@ -50,7 +50,8 @@ public class PlayerTest {
         assertEquals(player.getCurrentHp(), 50);
     }
 
-    private void equalityAssertion() {
+    @Test
+    void equalityAssertion() {
         assertEquals(player, new PlaceholderBot("test2"));
         assertEquals(human, new Human(new User("test1", "test"), null));
         assertNotEquals(player, human);
@@ -58,7 +59,8 @@ public class PlayerTest {
         assertNotEquals(human, new Human(new User("test2", "test"), null));
     }
 
-    private void restrictionAssertion() {
+    @Test
+    void restrictionAssertion() {
         player.setPermanentRestrict("test", 0);
         player.resetRestrict();
         assertTrue(player.isRestricted("test"));

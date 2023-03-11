@@ -33,7 +33,6 @@ public abstract class Activity {
     }
 
 
-
     public boolean checkCondition(AttackHandle attackHandle) {
         return false;
     }

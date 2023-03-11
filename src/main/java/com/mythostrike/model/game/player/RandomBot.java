@@ -56,7 +56,7 @@ public class RandomBot extends Bot {
             if (tempCardCount.isEmpty() && selectedZero) {
                 return new ArrayList<>();
             }
-        } while(amount > cardIds.size() || selectOtherThenZero );
+        } while (amount > cardIds.size() || selectOtherThenZero);
 
         //select amount random cards from cardIds
         return new ArrayList<>(Bot.selectRandomValues(cardIds, amount));
@@ -81,7 +81,7 @@ public class RandomBot extends Bot {
             if (tempCardCount.isEmpty() && selectedZero) {
                 return NO_SKILL_PICKED;
             }
-        } while(amount > skillIds.size() || selectOtherThenZero);
+        } while (amount > skillIds.size() || selectOtherThenZero);
 
         if (amount < 0 || amount > 1) {
             throw new IllegalArgumentException("you should only be able to select one skill");
@@ -113,7 +113,7 @@ public class RandomBot extends Bot {
             if (tempCardCount.isEmpty() && selectedZero) {
                 return new ArrayList<>();
             }
-        } while(amount > players.size() || selectOtherThenZero);
+        } while (amount > players.size() || selectOtherThenZero);
 
         //select amount random cards from cardIds
         return new ArrayList<>(Bot.selectRandomValues(players, amount));

@@ -35,15 +35,10 @@ public abstract class Bot extends Player {
         super(name);
     }
 
-    @Override
-    public void initialize(GameManager gameManager) {
-        this.gameManager = gameManager;
-        this.gameController = gameManager.getGameController();
-    }
-
     /**
      * selects count objects of type T from the list with the RANDOM_SEED from the Game Class
-     * @param list the list to choose from
+     *
+     * @param list  the list to choose from
      * @param count the number of objects to randomly select
      * @return the radomly selected list of objects
      * @throws IllegalArgumentException if the list is not big enough
@@ -64,7 +59,8 @@ public abstract class Bot extends Player {
 
     /**
      * selects one random object of type T from the list with the RANDOM_SEED from the Game Class
-     * @param list the list to select the object from
+     *
+     * @param list   the list to select the object from
      * @param remove removes the selected item from the list before returning
      * @return the random selected object
      */
@@ -81,9 +77,16 @@ public abstract class Bot extends Player {
 
     }
 
+    @Override
+    public void initialize(GameManager gameManager) {
+        this.gameManager = gameManager;
+        this.gameController = gameManager.getGameController();
+    }
+
     /**
      * Call this method to select a champion from the given message for this bot.
      * Depending on the difficulty of the bot, this method will be implemented differently.
+     *
      * @param message the champion selection message to select a champion from
      */
     public abstract void selectChampionFrom(ChampionSelectionMessage message);
@@ -92,6 +95,7 @@ public abstract class Bot extends Player {
     /**
      * Call this method to let the bot highlight a card or skill from the given pick request.
      * Depending on the difficulty of the bot, this method will be implemented differently.
+     *
      * @param pickRequest the pick request to tell the bot what he can do
      */
     public void highlight(PickRequest pickRequest) {
@@ -176,7 +180,8 @@ public abstract class Bot extends Player {
 
     /**
      * select a list of card ids. The size of the list has to be in the cardCount list to be valid.
-     * @param cardIds the list of card ids to select from
+     *
+     * @param cardIds   the list of card ids to select from
      * @param cardCount the list of the amount of cards possibly to select
      * @return the selected card id list
      */
@@ -184,7 +189,8 @@ public abstract class Bot extends Player {
 
     /**
      * select a list of card ids. The size of the list has to be in the cardCount list to be valid.
-     * @param cardIds the list of card ids to select from
+     *
+     * @param cardIds   the list of card ids to select from
      * @param cardCount the list of the amount of cards possibly to select
      * @return the selected card id list
      */
@@ -192,7 +198,8 @@ public abstract class Bot extends Player {
 
     /**
      * select a skill id from the list. The amount of skills to selected has to be from the skillCount list.
-     * @param skillIds the list of skill ids to select from
+     *
+     * @param skillIds   the list of skill ids to select from
      * @param skillCount the list of the amount of skills possibly to select
      * @return the selected skill. If no skill is selected NO_SKILL_PICKED will be returned.
      */
@@ -200,7 +207,8 @@ public abstract class Bot extends Player {
 
     /**
      * select a list of player usernames. The size of the list has to be in the playerCount list to be valid.
-     * @param players the list of usernames to select from
+     *
+     * @param players     the list of usernames to select from
      * @param playerCount the list of the amount of players possibly to select
      * @return the selected username list
      */

@@ -76,6 +76,7 @@ public class WebSocketEventHandler {
     /**
      * Send an update game message to client and increase the number of connected players.
      * If all players are connected after the championselection, the game starts.
+     *
      * @param lobbyId id of the lobby
      */
     private void updateGame(int lobbyId) {
@@ -108,7 +109,8 @@ public class WebSocketEventHandler {
 
     /**
      * Send the client his current handcards.
-     * @param lobbyId id of the lobby
+     *
+     * @param lobbyId  id of the lobby
      * @param username username of the client
      */
     private void sendCurrentHandcards(int lobbyId, String username) {

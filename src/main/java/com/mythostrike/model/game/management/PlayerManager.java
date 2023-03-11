@@ -137,6 +137,7 @@ public class PlayerManager {
     /**
      * Kill a player, move all cards to table pile
      * Dont sleep after one card movement, only sleep once after all cards are moved
+     *
      * @param player
      */
     public void killPlayer(Player player) {

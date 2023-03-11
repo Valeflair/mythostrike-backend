@@ -53,8 +53,9 @@ public final class LobbyList {
 
     /**
      * removes the user from the lobby and removes the lobby if it is empty
+     *
      * @param lobbyId id of the lobby to remove the user from
-     * @param user user to remove
+     * @param user    user to remove
      * @return true if the lobby was removed
      */
     public boolean removeUser(int lobbyId, User user) {
@@ -110,6 +111,7 @@ public final class LobbyList {
 
     /**
      * increases the number of users in game by one
+     *
      * @param id the id of the lobby
      */
     public void increaseUserInGame(int id) {
@@ -121,6 +123,7 @@ public final class LobbyList {
     /**
      * decreases the number of users in game by one.
      * If the number of users in game is 0, then the game gets stopped and deleted.
+     *
      * @param id the id of the lobby
      */
     public void decreaseUserInGame(int id) {
