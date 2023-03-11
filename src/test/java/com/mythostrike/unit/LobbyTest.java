@@ -7,7 +7,7 @@ import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.LobbyStatus;
 import com.mythostrike.model.lobby.ModeList;
 import com.mythostrike.model.lobby.Seat;
-import com.mythostrike.support.LobbyUtils;
+import com.mythostrike.support.utility.LobbyUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -39,9 +39,7 @@ class LobbyTest {
         assertEquals("test numberHumans equal", 1, lobby.getNumberHumans());
 
 
-        List<Seat> seats = LobbyUtils.createSeatList(
-            List.of(new Human(user, userService)), modeList.getMode(0)
-        );
+        List<Seat> seats = LobbyUtils.createSeatList(List.of(user), modeList.getMode(0), userService);
         assertEquals("test seats", seats, lobby.getSeats());
     }
 
@@ -54,9 +52,7 @@ class LobbyTest {
         assertEquals("test numberHumans equal", 2, lobby.getNumberHumans());
 
 
-        List<Seat> seats = LobbyUtils.createSeatList(
-            List.of(new Human(user, userService), new Human(secondUser, userService)), modeList.getMode(0)
-        );
+        List<Seat> seats = LobbyUtils.createSeatList(List.of(user, secondUser), modeList.getMode(0), userService);
         assertEquals("test seats", seats, lobby.getSeats());
     }
 

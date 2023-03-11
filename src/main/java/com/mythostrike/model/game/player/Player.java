@@ -216,6 +216,6 @@ public abstract class Player {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this);
+        return Objects.hash(this);
     }
 }

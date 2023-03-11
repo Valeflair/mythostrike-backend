@@ -2,11 +2,13 @@ package com.mythostrike.integration;
 
 
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
+import com.mythostrike.controller.message.lobby.LobbyMessage;
+import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
-import com.mythostrike.support.LobbyData;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
-import com.mythostrike.support.UserUtils;
+import com.mythostrike.support.utility.LobbyUtils;
+import com.mythostrike.support.utility.UserUtils;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -33,10 +35,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-class GameRunIntegrationTest {
+class LobbyIntegrationTest {
 
     private static final Integer PORT = 8080;
     private final List<TestUser> users = new ArrayList<>();
@@ -87,25 +90,18 @@ class GameRunIntegrationTest {
      */
     @Test
     void testLobbyWebSocketConnection() {
-        //create the lobby
-        given()
-            .headers(users.get(0).headers())
-            .body(new CreateLobbyRequest(0)).
-            when()
-            .post("/lobbies").
-            then()
-            .statusCode(201)
-            .body("id", notNullValue())
-            .body("mode", equalTo(ModeList.getModeList().getMode(0).name()))
-            .body("owner", equalTo(users.get(0).username()));
-
+        int modeId = 0;
 
         //subscribe to the lobby
-        SimpleStompFrameHandler<LobbyData> frameHandler = new SimpleStompFrameHandler<>(LobbyData.class);
+        SimpleStompFrameHandler<LobbyMessage> frameHandler = new SimpleStompFrameHandler<>(LobbyMessage.class);
         session.subscribe("/lobbies/1", frameHandler);
 
+        //create the lobby
+        LobbyMessage expected = LobbyUtils.createLobby(modeId, users.get(0));
+
         await()
-            .atMost(1, SECONDS)
+            .atMost(40, SECONDS)
             .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
+        assertEquals(expected, frameHandler.getNextMessage());
     }
 }

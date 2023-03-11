@@ -6,9 +6,9 @@ import io.restassured.http.Headers;
 import java.util.ArrayList;
 import java.util.List;
 
-public record TestUser(String username, String jwtToken, Headers headers) {
-    public TestUser(String name, String jwtToken) {
-        this(name, jwtToken, createHeader(jwtToken));
+public record TestUser(String username, int avatarNumber, String jwtToken, Headers headers) {
+    public TestUser(String username, String jwtToken) {
+        this(username, 1, jwtToken, createHeader(jwtToken));
     }
 
     private static Headers createHeader(String jwtToken) {

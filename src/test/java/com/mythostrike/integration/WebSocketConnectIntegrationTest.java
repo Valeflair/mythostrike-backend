@@ -7,9 +7,9 @@ import com.mythostrike.controller.LobbyController;
 import com.mythostrike.controller.message.authentication.UserAuthRequest;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
+import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.model.lobby.ModeList;
-import com.mythostrike.support.LobbyData;
 import com.mythostrike.support.SimplePrincipal;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import lombok.RequiredArgsConstructor;
@@ -96,7 +96,7 @@ class WebSocketConnectIntegrationTest {
 
 
         //subscribe to the lobby
-        SimpleStompFrameHandler<LobbyData> frameHandler = new SimpleStompFrameHandler<LobbyData>(LobbyData.class);
+        SimpleStompFrameHandler<LobbyMessage> frameHandler = new SimpleStompFrameHandler<>(LobbyMessage.class);
         session.subscribe("/lobbies/1", frameHandler);
 
         //create the lobby and change the mode

@@ -1,7 +1,5 @@
 package com.mythostrike.model.lobby;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.GameController;
@@ -22,19 +20,14 @@ import java.util.Objects;
 @Getter
 public class Lobby {
     private final int id;
-    @JsonIgnore
     private final UserService userService;
     private List<Seat> seats;
     private Mode mode;
     private Player owner;
-    @JsonIgnore
     @Setter
     private LobbyStatus status;
-    @JsonIgnore
     private int numberPlayers;
-    @JsonIgnore
     private int numberHumans;
-    @JsonIgnore
     private GameManager gameManager;
 
     public Lobby(int id, Mode mode, User owner, UserService userService) {
@@ -55,17 +48,6 @@ public class Lobby {
         seats.get(0).setPlayer(this.owner);
     }
 
-    @JsonGetter("mode")
-    private String modeToString() {
-        return mode.name();
-    }
-
-    @JsonGetter("owner")
-    private String ownerToString() {
-        return owner.getUsername();
-    }
-
-    @JsonIgnore
     private boolean isFull() {
         return numberPlayers >= mode.maxPlayer();
     }
@@ -126,15 +108,14 @@ public class Lobby {
         return true;
     }
 
-    @JsonIgnore
     public boolean canBeDeleted() {
         return numberHumans == 0;
     }
 
     private void selectNewOwner() {
-        for (int i = 0; i < seats.size(); i++) {
-            if (seats.get(i).getPlayer() instanceof Human) {
-                owner = seats.get(i).getPlayer();
+        for (Seat seat : seats) {
+            if (seat.getPlayer() instanceof Human) {
+                owner = seat.getPlayer();
                 return;
             }
         }

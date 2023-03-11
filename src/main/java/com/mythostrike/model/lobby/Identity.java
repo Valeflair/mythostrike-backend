@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
+import jakarta.persistence.Id;
 import lombok.Getter;
 
 import java.util.List;
@@ -99,6 +100,16 @@ public enum Identity {
         }
         return true;
     }
+
+    public static Identity getIdentityWithName(String name) {
+        for (Identity identity : Identity.values()) {
+            if (identity.name.equals(name)) {
+                return identity;
+            }
+        }
+        throw new IllegalArgumentException("No identity with name " + name + " found");
+    }
+
 
     @Override
     public String toString() {

@@ -46,4 +46,14 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
         messages.add(message);
         log.debug("Received : " + message);
     }
+
+    /**
+     * Get the next message in the queue. Throws an exception if the queue is empty.
+     * Remove the message from the queue.
+     *
+     * @return the next message in the queue
+     */
+    public T getNextMessage() {
+        return messages.remove();
+    }
 }

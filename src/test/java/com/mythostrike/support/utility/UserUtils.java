@@ -1,6 +1,7 @@
-package com.mythostrike.support;
+package com.mythostrike.support.utility;
 
 import com.mythostrike.controller.message.authentication.UserAuthRequest;
+import com.mythostrike.support.TestUser;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;

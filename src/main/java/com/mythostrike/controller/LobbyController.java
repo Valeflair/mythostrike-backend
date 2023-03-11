@@ -6,6 +6,7 @@ import com.mythostrike.controller.message.lobby.ChangeModeRequest;
 import com.mythostrike.controller.message.lobby.ChangeSeatRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
+import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.controller.message.lobby.LobbyOverview;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.lobby.Lobby;
@@ -64,7 +65,7 @@ public class LobbyController {
     }
 
     @PostMapping
-    public ResponseEntity<Lobby> create(Principal principal, @RequestBody CreateLobbyRequest request)
+    public ResponseEntity<LobbyMessage> create(Principal principal, @RequestBody CreateLobbyRequest request)
         throws IllegalInputException {
         log.debug("create lobby request from '{}' with  mode '{}", principal.getName(), request.modeId());
 
@@ -79,11 +80,11 @@ public class LobbyController {
         updateLobby(lobby.getId());
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(lobby);
+            .body(new LobbyMessage(lobby));
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Lobby> join(Principal principal, @RequestBody LobbyIdRequest request)
+    public ResponseEntity<LobbyMessage> join(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
         log.debug("join lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
 
@@ -100,7 +101,7 @@ public class LobbyController {
         }
 
         updateLobby(request.lobbyId());
-        return ResponseEntity.ok(lobby);
+        return ResponseEntity.ok(new LobbyMessage(lobby));
     }
 
     @PostMapping("/leave")
@@ -214,6 +215,6 @@ public class LobbyController {
         }
         String path = "/lobbies/" + lobbyId;
 
-        webSocketService.sendMessage(path, lobby, "updateLobby");
+        webSocketService.sendMessage(path, new LobbyMessage(lobby), "updateLobby");
     }
 }
