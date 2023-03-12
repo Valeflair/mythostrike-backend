@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Getter
 @JsonInclude(Include.NON_NULL)
-@JsonDeserialize(using  = SeatMessageDeserializer.class)
+@JsonDeserialize(using = SeatMessageDeserializer.class)
 public class SeatMessage {
     @JsonUnwrapped
     private final SeatPlayerMessage player;

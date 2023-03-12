@@ -11,6 +11,7 @@ import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
 import com.mythostrike.model.lobby.Seat;
+import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,14 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @Slf4j
 public final class LobbyUtils {
+    public static final String WEB_SOCKET_WRONG_MESSAGE = "Web Socket did not receive the correct message";
+
     private LobbyUtils() {
     }
 
@@ -55,9 +62,22 @@ public final class LobbyUtils {
         return seats;
     }
 
-    public static LobbyMessage createLobby(TestUser user, int modeId, int expectedStatusCode) {
-        if(expectedStatusCode != 201) {
-            //create the lobby and expect an error with error message
+    /**
+     * Creates a lobby and checks if the response is correct.
+     * If the expectedStatusCode is >= 300, it will try to create the lobby and expect an error with error message.
+     * If the expectedStatusCode is < 300, it will create the lobby and expect the correct response.
+     * It will also check if the web socket received the correct message through the frameHandler.
+     *
+     * @param user               the user that creates the lobby
+     * @param modeId             the id of the mode to start with
+     * @param expectedStatusCode the expected status code of the response (201 if lobby was created successfully)
+     * @param frameHandler       the frameHandler that receives the web socket messages
+     * @return the LobbyMessage that was received through the web socket
+     */
+    public static LobbyMessage createLobby(TestUser user, int modeId, int expectedStatusCode,
+                                           SimpleStompFrameHandler<LobbyMessage> frameHandler) {
+        if (expectedStatusCode >= 300) {
+            //try to create the lobby and expect an error with error message
             given()
                 .headers(user.headers())
                 .body(new CreateLobbyRequest(modeId)).
@@ -87,12 +107,32 @@ public final class LobbyUtils {
                 .body("seats", hasToString(seatMessageList.toString())).
                 extract().body().jsonPath().getInt("id");
 
-        return new LobbyMessage(lobbyId, mode.name(), user.username(), seatMessageList);
+        LobbyMessage expected = new LobbyMessage(lobbyId, mode.name(), user.username(), seatMessageList);
+
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
+        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
     }
 
-    public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, int expectedStatusCode) {
-        if(expectedStatusCode != 200) {
-            //create the lobby and expect an error with error message
+    /**
+     * Joins a lobby and checks if the response is correct.
+     * If the expectedStatusCode is >= 300, it will try to join the lobby and expect an error with error message.
+     * If the expectedStatusCode is < 300, it will join the lobby and expect the correct response.
+     * It will also check if the web socket received the correct message through the frameHandler.
+     *
+     * @param user               the user that joins the lobby
+     * @param oldLobbyState      the old lobby state to compare with the new lobby state
+     * @param expectedStatusCode the expected status code of the response (200 if the user joins the lobby successfully)
+     * @param frameHandler       the frameHandler that receives the web socket messages
+     * @return the LobbyMessage that was received through the web socket
+     */
+    public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, int expectedStatusCode,
+                                         SimpleStompFrameHandler<LobbyMessage> frameHandler) {
+        if (expectedStatusCode >= 300) {
+            //try to join the lobby and expect an error with error message
             given()
                 .headers(user.headers())
                 .body(new LobbyIdRequest(oldLobbyState.id())).
@@ -108,19 +148,19 @@ public final class LobbyUtils {
 
         //add player in the first empty seat
         boolean seatFound = false;
-        for(int i = 0; i < seatMessageList.size(); i++) {
-            if(seatMessageList.get(i).getPlayer() == null) {
+        for (int i = 0; i < seatMessageList.size(); i++) {
+            if (seatMessageList.get(i).getPlayer() == null) {
                 Identity identity = seatMessageList.get(i).getIdentity();
                 seatMessageList.set(i, new SeatMessage(user.username(), user.avatarNumber(), identity));
                 seatFound = true;
                 break;
             }
         }
-        if(!seatFound) {
+        if (!seatFound) {
             throw new IllegalArgumentException("No empty seat found in the lobby");
         }
 
-        //create the lobby
+        //join the lobby
         int lobbyId =
             given()
                 .headers(user.headers())
@@ -135,6 +175,47 @@ public final class LobbyUtils {
                 .body("seats", hasToString(seatMessageList.toString())).
                 extract().body().jsonPath().getInt("id");
 
-        return new LobbyMessage(lobbyId, oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+        LobbyMessage expected = new LobbyMessage(lobbyId, oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
+        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
+    }
+
+    /**
+     * Starts the game in a lobby and checks if the response is correct.
+     * If the expectedStatusCode is >= 300, it will try to start the game and expect an error with error message.
+     * If the expectedStatusCode is < 300, it will start the game and expect the correct response.
+     *
+     * @param user               the user that starts the game
+     * @param lobbyId            the id of the lobby
+     * @param expectedStatusCode the expected status code of the response (201 if the game was started successfully)
+     */
+    public static void startGame(TestUser user, int lobbyId, int expectedStatusCode) {
+        if (expectedStatusCode >= 300) {
+            //try to start the game and expect an error with error message
+            given()
+                .headers(user.headers())
+                .body(new LobbyIdRequest(lobbyId)).
+                when()
+                .post("/lobbies/start").
+                then()
+                .statusCode(expectedStatusCode)
+                .body("data", notNullValue())
+                .body("data.message", notNullValue());
+            return;
+        }
+
+        //start the game
+        given()
+            .headers(user.headers())
+            .body(new LobbyIdRequest(lobbyId)).
+            when()
+            .post("/lobbies/start").
+            then()
+            .statusCode(expectedStatusCode);
     }
 }

@@ -27,18 +27,17 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import static io.restassured.RestAssured.given;
+import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class LobbyIntegrationTest {
 
     private static final Integer PORT = 8080;
-    public static final String WEB_SOCKET_WRONG_MESSAGE = "Web Socket did not receive the correct message";
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -75,6 +74,7 @@ class LobbyIntegrationTest {
     void setupUsers() {
         users.add(UserUtils.createUser("TestUser", "TestPassword"));
         assertFalse(users.get(0).jwtToken().isEmpty());
+
         users.add(UserUtils.createUser("Reiner Zufall", "12341234"));
         assertFalse(users.get(1).jwtToken().isEmpty());
     }
@@ -86,24 +86,34 @@ class LobbyIntegrationTest {
      * @throws Exception
      */
     @Test
-    void testLobbyWebSocketConnection() {
+    void testLobbyTwoPlayer() {
 
         //subscribe to the lobby
-        SimpleStompFrameHandler<LobbyMessage> frameHandler = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe("/lobbies/1", frameHandler);
+        SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic = new SimpleStompFrameHandler<>(LobbyMessage.class);
+        session.subscribe("/lobbies/1", frameHandlerPublic);
+
+        List<SimpleStompFrameHandler<LobbyMessage>> frameHandlersPrivate = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            frameHandlersPrivate.add(new SimpleStompFrameHandler<>(LobbyMessage.class));
+            session.subscribe("/lobbies/1/" + users.get(i).username(), frameHandlersPrivate.get(i));
+        }
+
 
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201);
-        await()
-            .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
-        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
-
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201, frameHandlerPublic);
+        assertEquals(1, expected.id(), WEB_SOCKET_WRONG_MESSAGE);
         //join the lobby
-        expected = LobbyUtils.joinLobby(users.get(1), expected, 200);
+        expected = LobbyUtils.joinLobby(users.get(1), expected, 200, frameHandlerPublic);
+        assertNotNull(expected);
+
+        //start the game
+        LobbyUtils.startGame(users.get(0), expected.id(), 201);
         await()
             .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
-        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+            .untilAsserted(() -> {
+                for(SimpleStompFrameHandler<LobbyMessage> frameHandler : frameHandlersPrivate) {
+                    assertFalse(frameHandler.getMessages().isEmpty());
+                }
+            });
     }
 }
