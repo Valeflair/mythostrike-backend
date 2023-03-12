@@ -1,0 +1,16 @@
+[Unit]
+Description=cardgame2 backend
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+WorkingDirectory=/home/ubuntu/cardgame2/
+ExecStart=/home/ubuntu/cardgame2/mvnw spring-boot:run
+User=ubuntu
+Environment="MYSQL_HOST=localhost"
+Environment="MYSQL_USERNAME=springuser"
+Environment="MYSQL_PASSWORD=Myth0str1ke2022"
+
+[Install]
+WantedBy=multi-user.target

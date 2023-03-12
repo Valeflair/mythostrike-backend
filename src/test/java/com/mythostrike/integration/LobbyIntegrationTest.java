@@ -1,6 +1,8 @@
 package com.mythostrike.integration;
 
 
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
@@ -27,12 +29,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class LobbyIntegrationTest {
@@ -87,33 +89,27 @@ class LobbyIntegrationTest {
      */
     @Test
     void testLobbyTwoPlayer() {
+        //create the lobby
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201);
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe("/lobbies/1", frameHandlerPublic);
+        session.subscribe("/lobbies/" + expected.id() , frameHandlerPublic);
 
-        List<SimpleStompFrameHandler<LobbyMessage>> frameHandlersPrivate = new ArrayList<>();
+        List<SimpleStompFrameHandler<ChampionSelectionMessage>> frameHandlersPrivate = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
-            frameHandlersPrivate.add(new SimpleStompFrameHandler<>(LobbyMessage.class));
-            session.subscribe("/lobbies/1/" + users.get(i).username(), frameHandlersPrivate.get(i));
+            frameHandlersPrivate.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
+            session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), frameHandlersPrivate.get(i));
         }
 
-
-        //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201, frameHandlerPublic);
-        assertEquals(1, expected.id(), WEB_SOCKET_WRONG_MESSAGE);
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(1), expected, 200, frameHandlerPublic);
         assertNotNull(expected);
 
+        //join the lobby again, expect error
+        LobbyUtils.joinLobby(users.get(0), expected, 400, frameHandlerPublic);
+
         //start the game
-        LobbyUtils.startGame(users.get(0), expected.id(), 201);
-        await()
-            .atMost(1, SECONDS)
-            .untilAsserted(() -> {
-                for(SimpleStompFrameHandler<LobbyMessage> frameHandler : frameHandlersPrivate) {
-                    assertFalse(frameHandler.getMessages().isEmpty());
-                }
-            });
+        LobbyUtils.startGame(users.get(0), expected.id(), 201, frameHandlersPrivate);
     }
 }

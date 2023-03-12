@@ -1,4 +1,4 @@
-package com.mythostrike.controller.message.game;
+package com.mythostrike.controller.message.lobby;
 
 import com.mythostrike.model.game.player.Champion;
 import com.mythostrike.model.lobby.Identity;

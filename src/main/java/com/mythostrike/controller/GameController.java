@@ -3,7 +3,7 @@ package com.mythostrike.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.controller.message.game.CardMoveMessage;
-import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.controller.message.game.PlayerData;
@@ -11,8 +11,8 @@ import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
-import com.mythostrike.controller.message.game.WebSocketGameMessage;
-import com.mythostrike.controller.message.game.WebSocketGameMessageType;
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.GameMessageType;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.cards.Card;
@@ -155,14 +155,14 @@ public class GameController {
     private void updateGame(int lobbyId, List<PlayerData> playerDatas) {
         String path = String.format("/games/%d", lobbyId);
 
-        webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.UPDATE_GAME, playerDatas),
+        webSocketService.sendMessage(path, new GameMessage(GameMessageType.UPDATE_GAME, playerDatas),
             "updateGame");
     }
 
     public void highlight(int lobbyId, String toUsername, HighlightMessage message) {
         String path = String.format("/games/%d/%s", lobbyId, toUsername);
 
-        webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.HIGHLIGHT, message),
+        webSocketService.sendMessage(path, new GameMessage(GameMessageType.HIGHLIGHT, message),
             "highlight");
     }
 
@@ -185,7 +185,7 @@ public class GameController {
             .map(Player::getUsername).toList();
 
         //make only one log message
-        WebSocketGameMessage payload = new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message);
+        GameMessage payload = new GameMessage(GameMessageType.CARD_MOVE, message);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(payload);
@@ -213,7 +213,7 @@ public class GameController {
         for (String username : toUsernames) {
             String path = String.format("/games/%d/%s", lobbyId, username);
 
-            webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.CARD_MOVE, message),
+            webSocketService.sendMessage(path, new GameMessage(GameMessageType.CARD_MOVE, message),
                 "cardMovePrivate");
         }
     }
@@ -222,7 +222,7 @@ public class GameController {
         String path = String.format("/games/%d", lobbyId);
 
         webSocketService.sendMessage(path,
-            new WebSocketGameMessage(WebSocketGameMessageType.LOG, new LogMessage(message)), "logMessage");
+            new GameMessage(GameMessageType.LOG, new LogMessage(message)), "logMessage");
     }
 
     public void gameEnd(int lobbyId, List<PlayerResult> results) {
@@ -231,7 +231,7 @@ public class GameController {
         //remove game from lobby list
         lobbyList.removeLobby(lobbyId);
 
-        webSocketService.sendMessage(path, new WebSocketGameMessage(WebSocketGameMessageType.GAME_END, results),
+        webSocketService.sendMessage(path, new GameMessage(GameMessageType.GAME_END, results),
             "gameEnd");
     }
 }

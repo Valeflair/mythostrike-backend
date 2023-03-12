@@ -1,7 +1,7 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
-import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.model.exception.IllegalInputException;

@@ -1,0 +1,27 @@
+---Connect per ssh
+193.196.38.81 (oder andere aktuelle ip)
+ubuntu
+
+
+--On Server
+Key Passwort: Myth0str1ke2022
+
+
+sudo service cardgame-backend stop
+
+---Frontend
+cd cardgame2-frontend
+git reset -–hard
+git pull
+sudo nano src/services/service.js --> BASE_URL= "/api"
+
+npm run build
+sudo rm -r /var/www/cardgame/*
+sudo cp -r dist/* /var/www/cardgame/ 
+cd ~
+
+---Backend
+cd cardgame2
+git pull
+(sudo chmod +x mvnw)
+sudo service cardgame-backend start

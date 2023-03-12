@@ -1,0 +1,77 @@
+----Connect per ssh----
+193.196.38.81 (oder andere aktuelle ip)
+ubuntu
+
+
+----On Server----
+Key Passwort: Myth0str1ke2022
+
+sudo passwd --> Myth0str1ke2022
+sudo apt update
+sudo apt upgrade
+
+sudo apt install mysql-server
+
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+
+sudo apt install openjdk-17-jdk
+sudo apt install maven
+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&sudo apt-get install -y nodejs
+
+----mysql----
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf --> change bind-adresse to 0.0.0.0
+
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'Myth0str1ke2022';
+exit
+
+mysql_secure_installation
+
+
+sudo mysql -u root -p 
+--> passwort: Myth0str1ke2022
+create database mythostrike;
+create user 'springuser'@'%' identified by 'Myth0str1ke2022';
+grant all on mythostrike.* to 'springuser'@'%';
+
+ALTER DATABASE mythostrike CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_cs;
+
+----caddy----
+sudo nano /etc/caddy/Caddyfile --> Daten einfügen von Datei (ip-adresse und domain ändern)
+sudo service caddy reload
+
+----frontend----
+git clone https://git.scc.kit.edu/kastel-tva-pse/cardgame-2/cardgame2-frontend.git
+cd cardgame2-frontend/
+git checkout development
+
+git reset -–hard
+git pull
+sudo nano src/services/service.js --> BASE_URL= "/api"
+
+npm run build
+sudo rm -r /var/www/cardgame/*
+sudo cp -r dist/* /var/www/cardgame/ 
+
+----backend----
+git clone https://git.scc.kit.edu/kastel-tva-pse/cardgame-2/cardgame2-frontend.git
+cd cardgame2-frontend/
+git checkout development
+mvn clean install
+
+sudo chmod +x mvnw
+sudo nano /etc/systemd/system/cardgame-backend.service
+sudo systemctl daemon-reload
+sudo systemctl enable cardgame-backend.service
+
+sudo service cardgame-backend start
+(sudo service cardgame-backend status)
+
+
+sudo ufw allow proto tcp from any to any port 80,443 (??? benötigt)
+

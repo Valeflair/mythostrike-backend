@@ -1,0 +1,44 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+02779938-dc65-47ee-a9ec-93f5e2a13ff0.ka.bw-cloud-instance.org:80, 193.196.39.138:80 {
+	redir https://{host}{uri}
+}
+
+02779938-dc65-47ee-a9ec-93f5e2a13ff0.ka.bw-cloud-instance.org:443, 193.196.39.138:443 {
+	@static {
+	        file
+		path *.ico *.mp3 *.gif *.jpg *.jpeg *.png *.svg
+	}
+
+	header @static Cache-Control max-age=31536000
+
+#	handle_path /api/updates {
+#                reverse_proxy http://localhost:8080 {
+#			websocket
+#			transparent
+#		}
+#        }
+
+	handle_path /api/* {
+		reverse_proxy http://localhost:8080
+	}
+	
+	handle {
+		root * /var/www/cardgame
+		try_files {path}.html {path} /index.html
+		file_server {
+			hide .git
+		}
+	}
+}
+
+#refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile

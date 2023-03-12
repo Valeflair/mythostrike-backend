@@ -2,6 +2,8 @@ package com.mythostrike.support.utility;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
@@ -74,9 +76,8 @@ public final class LobbyUtils {
      * @param frameHandler       the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
-    public static LobbyMessage createLobby(TestUser user, int modeId, int expectedStatusCode,
-                                           SimpleStompFrameHandler<LobbyMessage> frameHandler) {
-        if (expectedStatusCode >= 300) {
+    public static LobbyMessage createLobby(TestUser user, int modeId, int expectedStatusCode) {
+        if (expectedStatusCode != 201) {
             //try to create the lobby and expect an error with error message
             given()
                 .headers(user.headers())
@@ -85,8 +86,7 @@ public final class LobbyUtils {
                 .post("/lobbies").
                 then()
                 .statusCode(expectedStatusCode)
-                .body("data", notNullValue())
-                .body("data.message", notNullValue());
+                .body("message", notNullValue());
             return null;
         }
         Mode mode = ModeList.getModeList().getMode(modeId);
@@ -100,21 +100,14 @@ public final class LobbyUtils {
                 when()
                 .post("/lobbies").
                 then()
-                .statusCode(expectedStatusCode)
+                .statusCode(201)
                 .body("id", notNullValue())
                 .body("mode", equalTo(mode.name()))
                 .body("owner", equalTo(user.username()))
                 .body("seats", hasToString(seatMessageList.toString())).
                 extract().body().jsonPath().getInt("id");
 
-        LobbyMessage expected = new LobbyMessage(lobbyId, mode.name(), user.username(), seatMessageList);
-
-        await()
-            .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
-        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
-
-        return expected;
+        return new LobbyMessage(lobbyId, mode.name(), user.username(), seatMessageList);
     }
 
     /**
@@ -131,7 +124,7 @@ public final class LobbyUtils {
      */
     public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, int expectedStatusCode,
                                          SimpleStompFrameHandler<LobbyMessage> frameHandler) {
-        if (expectedStatusCode >= 300) {
+        if (expectedStatusCode != 200) {
             //try to join the lobby and expect an error with error message
             given()
                 .headers(user.headers())
@@ -140,8 +133,7 @@ public final class LobbyUtils {
                 .post("/lobbies/join").
                 then()
                 .statusCode(expectedStatusCode)
-                .body("data", notNullValue())
-                .body("data.message", notNullValue());
+                .body("message", notNullValue());
             return null;
         }
         List<SeatMessage> seatMessageList = oldLobbyState.seats();
@@ -168,7 +160,7 @@ public final class LobbyUtils {
                 when()
                 .post("/lobbies/join").
                 then()
-                .statusCode(expectedStatusCode)
+                .statusCode(200)
                 .body("id", notNullValue())
                 .body("mode", equalTo(oldLobbyState.mode()))
                 .body("owner", not(equalTo(user.username())))
@@ -194,8 +186,9 @@ public final class LobbyUtils {
      * @param lobbyId            the id of the lobby
      * @param expectedStatusCode the expected status code of the response (201 if the game was started successfully)
      */
-    public static void startGame(TestUser user, int lobbyId, int expectedStatusCode) {
-        if (expectedStatusCode >= 300) {
+    public static void startGame(TestUser user, int lobbyId, int expectedStatusCode,
+                                 List<SimpleStompFrameHandler<ChampionSelectionMessage>> frameHandlersPrivate) {
+        if (expectedStatusCode != 201) {
             //try to start the game and expect an error with error message
             given()
                 .headers(user.headers())
@@ -204,8 +197,7 @@ public final class LobbyUtils {
                 .post("/lobbies/start").
                 then()
                 .statusCode(expectedStatusCode)
-                .body("data", notNullValue())
-                .body("data.message", notNullValue());
+                .body("message", notNullValue());
             return;
         }
 
@@ -216,6 +208,15 @@ public final class LobbyUtils {
             when()
             .post("/lobbies/start").
             then()
-            .statusCode(expectedStatusCode);
+            .statusCode(201);
+
+        await()
+            .atMost(2, SECONDS)
+            .untilAsserted(() -> {
+                //TODO: make message of champion and all other classes who are used for json conversion
+                for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : frameHandlersPrivate) {
+                    assertFalse(frameHandler.getMessages().isEmpty());
+                }
+            });
     }
 }

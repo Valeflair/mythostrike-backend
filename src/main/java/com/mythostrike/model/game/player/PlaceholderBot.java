@@ -1,6 +1,6 @@
 package com.mythostrike.model.game.player;
 
-import com.mythostrike.controller.message.game.ChampionSelectionMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import lombok.extern.slf4j.Slf4j;
 

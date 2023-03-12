@@ -34,6 +34,7 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -92,16 +93,18 @@ class WebSocketConnectIntegrationTest {
             System.out.println("User already exists, ignoring");
         }
         User testUser = userService.getUser(testUserPrincipal.getName());
-        Lobby testLobby = new Lobby(1, ModeList.getModeList().getMode(5), testUser, userService);
 
+        //create the lobby and change the mode
+        LobbyMessage message = lobbyController.create(testUserPrincipal, new CreateLobbyRequest(1)).getBody();
+        assertNotNull(message);
+        int lobbyId = message.id();
+        Lobby testLobby = new Lobby(lobbyId, ModeList.getModeList().getMode(5), testUser, userService);
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> frameHandler = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe("/lobbies/1", frameHandler);
+        session.subscribe("/lobbies/" + lobbyId, frameHandler);
 
-        //create the lobby and change the mode
-        lobbyController.create(testUserPrincipal, new CreateLobbyRequest(1));
-        lobbyController.changeMode(testUserPrincipal, new ChangeModeRequest(1, 1));
+        lobbyController.changeMode(testUserPrincipal, new ChangeModeRequest(lobbyId, 5));
 
         await()
             .atMost(1, SECONDS)
