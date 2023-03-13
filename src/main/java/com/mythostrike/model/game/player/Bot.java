@@ -1,10 +1,9 @@
 package com.mythostrike.model.game.player;
 
 import com.mythostrike.controller.GameController;
-import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
-import com.mythostrike.model.game.Game;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.management.GameManager;
 import lombok.Getter;
@@ -43,7 +42,7 @@ public abstract class Bot extends Player {
      * @return the radomly selected list of objects
      * @throws IllegalArgumentException if the list is not big enough
      */
-    protected static <T> List<T> selectRandomValues(List<T> list, int count) {
+    protected <T> List<T> selectRandomValues(List<T> list, int count) {
         List<T> tempList = new ArrayList<>(list);
         List<T> returnList = new ArrayList<>();
         int index;
@@ -51,7 +50,7 @@ public abstract class Bot extends Player {
             if (tempList.isEmpty()) {
                 throw new IllegalArgumentException("can't select " + count + "values from list");
             }
-            index = Game.RANDOM_SEED.nextInt(tempList.size());
+            index = gameManager.getRandom().nextInt(tempList.size());
             returnList.add(tempList.remove(index));
         }
         return returnList;
@@ -64,11 +63,11 @@ public abstract class Bot extends Player {
      * @param remove removes the selected item from the list before returning
      * @return the random selected object
      */
-    protected static <T> T selectRandomValue(List<T> list, boolean remove) {
+    protected <T> T selectRandomValue(List<T> list, boolean remove) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("can't select a value from an empty list");
         }
-        int index = Game.RANDOM_SEED.nextInt(list.size());
+        int index = gameManager.getRandom().nextInt(list.size());
         if (remove) {
             return list.remove(index);
         } else {

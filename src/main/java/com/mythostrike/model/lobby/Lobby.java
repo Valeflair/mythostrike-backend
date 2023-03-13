@@ -4,7 +4,6 @@ import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.model.exception.IllegalInputException;
-import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.game.player.Player;
@@ -16,9 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Getter
 public class Lobby {
+    private static final int SEED_NOT_SET = -1;
     private final int id;
     private final UserService userService;
     private List<Seat> seats;
@@ -29,6 +30,9 @@ public class Lobby {
     private int numberPlayers;
     private int numberHumans;
     private GameManager gameManager;
+    @Setter
+    private int randomSeed;
+
 
     public Lobby(int id, Mode mode, User owner, UserService userService) {
         this.id = id;
@@ -46,6 +50,7 @@ public class Lobby {
             seats.add(new Seat(i, null, identities.get(i)));
         }
         seats.get(0).setPlayer(this.owner);
+        this.randomSeed = SEED_NOT_SET;
     }
 
     private boolean isFull() {
@@ -238,10 +243,19 @@ public class Lobby {
             seats.stream().map(Seat::getPlayer).filter(Objects::nonNull).toList()
         );
 
+        //create random. If randomSeed is valid/set use it, otherwise use random seed
+        Random random;
+        if (this.randomSeed < 0) {
+            random = new Random();
+        } else {
+            random = new Random(randomSeed);
+        }
+
+
         //randomize positions for identity distribution if mode is Identity (except God King)
         if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
             Player godKing = players.remove(0);
-            Collections.shuffle(players, Game.RANDOM_SEED);
+            Collections.shuffle(players, random);
             players.add(0, godKing);
         }
 
@@ -253,13 +267,13 @@ public class Lobby {
         //randomize positions except God King, God King is always first
         if (mode.isFrom(ModeData.IDENTITY_FOR_EIGHT) || mode.isFrom(ModeData.IDENTITY_FOR_FIVE)) {
             Player godKing = players.remove(0);
-            Collections.shuffle(players, Game.RANDOM_SEED);
+            Collections.shuffle(players, random);
             players.add(0, godKing);
         } else {
-            Collections.shuffle(players, Game.RANDOM_SEED);
+            Collections.shuffle(players, random);
         }
 
-        gameManager = new GameManager(players, mode, id, gameController);
+        gameManager = new GameManager(players, mode, id, gameController, random);
         gameManager.gameStart();
         return true;
     }

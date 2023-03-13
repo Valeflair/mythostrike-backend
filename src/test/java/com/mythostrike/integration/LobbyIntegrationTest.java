@@ -1,7 +1,6 @@
 package com.mythostrike.integration;
 
 
-import com.mythostrike.controller.message.game.GameMessage;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.support.SimpleStompFrameHandler;
@@ -30,11 +29,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class LobbyIntegrationTest {
@@ -101,6 +97,9 @@ class LobbyIntegrationTest {
             frameHandlersPrivate.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
             session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), frameHandlersPrivate.get(i));
         }
+
+        //change the random seed of the lobby
+        LobbyUtils.setRandomSeed(expected.id(), 42); //TODO: change to what seed you want
 
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(1), expected, 200, frameHandlerPublic);

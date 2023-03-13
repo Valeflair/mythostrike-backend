@@ -2,7 +2,6 @@ package com.mythostrike.support.utility;
 
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
-import com.mythostrike.controller.message.game.GameMessage;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
@@ -10,6 +9,8 @@ import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.controller.message.lobby.SeatMessage;
 import com.mythostrike.model.game.player.Human;
 import com.mythostrike.model.lobby.Identity;
+import com.mythostrike.model.lobby.Lobby;
+import com.mythostrike.model.lobby.LobbyList;
 import com.mythostrike.model.lobby.Mode;
 import com.mythostrike.model.lobby.ModeList;
 import com.mythostrike.model.lobby.Seat;
@@ -62,6 +63,12 @@ public final class LobbyUtils {
             }
         }
         return seats;
+    }
+
+    public static void setRandomSeed(int lobbyId, int randomSeed) {
+        Lobby lobby = LobbyList.getLobbyList().getLobby(lobbyId);
+        if(lobby == null) throw new IllegalArgumentException("Lobby does not exist");
+        lobby.setRandomSeed(randomSeed);
     }
 
     /**

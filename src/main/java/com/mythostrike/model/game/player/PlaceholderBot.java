@@ -49,11 +49,11 @@ public class PlaceholderBot extends Bot {
         //select an amount possible for the cardIds
         int amount = 0;
         do {
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
         } while (amount > cardIds.size());
 
         //select amount random cards from cardIds
-        return new ArrayList<>(Bot.selectRandomValues(cardIds, amount));
+        return new ArrayList<>(selectRandomValues(cardIds, amount));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PlaceholderBot extends Bot {
         //select an amount possible for the cardIds
         int amount = 0;
         do {
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
         } while (amount > skillIds.size());
 
         if (amount < 0 || amount > 1) {
@@ -78,7 +78,7 @@ public class PlaceholderBot extends Bot {
         if (amount == 0) {
             return NO_SKILL_PICKED;
         } else {
-            return Bot.selectRandomValue(skillIds, false);
+            return selectRandomValue(skillIds, false);
         }
     }
 
@@ -94,10 +94,10 @@ public class PlaceholderBot extends Bot {
         //select an amount possible for the cardIds
         int amount = 0;
         do {
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
         } while (amount > players.size());
 
         //select amount random cards from cardIds
-        return new ArrayList<>(Bot.selectRandomValues(players, amount));
+        return new ArrayList<>(selectRandomValues(players, amount));
     }
 }

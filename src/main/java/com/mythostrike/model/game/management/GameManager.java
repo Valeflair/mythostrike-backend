@@ -40,6 +40,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,6 +66,8 @@ public class GameManager {
     @Getter
     private final int lobbyId;
     @Getter
+    private final Random random;
+    @Getter
     private final GameController gameController;
     @Getter
     private final Deque<Activity> currentActivity;
@@ -75,14 +78,15 @@ public class GameManager {
     private PickRequest lastPickRequest;
 
 
-    public GameManager(List<Player> players, Mode mode, int lobbyId, GameController gameController) {
+    public GameManager(List<Player> players, Mode mode, int lobbyId, GameController gameController, Random random) {
+        this.random = random;
+        this.lobbyId = lobbyId;
+        this.gameController = gameController;
         game = new Game(players, mode, this);
         cardManager = new CardManager(this);
         eventManager = new EventManager(this);
         playerManager = new PlayerManager(this);
         currentActivity = new LinkedList<>();
-        this.lobbyId = lobbyId;
-        this.gameController = gameController;
     }
 
     //---------------compiling method----------
@@ -195,7 +199,7 @@ public class GameManager {
     private void selectChampionPhase(List<Player> players) {
         for (Player player : players) {
             List<Champion> championList = new ArrayList<>(ChampionList.getChampionList().getChampions());
-            Collections.shuffle(championList, Game.RANDOM_SEED);
+            Collections.shuffle(championList, this.random);
 
             List<Champion> list = new ArrayList<>();
             //ask player to pick champion

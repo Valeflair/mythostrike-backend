@@ -1,7 +1,6 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.message.game.CardMoveMessage;
-import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardPile;
@@ -46,7 +45,7 @@ public class CardManager {
         );
 
         moveCard(cardMoveHandle);
-        gameManager.getGame().getDrawPile().shuffle(Game.RANDOM_SEED);
+        gameManager.getGame().getDrawPile().shuffle(gameManager.getRandom());
         gameManager.output("Discard pile is shuffled");
     }
 

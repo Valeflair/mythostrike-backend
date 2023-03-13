@@ -2,7 +2,6 @@ package com.mythostrike.model.game.player;
 
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
-import com.mythostrike.model.game.Game;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class RandomBot extends Bot {
             //ignore
             log.warn("Interrupted while waiting for action delay");
         }
-        int index = Game.RANDOM_SEED.nextInt(message.champions().size());
+        int index = gameManager.getRandom().nextInt(message.champions().size());
         Champion champion = ChampionList.getChampionList().getChampion(message.champions().get(index).id());
         gameManager.selectChampion(getUsername(), champion);
     }
@@ -49,7 +48,7 @@ public class RandomBot extends Bot {
         boolean selectedZero = false;
         do {
 
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
             selectOtherThenZero = tempCardCount.size() > 1 && amount == 0;
 
             //if we selected 0, maybe we need to select it because there is no other option
@@ -62,7 +61,7 @@ public class RandomBot extends Bot {
         } while (amount > cardIds.size() || selectOtherThenZero);
 
         //select amount random cards from cardIds
-        return new ArrayList<>(Bot.selectRandomValues(cardIds, amount));
+        return new ArrayList<>(selectRandomValues(cardIds, amount));
     }
 
     @Override
@@ -74,7 +73,7 @@ public class RandomBot extends Bot {
         boolean selectOtherThenZero = false;
         boolean selectedZero = false;
         do {
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
             selectOtherThenZero = tempCardCount.size() > 1 && amount == 0;
 
             //if we selected 0, maybe we need to select it because there is no other option
@@ -93,7 +92,7 @@ public class RandomBot extends Bot {
         if (amount == 0) {
             return NO_SKILL_PICKED;
         } else {
-            return Bot.selectRandomValue(skillIds, false);
+            return selectRandomValue(skillIds, false);
         }
     }
 
@@ -106,7 +105,7 @@ public class RandomBot extends Bot {
         boolean selectOtherThenZero;
         boolean selectedZero = false;
         do {
-            amount = Bot.selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempCardCount, true);
             selectOtherThenZero = tempCardCount.size() > 1 && amount == 0;
 
             //if we selected 0, maybe we need to select it because there is no other option
@@ -119,6 +118,6 @@ public class RandomBot extends Bot {
         } while (amount > players.size() || selectOtherThenZero);
 
         //select amount random cards from cardIds
-        return new ArrayList<>(Bot.selectRandomValues(players, amount));
+        return new ArrayList<>(selectRandomValues(players, amount));
     }
 }

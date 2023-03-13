@@ -2,7 +2,6 @@ package com.mythostrike.model.game.activity.skill.passive;
 
 
 import com.mythostrike.controller.message.game.HighlightMessage;
-import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -74,7 +73,7 @@ public class Revenge extends PassiveSkill {
                 return;
             }
             List<Card> throwCards = new ArrayList<>(damageHandle.getPlayer().getHandCards().getCards());
-            Card throwCard = throwCards.get(Game.RANDOM_SEED.nextInt(throwCards.size()));
+            Card throwCard = throwCards.get(gameManager.getRandom().nextInt(throwCards.size()));
             CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager, "drop because of Revenge",
                 damageHandle.getPlayer(), null, damageHandle.getPlayer().getHandCards(),
                 gameManager.getGame().getDiscardPile(), List.of(throwCard));

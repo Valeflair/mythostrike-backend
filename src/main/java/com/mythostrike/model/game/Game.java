@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Getter
 public class Game {
@@ -23,11 +22,7 @@ public class Game {
      * describe how many cards player draw.
      */
     public static final int DRAWCARDCOUNT = 4;
-
-    //TODO: make a static singelton list of random seeds from all games
-    public static final Random RANDOM_SEED = new Random(42);
-
-    public final GameManager gameManager;
+    private final GameManager gameManager;
     private final List<Player> allPlayers;
     private final List<Player> alivePlayers;
     private final Mode mode;
@@ -51,7 +46,7 @@ public class Game {
         tablePile = new CardPile(CardSpaceType.TABLE_PILE);
         discardPile = new CardPile(CardSpaceType.DISCARD_PILE);
         allCards = new CardPile(CardSpaceType.ALL_CARDS, drawPile.getCards());
-        drawPile.shuffle(RANDOM_SEED);
+        drawPile.shuffle(gameManager.getRandom());
     }
 
     public void nextPlayer() {

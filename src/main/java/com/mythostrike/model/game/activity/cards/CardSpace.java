@@ -12,7 +12,6 @@ import java.util.Objects;
 public class CardSpace {
 
     protected final List<Card> cards;
-
     @Getter
     private final String name;
 
