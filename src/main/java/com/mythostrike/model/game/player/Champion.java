@@ -2,11 +2,15 @@ package com.mythostrike.model.game.player;
 
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.PassiveSkill;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
+@Builder
 public class Champion {
 
     private final int id;

@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class ChampionList {
-    private static ChampionList instance;
+    private static ChampionList instance = null;
     private final List<Champion> champions;
 
     /**

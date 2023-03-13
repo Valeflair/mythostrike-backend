@@ -1,7 +1,8 @@
 package com.mythostrike.model.game.player;
 
-import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.HighlightMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
+import com.mythostrike.model.game.Game;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class RandomBot extends Bot {
             //ignore
             log.warn("Interrupted while waiting for action delay");
         }
-        gameManager.selectChampion(getUsername(), Bot.selectRandomValue(message.champions(), false));
+        int index = Game.RANDOM_SEED.nextInt(message.champions().size());
+        Champion champion = ChampionList.getChampionList().getChampion(message.champions().get(index).id());
+        gameManager.selectChampion(getUsername(), champion);
     }
 
     @Override

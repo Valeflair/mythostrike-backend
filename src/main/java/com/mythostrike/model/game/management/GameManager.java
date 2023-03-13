@@ -1,9 +1,10 @@
 package com.mythostrike.model.game.management;
 
 import com.mythostrike.controller.GameController;
-import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.controller.message.game.PlayerResult;
+import com.mythostrike.controller.message.lobby.ChampionMessage;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.Phase;
@@ -209,7 +210,7 @@ public class GameManager {
             }
             //wahl aussuchen und Leben initialisieren
             ChampionSelectionMessage championSelectionMessage
-                = new ChampionSelectionMessage(player.getIdentity(), list);
+                = new ChampionSelectionMessage(player.getIdentity(), list.stream().map(ChampionMessage::new).toList());
 
             if (player instanceof Bot bot) {
                 bot.selectChampionFrom(championSelectionMessage);
