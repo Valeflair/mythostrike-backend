@@ -3,7 +3,8 @@ package com.mythostrike.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mythostrike.controller.message.game.CardMoveMessage;
-import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.GameMessageType;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.controller.message.game.PlayerData;
@@ -11,8 +12,7 @@ import com.mythostrike.controller.message.game.PlayerResult;
 import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
-import com.mythostrike.controller.message.game.GameMessage;
-import com.mythostrike.controller.message.game.GameMessageType;
+import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.exception.IllegalInputException;
 import com.mythostrike.model.game.activity.cards.Card;
@@ -140,13 +140,18 @@ public class GameController {
             return;
         }
 
-        List<Player> players = gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull).toList();
+        List<Player> players = gameManager.getGame().getAllPlayers().stream().filter(Objects::nonNull)
+            .filter(player -> Objects.nonNull(player.getChampion())).toList();
         List<PlayerData> playerDatas = new ArrayList<>();
         boolean isCurrentPlayer;
 
         for (Player player : players) {
             isCurrentPlayer = player.equals(gameManager.getGame().getCurrentPlayer());
             playerDatas.add(new PlayerData(player, isCurrentPlayer));
+        }
+        if (playerDatas.isEmpty()) {
+            log.debug("No ready players found in game {}, can't update", lobbyId);
+            return;
         }
 
         updateGame(lobbyId, playerDatas);
