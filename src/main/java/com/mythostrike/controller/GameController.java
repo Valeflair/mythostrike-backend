@@ -7,9 +7,9 @@ import com.mythostrike.controller.message.game.GameMessage;
 import com.mythostrike.controller.message.game.GameMessageType;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.LogMessage;
+import com.mythostrike.controller.message.game.PlayCardsRequest;
 import com.mythostrike.controller.message.game.PlayerData;
 import com.mythostrike.controller.message.game.PlayerResult;
-import com.mythostrike.controller.message.game.SelectCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
@@ -71,7 +71,7 @@ public class GameController {
     }
 
     @PostMapping("/cards")
-    public ResponseEntity<Void> selectCards(Principal principal, @RequestBody SelectCardsRequest request)
+    public ResponseEntity<Void> selectCards(Principal principal, @RequestBody PlayCardsRequest request)
         throws IllegalInputException {
         List<String> cardNames = new ArrayList<>();
         if (request.cardIds() != null) {

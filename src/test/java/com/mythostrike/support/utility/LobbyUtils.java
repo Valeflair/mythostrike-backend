@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @Slf4j
@@ -73,8 +74,7 @@ public final class LobbyUtils {
 
     /**
      * Creates a lobby and checks if the response is correct.
-     * If the expectedStatusCode is >= 300, it will try to create the lobby and expect an error with error message.
-     * If the expectedStatusCode is < 300, it will create the lobby and expect the correct response.
+     * If the expected status code is not 201, it will try to start the game and expect an error with error message.
      * It will also check if the web socket received the correct message through the frameHandler.
      *
      * @param user               the user that creates the lobby
@@ -119,18 +119,19 @@ public final class LobbyUtils {
 
     /**
      * Joins a lobby and checks if the response is correct.
-     * If the expectedStatusCode is >= 300, it will try to join the lobby and expect an error with error message.
-     * If the expectedStatusCode is < 300, it will join the lobby and expect the correct response.
+     * If the expected status code is not 200, it will try to start the game and expect an error with error message.
      * It will also check if the web socket received the correct message through the frameHandler.
      *
      * @param user               the user that joins the lobby
      * @param oldLobbyState      the old lobby state to compare with the new lobby state
      * @param expectedStatusCode the expected status code of the response (200 if the user joins the lobby successfully)
-     * @param frameHandler       the frameHandler that receives the web socket messages
+     * @param frameHandlerPublic       the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
     public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, int expectedStatusCode,
-                                         SimpleStompFrameHandler<LobbyMessage> frameHandler) {
+                                         SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic) {
+        assertTrue(frameHandlerPublic.getMessages().isEmpty(), "The frame handler should not have any messages");
+
         if (expectedStatusCode != 200) {
             //try to join the lobby and expect an error with error message
             given()
@@ -178,16 +179,15 @@ public final class LobbyUtils {
 
         await()
             .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandler.getMessages().isEmpty()));
-        assertEquals(expected, frameHandler.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+            .untilAsserted(() -> assertFalse(frameHandlerPublic.getMessages().isEmpty()));
+        assertEquals(expected, frameHandlerPublic.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
         return expected;
     }
 
     /**
      * Starts the game in a lobby and checks if the response is correct.
-     * If the expectedStatusCode is >= 300, it will try to start the game and expect an error with error message.
-     * If the expectedStatusCode is < 300, it will start the game and expect the correct response.
+     * If the expected status code is not 201, it will try to start the game and expect an error with error message.
      *
      * @param user               the user that starts the game
      * @param lobbyId            the id of the lobby
@@ -195,6 +195,11 @@ public final class LobbyUtils {
      */
     public static void startGame(TestUser user, int lobbyId, int expectedStatusCode,
                                  List<SimpleStompFrameHandler<ChampionSelectionMessage>> frameHandlersPrivate) {
+        for (SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : frameHandlersPrivate) {
+            assertTrue(frameHandler.getMessages().isEmpty(), "The frame handler should not have any messages");
+        }
+
+
         if (expectedStatusCode != 201) {
             //try to start the game and expect an error with error message
             given()
