@@ -11,6 +11,9 @@ import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
+import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -220,5 +223,50 @@ public final class GameUtils {
                     }
                 });
     }
+
+    public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of(target));
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of());
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(), List.of());
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId, StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardId, List.of());
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
 
 }
