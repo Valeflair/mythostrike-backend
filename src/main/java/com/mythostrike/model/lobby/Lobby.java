@@ -19,7 +19,7 @@ import java.util.Random;
 
 @Getter
 public class Lobby {
-    private static final int SEED_NOT_SET = -1;
+    private static final int SEED_NOT_SET = 9527;
     private final int id;
     private final UserService userService;
     private List<Seat> seats;
