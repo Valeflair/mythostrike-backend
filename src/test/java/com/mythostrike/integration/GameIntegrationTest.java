@@ -37,6 +37,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
+import static com.mythostrike.support.utility.UserUtils.I_JACK;
+import static com.mythostrike.support.utility.UserUtils.I_MINH;
+import static com.mythostrike.support.utility.UserUtils.I_REINER_ZUFALL;
+import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -49,11 +53,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 class GameIntegrationTest {
     private static final Integer PORT = 8080;
-    public static final int I_TEST_USER = 0;
-    public static final int I_REINER_ZUFALL = 1;
-    public static final int I_MINH = 2;
-    public static final int I_JACK = 3;
-    public static final int I_TILL = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -79,8 +78,6 @@ class GameIntegrationTest {
             .get(1, SECONDS);
     }
 
-    //TODO: mock jwt Token generation or database for tests
-
     /**
      * before using the users, we need to create them and get their jwt tokens.
      * If the user does not exist, we register them.
@@ -88,21 +85,7 @@ class GameIntegrationTest {
      */
     @BeforeEach
     void setupUsers() {
-        users.add(UserUtils.createUser("TestUser", "TestPassword"));
-        assertFalse(users.get(I_TEST_USER).jwtToken().isEmpty());
-
-        users.add(UserUtils.createUser("Reiner Zufall", "12341234"));
-        assertFalse(users.get(I_REINER_ZUFALL).jwtToken().isEmpty());
-
-
-        users.add(UserUtils.createUser("Minh-Trung Minh-Trung Tang", "MinhTrungTangMinhTrungTang"));
-        assertFalse(users.get(I_MINH).jwtToken().isEmpty());
-
-        users.add(UserUtils.createUser("__Jack__", "JackyChanJackyChan"));
-        assertFalse(users.get(I_JACK).jwtToken().isEmpty());
-
-        /*users.add(UserUtils.createUser("Till1234", "IchBinEinCoolesPassword"));
-        assertFalse(users.get(4).jwtToken().isEmpty());*/
+        users.addAll(UserUtils.getInstance().getUsers(4));
     }
 
 

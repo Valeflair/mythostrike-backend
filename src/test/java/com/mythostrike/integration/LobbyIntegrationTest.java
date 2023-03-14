@@ -29,7 +29,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -61,8 +60,6 @@ class LobbyIntegrationTest {
             .get(1, SECONDS);
     }
 
-    //TODO: mock jwt Token generation or database for tests
-
     /**
      * before using the users, we need to create them and get their jwt tokens.
      * If the user does not exist, we register them.
@@ -70,11 +67,7 @@ class LobbyIntegrationTest {
      */
     @BeforeEach
     void setupUsers() {
-        users.add(UserUtils.createUser("TestUser", "TestPassword"));
-        assertFalse(users.get(0).jwtToken().isEmpty());
-
-        users.add(UserUtils.createUser("Reiner Zufall", "12341234"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
+        users.addAll(UserUtils.getInstance().getUsers(8));
     }
 
 
