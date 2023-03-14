@@ -11,6 +11,10 @@ public record TestUser(String username, int avatarNumber, String jwtToken, Heade
         this(username, 1, jwtToken, createHeader(jwtToken));
     }
 
+    public TestUser(String username) {
+        this(username, 1, "", null);
+    }
+
     private static Headers createHeader(String jwtToken) {
         List<Header> headerList = new ArrayList<>();
 

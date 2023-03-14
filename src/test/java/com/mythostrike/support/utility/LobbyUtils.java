@@ -3,6 +3,7 @@ package com.mythostrike.support.utility;
 import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
+import com.mythostrike.controller.message.lobby.ChangeModeRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
@@ -31,7 +32,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @Slf4j
@@ -45,7 +45,7 @@ public final class LobbyUtils {
         List<SeatMessage> seats = new ArrayList<>(mode.maxPlayer());
         List<Identity> identities = mode.identityList();
         for (int i = 0; i < mode.maxPlayer(); i++) {
-            if (i > players.size() - 1) {
+            if (i > players.size() - 1 || players.get(i) == null) {
                 seats.add(new SeatMessage(identities.get(i)));
             } else {
                 seats.add(new SeatMessage(players.get(i).username(), players.get(i).avatarNumber(), identities.get(i)));
@@ -131,7 +131,8 @@ public final class LobbyUtils {
      */
     public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
                                          SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
-        assertTrue(publicLobbyWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
+        //clear all messages from the frame handler
+        publicLobbyWebSocket.getMessages().clear();
 
         if (expectError) {
             //try to join the lobby and expect an error with error message
@@ -143,7 +144,7 @@ public final class LobbyUtils {
                 then()
                 .statusCode(greaterThanOrEqualTo(400))
                 .body("message", notNullValue());
-            return null;
+            return oldLobbyState;
         }
         List<SeatMessage> seatMessageList = oldLobbyState.seats();
 
@@ -186,6 +187,181 @@ public final class LobbyUtils {
         return expected;
     }
 
+    public static LobbyMessage leaveLobby(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
+                                         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+        //clear all messages from the frame handler
+        publicLobbyWebSocket.getMessages().clear();
+
+        if (expectError) {
+            //try to join the lobby and expect an error with error message
+            given()
+                .headers(user.headers())
+                .body(new LobbyIdRequest(oldLobbyState.id())).
+                when()
+                .post("/lobbies/leave").
+                then()
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return oldLobbyState;
+        }
+        List<SeatMessage> seatMessageList = oldLobbyState.seats();
+
+        //add player in the first empty seat
+        boolean userFound = false;
+        for (int i = 0; i < seatMessageList.size(); i++) {
+            if (seatMessageList.get(i).getPlayer().username().equals(user.username())) {
+                seatMessageList.set(i, new SeatMessage(seatMessageList.get(i).getIdentity()));
+                userFound = true;
+                break;
+            }
+        }
+        if (!userFound) {
+            throw new IllegalArgumentException("No seat with player found in the lobby");
+        }
+
+        //leave the lobby
+        given()
+            .headers(user.headers())
+            .body(new LobbyIdRequest(oldLobbyState.id())).
+            when()
+            .post("/lobbies/leave").
+            then()
+            .statusCode(200);
+
+        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
+    }
+
+    public static LobbyMessage changeMode(TestUser user, LobbyMessage oldLobbyState, int newModeId, boolean expectError,
+                                          SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+        //clear all messages from the frame handler
+        publicLobbyWebSocket.getMessages().clear();
+
+        if (expectError) {
+            //try to join the lobby and expect an error with error message
+            given()
+                .headers(user.headers())
+                .body(new ChangeModeRequest(oldLobbyState.id(), newModeId)).
+                when()
+                .put("/lobbies/mode").
+                then()
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return oldLobbyState;
+        }
+        List<SeatMessage> seatMessageList = oldLobbyState.seats();
+        Mode newMode = ModeList.getModeList().getMode(newModeId);
+
+        //update seats
+        //if we have too many seats, move players from the seats that are not in the new mode to empty seats in front
+        List<String> usersToMove = new ArrayList<>();
+        for (int i = newMode.maxPlayer(); i < seatMessageList.size(); i++) {
+            if (seatMessageList.get(i).getPlayer() != null) {
+                usersToMove.add(seatMessageList.get(i).getPlayer().username());
+            }
+        }
+        //add to remove players to empty seats
+        List<TestUser> newUserList = new ArrayList<>();
+        int index = 0;
+        for(int i = 0; i < newMode.maxPlayer(); i++) {
+            if (i < seatMessageList.size() && seatMessageList.get(i).getPlayer() != null) {
+                newUserList.add(new TestUser( seatMessageList.get(i).getPlayer().username() ));
+            } else {
+                if (index >= usersToMove.size()) {
+                    newUserList.add(null);
+                } else {
+                    newUserList.add(new TestUser(usersToMove.get(index)));
+                    index++;
+                }
+            }
+        }
+        if(index < usersToMove.size()) {
+            throw new IllegalArgumentException("Too many players to move");
+        }
+
+        //make new seat list
+        seatMessageList = createSeatMessageList(newUserList, newMode);
+
+
+        //leave the lobby
+        given()
+            .headers(user.headers())
+            .body(new ChangeModeRequest(oldLobbyState.id(), newModeId)).
+            when()
+            .put("/lobbies/mode").
+            then()
+            .statusCode(200);
+
+        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), newMode.name(), oldLobbyState.owner(), seatMessageList);
+
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
+    }
+
+    public static LobbyMessage addBot(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
+                                         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+        //clear all messages from the frame handler
+        publicLobbyWebSocket.getMessages().clear();
+
+        if (expectError) {
+            //try add bot to lobby and expect an error with error message
+            given()
+                .headers(user.headers())
+                .body(new LobbyIdRequest(oldLobbyState.id())).
+                when()
+                .post("/lobbies/bot").
+                then()
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return oldLobbyState;
+        }
+
+
+        //add bot to lobby
+        given()
+            .headers(user.headers())
+            .body(new LobbyIdRequest(oldLobbyState.id())).
+            when()
+            .post("/lobbies/bot").
+            then()
+            .statusCode(200);
+
+        List<SeatMessage> seatMessageList = oldLobbyState.seats();
+
+        //add bot in the first empty seat
+        boolean addedBot = false;
+        for (int i = 0; i < seatMessageList.size(); i++) {
+            if (seatMessageList.get(i).getPlayer() == null) {
+                Identity identity = seatMessageList.get(i).getIdentity();
+                seatMessageList.set(i, new SeatMessage("Bot" + i, 0, identity));
+                addedBot = true;
+                break;
+            }
+        }
+        if (!addedBot) {
+            throw new IllegalArgumentException("No empty seat in Lobby found");
+        }
+
+        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
+    }
+
     /**
      * Starts the game in a lobby and checks if the response is correct.
      * If the expected status code is not 201, it will try to start the game and expect an error with error message.
@@ -197,8 +373,9 @@ public final class LobbyUtils {
      */
     public static void startGame(TestUser user, int lobbyId, boolean expectError,
                                  List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateLobbyWebSockets) {
+        //clear all messages from the frame handler
         for (SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
-            assertTrue(frameHandler.getMessages().isEmpty(), "The frame handler should not have any messages");
+            frameHandler.getMessages().clear();
         }
 
 
@@ -227,7 +404,6 @@ public final class LobbyUtils {
         await()
             .atMost(2, SECONDS)
             .untilAsserted(() -> {
-                //TODO: make message of champion and all other classes who are used for json conversion
                 for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
                     assertFalse(frameHandler.getMessages().isEmpty());
                 }

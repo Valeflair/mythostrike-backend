@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mythostrike.model.lobby.Identity;
 import com.mythostrike.model.lobby.Seat;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 @JsonDeserialize(using = SeatMessageDeserializer.class)
 public class SeatMessage {
     @JsonUnwrapped
+    @Setter
     private final SeatPlayerMessage player;
     private final Identity identity;
 
