@@ -417,28 +417,27 @@ public class GameManager {
         submitRunnable(this::proceed);
     }
 
-    public void selectSkill(String playerName, int skillIndex, List<String> targets) {
+    public void selectSkill(String playerName, int skillId, List<String> targets) {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         lastPickRequest.setSelectedPlayers(targetPlayers);
-        if (skillIndex == NO_SKILL_SELECTED) {
+        if (skillId == NO_SKILL_SELECTED) {
             lastPickRequest.setClickedCancel(true);
             proceed();
             return;
         }
-        //TODO: change skill Index to real skill id
-        if (skillIndex < 0 || skillIndex >= lastPickRequest.getHighlightMessage().skillIds().size()) {
-            throw new IllegalArgumentException("You don't have a skill with this index");
+
+        List<Integer> skillIds = lastPickRequest.getHighlightMessage().skillIds();
+        if (skillId < 0 || !skillIds.contains(skillId)) {
+            throw new IllegalArgumentException("There is no skill with this id");
         }
-        Integer skillId = lastPickRequest.getHighlightMessage().skillIds().get(skillIndex);
+        int skillIndex = skillIds.indexOf(skillId);
 
         //check if the player selected the valid players
-        //int index = lastPickRequest.getHighlightMessage().skillIds().indexOf(skillId);
         if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(),
             targets)) {
             throw new IllegalArgumentException("You don't have the selected skill");
         }
-
 
         lastPickRequest.setClickedCancel(true);
         if (lastPickRequest.getHighlightMessage().activateEndTurn()) {

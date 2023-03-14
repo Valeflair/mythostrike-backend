@@ -10,7 +10,6 @@ import com.mythostrike.model.game.management.GameManager;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Extort extends Card {
@@ -62,9 +61,8 @@ public class Extort extends Card {
         playOut();
         Player player = cardUseHandle.getPlayer();
         for (Player target : pickRequest.getSelectedPlayers()) {
-            List<Card> list = new ArrayList<>(target.getHandCards().getCards());
-            Collections.shuffle(list);
-            Card extort = list.get(0);
+            int index = gameManager.getRandom().nextInt(target.getHandCards().size());
+            Card extort = target.getHandCards().getCards().get(index);
 
             gameManager.getCardManager().moveCard(
                 new CardMoveHandle(gameManager, "extort", target, player, target.getHandCards(), player.getHandCards(),
