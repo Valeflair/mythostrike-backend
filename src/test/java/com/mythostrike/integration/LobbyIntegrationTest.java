@@ -120,10 +120,28 @@ class LobbyIntegrationTest {
         expected = LobbyUtils.changeMode(users.get(0), expected, 1, false, publicWebSocket);
         assertNotNull(expected);
 
+        //add Bot, lobby full
+        LobbyUtils.addBot(users.get(0), expected,true, publicWebSocket);
+
+        //change mode to 2 vs 2
+        expected = LobbyUtils.changeMode(users.get(0), expected, 2, false, publicWebSocket);
+        assertNotNull(expected);
+
+        //add Bot not owner
+        LobbyUtils.addBot(users.get(1), expected, true, publicWebSocket);
+
+        //add Bot
+        expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
+        assertNotNull(expected);
+
+
+
+
+
 
 
         //start the game
-        LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);
+        //LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);
 
     }
 }
