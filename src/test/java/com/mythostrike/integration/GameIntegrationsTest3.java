@@ -1,13 +1,11 @@
 package com.mythostrike.integration;
 
 
-import com.mythostrike.controller.message.game.GameMessageType;
-import com.mythostrike.controller.message.game.PlayCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.model.game.player.ChampionList;
+import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
@@ -38,6 +36,8 @@ import java.util.concurrent.TimeoutException;
 
 import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
 import static com.mythostrike.support.utility.UserUtils.I_JACK;
+import static com.mythostrike.support.utility.UserUtils.I_REINER_ZUFALL;
+import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -50,11 +50,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 class GameIntegrationTest3 {
     private static final Integer PORT = 8080;
-    public static final int I_TEST_USER = 0;
-    public static final int I_REINER_ZUFALL = 1;
-    public static final int I_MINH = 2;
-    public static final int I_JACK = 3;
-    public static final int I_TILL = 4;
+    public static final int I_UNO = 0;
+    public static final int I_DOS = 1;
+    public static final int I_TRES = 2;
+    public static final int I_CUATRO = 3;
+    public static final int I_BOT = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -89,7 +89,7 @@ class GameIntegrationTest3 {
      */
     @BeforeEach
     void setupUsers() {
-        users.addAll(UserUtils.getInstance().getUsers(4));
+        users.addAll(UserUtils.getInstance().getUsers(5));
     }
 
 
@@ -121,11 +121,15 @@ class GameIntegrationTest3 {
             session.subscribe(String.format("/games/%d/%s",  lobbyId, users.get(i).username()), privateGameWebSockets.get(i));
         }
 
+        round1(lobbyId, privateGameWebSockets.get(I_UNO));
+        //round2(lobbyId, privateGameWebSockets.get(I_DOS));
+        //round3(lobbyId, privateGameWebSockets.get(I_TRES));
+
     }
 
     private int createLobbyAndStartGame() {
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(I_TEST_USER), 0, false);
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(I_UNO), 0, false);
 
         int lobbyId = expected.id();
 
@@ -145,26 +149,26 @@ class GameIntegrationTest3 {
 
         //change the random seed of the lobby
         LobbyUtils.setRandomSeed(lobbyId, 9527);
+
+        LobbyUtils.changeMode(users.get(I_UNO), expected, 5 , false, publicLobbyWebSocket);
         //join the lobby
-        expected = LobbyUtils.joinLobby(users.get(I_REINER_ZUFALL), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_DOS), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
-        expected = LobbyUtils.joinLobby(users.get(I_MINH), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_TRES), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
-        expected = LobbyUtils.joinLobby(users.get(I_JACK), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_CUATRO), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
+        expected = LobbyUtils.addBot(users.get(I_UNO), expected, false,  publicLobbyWebSocket);
 
-
-
-        //TODO:add bot
 
 
         //start the game
-        LobbyUtils.startGame(users.get(I_TEST_USER), lobbyId, false, privateLobbyWebSockets);
+        LobbyUtils.startGame(users.get(I_UNO), lobbyId, false, privateLobbyWebSockets);
 
         for (int i = 0; i < users.size(); i++) {
             int finalI = i;
             await()
-                .atMost(1, SECONDS)
+                .atMost(2, SECONDS)
                 .untilAsserted(() -> {
                     assertFalse(privateLobbyWebSockets.get(finalI).getMessages().isEmpty());
                 });
@@ -177,31 +181,55 @@ class GameIntegrationTest3 {
 
     private void selectChampions(int lobbyId, StompFrameHandlerGame publicGameWebSocket) {
         //select champions for each user
-        int championId = 2;
+        int championId = 5;
         String championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(I_TEST_USER), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_UNO), new SelectChampionRequest(lobbyId, championId), championName,
             false, publicGameWebSocket);
 
         championId = 6;
         championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(I_REINER_ZUFALL), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_DOS), new SelectChampionRequest(lobbyId, championId), championName,
             false, publicGameWebSocket);
 
-        championId = 3;
+        championId = 2;
         championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(I_MINH), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_TRES), new SelectChampionRequest(lobbyId, championId), championName,
             false, publicGameWebSocket);
 
-        championId = 1;
+        championId = 0;
         championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(I_JACK), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_CUATRO), new SelectChampionRequest(lobbyId, championId), championName,
             false, publicGameWebSocket);
     }
 
 
-    private void round1Jack(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
-        TestUser currentPlayer = users.get(I_JACK);
-
-        GameUtils.playCard(currentPlayer, lobbyId, 1035, privateGameWebSocket);
+    private void round1(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
+        TestUser currentPlayer = users.get(I_UNO);
+        //vulcanic
+        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1076, users.get(I_DOS).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_TRES).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_TRES), lobbyId, null, users.get(I_CUATRO).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_CUATRO), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
+        //spear of mars
+        GameUtils.playCardOnTarget(users.get(I_UNO), lobbyId, 1080, users.get(I_UNO).username(), privateGameWebSocket);
+        //vulcanic
+        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1075, users.get(I_DOS).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_TRES).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_TRES), lobbyId, null, users.get(I_CUATRO).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_CUATRO), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
+        //attack
+        GameUtils.playCardOnTarget(users.get(I_UNO), lobbyId, 1020, users.get(I_DOS).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
+        GameUtils.endTurn(currentPlayer, lobbyId, false, true, false, privateGameWebSocket);
     }
+
+    /*
+    private void round2(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
+        TestUser currentPlayer = users.get(I_DOS);
+        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1039, users.get(I_DOS).username(), privateGameWebSocket);
+        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1068, users.get(I_DOS).username(), privateGameWebSocket);
+
+    }
+
+     */
 }
