@@ -1,11 +1,7 @@
 package com.mythostrike.support.utility;
 
 
-import com.mythostrike.controller.message.game.CardMoveMessage;
-import com.mythostrike.controller.message.game.GameMessage;
-import com.mythostrike.controller.message.game.GameMessageType;
-import com.mythostrike.controller.message.game.PlayCardsRequest;
-import com.mythostrike.controller.message.game.SelectChampionRequest;
+import com.mythostrike.controller.message.game.*;
 import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
@@ -26,6 +22,8 @@ public final class GameUtils {
 
     private GameUtils() {
     }
+
+
 
     /**
      * Selects a champion for the user and checks if the game update message is received and if the player is in the game.
@@ -125,4 +123,87 @@ public final class GameUtils {
                 assertEquals(CardSpaceType.TABLE_PILE.getName(), cardMoveMessage.destination());
             });
     }
+
+    public static void useSkill(TestUser user, UseSkillRequest request,boolean expectError,
+                                SimpleStompFrameHandler<GameMessage> publicGameWebSocket) {
+        assertTrue(publicGameWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
+
+        if (expectError) {
+            //try to start the game and expect an error with error message
+            given()
+                    .headers(user.headers())
+                    .body(request).
+                    when()
+                    .post("/games/play/skills").
+                    then()
+                    .statusCode(greaterThanOrEqualTo(400))
+                    .body("message", notNullValue());
+            return;
+        }
+
+        given()
+                .headers(user.headers())
+                .body(request).
+                when()
+                .post("/games/play/skills").
+                then()
+                .statusCode(200);
+
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(() -> {
+                    //check if game update message is received
+                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
+                    GameMessage message = publicGameWebSocket.getMessages().peek();
+                    assertEquals(GameMessageType.HIGHLIGHT, message.messageType());
+                    HighlightMessage highlightMessage = (HighlightMessage) message.payload();
+                  //TODO: unterscheiden zwscihen Skills. Hesta braucht highlight und Achhilles nicht
+
+                });
+    }
+
+    public static void endTurn(TestUser user,boolean expectError,int lobbyId,
+                                SimpleStompFrameHandler<GameMessage> publicGameWebSocket) {
+        assertTrue(publicGameWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
+
+        if (expectError) {
+            //try to start the game and expect an error with error message
+            given()
+                    .headers(user.headers())
+                    .body(lobbyId).
+                    when()
+                    .post("/games/play/end").
+                    then()
+                    .statusCode(greaterThanOrEqualTo(400))
+                    .body("message", notNullValue());
+            return;
+        }
+
+
+
+        given()
+                .headers(user.headers())
+                .body(lobbyId).
+                when()
+                .post("/games/play/end").
+                then()
+                .statusCode(200);
+
+        await()
+                .atMost(2, SECONDS)
+                .untilAsserted(() -> {
+                    //check if game update message is received
+                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
+                    GameMessage message = publicGameWebSocket.getMessages().peek();
+                    assertEquals(GameMessageType.CARD_MOVE, message.messageType());
+                    CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
+
+                    //check if the right cards are moved
+                //    assertEquals(request.cardIds(), cardMoveMessage.cardIds());
+                    assertEquals(CardSpaceType.TABLE_PILE.getName(), cardMoveMessage.source());
+                    assertEquals(CardSpaceType.DISCARD_PILE.getName(), cardMoveMessage.destination());
+
+                });
+    }
+
 }
