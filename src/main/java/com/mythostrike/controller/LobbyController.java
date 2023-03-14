@@ -52,7 +52,7 @@ public class LobbyController {
 
     @GetMapping
     public ResponseEntity<List<LobbyOverview>> getLobbies() {
-        log.debug("getLobbies request");
+        log.trace("REQUEST: getLobbies");
         //TODO: test erstellen
         /*List<LobbyOverview> list = new ArrayList<>();
         list.add(new LobbyOverview(2, "Hyuman123", "active", "FFA", 5));
@@ -67,7 +67,7 @@ public class LobbyController {
     @PostMapping
     public ResponseEntity<LobbyMessage> create(Principal principal, @RequestBody CreateLobbyRequest request)
         throws IllegalInputException {
-        log.debug("create lobby request from '{}' with  mode '{}", principal.getName(), request.modeId());
+        log.debug("REQUEST: create lobby from '{}' with  mode '{}", principal.getName(), request.modeId());
 
         //get objects from REST data
         User user = userService.getUser(principal.getName());
@@ -86,7 +86,7 @@ public class LobbyController {
     @PostMapping("/join")
     public ResponseEntity<LobbyMessage> join(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
-        log.debug("join lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
+        log.debug("REQUEST: join lobby '{}' from '{}'", request.lobbyId(), principal.getName());
 
         //get objects from REST data
         User user = userService.getUser(principal.getName());
@@ -107,7 +107,7 @@ public class LobbyController {
     @PostMapping("/leave")
     public ResponseEntity<Void> leave(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
-        log.debug("leave lobby '{}' request from '{}'", request.lobbyId(), principal.getName());
+        log.debug("REQUEST: leave lobby '{}' from '{}'", request.lobbyId(), principal.getName());
 
         //get objects from REST data
         User user = userService.getUser(principal.getName());
@@ -122,7 +122,7 @@ public class LobbyController {
     @PutMapping("/mode")
     public ResponseEntity<Void> changeMode(Principal principal, @RequestBody ChangeModeRequest request)
         throws IllegalInputException {
-        log.debug("change mode in '{}' to '{}' request from '{}'", request.lobbyId(), request.newModeId(),
+        log.debug("REQUEST: change mode in '{}' to '{}' from '{}'", request.lobbyId(), request.newModeId(),
             principal.getName());
 
         //get objects from REST data
@@ -146,7 +146,7 @@ public class LobbyController {
     @PutMapping("/seats")
     public ResponseEntity<Void> changeSeat(Principal principal, @RequestBody ChangeSeatRequest request)
         throws IllegalInputException {
-        log.debug("change seat in '{}' to '{}' request from '{}'", request.lobbyId(), request.newSeatId(),
+        log.debug("REQUEST: change seat in '{}' to '{}' from '{}'", request.lobbyId(), request.newSeatId(),
             principal.getName());
 
         //get objects from REST data
@@ -169,7 +169,7 @@ public class LobbyController {
     @PostMapping("/bot")
     public ResponseEntity<Void> addBot(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
-        log.debug("add bot to '{}' request from '{}'", request.lobbyId(), principal.getName());
+        log.debug("REQUEST: add bot to '{}' from '{}'", request.lobbyId(), principal.getName());
 
         //get objects from REST data
         User user = userService.getUser(principal.getName());
@@ -191,7 +191,7 @@ public class LobbyController {
     @PostMapping("/start")
     public ResponseEntity<Void> start(Principal principal, @RequestBody LobbyIdRequest request)
         throws IllegalInputException {
-        log.debug("start game '{}' request from '{}'", request.lobbyId(), principal.getName());
+        log.debug("REQUEST: start game '{}' from '{}'", request.lobbyId(), principal.getName());
         //get objects from REST data
         User user = userService.getUser(principal.getName());
         Lobby lobby = lobbyList.getLobby(request.lobbyId());

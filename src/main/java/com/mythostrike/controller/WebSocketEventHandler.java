@@ -72,32 +72,36 @@ public class WebSocketEventHandler {
         } else if (gameMatcher.matches()) {
             //send update Game message to client and increase the number of connected players
             int lobbyId = Integer.parseInt(gameMatcher.group(1));
-            updateGame(lobbyId);
-        } else if (gamePrivateMatcher.matches()) {
-            //send current Handcards to client
+
+            //shortly wait, sometimes the client is not ready to receive the game update
+            try {
+                sleep(SLEEP_BEFORE_RESPONSE);
+            } catch (InterruptedException e) {
+                log.error("could not sleep", e);
+            }
+            //send an game update to client
+            gameController.updateGame(lobbyId);
+        }
+        else if (gamePrivateMatcher.matches()) {
+            //increase the number of connected players
             int lobbyId = Integer.parseInt(gamePrivateMatcher.group(1));
+            addUserToGame(lobbyId);
+
+            //send current Handcards to client
+            /* currently not needed. Maybe in the future to enable reconnecting
             String username = gamePrivateMatcher.group(2);
             sendCurrentHandcards(lobbyId, username);
+            */
         }
     }
 
     /**
-     * Send an update game message to client and increase the number of connected players.
      * If all players are connected after the championselection, the game starts.
      *
      * @param lobbyId id of the lobby
      */
-    private void updateGame(int lobbyId) {
-        //shortly wait, sometimes the client is not ready to receive the game update
-        try {
-            sleep(SLEEP_BEFORE_RESPONSE);
-        } catch (InterruptedException e) {
-            log.error("could not sleep", e);
-        }
-
-        //send an game update to client
+    private void addUserToGame(int lobbyId) {
         lobbyList.increaseUserInGame(lobbyId);
-        gameController.updateGame(lobbyId);
 
         //when all players are connected start the normal game procedure
         if (lobbyList.isGameReadyToStart(lobbyId)) {
@@ -111,7 +115,6 @@ public class WebSocketEventHandler {
             gameManager.allPlayersConnected();
             gameController.updateGame(lobbyId);
         }
-
     }
 
     /**

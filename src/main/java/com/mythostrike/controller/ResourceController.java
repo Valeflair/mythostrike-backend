@@ -29,20 +29,20 @@ public class ResourceController {
 
     @GetMapping("/cards")
     public ResponseEntity<List<CardMessage>> getCards() {
-        log.debug("getCards request");
+        log.trace("REQUEST: getCards");
 
         return ResponseEntity.ok(cardList.getCards().stream().map(CardMessage::new).toList());
     }
 
     @GetMapping("/modes")
     public ResponseEntity<List<Mode>> getModes() {
-        log.debug("getModes request");
+        log.trace("REQUEST: getModes");
         return ResponseEntity.ok(modeList.getModes());
     }
 
     @GetMapping("/champions")
     public ResponseEntity<List<Champion>> getChampions() {
-        log.debug("getChampions request");
+        log.trace("REQUEST: getChampions");
         return ResponseEntity.ok(championList.getChampions());
     }
 }

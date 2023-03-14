@@ -35,7 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<UserAuthResponse> register(@RequestBody UserAuthRequest request) {
-        log.debug("register request: '{}'", request.username());
+        log.debug("REQUEST: register '{}'", request.username());
         try {
             userService.createUser(request);
         } catch (EntityExistsException e) {
@@ -49,7 +49,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponse> login(@RequestBody UserAuthRequest request) {
-        log.debug("login request: '{}'", request.username());
+        log.debug("REQUEST: login from '{}'", request.username());
         if (userService.areCredentialsValid(request)) {
             log.debug("Token requested for user: '{}'", request.username());
             return ResponseEntity.ok(new UserAuthResponse(tokenService.generateToken(request)));
@@ -60,7 +60,7 @@ public class AuthenticationController {
 
     @PostMapping("/data")
     public ResponseEntity<User> getUser(Principal principal) {
-        log.debug("user data request: '{}'", principal.getName());
+        log.debug("REQUEST: user data from '{}'", principal.getName());
         User user;
         try {
             user = userService.getUser(principal.getName());
@@ -73,7 +73,7 @@ public class AuthenticationController {
 
     @PostMapping("/avatar")
     public ResponseEntity<Void> selectAvatar(Principal principal, @RequestBody ChangeAvatarRequest request) {
-        log.debug("select Avatar '{}' request from '{}'", request.avatarNumber(), principal.getName());
+        log.debug("REQUEST: select Avatar '{}' from '{}'", request.avatarNumber(), principal.getName());
         User user;
         try {
             user = userService.getUser(principal.getName());
@@ -90,7 +90,7 @@ public class AuthenticationController {
 
     @GetMapping("/ranklist")
     public ResponseEntity<List<User>> getRankList() {
-        log.debug("get Ranklist request");
+        log.trace("REQUEST: get Ranklist");
 
         List<User> users = userService.getAllUsers();
         //sort users by rankPoints

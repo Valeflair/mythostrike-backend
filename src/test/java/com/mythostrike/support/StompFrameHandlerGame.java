@@ -1,5 +1,7 @@
 package com.mythostrike.support;
 
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.GameMessageType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -12,16 +14,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @Slf4j
-public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
-
-    private final Type payloadType;
+public class StompFrameHandlerGame extends StompSessionHandlerAdapter {
 
     @Getter
-    private final Queue<T> messages = new LinkedList<>();
-
-    public SimpleStompFrameHandler(Type payloadType) {
-        this.payloadType = payloadType;
-    }
+    private final Queue<GameMessage> messages = new LinkedList<>();
 
 
     @Override
@@ -37,13 +33,17 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
 
     @Override
     public Type getPayloadType(StompHeaders headers) {
-        return payloadType;
+        return GameMessage.class;
     }
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
-        T message = (T) payload;
+        GameMessage message = (GameMessage) payload;
 
+        //ignore log messages, they are not relevant for the tests. Don't add them to the queue.
+        if (message.messageType() == GameMessageType.LOG) {
+            return;
+        }
         messages.add(message);
         log.debug("Received : " + message);
     }
@@ -54,7 +54,11 @@ public class SimpleStompFrameHandler<T> extends StompSessionHandlerAdapter {
      *
      * @return the next message in the queue
      */
-    public T getNextMessage() {
+    public GameMessage getNextMessage() {
         return messages.remove();
+    }
+
+    public boolean containsType(GameMessageType type) {
+        return messages.stream().anyMatch(message -> message.messageType() == type);
     }
 }

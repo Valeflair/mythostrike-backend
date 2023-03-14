@@ -1,12 +1,15 @@
 package com.mythostrike.integration;
 
 
-import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.GameMessageType;
+import com.mythostrike.controller.message.game.PlayCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
+import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.support.SimpleStompFrameHandler;
+import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
 import com.mythostrike.support.utility.GameUtils;
 import com.mythostrike.support.utility.LobbyUtils;
@@ -40,12 +43,17 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Slf4j
 class GameIntegrationTest {
-
     private static final Integer PORT = 8080;
+    public static final int I_TEST_USER = 0;
+    public static final int I_REINER_ZUFALL = 1;
+    public static final int I_MINH = 2;
+    public static final int I_JACK = 3;
+    public static final int I_TILL = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -80,21 +88,21 @@ class GameIntegrationTest {
      */
     @BeforeEach
     void setupUsers() {
-        int id = 0;
         users.add(UserUtils.createUser("TestUser", "TestPassword"));
-        assertFalse(users.get(id++).jwtToken().isEmpty());
+        assertFalse(users.get(I_TEST_USER).jwtToken().isEmpty());
 
         users.add(UserUtils.createUser("Reiner Zufall", "12341234"));
-        assertFalse(users.get(id++).jwtToken().isEmpty());
+        assertFalse(users.get(I_REINER_ZUFALL).jwtToken().isEmpty());
+
 
         users.add(UserUtils.createUser("Minh-Trung Minh-Trung Tang", "MinhTrungTangMinhTrungTang"));
-        assertFalse(users.get(id++).jwtToken().isEmpty());
+        assertFalse(users.get(I_MINH).jwtToken().isEmpty());
 
         users.add(UserUtils.createUser("__Jack__", "JackyChanJackyChan"));
-        assertFalse(users.get(id++).jwtToken().isEmpty());
+        assertFalse(users.get(I_JACK).jwtToken().isEmpty());
 
         /*users.add(UserUtils.createUser("Till1234", "IchBinEinCoolesPassword"));
-        assertFalse(users.get(id++).jwtToken().isEmpty());*/
+        assertFalse(users.get(4).jwtToken().isEmpty());*/
     }
 
 
@@ -105,8 +113,35 @@ class GameIntegrationTest {
      */
     @Test
     void gameTwoVsTwoTest() {
+        int lobbyId = createLobbyAndStartGame();
+
+        //subscribe to the public game Web Socket
+        StompFrameHandlerGame publicGameWebSocket = new StompFrameHandlerGame();
+        //wait for update game message and remove it from the queue
+        session.subscribe(String.format("/games/%d", lobbyId) , publicGameWebSocket);
+        try{
+            sleep(200);
+        } catch (InterruptedException e) {
+            log.debug("Interrupted while sleeping");
+        }
+
+        selectChampions(lobbyId, publicGameWebSocket);
+
+        //connect to all private game web Sockets
+        List<StompFrameHandlerGame> privateGameWebSockets = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            privateGameWebSockets.add(new StompFrameHandlerGame());
+            session.subscribe(String.format("/games/%d/%s",  lobbyId, users.get(i).username()), privateGameWebSockets.get(i));
+        }
+
+        round1Jack(lobbyId, privateGameWebSockets.get(I_JACK));
+        round2TestUser(lobbyId, privateGameWebSockets.get(I_TEST_USER));
+        round3ReinerZufall(lobbyId, privateGameWebSockets.get(I_REINER_ZUFALL));
+    }
+
+    private int createLobbyAndStartGame() {
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, false);
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(I_TEST_USER), 0, false);
 
         int lobbyId = expected.id();
 
@@ -128,43 +163,117 @@ class GameIntegrationTest {
         LobbyUtils.setRandomSeed(lobbyId, 300); //TODO: change to what seed you want
 
         //join the lobby
-        expected = LobbyUtils.joinLobby(users.get(1), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_REINER_ZUFALL), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
-        expected = LobbyUtils.joinLobby(users.get(2), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_MINH), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
-        expected = LobbyUtils.joinLobby(users.get(3), expected, false, publicLobbyWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(I_JACK), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
+
+        //TODO: change mode to 2v2
 
         //start the game
-        LobbyUtils.startGame(users.get(0), lobbyId, false, privateLobbyWebSockets);
+        LobbyUtils.startGame(users.get(I_TEST_USER), lobbyId, false, privateLobbyWebSockets);
 
         //TODO: check if for each user the champion selection message is received
+        return lobbyId;
+    }
 
-        //subscribe to the lobby
-        SimpleStompFrameHandler<GameMessage> publicGameWebSocket = new SimpleStompFrameHandler<>(GameMessage.class);
-        //wait for update game message and remove it from the queue
-        session.subscribe(String.format("/games/%d", expected.id()) , publicGameWebSocket);
-        try{
-            sleep(200);
-        } catch (InterruptedException e) {
-            log.debug("Interrupted while sleeping");
-        }
-
-        List<SimpleStompFrameHandler<GameMessage>> privateGameWebSockets = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            privateGameWebSockets.add(new SimpleStompFrameHandler<>(GameMessage.class));
-            session.subscribe(String.format("/games/%d/%s",  expected.id(), users.get(i).username()), privateGameWebSockets.get(i));
-        }
-
-        //TODO: select champion for every player
-        int championId = 1;
+    private void selectChampions(int lobbyId, StompFrameHandlerGame publicGameWebSocket) {
+        //select champions for each user
+        int championId = 2;
         String championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(0), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_TEST_USER), new SelectChampionRequest(lobbyId, championId), championName,
             false, publicGameWebSocket);
 
+        championId = 6;
+        championName = ChampionList.getChampionList().getChampion(championId).getName();
+        GameUtils.selectChampion(users.get(I_REINER_ZUFALL), new SelectChampionRequest(lobbyId, championId), championName,
+            false, publicGameWebSocket);
 
-        //TODO: play game
+        championId = 3;
+        championName = ChampionList.getChampionList().getChampion(championId).getName();
+        GameUtils.selectChampion(users.get(I_MINH), new SelectChampionRequest(lobbyId, championId), championName,
+            false, publicGameWebSocket);
 
+        championId = 1;
+        championName = ChampionList.getChampionList().getChampion(championId).getName();
+        GameUtils.selectChampion(users.get(I_JACK), new SelectChampionRequest(lobbyId, championId), championName,
+            false, publicGameWebSocket);
+    }
 
+    private void round1Jack(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
+        TestUser currentPlayer = users.get(I_JACK);
+
+        await()
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //TODO: play game and check if everything works. Also check once if not ok moves get an error message
+
+        //play a card
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1082), List.of());
+        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+
+        //TODO: check if equipment is played
+
+        //wait for the next pick request players highlight message
+        await()
+            .atMost(2, SECONDS)
+            .untilAsserted(
+                () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //end turn
+        GameUtils.endTurn(currentPlayer, lobbyId, false, false, true, privateGameWebSocket);
+
+        //discard a card
+        playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1057), List.of());
+        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    private void round2TestUser(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
+        TestUser currentPlayer = users.get(I_TEST_USER);
+
+        await()
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //end turn
+        GameUtils.endTurn(currentPlayer, lobbyId, false, false, true, privateGameWebSocket);
+
+        //discard 2 cards
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1087, 1021), List.of());
+        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    private void round3ReinerZufall(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
+        TestUser currentPlayer = users.get(I_REINER_ZUFALL);
+
+        await()
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //use skill
+        UseSkillRequest request = new UseSkillRequest(lobbyId, 0, List.of());
+        GameUtils.useSkill(currentPlayer, request, false, privateGameWebSocket);
+
+        await()
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //select all cards to change
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1003, 1049, 1080, 1041, 1031, 1075), List.of());
+        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+
+        await()
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //end turn
+        GameUtils.endTurn(currentPlayer, lobbyId, false, true, true, privateGameWebSocket);
+
+        //discard 2 cards
+        playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1015,1067,1016), List.of());
+        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
     }
 }

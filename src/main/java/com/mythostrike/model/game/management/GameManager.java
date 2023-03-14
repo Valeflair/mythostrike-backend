@@ -55,6 +55,7 @@ public class GameManager {
     //player start up with 4 cards and draw 2 cards at each turn start
     private static final int CARD_COUNT_START_UP = 4;
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    public static final int NO_SKILL_SELECTED = -1;
     @Getter
     private final Game game;
     @Getter
@@ -365,7 +366,7 @@ public class GameManager {
             }
         });
 
-        //cardDistribution() is started when all players connected to the inGame (/games/{id}) Websocket
+        //cardDistribution() is started when all players connected to the inGame (/games/{id}/{username}) Websocket
         //the methode handleSessionSubscribeEvent in GameController is called when a client connects to the websocket.
         //If all clients are connected, then the methode cardDistribution() is called.
     }
@@ -420,19 +421,22 @@ public class GameManager {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
         lastPickRequest.setSelectedPlayers(targetPlayers);
-        if (skillIndex < 0) {
+        if (skillIndex == NO_SKILL_SELECTED) {
             lastPickRequest.setClickedCancel(true);
             proceed();
             return;
         }
         //TODO: change skill Index to real skill id
+        if (skillIndex < 0 || skillIndex >= lastPickRequest.getHighlightMessage().skillIds().size()) {
+            throw new IllegalArgumentException("You don't have a skill with this index");
+        }
         Integer skillId = lastPickRequest.getHighlightMessage().skillIds().get(skillIndex);
 
         //check if the player selected the valid players
         //int index = lastPickRequest.getHighlightMessage().skillIds().indexOf(skillId);
         if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(),
             targets)) {
-            throw new IllegalArgumentException("Selected skill is not allowed for this player");
+            throw new IllegalArgumentException("You don't have the selected skill");
         }
 
 

@@ -54,7 +54,7 @@ public class GameController {
     @PostMapping("/champion")
     public ResponseEntity<Void> selectChampion(Principal principal, @RequestBody SelectChampionRequest request)
         throws IllegalInputException {
-        log.debug("select champion '{}' request in '{}' from '{}'", request.championId(), request.lobbyId(),
+        log.debug("REQUEST: select champion '{}' in '{}' from '{}'", request.championId(), request.lobbyId(),
             principal.getName());
 
         //get objects from REST data
@@ -78,7 +78,7 @@ public class GameController {
             cardNames = request.cardIds().stream().map(cardList::getCard).map(Card::toString).toList();
         }
 
-        log.debug("play card '{}' request in '{}' from '{}' to targets '{}'", cardNames, request.lobbyId(),
+        log.debug("REQUEST: play card '{}' in '{}' from '{}' to targets '{}'", cardNames, request.lobbyId(),
             principal.getName(), request.targets());
 
         //get objects from REST data
@@ -95,7 +95,7 @@ public class GameController {
 
     @PostMapping("/skills")
     public ResponseEntity<Void> useSkill(Principal principal, @RequestBody UseSkillRequest request) {
-        log.debug("use skill '{}' request in '{}' from '{}' to targets '{}'", request.skillId(), request.lobbyId(),
+        log.debug("REQUEST: use skill '{}' in '{}' from '{}' to targets '{}'", request.skillId(), request.lobbyId(),
             principal.getName(), request.targets());
 
         //get objects from REST data
@@ -112,7 +112,7 @@ public class GameController {
 
     @PostMapping("/end")
     public ResponseEntity<Void> endTurn(Principal principal, @RequestBody LobbyIdRequest request) {
-        log.debug("end turn request in '{}' from '{}'", request.lobbyId(), principal.getName());
+        log.debug("REQUEST: end turn in '{}' from '{}'", request.lobbyId(), principal.getName());
 
         //get objects from REST data
         GameManager gameManager = lobbyList.getGameManager(request.lobbyId());
