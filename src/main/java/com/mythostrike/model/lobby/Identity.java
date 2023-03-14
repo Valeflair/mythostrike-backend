@@ -20,7 +20,8 @@ public enum Identity {
     GOD_KING("God King", false, true),
     GENERAL("General", true, false),
     REBEL("Rebel", true, false),
-    RENEGADE("Renegade", true, true);
+    RENEGADE("Renegade", true, true),
+    INCOGNITO("Incognito", true, true);
 
 
     static {
@@ -44,8 +45,6 @@ public enum Identity {
 
         NONE.hasToDie = List.of(NONE);
     }
-
-    public static final String INCOGNITO = "Incognito";
 
     @Getter
     @JsonValue
