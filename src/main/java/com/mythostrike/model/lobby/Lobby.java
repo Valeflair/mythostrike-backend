@@ -50,7 +50,7 @@ public class Lobby {
             seats.add(new Seat(i, null, identities.get(i)));
         }
         seats.get(0).setPlayer(this.owner);
-        this.randomSeed = SEED_NOT_SET;
+        this.randomSeed = 300;
     }
 
     private boolean isFull() {
