@@ -153,6 +153,9 @@ class GameIntegrationTest2 {
         expected = LobbyUtils.joinLobby(users.get(I_KRATOS), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
 
+        expected = LobbyUtils.changeMode(users.get(I_ACHILLES), expected, 2, false, publicLobbyWebSocket);
+        assertNotNull(expected);
+
         //start the game
         LobbyUtils.startGame(users.get(I_ACHILLES), lobbyId, false, privateLobbyWebSockets);
 
@@ -184,7 +187,6 @@ class GameIntegrationTest2 {
     }
 
     private void round1Kratos(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
-        TestUser currentPlayer = users.get(I_KRATOS);
         StompFrameHandlerGame privateGameWebSocket = privateGameWebSocketList.get(I_KRATOS);
 
         await()
@@ -193,17 +195,17 @@ class GameIntegrationTest2 {
 
 
         //play extort
-        GameUtils.playCardOnTarget(users.get(I_KRATOS), lobbyId, 1057, users.get(I_ACHILLES).username(),
+        GameUtils.playCardOnTarget(users.get(I_KRATOS), lobbyId, 1057, users.get(I_HESTIA).username(),
                 privateGameWebSocketList.get(I_KRATOS));
 
 
         //play attack
-        GameUtils.playCardOnTarget(users.get(I_KRATOS), lobbyId, 1025, users.get(I_ACHILLES).username(),
-                privateGameWebSocketList.get(I_ACHILLES));
+        GameUtils.playCardOnTarget(users.get(I_KRATOS), lobbyId, 1025, users.get(I_HESTIA).username(),
+                privateGameWebSocketList.get(I_KRATOS));
 
         //play defend from Hestia
-        GameUtils.playCard(users.get(I_ACHILLES), lobbyId, 1049,
-                privateGameWebSocketList.get(I_ACHILLES));
+        GameUtils.playCard(users.get(I_HESTIA), lobbyId, 1049,
+                privateGameWebSocketList.get(I_HESTIA));
 
         //Godarena
         GameUtils.playCard(users.get(I_KRATOS), lobbyId, 1005,
@@ -244,7 +246,7 @@ class GameIntegrationTest2 {
 
         //play attack on Kratos
         GameUtils.playCardOnTarget(users.get(I_ACHILLES), lobbyId, 1036,users.get(I_KRATOS).username(),
-                privateGameWebSocketList.get(I_KRATOS));
+                privateGameWebSocketList.get(I_ACHILLES));
 
         //play heal as defend from kratos
         GameUtils.playCard(users.get(I_KRATOS), lobbyId, 1061,

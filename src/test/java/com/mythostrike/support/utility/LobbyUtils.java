@@ -281,7 +281,7 @@ public final class LobbyUtils {
                 }
             }
         }
-        if(index < usersToMove.size()) {
+        if(index < usersToMove.size() - 1) {
             throw new IllegalArgumentException("Too many players to move");
         }
 
