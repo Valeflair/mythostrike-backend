@@ -224,7 +224,7 @@ public final class GameUtils {
     }
 
 
-    public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
+    public static void playCardOnTarget(TestUser user, int lobbyId, Integer cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
             .atMost(2, SECONDS)
