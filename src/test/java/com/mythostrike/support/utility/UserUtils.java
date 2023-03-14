@@ -5,6 +5,7 @@ import com.mythostrike.support.TestUser;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public final class UserUtils {
@@ -19,8 +20,7 @@ public final class UserUtils {
                 .body(new UserAuthRequest(username, password)).
                 when()
                 .post("/users/login").
-                then()
-                .statusCode(200).
+                then().
                 extract().response();
 
         //if user does not exist, register user
@@ -33,6 +33,8 @@ public final class UserUtils {
                     then()
                     .statusCode(201).
                     extract().response();
+        } else {
+            assertEquals(response.statusCode(), 200, "Could not login user: " + response.asString());
         }
 
         String jwtToken = response.jsonPath().getString("jwtToken");

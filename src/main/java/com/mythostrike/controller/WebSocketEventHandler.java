@@ -25,6 +25,7 @@ import static java.lang.Thread.sleep;
 @Component
 public class WebSocketEventHandler {
 
+    public static final int SLEEP_BEFORE_RESPONSE = 100;
     private final GameController gameController;
 
     private final LobbyController lobbyController;
@@ -60,6 +61,13 @@ public class WebSocketEventHandler {
         if (lobbyMatcher.matches()) {
             //send update Lobby message to client
             int lobbyId = Integer.parseInt(lobbyMatcher.group(1));
+
+            //shortly wait, sometimes the client is not ready to receive the game update
+            try {
+                sleep(SLEEP_BEFORE_RESPONSE);
+            } catch (InterruptedException e) {
+                log.error("could not sleep", e);
+            }
             lobbyController.updateLobby(lobbyId);
         } else if (gameMatcher.matches()) {
             //send update Game message to client and increase the number of connected players
@@ -80,10 +88,9 @@ public class WebSocketEventHandler {
      * @param lobbyId id of the lobby
      */
     private void updateGame(int lobbyId) {
-        //TODO: in thread
         //shortly wait, sometimes the client is not ready to receive the game update
         try {
-            sleep(50);
+            sleep(SLEEP_BEFORE_RESPONSE);
         } catch (InterruptedException e) {
             log.error("could not sleep", e);
         }
@@ -114,12 +121,11 @@ public class WebSocketEventHandler {
      * @param username username of the client
      */
     private void sendCurrentHandcards(int lobbyId, String username) {
-        //TODO: in thread
         //shortly wait, sometimes the client is not ready to receive the game update
         try {
-            sleep(50);
+            sleep(SLEEP_BEFORE_RESPONSE);
         } catch (InterruptedException e) {
-            log.error("could not sleep", e);
+            log.error("could not sleep");
         }
         GameManager gameManager = lobbyList.getGameManager(lobbyId);
         if (gameManager == null) throw new IllegalStateException("gameManager is null, but game is running");

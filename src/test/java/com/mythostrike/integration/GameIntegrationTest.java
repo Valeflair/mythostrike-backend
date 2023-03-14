@@ -1,15 +1,20 @@
 package com.mythostrike.integration;
 
 
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
+import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.TestUser;
+import com.mythostrike.support.utility.GameUtils;
 import com.mythostrike.support.utility.LobbyUtils;
 import com.mythostrike.support.utility.UserUtils;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +33,16 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
+import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@Slf4j
 class GameIntegrationTest {
 
     private static final Integer PORT = 8080;
@@ -70,23 +80,21 @@ class GameIntegrationTest {
      */
     @BeforeEach
     void setupUsers() {
+        int id = 0;
         users.add(UserUtils.createUser("TestUser", "TestPassword"));
-        assertFalse(users.get(0).jwtToken().isEmpty());
+        assertFalse(users.get(id++).jwtToken().isEmpty());
 
         users.add(UserUtils.createUser("Reiner Zufall", "12341234"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
+        assertFalse(users.get(id++).jwtToken().isEmpty());
 
         users.add(UserUtils.createUser("Minh-Trung Minh-Trung Tang", "MinhTrungTangMinhTrungTang"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
+        assertFalse(users.get(id++).jwtToken().isEmpty());
 
         users.add(UserUtils.createUser("__Jack__", "JackyChanJackyChan"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
+        assertFalse(users.get(id++).jwtToken().isEmpty());
 
-        users.add(UserUtils.createUser("Till1234", "IchBinEinCoolesPassword"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
-
-        users.add(UserUtils.createUser("Hong Kong", "Ich_bin_ein_Hong_Konger"));
-        assertFalse(users.get(1).jwtToken().isEmpty());
+        /*users.add(UserUtils.createUser("Till1234", "IchBinEinCoolesPassword"));
+        assertFalse(users.get(id++).jwtToken().isEmpty());*/
     }
 
 
@@ -98,42 +106,62 @@ class GameIntegrationTest {
     @Test
     void gameTwoVsTwoTest() {
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201);
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, false);
+
+        int lobbyId = expected.id();
 
         //subscribe to the lobby
-        SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe(String.format("/lobbies/%d", expected.id()) , frameHandlerPublic);
+        SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
+        session.subscribe(String.format("/lobbies/%d", lobbyId) , publicLobbyWebSocket);
+        await()
+            .atMost(1, SECONDS)
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
-        List<SimpleStompFrameHandler<ChampionSelectionMessage>> frameHandlersPrivate = new ArrayList<>();
+        List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateLobbyWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
-            frameHandlersPrivate.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), frameHandlersPrivate.get(i));
+            privateLobbyWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
+            session.subscribe(String.format("/lobbies/%d/%s",  lobbyId, users.get(i).username()), privateLobbyWebSockets.get(i));
         }
 
         //change the random seed of the lobby
-        LobbyUtils.setRandomSeed(expected.id(), 300); //TODO: change to what seed you want
+        LobbyUtils.setRandomSeed(lobbyId, 300); //TODO: change to what seed you want
 
         //join the lobby
-        expected = LobbyUtils.joinLobby(users.get(1), expected, 200, frameHandlerPublic);
+        expected = LobbyUtils.joinLobby(users.get(1), expected, false, publicLobbyWebSocket);
+        assertNotNull(expected);
+        expected = LobbyUtils.joinLobby(users.get(2), expected, false, publicLobbyWebSocket);
+        assertNotNull(expected);
+        expected = LobbyUtils.joinLobby(users.get(3), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
 
-        //join the lobby again, expect error
-        LobbyUtils.joinLobby(users.get(0), expected, 400, frameHandlerPublic);
-
         //start the game
-        LobbyUtils.startGame(users.get(0), expected.id(), 201, frameHandlersPrivate);
+        LobbyUtils.startGame(users.get(0), lobbyId, false, privateLobbyWebSockets);
+
         //TODO: check if for each user the champion selection message is received
-        //TODO: select champion for every player
 
         //subscribe to the lobby
-        frameHandlerPublic = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe(String.format("/games/%d", expected.id()) , frameHandlerPublic);
-
-        frameHandlersPrivate = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            frameHandlersPrivate.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/games/%d/%s",  expected.id(), users.get(i).username()), frameHandlersPrivate.get(i));
+        SimpleStompFrameHandler<GameMessage> publicGameWebSocket = new SimpleStompFrameHandler<>(GameMessage.class);
+        //wait for update game message and remove it from the queue
+        session.subscribe(String.format("/games/%d", expected.id()) , publicGameWebSocket);
+        try{
+            sleep(200);
+        } catch (InterruptedException e) {
+            log.debug("Interrupted while sleeping");
         }
+
+        List<SimpleStompFrameHandler<GameMessage>> privateGameWebSockets = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            privateGameWebSockets.add(new SimpleStompFrameHandler<>(GameMessage.class));
+            session.subscribe(String.format("/games/%d/%s",  expected.id(), users.get(i).username()), privateGameWebSockets.get(i));
+        }
+
+        //TODO: select champion for every player
+        int championId = 1;
+        String championName = ChampionList.getChampionList().getChampion(championId).getName();
+        GameUtils.selectChampion(users.get(0), new SelectChampionRequest(lobbyId, championId), championName,
+            false, publicGameWebSocket);
+
 
         //TODO: play game
 

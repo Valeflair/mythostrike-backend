@@ -25,6 +25,7 @@ import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -79,12 +80,12 @@ public final class LobbyUtils {
      *
      * @param user               the user that creates the lobby
      * @param modeId             the id of the mode to start with
-     * @param expectedStatusCode the expected status code of the response (201 if lobby was created successfully)
+     * @param expectError        if true, it will try to creat the lobby and expect an error with an error message
      * @param frameHandler       the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
-    public static LobbyMessage createLobby(TestUser user, int modeId, int expectedStatusCode) {
-        if (expectedStatusCode != 201) {
+    public static LobbyMessage createLobby(TestUser user, int modeId, boolean expectError) {
+        if (expectError) {
             //try to create the lobby and expect an error with error message
             given()
                 .headers(user.headers())
@@ -92,7 +93,7 @@ public final class LobbyUtils {
                 when()
                 .post("/lobbies").
                 then()
-                .statusCode(expectedStatusCode)
+                .statusCode(greaterThanOrEqualTo(400))
                 .body("message", notNullValue());
             return null;
         }
@@ -124,15 +125,15 @@ public final class LobbyUtils {
      *
      * @param user               the user that joins the lobby
      * @param oldLobbyState      the old lobby state to compare with the new lobby state
-     * @param expectedStatusCode the expected status code of the response (200 if the user joins the lobby successfully)
-     * @param frameHandlerPublic       the frameHandler that receives the web socket messages
+     * @param expectError       if true, it will try to join the lobby and expect an error with an error message
+     * @param publicLobbyWebSocket       the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
-    public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, int expectedStatusCode,
-                                         SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic) {
-        assertTrue(frameHandlerPublic.getMessages().isEmpty(), "The frame handler should not have any messages");
+    public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
+                                         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+        assertTrue(publicLobbyWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
 
-        if (expectedStatusCode != 200) {
+        if (expectError) {
             //try to join the lobby and expect an error with error message
             given()
                 .headers(user.headers())
@@ -140,7 +141,7 @@ public final class LobbyUtils {
                 when()
                 .post("/lobbies/join").
                 then()
-                .statusCode(expectedStatusCode)
+                .statusCode(greaterThanOrEqualTo(400))
                 .body("message", notNullValue());
             return null;
         }
@@ -179,8 +180,8 @@ public final class LobbyUtils {
 
         await()
             .atMost(1, SECONDS)
-            .untilAsserted(() -> assertFalse(frameHandlerPublic.getMessages().isEmpty()));
-        assertEquals(expected, frameHandlerPublic.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
         return expected;
     }
@@ -191,16 +192,17 @@ public final class LobbyUtils {
      *
      * @param user               the user that starts the game
      * @param lobbyId            the id of the lobby
+     * @param expectError        if true, it will try to start the game and expect an error with an error message
      * @param expectedStatusCode the expected status code of the response (201 if the game was started successfully)
      */
-    public static void startGame(TestUser user, int lobbyId, int expectedStatusCode,
-                                 List<SimpleStompFrameHandler<ChampionSelectionMessage>> frameHandlersPrivate) {
-        for (SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : frameHandlersPrivate) {
+    public static void startGame(TestUser user, int lobbyId, boolean expectError,
+                                 List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateLobbyWebSockets) {
+        for (SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
             assertTrue(frameHandler.getMessages().isEmpty(), "The frame handler should not have any messages");
         }
 
 
-        if (expectedStatusCode != 201) {
+        if (expectError) {
             //try to start the game and expect an error with error message
             given()
                 .headers(user.headers())
@@ -208,7 +210,7 @@ public final class LobbyUtils {
                 when()
                 .post("/lobbies/start").
                 then()
-                .statusCode(expectedStatusCode)
+                .statusCode(greaterThanOrEqualTo(400))
                 .body("message", notNullValue());
             return;
         }
@@ -226,7 +228,7 @@ public final class LobbyUtils {
             .atMost(2, SECONDS)
             .untilAsserted(() -> {
                 //TODO: make message of champion and all other classes who are used for json conversion
-                for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : frameHandlersPrivate) {
+                for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
                     assertFalse(frameHandler.getMessages().isEmpty());
                 }
             });

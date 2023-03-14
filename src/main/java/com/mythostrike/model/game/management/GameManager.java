@@ -139,6 +139,23 @@ public class GameManager {
         });
     }
 
+    /**
+     * check parameters from a REST call before adding the activity to the queue to do async. That way there won't be
+     * any errors when the activity is actually executed and the REST call will finish faster for the client.
+     *
+     * @param runnable the activity to be executed
+     */
+    private void submitRunnableWithoutUpdate(Runnable runnable) {
+        EXECUTOR.execute(() -> {
+            try {
+                runnable.run();
+            } catch (Exception exception) {
+                List<StackTraceElement> limitedStackTrace = Arrays.stream(exception.getStackTrace()).limit(5).toList();
+                log.error("Error in runnable: '{}' at '{}'", exception.getMessage(), limitedStackTrace);
+            }
+        });
+    }
+
     //----------------GameRun----------------
     public void endTurn(String username) {
         if (!game.getCurrentPlayer().getUsername().equals(username)) {
@@ -184,7 +201,7 @@ public class GameManager {
             checkDying.register(eventManager, player);
         }
 
-        submitRunnable(() -> selectChampionPhase(players));
+        submitRunnableWithoutUpdate(() -> selectChampionPhase(players));
     }
 
     /**

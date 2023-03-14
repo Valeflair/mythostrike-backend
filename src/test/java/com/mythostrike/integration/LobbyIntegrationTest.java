@@ -86,7 +86,7 @@ class LobbyIntegrationTest {
     @Test
     void testLobbyTwoPlayer() {
         //create the lobby
-        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, 201);
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, false);
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> frameHandlerPublic = new SimpleStompFrameHandler<>(LobbyMessage.class);
@@ -102,13 +102,13 @@ class LobbyIntegrationTest {
         LobbyUtils.setRandomSeed(expected.id(), 42); //TODO: change to what seed you want
 
         //join the lobby
-        expected = LobbyUtils.joinLobby(users.get(1), expected, 200, frameHandlerPublic);
+        expected = LobbyUtils.joinLobby(users.get(1), expected, false, frameHandlerPublic);
         assertNotNull(expected);
 
         //join the lobby again, expect error
-        LobbyUtils.joinLobby(users.get(0), expected, 400, frameHandlerPublic);
+        LobbyUtils.joinLobby(users.get(0), expected, true, frameHandlerPublic);
 
         //start the game
-        LobbyUtils.startGame(users.get(0), expected.id(), 201, frameHandlersPrivate);
+        LobbyUtils.startGame(users.get(0), expected.id(), false, frameHandlersPrivate);
     }
 }
