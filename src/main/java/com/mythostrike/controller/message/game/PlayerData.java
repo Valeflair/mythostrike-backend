@@ -21,7 +21,7 @@ public record PlayerData(String username, int cardCount, boolean isAlive,
     @JsonGetter("identity")
     private String getIdentityString() {
         if (identity.isIncognito()) {
-            return Identity.NONE.toString();
+            return Identity.INCOGNITO;
         } else {
             return identity.toString();
         }

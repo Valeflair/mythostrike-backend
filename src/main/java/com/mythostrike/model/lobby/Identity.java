@@ -13,13 +13,15 @@ import java.util.List;
 
 @JsonFormat(shape = Shape.OBJECT)
 public enum Identity {
+
+    NONE("None", false, true),
     TEAM_RED("Team Red", false, false),
     TEAM_BLUE("Team Blue", false, false),
     GOD_KING("God King", false, true),
     GENERAL("General", true, false),
     REBEL("Rebel", true, false),
-    RENEGADE("Renegade", true, true),
-    NONE("None", false, true);
+    RENEGADE("Renegade", true, true);
+
 
     static {
         TEAM_RED.hasToSurvive = List.of(TEAM_RED);
@@ -42,6 +44,8 @@ public enum Identity {
 
         NONE.hasToDie = List.of(NONE);
     }
+
+    public static final String INCOGNITO = "Incognito";
 
     @Getter
     @JsonValue

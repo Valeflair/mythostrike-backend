@@ -16,25 +16,27 @@ class GameMessageDeserializer extends JsonDeserializer<GameMessage> {
 
         GameMessageType type = GameMessageType.valueOf(node.get("messageType").asText());
         ObjectMapper objectMapper = new ObjectMapper();
+        GameMessage message;
 
         switch (type) {
             case HIGHLIGHT -> {
-                return new GameMessage(type, objectMapper.treeToValue(node.get("payload"), HighlightMessage.class));
+                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), HighlightMessage.class));
             }
             case UPDATE_GAME -> {
                 PlayerData[] payload = objectMapper.treeToValue(node.get("payload"), PlayerData[].class);
-                return new GameMessage(type, List.of(payload));
+                message = new GameMessage(type, List.of(payload));
             }
             case CARD_MOVE -> {
-                return new GameMessage(type, objectMapper.treeToValue(node.get("payload"), CardMoveMessage.class));
+                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), CardMoveMessage.class));
             }
             case LOG -> {
-                return new GameMessage(type, objectMapper.treeToValue(node.get("payload"), LogMessage.class));
+                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), LogMessage.class));
             }
             case GAME_END -> {
-                return new GameMessage(type, objectMapper.treeToValue(node.get("payload"), PlayerResult.class));
+                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), PlayerResult.class));
             }
             default -> throw new IllegalStateException("Unexpected value: " + type);
         }
+        return message;
     }
 }
