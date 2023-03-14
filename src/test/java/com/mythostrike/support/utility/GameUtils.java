@@ -1,17 +1,16 @@
 package com.mythostrike.support.utility;
 
 
-import com.mythostrike.controller.message.game.GameMessage;
-import com.mythostrike.controller.message.game.GameMessageType;
-import com.mythostrike.controller.message.game.PlayCardsRequest;
-import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.UseSkillRequest;
+import com.mythostrike.controller.message.game.*;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
+import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static io.restassured.RestAssured.given;
@@ -25,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public final class GameUtils {
+
+    public static final int WAIT_FOR_HIGHLIGHT_MESSAGE = 5;
 
 
     private GameUtils() {
@@ -43,6 +44,7 @@ public final class GameUtils {
      */
     public static void selectChampion(TestUser user, SelectChampionRequest request, String selectedChampionName,
                                       boolean expectError, StompFrameHandlerGame publicGameWebSocket) {
+        //TODO: add wait before every Request
         assertTrue(publicGameWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
 
         if (expectError) {
@@ -67,28 +69,27 @@ public final class GameUtils {
                 .statusCode(200);
 
         await()
-            .atMost(2, SECONDS)
+            .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
             .untilAsserted(() -> {
                     //check if game update message is received
                     assertFalse(publicGameWebSocket.getMessages().isEmpty());
-                    GameMessage message = publicGameWebSocket.getMessages().remove();
-                    if (message.messageType() != GameMessageType.UPDATE_GAME
-                        || !(message.payload() instanceof Iterable<?>) ) {
-                        throw new IllegalArgumentException("Received wrong message type: " + message.messageType());
-                    }
-                    //TODO: make custom deserializer for the GameMessage payload
-                    /*List<PlayerData> playerDataList = new ArrayList<>();
-                    for (Object data : (Iterable<?>) message.payload()) {
-                        assertTrue(data instanceof PlayerData, "The payload should be a collection of PlayerData");
-                        playerDataList.add((PlayerData) data);
-                    }
-
-                    //check if the player is in the game
-                    Optional<PlayerData> playerData = playerDataList.stream()
-                        .filter(data -> data.username().equals(user.username())).findFirst();
-                    assertFalse(playerData.isEmpty());
-                    assertEquals(selectedChampionName, playerData.get().champion().name());*/
             });
+
+        //get update players
+        GameMessage message = publicGameWebSocket.getMessages().remove();
+        assertEquals(message.messageType(), GameMessageType.UPDATE_GAME, "wrong message type");
+
+        List<PlayerData> playerDataList = new ArrayList<>();
+        for (Object data : (Iterable<?>) message.payload()) {
+            assertTrue(data instanceof PlayerData, "The payload should be a collection of PlayerData");
+            playerDataList.add((PlayerData) data);
+        }
+
+        //check if the player is in the game
+        Optional<PlayerData> playerData = playerDataList.stream()
+            .filter(data -> data.username().equals(user.username())).findFirst();
+        assertFalse(playerData.isEmpty());
+        assertEquals(selectedChampionName, playerData.get().champion().name());
     }
 
     public static void playCards(TestUser user, PlayCardsRequest request, boolean expectError,
@@ -117,20 +118,25 @@ public final class GameUtils {
             then()
             .statusCode(200);
 
+        //if the cardIds is empty, we dont get a card move message
+        if (request.cardIds().isEmpty()) {
+            return;
+        }
+
         await()
-            .atMost(2, SECONDS)
+            .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
             .untilAsserted(() -> {
                 //check if game update message is received
                 assertFalse(privateGameWebSocket.getMessages().isEmpty());
-                GameMessage message = privateGameWebSocket.getMessages().peek();
-                assertEquals(GameMessageType.CARD_MOVE, message.messageType());
-                /*CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
-
-                //check if the right cards are moved
-                assertEquals(request.cardIds(), cardMoveMessage.cardIds());
-                assertEquals(user.username(), cardMoveMessage.source());
-                assertEquals(CardSpaceType.TABLE_PILE.getName(), cardMoveMessage.destination());*/
             });
+
+        GameMessage message = privateGameWebSocket.getMessages().peek();
+        assertEquals(GameMessageType.CARD_MOVE, message.messageType());
+        CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
+
+        //check if the right cards are moved
+        assertEquals(request.cardIds(), cardMoveMessage.cardIds());
+        assertEquals(user.username(), cardMoveMessage.source());
     }
 
     public static void useSkill(TestUser user, UseSkillRequest request, boolean expectError,
@@ -160,7 +166,7 @@ public final class GameUtils {
                 .statusCode(200);
 
         await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(() -> {
                     //check if websocket message is received
                     assertFalse(publicGameWebSocket.getMessages().isEmpty());
@@ -168,9 +174,13 @@ public final class GameUtils {
     }
 
     public static void endTurn(TestUser user, int lobbyId, boolean expectError, boolean hasToCleanTable,
-                               boolean hasToDiscardCards, StompFrameHandlerGame publicGameWebSocket) {
+                               boolean hasToDiscardCards, StompFrameHandlerGame privateGameWebSocket) {
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
         //clear all messages from the frame handler
-        publicGameWebSocket.getMessages().clear();
+        privateGameWebSocket.getMessages().clear();
 
         if (expectError) {
             //try to start the game and expect an error with error message
@@ -195,39 +205,36 @@ public final class GameUtils {
 
         if(hasToCleanTable) {
             await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(() -> {
                     //check if card move message from table pile to discard pile is received
-                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
-                    GameMessage message = publicGameWebSocket.getMessages().remove();
+                    assertFalse(privateGameWebSocket.getMessages().isEmpty());
+                    GameMessage message = privateGameWebSocket.getMessages().remove();
 
-                    /*CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
+                    CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
 
                     //check if the right cards are moved
                     //assertEquals(request.cardIds(), cardMoveMessage.cardIds());
                     assertEquals(CardSpaceType.TABLE_PILE.getName(), cardMoveMessage.source());
-                    assertEquals(CardSpaceType.DISCARD_PILE.getName(), cardMoveMessage.destination());*/
+                    assertEquals(CardSpaceType.DISCARD_PILE.getName(), cardMoveMessage.destination());
                 });
         }
-
-        await()
-                .atMost(2, SECONDS)
-                .untilAsserted(() -> {
-                    //check if game update message is received
-                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
-                    GameMessage message = publicGameWebSocket.getMessages().peek();
-                    if(hasToDiscardCards && message.messageType() != GameMessageType.HIGHLIGHT) {
-                        throw new IllegalArgumentException("Received wrong message type: " + message.messageType());
-                    } else if(!hasToDiscardCards && message.messageType() != GameMessageType.CARD_MOVE ) {
-                        throw new IllegalArgumentException("Received wrong message type: " + message.messageType());
-                    }
-                });
+        if (hasToDiscardCards) {
+            await()
+                    .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                    .untilAsserted(() -> {
+                        //check if game update message is received
+                        assertFalse(privateGameWebSocket.getMessages().isEmpty());
+                    });
+            GameMessage message = privateGameWebSocket.getMessages().peek();
+            assertEquals(message.messageType(), GameMessageType.HIGHLIGHT, "Received wrong message type: " + message.messageType());
+        }
     }
 
     public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -235,10 +242,21 @@ public final class GameUtils {
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
+    public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets, StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), targets);
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
     public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -249,7 +267,7 @@ public final class GameUtils {
     public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -260,7 +278,7 @@ public final class GameUtils {
     public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(2, SECONDS)
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 

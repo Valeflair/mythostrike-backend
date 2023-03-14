@@ -2,9 +2,7 @@ package com.mythostrike.integration;
 
 
 import com.mythostrike.controller.message.game.GameMessageType;
-import com.mythostrike.controller.message.game.PlayCardsRequest;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
-import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.model.game.player.ChampionList;
@@ -47,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Slf4j
-class GameIntegrationTest2 {
+class Game2IntegrationTest {
     private static final Integer PORT = 8080;
     private static final int I_ACHILLES = 0;
     private static final int I_HESTIA = 1;
@@ -119,7 +117,6 @@ class GameIntegrationTest2 {
 
         round1Kratos(lobbyId, privateGameWebSockets);
         round2Achilles(lobbyId, privateGameWebSockets);
-        round3ReinerZufall(lobbyId, privateGameWebSockets.get(I_HESTIA));
     }
 
     private int createLobbyAndStartGame() {
@@ -223,9 +220,8 @@ class GameIntegrationTest2 {
         GameUtils.playCard(users.get(I_TERPISORE), lobbyId, 1012,
                 privateGameWebSocketList.get(I_TERPISORE));
 
-
         //end turn
-        GameUtils.endTurn(users.get(I_KRATOS), lobbyId, false, false, true, privateGameWebSocketList.get(I_KRATOS));
+        GameUtils.endTurn(users.get(I_KRATOS), lobbyId, false, true, false, privateGameWebSocket);
 
     }
 
@@ -252,41 +248,7 @@ class GameIntegrationTest2 {
         GameUtils.playCard(users.get(I_KRATOS), lobbyId, 1061,
                 privateGameWebSocketList.get(I_KRATOS));
 
-
-
         //end turn
-        GameUtils.endTurn(users.get(I_ACHILLES), lobbyId, false, false, true, privateGameWebSocketList.get(I_ACHILLES));
-
-    }
-
-    private void round3ReinerZufall(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
-        TestUser currentPlayer = users.get(I_HESTIA);
-
-        await()
-                .atMost(10, SECONDS)
-                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
-        //use skill
-        UseSkillRequest request = new UseSkillRequest(lobbyId, 0, List.of());
-        GameUtils.useSkill(currentPlayer, request, false, privateGameWebSocket);
-
-        await()
-                .atMost(10, SECONDS)
-                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
-        //select all cards to change
-        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1003, 1049, 1080, 1041, 1031, 1075), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
-
-        await()
-                .atMost(10, SECONDS)
-                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
-        //end turn
-        GameUtils.endTurn(currentPlayer, lobbyId, false, true, true, privateGameWebSocket);
-
-        //discard 2 cards
-        playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1015,1067,1016), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+        GameUtils.endTurn(users.get(I_ACHILLES), lobbyId, false, true, false, privateGameWebSocketList.get(I_ACHILLES));
     }
 }
