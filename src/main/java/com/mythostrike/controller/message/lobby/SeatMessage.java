@@ -1,6 +1,5 @@
 package com.mythostrike.controller.message.lobby;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -46,15 +45,6 @@ public class SeatMessage {
     public SeatMessage(Identity identity) {
         this.player = null;
         this.identity = identity;
-    }
-
-    @JsonGetter("identity")
-    private String identityToString() {
-        if (identity.isIncognito()) {
-            return Identity.NONE.getName();
-        } else {
-            return identity.getName();
-        }
     }
 
     @Override

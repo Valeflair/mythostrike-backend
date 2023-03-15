@@ -2,6 +2,7 @@ package com.mythostrike.model.lobby;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.mythostrike.model.game.management.GameManager;
@@ -110,6 +111,14 @@ public enum Identity {
             }
         }
         return true;
+    }
+
+    @JsonGetter("name")
+    private String getNameWithIncognito() {
+        if (isIncognito()) {
+            return INCOGNITO.name;
+        }
+        return name;
     }
 
     @Override

@@ -134,14 +134,17 @@ class LobbyIntegrationTest {
         expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
         assertNotNull(expected);
 
+        //start game not owner
+        LobbyUtils.startGame(users.get(1), expected.id(), true, privateWebSockets);
 
+        //start game not enough players
+        LobbyUtils.startGame(users.get(0), expected.id(), true, privateWebSockets);
 
-
-
-
+        //add Bot
+        expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
+        assertNotNull(expected);
 
         //start the game
-        //LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);
-
+        LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);
     }
 }
