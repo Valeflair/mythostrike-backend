@@ -48,8 +48,6 @@ public enum Identity {
     }
 
     @Getter
-    @JsonValue
-    @JsonUnwrapped
     private final String name;
     @Getter
     private final boolean incognito;
@@ -113,6 +111,8 @@ public enum Identity {
         return true;
     }
 
+    @JsonValue
+    @JsonUnwrapped
     @JsonGetter("name")
     private String getNameWithIncognito() {
         if (isIncognito()) {
