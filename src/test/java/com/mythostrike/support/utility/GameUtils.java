@@ -1,7 +1,13 @@
 package com.mythostrike.support.utility;
 
 
-import com.mythostrike.controller.message.game.*;
+import com.mythostrike.controller.message.game.CardMoveMessage;
+import com.mythostrike.controller.message.game.GameMessage;
+import com.mythostrike.controller.message.game.GameMessageType;
+import com.mythostrike.controller.message.game.PlayCardsRequest;
+import com.mythostrike.controller.message.game.PlayerData;
+import com.mythostrike.controller.message.game.SelectChampionRequest;
+import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.support.StompFrameHandlerGame;
@@ -12,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -25,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 public final class GameUtils {
 
-    public static final int WAIT_FOR_HIGHLIGHT_MESSAGE = 5;
+    private static final int WAIT_FOR_WEBSOCKET = 5;
 
 
     private GameUtils() {
@@ -70,7 +75,7 @@ public final class GameUtils {
                 .statusCode(200);
 
         await()
-            .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> {
                     //check if game update message is received
                     assertFalse(publicGameWebSocket.getMessages().isEmpty());
@@ -125,7 +130,7 @@ public final class GameUtils {
         }
 
         await()
-            .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> {
                 //check if game update message is received
                 assertFalse(privateGameWebSocket.getMessages().isEmpty());
@@ -167,7 +172,7 @@ public final class GameUtils {
                 .statusCode(200);
 
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(() -> {
                     //check if websocket message is received
                     assertFalse(publicGameWebSocket.getMessages().isEmpty());
@@ -206,7 +211,7 @@ public final class GameUtils {
 
         if(hasToCleanTable) {
             await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(() -> {
                     //check if card move message from table pile to discard pile is received
                     assertFalse(privateGameWebSocket.getMessages().isEmpty());
@@ -222,7 +227,7 @@ public final class GameUtils {
         }
         if (hasToDiscardCards) {
             await()
-                    .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                    .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                     .untilAsserted(() -> {
                         //check if game update message is received
                         assertFalse(privateGameWebSocket.getMessages().isEmpty());
@@ -237,7 +242,7 @@ public final class GameUtils {
 
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -248,7 +253,7 @@ public final class GameUtils {
     public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -259,7 +264,7 @@ public final class GameUtils {
     public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -270,7 +275,7 @@ public final class GameUtils {
     public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
@@ -281,7 +286,7 @@ public final class GameUtils {
     public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId, StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(
                         () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 

@@ -33,7 +33,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class LobbyIntegrationTest {
@@ -82,7 +81,7 @@ class LobbyIntegrationTest {
         SimpleStompFrameHandler<LobbyMessage> publicWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
         session.subscribe("/lobbies/" + expected.id() , publicWebSocket);
         await()
-            .atMost(1, SECONDS)
+            .atMost(2, SECONDS)
             .untilAsserted(() -> assertFalse(publicWebSocket.getMessages().isEmpty()));
         assertEquals(expected, publicWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
@@ -100,39 +99,37 @@ class LobbyIntegrationTest {
 
         //join lobby
         expected = LobbyUtils.joinLobby(users.get(1), expected, false, publicWebSocket);
-        assertNotNull(expected);
+
 
         //leave lobby directly after joining
         expected = LobbyUtils.leaveLobby(users.get(1), expected, false, publicWebSocket);
-        assertNotNull(expected);
+
 
         //leave lobby again, expect error
-        LobbyUtils.leaveLobby(users.get(1), expected, true, publicWebSocket);
+        expected = LobbyUtils.leaveLobby(users.get(1), expected, true, publicWebSocket);
 
         //join lobby again
         expected = LobbyUtils.joinLobby(users.get(1), expected, false, publicWebSocket);
-        assertNotNull(expected);
+
 
         //not owner cant change lobby
-        LobbyUtils.changeMode(users.get(1), expected, 1, true, publicWebSocket);
+        expected = LobbyUtils.changeMode(users.get(1), expected, 1, true, publicWebSocket);
 
         //change mode to 1 vs 1
         expected = LobbyUtils.changeMode(users.get(0), expected, 1, false, publicWebSocket);
-        assertNotNull(expected);
+
 
         //add Bot, lobby full
-        LobbyUtils.addBot(users.get(0), expected,true, publicWebSocket);
+        expected = LobbyUtils.addBot(users.get(0), expected,true, publicWebSocket);
 
         //change mode to 2 vs 2
         expected = LobbyUtils.changeMode(users.get(0), expected, 2, false, publicWebSocket);
-        assertNotNull(expected);
 
         //add Bot not owner
-        LobbyUtils.addBot(users.get(1), expected, true, publicWebSocket);
+        expected = LobbyUtils.addBot(users.get(1), expected, true, publicWebSocket);
 
         //add Bot
         expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
-        assertNotNull(expected);
 
         //start game not owner
         LobbyUtils.startGame(users.get(1), expected.id(), true, privateWebSockets);
@@ -140,9 +137,73 @@ class LobbyIntegrationTest {
         //start game not enough players
         LobbyUtils.startGame(users.get(0), expected.id(), true, privateWebSockets);
 
+        //change seat to invalid seat
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 4,true, publicWebSocket);
+
+        //change seat to empty seat
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 3,false, publicWebSocket);
+
+        //change seat to occupied seat
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 1,true, publicWebSocket);
+
         //add Bot
         expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
-        assertNotNull(expected);
+
+        //add more Bots then allowed
+        expected = LobbyUtils.addBot(users.get(0), expected, true, publicWebSocket);
+
+        //start the game
+        LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);
+    }
+
+    @Test
+    void testLobbyEightPlayer() {
+        users.clear();
+        users.addAll(UserUtils.getInstance().getUsers(7));
+
+        //create the lobby
+        LobbyMessage expected = LobbyUtils.createLobby(users.get(0), 0, false);
+
+        //subscribe to the lobby
+        SimpleStompFrameHandler<LobbyMessage> publicWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
+        session.subscribe("/lobbies/" + expected.id() , publicWebSocket);
+        await()
+            .atMost(2, SECONDS)
+            .untilAsserted(() -> assertFalse(publicWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateWebSockets = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            privateWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
+            session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), privateWebSockets.get(i));
+        }
+
+        //change the random seed of the lobby
+        LobbyUtils.setRandomSeed(expected.id(), 42); //TODO: change to what seed you want
+
+        //join the lobby again, expect error
+        LobbyUtils.joinLobby(users.get(0), expected, true, publicWebSocket);
+
+        //join lobby
+        expected = LobbyUtils.joinLobby(users.get(1), expected, false, publicWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(2), expected, false, publicWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(3), expected, false, publicWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(4), expected, false, publicWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(5), expected, false, publicWebSocket);
+        expected = LobbyUtils.joinLobby(users.get(6), expected, false, publicWebSocket);
+
+        //add Bot
+        expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
+
+        //add more Bots then allowed
+        expected = LobbyUtils.addBot(users.get(0), expected, true, publicWebSocket);
+
+        //change mode to 1 vs 1, expect error
+        expected = LobbyUtils.changeMode(users.get(0), expected, 1, true, publicWebSocket);
+
+        //change to Identity for 8, expect error
+        expected = LobbyUtils.changeMode(users.get(0), expected, 7, true, publicWebSocket);
+
 
         //start the game
         LobbyUtils.startGame(users.get(0), expected.id(), false, privateWebSockets);

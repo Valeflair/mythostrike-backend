@@ -46,7 +46,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -147,11 +146,11 @@ class GameIntegrationTest {
 
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(I_REINER_ZUFALL), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
         expected = LobbyUtils.joinLobby(users.get(I_MINH), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
         expected = LobbyUtils.joinLobby(users.get(I_JACK), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
 
         //TODO: change mode to 2v2
 

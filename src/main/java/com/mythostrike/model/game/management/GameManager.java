@@ -55,7 +55,8 @@ public class GameManager {
     //player start up with 4 cards and draw 2 cards at each turn start
     private static final int CARD_COUNT_START_UP = 4;
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
-    public static final int NO_SKILL_SELECTED = -1;
+    private static final int NO_SKILL_SELECTED = -1;
+    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = 100;
     @Getter
     private final Game game;
     @Getter
@@ -211,6 +212,12 @@ public class GameManager {
      * After that the first turn is started and to the first player a highlight message is sent.
      */
     public void allPlayersConnected() {
+        //frontend needs a bit of time to load the game for the last user
+        try {
+            Thread.sleep(SLEEP_BEFORE_CARD_DISTRIBUTION);
+        } catch (InterruptedException e) {
+            log.warn("sleep was interrupted");
+        }
         submitRunnable(this::cardDistribution);
     }
 
@@ -401,7 +408,7 @@ public class GameManager {
         if (cards.size() == 1) {
             int index = lastPickRequest.getHighlightMessage().cardIds().indexOf(cardIds.get(0));
             if (!isTargetSelectionValid(index, lastPickRequest.getHighlightMessage().cardPlayerConditions(), targets)) {
-                throw new IllegalArgumentException("Selected card is not allowed for this player");
+                throw new IllegalArgumentException("Selected targets is not allowed for this card");
             }
 
             lastPickRequest.setSelectedPlayers(targetPlayers);
