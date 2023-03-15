@@ -46,10 +46,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 class GameIntegrationTest3 {
     private static final Integer PORT = 8080;
-    public static final int I_UNO = 0;
-    public static final int I_DOS = 1;
-    public static final int I_TRES = 2;
-    public static final int I_CUATRO = 3;
+    private static final int I_UNO = 0;
+    private static final int I_DOS = 1;
+    private static final int I_TRES = 2;
+    private static final int I_CUATRO = 3;
     public static final int I_BOT = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;

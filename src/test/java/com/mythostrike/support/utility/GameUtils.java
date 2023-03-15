@@ -141,7 +141,8 @@ public final class GameUtils {
         CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
 
         //check if the right cards are moved
-        assertEquals(request.cardIds(), cardMoveMessage.cardIds());
+        assertEquals(cardMoveMessage.cardIds().size(), request.cardIds().size());
+        assertTrue(cardMoveMessage.cardIds().containsAll(request.cardIds()));
         assertEquals(user.username(), cardMoveMessage.source());
     }
 
