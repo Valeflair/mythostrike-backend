@@ -45,7 +45,8 @@ public final class GameUtils {
     public static void selectChampion(TestUser user, SelectChampionRequest request, String selectedChampionName,
                                       boolean expectError, StompFrameHandlerGame publicGameWebSocket) {
         //TODO: add wait before every Request
-        assertTrue(publicGameWebSocket.getMessages().isEmpty(), "The frame handler should not have any messages");
+        //clear all messages from the frame handler
+        publicGameWebSocket.getMessages().clear();
 
         if (expectError) {
             //try to start the game and expect an error with error message

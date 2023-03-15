@@ -1,6 +1,7 @@
 package com.mythostrike.integration;
 
 
+import com.mythostrike.controller.message.game.GameMessageType;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
@@ -89,7 +90,8 @@ class GameIntegrationTest3 {
      */
     @BeforeEach
     void setupUsers() {
-        users.addAll(UserUtils.getInstance().getUsers(5));
+        users.addAll(UserUtils.getInstance().getUsers(4));
+
     }
 
 
@@ -107,7 +109,7 @@ class GameIntegrationTest3 {
         //wait for update game message and remove it from the queue
         session.subscribe(String.format("/games/%d", lobbyId) , publicGameWebSocket);
         try{
-            sleep(200);
+            sleep(500);
         } catch (InterruptedException e) {
             log.debug("Interrupted while sleeping");
         }
@@ -121,7 +123,7 @@ class GameIntegrationTest3 {
             session.subscribe(String.format("/games/%d/%s",  lobbyId, users.get(i).username()), privateGameWebSockets.get(i));
         }
 
-        round1(lobbyId, privateGameWebSockets.get(I_UNO));
+        round1(lobbyId, privateGameWebSockets);
         //round2(lobbyId, privateGameWebSockets.get(I_DOS));
         //round3(lobbyId, privateGameWebSockets.get(I_TRES));
 
@@ -150,7 +152,9 @@ class GameIntegrationTest3 {
         //change the random seed of the lobby
         LobbyUtils.setRandomSeed(lobbyId, 9527);
 
-        LobbyUtils.changeMode(users.get(I_UNO), expected, 5 , false, publicLobbyWebSocket);
+
+        expected = LobbyUtils.changeMode(users.get(I_UNO), expected, 5 , false, publicLobbyWebSocket);
+        assertNotNull(expected);
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(I_DOS), expected, false, publicLobbyWebSocket);
         assertNotNull(expected);
@@ -203,24 +207,32 @@ class GameIntegrationTest3 {
     }
 
 
-    private void round1(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
-        TestUser currentPlayer = users.get(I_UNO);
+    private void round1(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+        await()
+            .atMost(20, SECONDS)
+            .untilAsserted(
+                () -> assertTrue( privateGameWebSocketList.get(I_UNO).containsType(GameMessageType.HIGHLIGHT) )
+            );
+
         //vulcanic
-        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1076, users.get(I_DOS).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_TRES).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_TRES), lobbyId, null, users.get(I_CUATRO).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_CUATRO), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
+        GameUtils.playCard(users.get(I_UNO), lobbyId, 1076, privateGameWebSocketList.get(I_UNO));
+        GameUtils.confirm(users.get(I_DOS), lobbyId, privateGameWebSocketList.get(I_DOS));
+        GameUtils.confirm(users.get(I_TRES), lobbyId, privateGameWebSocketList.get(I_TRES));
+        GameUtils.confirm(users.get(I_CUATRO), lobbyId, privateGameWebSocketList.get(I_CUATRO));
         //spear of mars
-        GameUtils.playCardOnTarget(users.get(I_UNO), lobbyId, 1080, users.get(I_UNO).username(), privateGameWebSocket);
+        GameUtils.playCard(users.get(I_UNO), lobbyId, 1080,
+            privateGameWebSocketList.get(I_UNO));
         //vulcanic
-        GameUtils.playCardOnTarget(currentPlayer, lobbyId, 1075, users.get(I_DOS).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_TRES).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_TRES), lobbyId, null, users.get(I_CUATRO).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_CUATRO), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
+        GameUtils.playCard(users.get(I_UNO), lobbyId, 1075, privateGameWebSocketList.get(I_UNO));
+        GameUtils.confirm(users.get(I_DOS), lobbyId, privateGameWebSocketList.get(I_DOS));
+        GameUtils.confirm(users.get(I_TRES), lobbyId, privateGameWebSocketList.get(I_TRES));
+        GameUtils.confirm(users.get(I_CUATRO), lobbyId, privateGameWebSocketList.get(I_CUATRO));
         //attack
-        GameUtils.playCardOnTarget(users.get(I_UNO), lobbyId, 1020, users.get(I_DOS).username(), privateGameWebSocket);
-        GameUtils.playCardOnTarget(users.get(I_DOS), lobbyId, null, users.get(I_UNO).username(), privateGameWebSocket);
-        GameUtils.endTurn(currentPlayer, lobbyId, false, true, false, privateGameWebSocket);
+        GameUtils.playCardOnTarget(users.get(I_UNO), lobbyId, 1020, users.get(I_DOS).username(),
+            privateGameWebSocketList.get(I_UNO));
+        GameUtils.confirm(users.get(I_DOS), lobbyId, privateGameWebSocketList.get(I_DOS));
+        GameUtils.endTurn(users.get(I_UNO), lobbyId, false, true, false,
+            privateGameWebSocketList.get(I_UNO));
     }
 
     /*

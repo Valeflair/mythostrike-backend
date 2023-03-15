@@ -19,7 +19,7 @@ import java.util.Random;
 
 @Getter
 public class Lobby {
-    private static final int SEED_NOT_SET = 9527;
+    private static final int SEED_NOT_SET = -1;
     private final int id;
     private final UserService userService;
     private List<Seat> seats;
@@ -50,7 +50,7 @@ public class Lobby {
             seats.add(new Seat(i, null, identities.get(i)));
         }
         seats.get(0).setPlayer(this.owner);
-        this.randomSeed = 300;
+        this.randomSeed = 9527;
     }
 
     private boolean isFull() {
