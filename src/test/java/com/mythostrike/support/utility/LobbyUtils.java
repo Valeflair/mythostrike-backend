@@ -45,10 +45,15 @@ public final class LobbyUtils {
         List<SeatMessage> seats = new ArrayList<>(mode.maxPlayer());
         List<Identity> identities = mode.identityList();
         for (int i = 0; i < mode.maxPlayer(); i++) {
+            Identity identity = identities.get(i);
+            if (identity.isIncognito()) {
+                identity = Identity.INCOGNITO;
+            }
+
             if (i > players.size() - 1 || players.get(i) == null) {
-                seats.add(new SeatMessage(identities.get(i)));
+                seats.add(new SeatMessage(identity));
             } else {
-                seats.add(new SeatMessage(players.get(i).username(), players.get(i).avatarNumber(), identities.get(i)));
+                seats.add(new SeatMessage(players.get(i).username(), players.get(i).avatarNumber(), identity));
             }
         }
         return seats;
@@ -58,10 +63,15 @@ public final class LobbyUtils {
         List<Seat> seats = new ArrayList<>(mode.maxPlayer());
         List<Identity> identities = mode.identityList();
         for (int i = 0; i < mode.maxPlayer(); i++) {
+            Identity identity = identities.get(i);
+            if (identity.isIncognito()) {
+                identity = Identity.INCOGNITO;
+            }
+
             if (i > users.size() - 1) {
-                seats.add(new Seat(i, null, identities.get(i)));
+                seats.add(new Seat(i, null, identity));
             } else {
-                seats.add(new Seat(i, new Human(users.get(i), userService), identities.get(i)));
+                seats.add(new Seat(i, new Human(users.get(i), userService), identity));
             }
         }
         return seats;
