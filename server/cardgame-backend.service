@@ -1,5 +1,5 @@
 [Unit]
-Description=cardgame2 backend
+Description=cardgame backend
 After=network.target
 
 [Service]

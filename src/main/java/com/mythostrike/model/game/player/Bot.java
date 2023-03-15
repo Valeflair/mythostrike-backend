@@ -149,8 +149,6 @@ public abstract class Bot extends Player {
                 if (!list.isEmpty()) {
                     playerCondition = list.get(message.skillIds().indexOf(pickedSkillId));
                 }
-                //TODO: change to real skillId not index
-                pickedSkillId = message.skillIds().indexOf(pickedSkillId);
             }
             selectedSkill = true;
             //select nothing if possible

@@ -79,7 +79,7 @@ public class CardManager {
         Card judge = peekTopDrawPile(1).get(0);
         moveCard(new CardMoveHandle(gameManager, "judge", null, null, gameManager.getGame().getDrawPile(),
             gameManager.getGame().getTablePile(), List.of(judge)));
-        //TODO:think if sleep for judge is important so that player can see the card well before it get into discard pile
+
         try {
             sleep(JUDGE_PAUSE_ON_TABLE_PILE);
         } catch (InterruptedException e) {

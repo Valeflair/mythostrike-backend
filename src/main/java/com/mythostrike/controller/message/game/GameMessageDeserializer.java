@@ -33,7 +33,7 @@ class GameMessageDeserializer extends JsonDeserializer<GameMessage> {
                 message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), LogMessage.class));
             }
             case GAME_END -> {
-                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), PlayerResult.class));
+                message = new GameMessage(type, objectMapper.treeToValue(node.get("payload"), PlayerGameResult.class));
             }
             default -> throw new IllegalStateException("Unexpected value: " + type);
         }
