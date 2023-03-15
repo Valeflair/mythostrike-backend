@@ -451,8 +451,12 @@ public class GameManager {
 
         //check if the player selected a valid skill
         List<Integer> skillIds = highlightMessage.skillIds();
-        if (skillId < 0 || highlightMessage.skillCount().contains(1) || !skillIds.contains(skillId) ) {
-            throw new IllegalArgumentException("There is no skill with this id " + skillId);
+        if (skillId < 0) throw new IllegalArgumentException(String.format("Skill id '%d' is not allowed", skillId));
+        if ( !highlightMessage.skillCount().contains(1) ) {
+            throw new IllegalArgumentException("You can't play a skill");
+        }
+        if ( !skillIds.contains(skillId) ) {
+            throw new IllegalArgumentException("You dont have the skill with this id " + skillId);
         }
         int skillIndex = skillIds.indexOf(skillId);
 
