@@ -35,6 +35,7 @@ public class PickCardToPLay extends Activity {
 
     @Override
     public void use() {
+        gameManager.cleanTable();
         Player player = gameManager.getGame().getCurrentPlayer();
         CardAskHandle cardAskHandle = new CardAskHandle(gameManager, "ask for play card", player,
             List.of(), player.getHandCards(), gameManager.getGame().getTablePile(), 1,
