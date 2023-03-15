@@ -1,5 +1,6 @@
 package com.mythostrike.controller.message.game;
 
+import com.mythostrike.model.game.activity.cards.CardList;
 import lombok.Builder;
 
 import java.util.ArrayList;
@@ -68,5 +69,20 @@ public record HighlightMessage(List<Integer> cardIds,
             this.skillCount = new ArrayList<>();
             return this;
         }
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("HighlightMessage{");
+        sb.append("cardIds=").append(cardIds.stream().map(id -> CardList.getCardList().getCard(id)).toList());
+        sb.append(", cardCount=").append(cardCount);
+        sb.append(", cardPlayerConditions=").append(cardPlayerConditions);
+        sb.append(", skillIds=").append(skillIds);
+        sb.append(", skillCount=").append(skillCount);
+        sb.append(", skillPlayerConditions=").append(skillPlayerConditions);
+        sb.append(", reason='").append(reason).append('\'');
+        sb.append(", activateEndTurn=").append(activateEndTurn);
+        sb.append('}');
+        return sb.toString();
     }
 }

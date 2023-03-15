@@ -89,6 +89,6 @@ public abstract class Card extends Activity {
 
     @Override
     public String toString() {
-        return String.format("%s (%s%d)", name, symbol.getShort(), point);
+        return String.format("%d|%s (%s%d)", id, name, symbol.getShort(), point);
     }
 }
