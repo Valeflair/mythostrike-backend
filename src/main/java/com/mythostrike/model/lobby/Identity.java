@@ -47,7 +47,6 @@ public enum Identity {
         NONE.hasToDie = List.of(NONE);
     }
 
-    @Getter
     private final String name;
     @Getter
     private final boolean incognito;
@@ -115,7 +114,7 @@ public enum Identity {
     @JsonUnwrapped
     @JsonGetter("name")
     private String getNameWithIncognito() {
-        if (isIncognito()) {
+        if (incognito) {
             return INCOGNITO.name;
         }
         return name;

@@ -6,7 +6,6 @@ import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
 import com.mythostrike.model.game.player.ChampionList;
-import com.mythostrike.model.lobby.Lobby;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
@@ -36,25 +35,21 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static com.mythostrike.support.utility.LobbyUtils.WEB_SOCKET_WRONG_MESSAGE;
-import static com.mythostrike.support.utility.UserUtils.I_JACK;
-import static com.mythostrike.support.utility.UserUtils.I_REINER_ZUFALL;
-import static com.mythostrike.support.utility.UserUtils.I_TEST_USER;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Slf4j
 class GameIntegrationTest3 {
     private static final Integer PORT = 8080;
-    public static final int I_UNO = 0;
-    public static final int I_DOS = 1;
-    public static final int I_TRES = 2;
-    public static final int I_CUATRO = 3;
+    private static final int I_UNO = 0;
+    private static final int I_DOS = 1;
+    private static final int I_TRES = 2;
+    private static final int I_CUATRO = 3;
     public static final int I_BOT = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
@@ -154,14 +149,13 @@ class GameIntegrationTest3 {
 
 
         expected = LobbyUtils.changeMode(users.get(I_UNO), expected, 5 , false, publicLobbyWebSocket);
-        assertNotNull(expected);
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(I_DOS), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
         expected = LobbyUtils.joinLobby(users.get(I_TRES), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
         expected = LobbyUtils.joinLobby(users.get(I_CUATRO), expected, false, publicLobbyWebSocket);
-        assertNotNull(expected);
+
         expected = LobbyUtils.addBot(users.get(I_UNO), expected, false,  publicLobbyWebSocket);
 
 

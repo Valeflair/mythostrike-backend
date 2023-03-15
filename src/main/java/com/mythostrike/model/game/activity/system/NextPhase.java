@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.activity.system;
 
+import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.model.game.Phase;
 import com.mythostrike.model.game.activity.SystemAction;
 import com.mythostrike.model.game.activity.cards.Card;
@@ -28,7 +29,7 @@ public class NextPhase extends SystemAction {
 
     public static final String NAME = NextPhase.class.getSimpleName();
     public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
-    public static final int DELAY_BEFORE_SWITCH_PLAYER = 500;
+    public static final int DELAY_BEFORE_SWITCH_PLAYER = MythostrikeBackendApplication.TEST_MODE ? 0 : 500;
 
     public NextPhase(GameManager gameManager) {
         super(NAME, DESCRIPTION, gameManager);

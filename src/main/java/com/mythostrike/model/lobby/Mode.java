@@ -1,10 +1,8 @@
 package com.mythostrike.model.lobby;
 
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,20 +15,6 @@ public record Mode(int id, String name, String description, int minPlayer, int m
 
     public @UnmodifiableView List<Identity> getIdentityList() {
         return Collections.unmodifiableList(identityList);
-    }
-
-    @JsonGetter("identityList")
-    private List<String> getIdentityListToString() {
-        List<String> result = new ArrayList<>();
-        for (Identity identity : this.identityList) {
-            //when the identity is incognito, the player shouldn't know about it for now.
-            if (identity.isIncognito()) {
-                result.add(Identity.NONE.toString());
-            } else {
-                result.add(identity.toString());
-            }
-        }
-        return result;
     }
 
     @Override

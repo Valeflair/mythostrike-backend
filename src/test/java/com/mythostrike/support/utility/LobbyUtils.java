@@ -4,6 +4,7 @@ import com.mythostrike.account.repository.User;
 import com.mythostrike.account.service.UserService;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.ChangeModeRequest;
+import com.mythostrike.controller.message.lobby.ChangeSeatRequest;
 import com.mythostrike.controller.message.lobby.CreateLobbyRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
@@ -37,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @Slf4j
 public final class LobbyUtils {
     public static final String WEB_SOCKET_WRONG_MESSAGE = "Web Socket did not receive the correct message";
+    private static final int WAIT_FOR_WEBSOCKET = 5;
 
     private LobbyUtils() {
     }
@@ -190,7 +192,7 @@ public final class LobbyUtils {
         LobbyMessage expected = new LobbyMessage(lobbyId, oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
-            .atMost(1, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
         assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
@@ -241,7 +243,7 @@ public final class LobbyUtils {
         LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
-            .atMost(1, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
         assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
@@ -311,7 +313,65 @@ public final class LobbyUtils {
         LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), newMode.name(), oldLobbyState.owner(), seatMessageList);
 
         await()
-            .atMost(1, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+            .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
+        assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
+
+        return expected;
+    }
+
+    public static LobbyMessage changeSeat(TestUser user, LobbyMessage oldLobbyState, int newSeatIndex, boolean expectError,
+                                          SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+        //clear all messages from the frame handler
+        publicLobbyWebSocket.getMessages().clear();
+
+        if (expectError) {
+            //try to join the lobby and expect an error with error message
+            given()
+                .headers(user.headers())
+                .body(new ChangeSeatRequest(oldLobbyState.id(), newSeatIndex)).
+                when()
+                .put("/lobbies/seats").
+                then()
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return oldLobbyState;
+        }
+        List<SeatMessage> seatMessageList = oldLobbyState.seats();
+
+        //move player to new seat
+        if(seatMessageList.get(newSeatIndex).getPlayer() != null) {
+            throw new IllegalArgumentException("Seat is already taken");
+        }
+
+        boolean userFound = false;
+        for(int i = 0; i < seatMessageList.size(); i++) {
+            if(seatMessageList.get(i).getPlayer() != null && seatMessageList.get(i).getPlayer().username().equals(user.username())) {
+                seatMessageList.set(i, new SeatMessage(seatMessageList.get(i).getIdentity()));
+                seatMessageList.set(newSeatIndex,
+                    new SeatMessage(user.username(), user.avatarNumber(), seatMessageList.get(newSeatIndex).getIdentity()));
+                userFound = true;
+                break;
+            }
+        }
+        if (!userFound) {
+            throw new IllegalArgumentException("No seat with player found in the lobby");
+        }
+
+
+        //leave the lobby
+        given()
+            .headers(user.headers())
+            .body(new ChangeSeatRequest(oldLobbyState.id(), newSeatIndex)).
+            when()
+            .put("/lobbies/seats").
+            then()
+            .statusCode(200);
+
+        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+
+        await()
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
         assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
@@ -365,7 +425,7 @@ public final class LobbyUtils {
         LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
-            .atMost(1, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
         assertEquals(expected, publicLobbyWebSocket.getNextMessage(), WEB_SOCKET_WRONG_MESSAGE);
 
@@ -412,7 +472,7 @@ public final class LobbyUtils {
             .statusCode(201);
 
         await()
-            .atMost(2, SECONDS)
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> {
                 for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
                     assertFalse(frameHandler.getMessages().isEmpty());

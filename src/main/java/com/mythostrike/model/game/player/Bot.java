@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.player;
 
+import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
@@ -19,7 +20,7 @@ import static java.lang.Thread.sleep;
 @Slf4j
 public abstract class Bot extends Player {
 
-    protected static final int DELAY_BEFORE_ACTION = 500;
+    protected static final int DELAY_BEFORE_ACTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 500;
 
     protected static final int NO_SKILL_PICKED = -1;
 

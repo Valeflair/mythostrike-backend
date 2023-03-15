@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.management;
 
+import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.controller.message.game.CardMoveMessage;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
@@ -24,8 +25,9 @@ import static java.lang.Thread.sleep;
 
 public class CardManager {
 
-    public static final int JUDGE_PAUSE_ON_TABLE_PILE = 1000;
-    public static final int CARD_MOVE_PAUSE_AFTER_MOVEMENT = 1000;
+
+    public static final int JUDGE_PAUSE_ON_TABLE_PILE = MythostrikeBackendApplication.TEST_MODE ? 0 : 1000;
+    public static final int CARD_MOVE_PAUSE_AFTER_MOVEMENT = MythostrikeBackendApplication.TEST_MODE ? 0 : 1000;
 
     private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
         = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
