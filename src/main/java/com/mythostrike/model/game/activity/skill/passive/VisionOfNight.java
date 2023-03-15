@@ -47,7 +47,6 @@ public class VisionOfNight extends PassiveSkill {
     public void activate() {
         GameManager gameManager = phaseHandle.getGameManager();
 
-        //TODO: make with judge???
         List<Card> cardsToJudge = Collections.unmodifiableList(gameManager.getCardManager().peekTopDrawPile(2));
 
         List<Card> blackCards = new ArrayList<>();

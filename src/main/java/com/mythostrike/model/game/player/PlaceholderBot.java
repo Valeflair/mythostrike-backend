@@ -63,12 +63,12 @@ public class PlaceholderBot extends Bot {
             return NO_SKILL_PICKED;
         }
 
-        List<Integer> tempCardCount = new ArrayList<>(skillCount);
+        List<Integer> tempSkillCount = new ArrayList<>(skillCount);
 
         //select an amount possible for the cardIds
         int amount = 0;
         do {
-            amount = selectRandomValue(tempCardCount, true);
+            amount = selectRandomValue(tempSkillCount, true);
         } while (amount > skillIds.size());
 
         if (amount < 0 || amount > 1) {

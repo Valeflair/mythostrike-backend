@@ -49,7 +49,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class GameManager {
 
-    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 100;
+    private static final int SLEEP_BEFORE_CARD_DISTRIBUTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 100;
     //player has 3 champions to pick in game, god-king has 5
     private static final int PICK_CHAMPION_COUNT = 3;
     private static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
@@ -436,7 +436,7 @@ public class GameManager {
 
         List<Integer> skillIds = lastPickRequest.getHighlightMessage().skillIds();
         if (skillId < 0 || !skillIds.contains(skillId)) {
-            throw new IllegalArgumentException("There is no skill with this id");
+            throw new IllegalArgumentException("There is no skill with this id " + skillId);
         }
         int skillIndex = skillIds.indexOf(skillId);
 
