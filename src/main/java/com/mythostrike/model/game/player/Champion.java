@@ -30,4 +30,11 @@ public class Champion {
             activeSkills.get(i).initialize(i);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Champion{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

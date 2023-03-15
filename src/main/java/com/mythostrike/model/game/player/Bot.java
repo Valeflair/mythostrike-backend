@@ -224,9 +224,4 @@ public abstract class Bot extends Player {
 
         return this.getUsername().equals(bot.getUsername()) && Objects.equals(gameManager, bot.gameManager);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this);
-    }
 }

@@ -216,6 +216,20 @@ public abstract class Player {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this);
+        return Objects.hash(username, avatarNumber, identity, champion);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" + "username='" + username + '\'' +
+                ", handCards=" + handCards +
+                ", equipment=" + equipment +
+                ", delayedEffect=" + delayedEffect +
+                ", champion=" + champion +
+                ", currentHp=" + currentHp +
+                ", maxHp=" + maxHp +
+                ", identity=" + identity +
+                ", isAlive=" + isAlive +
+                '}';
     }
 }

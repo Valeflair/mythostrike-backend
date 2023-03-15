@@ -95,6 +95,13 @@ public class CardSpace {
 
     @Override
     public int hashCode() {
-        return Objects.hash(cards);
+        return Objects.hash(name, cards, type);
+    }
+
+    @Override
+    public String toString() {
+        return "CardSpace{" + "cards=" + cards +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

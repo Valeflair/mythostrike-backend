@@ -57,7 +57,7 @@ public final class UserUtils {
         return instance;
     }
 
-    private static TestUser createUser(String username, String password) {
+    public static TestUser createUser(String username, String password) {
         //login user to get jwt Token
         Response response =
             given()

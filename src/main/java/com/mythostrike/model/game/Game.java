@@ -66,4 +66,15 @@ public class Game {
         players.remove(player);
         return players;
     }
+
+    @Override
+    public String toString() {
+        return "Game{" + "allPlayers=" + allPlayers +
+                ", mode=" + mode +
+                ", allCards=" + allCards +
+                ", drawPile=" + drawPile +
+                ", discardPile=" + discardPile +
+                ", tablePile=" + tablePile +
+                '}';
+    }
 }

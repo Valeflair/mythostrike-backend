@@ -25,6 +25,6 @@ public record LobbyMessage(int id, String mode, String owner, List<SeatMessage> 
 
     @Override
     public int hashCode() {
-        return Objects.hash(this);
+        return Objects.hash(id, owner);
     }
 }

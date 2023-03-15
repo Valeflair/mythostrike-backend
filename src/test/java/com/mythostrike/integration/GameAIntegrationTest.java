@@ -153,13 +153,8 @@ class GameAIntegrationTest {
 
         expected = LobbyUtils.joinLobby(users.get(I_JACK), expected, false, publicLobbyWebSocket);
 
-
-        //TODO: change mode to 2v2
-
         //start the game
         LobbyUtils.startGame(users.get(I_TEST_USER), lobbyId, false, privateLobbyWebSockets);
-
-        //TODO: check if for each user the champion selection message is received
         return lobbyId;
     }
 
@@ -194,13 +189,10 @@ class GameAIntegrationTest {
             .atMost(10, SECONDS)
             .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
-        //TODO: play game and check if everything works. Also check once if not ok moves get an error message
 
         //play a card
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1082), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
-
-        //TODO: check if equipment is played
+        GameUtils.requestPlayCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
 
         //wait for the next pick request players highlight message
         await()
@@ -213,7 +205,7 @@ class GameAIntegrationTest {
 
         //discard a card
         playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1057), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+        GameUtils.requestPlayCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
     }
 
     private void round2TestUser(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
@@ -228,7 +220,7 @@ class GameAIntegrationTest {
 
         //discard 2 cards
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1087, 1021), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+        GameUtils.requestPlayCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
     }
 
     private void round3ReinerZufall(int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
@@ -239,8 +231,7 @@ class GameAIntegrationTest {
             .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
         //use skill
-        UseSkillRequest request = new UseSkillRequest(lobbyId, 0, List.of());
-        GameUtils.useSkill(currentPlayer, request, false, privateGameWebSocket);
+        GameUtils.useSkill(currentPlayer, lobbyId, 0, privateGameWebSocket);
 
         await()
             .atMost(10, SECONDS)
@@ -249,7 +240,7 @@ class GameAIntegrationTest {
         //select all cards to change
         PlayCardsRequest playCardsRequest =
             new PlayCardsRequest(lobbyId, List.of(1003, 1049, 1080, 1041, 1031, 1075), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+        GameUtils.requestPlayCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
 
         await()
             .atMost(10, SECONDS)
@@ -260,6 +251,6 @@ class GameAIntegrationTest {
 
         //discard 2 cards
         playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1015, 1067, 1016), List.of());
-        GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
+        GameUtils.requestPlayCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
     }
 }

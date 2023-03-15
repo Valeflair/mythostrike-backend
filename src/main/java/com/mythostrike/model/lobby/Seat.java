@@ -32,6 +32,6 @@ public class Seat {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this);
+        return Objects.hash(id, player, identity);
     }
 }

@@ -10,14 +10,17 @@ import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.LobbyIdRequest;
 import com.mythostrike.model.game.activity.cards.CardSpaceType;
+import com.mythostrike.model.lobby.LobbyList;
 import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import static com.mythostrike.model.game.management.GameManager.NO_SKILL_SELECTED;
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -97,8 +100,8 @@ public final class GameUtils {
         assertEquals(selectedChampionName, playerData.get().champion().name());
     }
 
-    public static void playCards(TestUser user, PlayCardsRequest request, boolean expectError,
-                                 StompFrameHandlerGame privateGameWebSocket) {
+    public static void requestPlayCards(TestUser user, PlayCardsRequest request, boolean expectError,
+                                        StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -150,8 +153,8 @@ public final class GameUtils {
         assertEquals(user.username(), cardMoveMessage.source());
     }
 
-    public static void useSkill(TestUser user, UseSkillRequest request, boolean expectError,
-                                StompFrameHandlerGame privateGameWebSocket) {
+    private static void requestUseSkill(TestUser user, UseSkillRequest request, boolean expectError,
+                                        StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -181,12 +184,14 @@ public final class GameUtils {
             then()
             .statusCode(200);
 
-        await()
-            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
-            .untilAsserted(() -> {
-                //check if websocket message is received
-                assertFalse(privateGameWebSocket.getMessages().isEmpty());
-            });
+        if(request.skillId()!=NO_SKILL_SELECTED) {
+            await()
+                    .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+                    .untilAsserted(() -> {
+                        //check if websocket message is received
+                        assertFalse(privateGameWebSocket.getMessages().isEmpty());
+                    });
+        }
     }
 
     public static void endTurn(TestUser user, int lobbyId, boolean expectError, boolean hasToCleanTable,
@@ -248,39 +253,65 @@ public final class GameUtils {
         }
     }
 
+    public static void startRound(int lobbyId, StompFrameHandlerGame privateGameWebSocket, int roundCounter) {
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+        log.debug("GAME-round {} = {}", roundCounter,
+                Objects.requireNonNull(LobbyList.getLobbyList().getGameManager(lobbyId)).getGame().toString());
+    }
+
 
     public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target,
                                         StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of(target));
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets,
                                             StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), targets);
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of());
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playMultipleCards(TestUser user, int lobbyId, List<Integer> cardIds,
                                          StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardIds, List.of());
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void confirm(TestUser user, int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(), List.of());
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId,
                                    StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardId, List.of());
-        playCards(user, playCardsRequest, false, privateGameWebSocket);
+        requestPlayCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
+    public static void useSkill(TestUser user, int lobbyId, int skillId,
+                                   StompFrameHandlerGame privateGameWebSocket) {
+        UseSkillRequest request = new UseSkillRequest(lobbyId, skillId, List.of());
+        requestUseSkill(user, request, false, privateGameWebSocket);
+    }
+
+    public static void useNoSkill(TestUser user, int lobbyId,
+                                StompFrameHandlerGame privateGameWebSocket) {
+        UseSkillRequest request = new UseSkillRequest(lobbyId, NO_SKILL_SELECTED, List.of());
+        requestUseSkill(user, request, false, privateGameWebSocket);
+    }
+
+    public static void useSkillOnTargetList(TestUser user, int lobbyId, int skillId, List<String> targets,
+                                StompFrameHandlerGame privateGameWebSocket) {
+        UseSkillRequest request = new UseSkillRequest(lobbyId, skillId, targets);
+        requestUseSkill(user, request, false, privateGameWebSocket);
     }
 
 
