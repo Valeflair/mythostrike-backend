@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(RsaKeyProperties.class)
 public class MythostrikeBackendApplication {
 
-    public static final boolean TEST_MODE = true;
+    public static final boolean TEST_MODE = System.getenv("TEST_SEED") != null;
 
     public static void main(String[] args) {
         SpringApplication.run(MythostrikeBackendApplication.class, args);
