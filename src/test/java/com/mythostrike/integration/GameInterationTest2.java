@@ -3,8 +3,10 @@ package com.mythostrike.integration;
 
 import com.mythostrike.controller.message.game.GameMessageType;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
+import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.controller.message.lobby.LobbyMessage;
+import com.mythostrike.model.game.Game;
 import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.StompFrameHandlerGame;
@@ -117,6 +119,9 @@ class Game2IntegrationTest {
 
         round1Kratos(lobbyId, privateGameWebSockets);
         round2Achilles(lobbyId, privateGameWebSockets);
+        round3Hestia(lobbyId,privateGameWebSockets);
+        round4Terpisore(lobbyId,privateGameWebSockets);
+
     }
 
     private int createLobbyAndStartGame() {
@@ -251,4 +256,92 @@ class Game2IntegrationTest {
         //end turn
         GameUtils.endTurn(users.get(I_ACHILLES), lobbyId, false, true, false, privateGameWebSocketList.get(I_ACHILLES));
     }
+
+    private void round3Hestia(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+        StompFrameHandlerGame privateGameWebSocket = privateGameWebSocketList.get(I_HESTIA  );
+
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //play equip Spear of Mars
+        GameUtils.playCard(users.get(I_HESTIA), lobbyId, 1080,
+                privateGameWebSocketList.get(I_HESTIA));
+
+        //play Vulcanic eruption
+        GameUtils.playCard(users.get(I_HESTIA), lobbyId, 1075,
+                privateGameWebSocketList.get(I_HESTIA));
+
+        //skip from Terpisore
+        GameUtils.confirm(users.get(I_TERPISORE), lobbyId,
+                privateGameWebSocketList.get(I_TERPISORE));
+
+        //skip from Kratos
+        GameUtils.confirm(users.get(I_KRATOS), lobbyId,
+                privateGameWebSocketList.get(I_KRATOS));
+
+        //skip from Achilles
+        GameUtils.confirm(users.get(I_ACHILLES), lobbyId,
+                privateGameWebSocketList.get(I_ACHILLES));
+
+        //skill synergy order
+        UseSkillRequest request = new UseSkillRequest(lobbyId, 0, List.of());
+        GameUtils.useSkill(users.get(I_HESTIA), request, false, privateGameWebSocketList.get(I_HESTIA));
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //play cards which are used to swap new cards because of skill
+        GameUtils.playMultipleCards(users.get(I_HESTIA), lobbyId, List.of(1031,1041),
+                privateGameWebSocketList.get(I_HESTIA));
+
+        //play Heal
+        GameUtils.playCard(users.get(I_HESTIA), lobbyId, 1067,
+                privateGameWebSocketList.get(I_HESTIA));
+
+        //play attack on Kratos
+        GameUtils.playCardOnTarget(users.get(I_HESTIA), lobbyId, 1015,users.get(I_KRATOS).username(),
+                privateGameWebSocketList.get(I_HESTIA));
+
+        //skip from Kratos
+        GameUtils.confirm(users.get(I_KRATOS), lobbyId,
+                privateGameWebSocketList.get(I_KRATOS));
+
+        //end turn
+        GameUtils.endTurn(users.get(I_HESTIA), lobbyId, false, true, false, privateGameWebSocketList.get(I_HESTIA));
+    }
+
+    private void round4Terpisore(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+        StompFrameHandlerGame privateGameWebSocket = privateGameWebSocketList.get(I_TERPISORE);
+
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //play Attack on Achilles
+        GameUtils.playCardOnTarget(users.get(I_TERPISORE), lobbyId, 1016, users.get(I_ACHILLES).username(),
+                privateGameWebSocketList.get(I_TERPISORE));
+
+        //skip from Achilles
+        GameUtils.confirm(users.get(I_ACHILLES), lobbyId,
+                privateGameWebSocketList.get(I_ACHILLES));
+
+        //skill revenge von Achilles aktiviert
+        UseSkillRequest request = new UseSkillRequest(lobbyId, 103, List.of());
+        GameUtils.useSkill(users.get(I_ACHILLES), request, false, privateGameWebSocketList.get(I_ACHILLES));
+        await()
+                .atMost(10, SECONDS)
+                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        //play heal
+        GameUtils.playCard(users.get(I_TERPISORE), lobbyId, 1063,
+                privateGameWebSocketList.get(I_TERPISORE));
+
+
+
+        //end turn
+        GameUtils.endTurn(users.get(I_TERPISORE), lobbyId, false, true, true, privateGameWebSocketList.get(I_TERPISORE));
+        GameUtils.discardCard(users.get(I_TERPISORE),lobbyId,List.of(1066),privateGameWebSocketList.get(I_TERPISORE));
+    }
+
 }

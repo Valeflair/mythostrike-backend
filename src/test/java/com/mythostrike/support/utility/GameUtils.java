@@ -266,6 +266,17 @@ public final class GameUtils {
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
+    public static void playMultipleCards(TestUser user, int lobbyId, List<Integer> cardIds, StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+
+        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardIds, List.of());
+        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+    }
+
     public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()

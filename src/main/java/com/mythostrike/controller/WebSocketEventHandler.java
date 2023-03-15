@@ -25,7 +25,7 @@ import static java.lang.Thread.sleep;
 @Component
 public class WebSocketEventHandler {
 
-    public static final int SLEEP_BEFORE_RESPONSE = 200;
+    public static final int SLEEP_BEFORE_RESPONSE = 0;
     private final GameController gameController;
 
     private final LobbyController lobbyController;
