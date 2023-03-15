@@ -10,6 +10,7 @@ import com.mythostrike.model.game.player.Player;
 import com.mythostrike.model.game.player.RandomBot;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @Getter
+@Slf4j
 public class Lobby {
     private static final int SEED_NOT_SET = -1;
     private final int id;
@@ -53,7 +55,13 @@ public class Lobby {
 
         this.randomSeed = SEED_NOT_SET;
         if (System.getenv("TEST_SEED") != null) {
-            this.randomSeed = Integer.parseInt(System.getenv("TEST_SEED"));
+            try {
+                int seed = Integer.parseInt(System.getenv("TEST_SEED"));
+                log.info("TEST_SEED is set to {}, using it as random seed", seed);
+                this.randomSeed = seed;
+            } catch (NumberFormatException e) {
+                log.error("TEST_SEED is not a number, using default random seed");
+            }
         }
     }
 

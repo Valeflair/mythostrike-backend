@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Slf4j
-class GameIntegrationTest {
+class GameAIntegrationTest {
     private static final Integer PORT = 8080;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
@@ -100,8 +100,8 @@ class GameIntegrationTest {
         //subscribe to the public game Web Socket
         StompFrameHandlerGame publicGameWebSocket = new StompFrameHandlerGame();
         //wait for update game message and remove it from the queue
-        session.subscribe(String.format("/games/%d", lobbyId) , publicGameWebSocket);
-        try{
+        session.subscribe(String.format("/games/%d", lobbyId), publicGameWebSocket);
+        try {
             sleep(200);
         } catch (InterruptedException e) {
             log.debug("Interrupted while sleeping");
@@ -113,7 +113,8 @@ class GameIntegrationTest {
         List<StompFrameHandlerGame> privateGameWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateGameWebSockets.add(new StompFrameHandlerGame());
-            session.subscribe(String.format("/games/%d/%s",  lobbyId, users.get(i).username()), privateGameWebSockets.get(i));
+            session.subscribe(String.format("/games/%d/%s", lobbyId, users.get(i).username()),
+                privateGameWebSockets.get(i));
         }
 
         round1Jack(lobbyId, privateGameWebSockets.get(I_JACK));
@@ -129,7 +130,7 @@ class GameIntegrationTest {
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe(String.format("/lobbies/%d", lobbyId) , publicLobbyWebSocket);
+        session.subscribe(String.format("/lobbies/%d", lobbyId), publicLobbyWebSocket);
         await()
             .atMost(1, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
@@ -138,7 +139,8 @@ class GameIntegrationTest {
         List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateLobbyWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateLobbyWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/lobbies/%d/%s",  lobbyId, users.get(i).username()), privateLobbyWebSockets.get(i));
+            session.subscribe(String.format("/lobbies/%d/%s", lobbyId, users.get(i).username()),
+                privateLobbyWebSockets.get(i));
         }
 
         //change the random seed of the lobby
@@ -170,7 +172,8 @@ class GameIntegrationTest {
 
         championId = 6;
         championName = ChampionList.getChampionList().getChampion(championId).getName();
-        GameUtils.selectChampion(users.get(I_REINER_ZUFALL), new SelectChampionRequest(lobbyId, championId), championName,
+        GameUtils.selectChampion(users.get(I_REINER_ZUFALL), new SelectChampionRequest(lobbyId, championId),
+            championName,
             false, publicGameWebSocket);
 
         championId = 3;
@@ -244,7 +247,8 @@ class GameIntegrationTest {
             .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
         //select all cards to change
-        PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1003, 1049, 1080, 1041, 1031, 1075), List.of());
+        PlayCardsRequest playCardsRequest =
+            new PlayCardsRequest(lobbyId, List.of(1003, 1049, 1080, 1041, 1031, 1075), List.of());
         GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
 
         await()
@@ -255,7 +259,7 @@ class GameIntegrationTest {
         GameUtils.endTurn(currentPlayer, lobbyId, false, true, true, privateGameWebSocket);
 
         //discard 2 cards
-        playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1015,1067,1016), List.of());
+        playCardsRequest = new PlayCardsRequest(lobbyId, List.of(1015, 1067, 1016), List.of());
         GameUtils.playCards(currentPlayer, playCardsRequest, false, privateGameWebSocket);
     }
 }

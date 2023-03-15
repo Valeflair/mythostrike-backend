@@ -21,8 +21,8 @@ public final class UserUtils {
     public static final int I_HONG = 5;
     public static final int I_LAITO = 6;
     public static final int I_MAX_MUSTERMAN = 7;
-    private final List<TestUser> users = new ArrayList<>();
     private static UserUtils instance = null;
+    private final List<TestUser> users = new ArrayList<>();
 
     private UserUtils() {
         users.add(createUser("TestUser", "TestPassword"));
@@ -51,7 +51,7 @@ public final class UserUtils {
     }
 
     public static UserUtils getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new UserUtils();
         }
         return instance;

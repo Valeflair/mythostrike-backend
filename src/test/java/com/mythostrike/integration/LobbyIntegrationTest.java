@@ -79,7 +79,7 @@ class LobbyIntegrationTest {
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> publicWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe("/lobbies/" + expected.id() , publicWebSocket);
+        session.subscribe("/lobbies/" + expected.id(), publicWebSocket);
         await()
             .atMost(2, SECONDS)
             .untilAsserted(() -> assertFalse(publicWebSocket.getMessages().isEmpty()));
@@ -88,7 +88,8 @@ class LobbyIntegrationTest {
         List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), privateWebSockets.get(i));
+            session.subscribe(String.format("/lobbies/%d/%s", expected.id(), users.get(i).username()),
+                privateWebSockets.get(i));
         }
 
         //change the random seed of the lobby
@@ -120,7 +121,7 @@ class LobbyIntegrationTest {
 
 
         //add Bot, lobby full
-        expected = LobbyUtils.addBot(users.get(0), expected,true, publicWebSocket);
+        expected = LobbyUtils.addBot(users.get(0), expected, true, publicWebSocket);
 
         //change mode to 2 vs 2
         expected = LobbyUtils.changeMode(users.get(0), expected, 2, false, publicWebSocket);
@@ -138,13 +139,13 @@ class LobbyIntegrationTest {
         LobbyUtils.startGame(users.get(0), expected.id(), true, privateWebSockets);
 
         //change seat to invalid seat
-        expected = LobbyUtils.changeSeat(users.get(0), expected, 4,true, publicWebSocket);
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 4, true, publicWebSocket);
 
         //change seat to empty seat
-        expected = LobbyUtils.changeSeat(users.get(0), expected, 3,false, publicWebSocket);
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 3, false, publicWebSocket);
 
         //change seat to occupied seat
-        expected = LobbyUtils.changeSeat(users.get(0), expected, 1,true, publicWebSocket);
+        expected = LobbyUtils.changeSeat(users.get(0), expected, 1, true, publicWebSocket);
 
         //add Bot
         expected = LobbyUtils.addBot(users.get(0), expected, false, publicWebSocket);
@@ -166,7 +167,7 @@ class LobbyIntegrationTest {
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> publicWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe("/lobbies/" + expected.id() , publicWebSocket);
+        session.subscribe("/lobbies/" + expected.id(), publicWebSocket);
         await()
             .atMost(2, SECONDS)
             .untilAsserted(() -> assertFalse(publicWebSocket.getMessages().isEmpty()));
@@ -175,7 +176,8 @@ class LobbyIntegrationTest {
         List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/lobbies/%d/%s",  expected.id(), users.get(i).username()), privateWebSockets.get(i));
+            session.subscribe(String.format("/lobbies/%d/%s", expected.id(), users.get(i).username()),
+                privateWebSockets.get(i));
         }
 
         //change the random seed of the lobby

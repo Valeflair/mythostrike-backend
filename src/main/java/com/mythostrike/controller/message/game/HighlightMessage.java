@@ -58,6 +58,21 @@ public record HighlightMessage(List<Integer> cardIds,
         this.activateEndTurn = activateEndTurn;
     }
 
+    @Override
+    public String toString() {
+        String sb =
+            "HighlightMessage{" + "cardIds=" + cardIds.stream().map(id -> CardList.getCardList().getCard(id)).toList() +
+                ", cardCount=" + cardCount +
+                ", cardPlayerConditions=" + cardPlayerConditions +
+                ", skillIds=" + skillIds +
+                ", skillCount=" + skillCount +
+                ", skillPlayerConditions=" + skillPlayerConditions +
+                ", reason='" + reason + '\'' +
+                ", activateEndTurn=" + activateEndTurn +
+                '}';
+        return sb;
+    }
+
     //make sure the lists are even with the builder not null
     public static class HighlightMessageBuilder {
         public HighlightMessageBuilder builder() {
@@ -69,20 +84,5 @@ public record HighlightMessage(List<Integer> cardIds,
             this.skillCount = new ArrayList<>();
             return this;
         }
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("HighlightMessage{");
-        sb.append("cardIds=").append(cardIds.stream().map(id -> CardList.getCardList().getCard(id)).toList());
-        sb.append(", cardCount=").append(cardCount);
-        sb.append(", cardPlayerConditions=").append(cardPlayerConditions);
-        sb.append(", skillIds=").append(skillIds);
-        sb.append(", skillCount=").append(skillCount);
-        sb.append(", skillPlayerConditions=").append(skillPlayerConditions);
-        sb.append(", reason='").append(reason).append('\'');
-        sb.append(", activateEndTurn=").append(activateEndTurn);
-        sb.append('}');
-        return sb.toString();
     }
 }

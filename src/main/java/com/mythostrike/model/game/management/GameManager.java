@@ -49,15 +49,14 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class GameManager {
 
+    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 100;
     //player has 3 champions to pick in game, god-king has 5
     private static final int PICK_CHAMPION_COUNT = 3;
     private static final int PICK_CHAMPION_COUNT_GOD_KING = 5;
-
     //player start up with 4 cards and draw 2 cards at each turn start
     private static final int CARD_COUNT_START_UP = 4;
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final int NO_SKILL_SELECTED = -1;
-    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 100;
     @Getter
     private final Game game;
     @Getter

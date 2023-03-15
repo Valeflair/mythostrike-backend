@@ -81,7 +81,7 @@ public final class LobbyUtils {
 
     public static void setRandomSeed(int lobbyId, int randomSeed) {
         Lobby lobby = LobbyList.getLobbyList().getLobby(lobbyId);
-        if(lobby == null) throw new IllegalArgumentException("Lobby does not exist");
+        if (lobby == null) throw new IllegalArgumentException("Lobby does not exist");
         lobby.setRandomSeed(randomSeed);
     }
 
@@ -90,10 +90,10 @@ public final class LobbyUtils {
      * If the expected status code is not 201, it will try to start the game and expect an error with error message.
      * It will also check if the web socket received the correct message through the frameHandler.
      *
-     * @param user               the user that creates the lobby
-     * @param modeId             the id of the mode to start with
-     * @param expectError        if true, it will try to creat the lobby and expect an error with an error message
-     * @param frameHandler       the frameHandler that receives the web socket messages
+     * @param user         the user that creates the lobby
+     * @param modeId       the id of the mode to start with
+     * @param expectError  if true, it will try to creat the lobby and expect an error with an error message
+     * @param frameHandler the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
     public static LobbyMessage createLobby(TestUser user, int modeId, boolean expectError) {
@@ -135,10 +135,10 @@ public final class LobbyUtils {
      * If the expected status code is not 200, it will try to start the game and expect an error with error message.
      * It will also check if the web socket received the correct message through the frameHandler.
      *
-     * @param user               the user that joins the lobby
-     * @param oldLobbyState      the old lobby state to compare with the new lobby state
-     * @param expectError       if true, it will try to join the lobby and expect an error with an error message
-     * @param publicLobbyWebSocket       the frameHandler that receives the web socket messages
+     * @param user                 the user that joins the lobby
+     * @param oldLobbyState        the old lobby state to compare with the new lobby state
+     * @param expectError          if true, it will try to join the lobby and expect an error with an error message
+     * @param publicLobbyWebSocket the frameHandler that receives the web socket messages
      * @return the LobbyMessage that was received through the web socket
      */
     public static LobbyMessage joinLobby(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
@@ -200,7 +200,7 @@ public final class LobbyUtils {
     }
 
     public static LobbyMessage leaveLobby(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
-                                         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+                                          SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
         //clear all messages from the frame handler
         publicLobbyWebSocket.getMessages().clear();
 
@@ -240,7 +240,8 @@ public final class LobbyUtils {
             then()
             .statusCode(200);
 
-        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+        LobbyMessage expected =
+            new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -281,9 +282,9 @@ public final class LobbyUtils {
         //add to remove players to empty seats
         List<TestUser> newUserList = new ArrayList<>();
         int index = 0;
-        for(int i = 0; i < newMode.maxPlayer(); i++) {
+        for (int i = 0; i < newMode.maxPlayer(); i++) {
             if (i < seatMessageList.size() && seatMessageList.get(i).getPlayer() != null) {
-                newUserList.add(new TestUser( seatMessageList.get(i).getPlayer().username() ));
+                newUserList.add(new TestUser(seatMessageList.get(i).getPlayer().username()));
             } else {
                 if (index >= usersToMove.size()) {
                     newUserList.add(null);
@@ -293,7 +294,7 @@ public final class LobbyUtils {
                 }
             }
         }
-        if(index < usersToMove.size() - 1) {
+        if (index < usersToMove.size() - 1) {
             throw new IllegalArgumentException("Too many players to move");
         }
 
@@ -310,7 +311,8 @@ public final class LobbyUtils {
             then()
             .statusCode(200);
 
-        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), newMode.name(), oldLobbyState.owner(), seatMessageList);
+        LobbyMessage expected =
+            new LobbyMessage(oldLobbyState.id(), newMode.name(), oldLobbyState.owner(), seatMessageList);
 
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -320,7 +322,8 @@ public final class LobbyUtils {
         return expected;
     }
 
-    public static LobbyMessage changeSeat(TestUser user, LobbyMessage oldLobbyState, int newSeatIndex, boolean expectError,
+    public static LobbyMessage changeSeat(TestUser user, LobbyMessage oldLobbyState, int newSeatIndex,
+                                          boolean expectError,
                                           SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
         //clear all messages from the frame handler
         publicLobbyWebSocket.getMessages().clear();
@@ -340,16 +343,18 @@ public final class LobbyUtils {
         List<SeatMessage> seatMessageList = oldLobbyState.seats();
 
         //move player to new seat
-        if(seatMessageList.get(newSeatIndex).getPlayer() != null) {
+        if (seatMessageList.get(newSeatIndex).getPlayer() != null) {
             throw new IllegalArgumentException("Seat is already taken");
         }
 
         boolean userFound = false;
-        for(int i = 0; i < seatMessageList.size(); i++) {
-            if(seatMessageList.get(i).getPlayer() != null && seatMessageList.get(i).getPlayer().username().equals(user.username())) {
+        for (int i = 0; i < seatMessageList.size(); i++) {
+            if (seatMessageList.get(i).getPlayer() != null &&
+                seatMessageList.get(i).getPlayer().username().equals(user.username())) {
                 seatMessageList.set(i, new SeatMessage(seatMessageList.get(i).getIdentity()));
                 seatMessageList.set(newSeatIndex,
-                    new SeatMessage(user.username(), user.avatarNumber(), seatMessageList.get(newSeatIndex).getIdentity()));
+                    new SeatMessage(user.username(), user.avatarNumber(),
+                        seatMessageList.get(newSeatIndex).getIdentity()));
                 userFound = true;
                 break;
             }
@@ -368,7 +373,8 @@ public final class LobbyUtils {
             then()
             .statusCode(200);
 
-        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+        LobbyMessage expected =
+            new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -379,7 +385,7 @@ public final class LobbyUtils {
     }
 
     public static LobbyMessage addBot(TestUser user, LobbyMessage oldLobbyState, boolean expectError,
-                                         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
+                                      SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket) {
         //clear all messages from the frame handler
         publicLobbyWebSocket.getMessages().clear();
 
@@ -422,7 +428,8 @@ public final class LobbyUtils {
             throw new IllegalArgumentException("No empty seat in Lobby found");
         }
 
-        LobbyMessage expected = new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
+        LobbyMessage expected =
+            new LobbyMessage(oldLobbyState.id(), oldLobbyState.mode(), oldLobbyState.owner(), seatMessageList);
 
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -474,7 +481,7 @@ public final class LobbyUtils {
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> {
-                for(SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
+                for (SimpleStompFrameHandler<ChampionSelectionMessage> frameHandler : privateLobbyWebSockets) {
                     assertFalse(frameHandler.getMessages().isEmpty());
                 }
             });

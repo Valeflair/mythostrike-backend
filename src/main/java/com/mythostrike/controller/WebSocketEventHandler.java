@@ -81,8 +81,7 @@ public class WebSocketEventHandler {
             }
             //send an game update to client
             gameController.updateGame(lobbyId);
-        }
-        else if (gamePrivateMatcher.matches()) {
+        } else if (gamePrivateMatcher.matches()) {
             //increase the number of connected players
             int lobbyId = Integer.parseInt(gamePrivateMatcher.group(1));
             addUserToGame(lobbyId);

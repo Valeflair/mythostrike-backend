@@ -41,11 +41,11 @@ public final class GameUtils {
      * Removes the game update message from the frame handler.
      * If the expected status code is not 200, it will try to start the game and expect an error with error message.
      *
-     * @param user the user that selects the champion
-     * @param request the request to select the champion
+     * @param user                 the user that selects the champion
+     * @param request              the request to select the champion
      * @param selectedChampionName the name of the selected champion
-     * @param expectError if the request should expect an error
-     * @param publicGameWebSocket the frame handler for the public game messages
+     * @param expectError          if the request should expect an error
+     * @param publicGameWebSocket  the frame handler for the public game messages
      */
     public static void selectChampion(TestUser user, SelectChampionRequest request, String selectedChampionName,
                                       boolean expectError, StompFrameHandlerGame publicGameWebSocket) {
@@ -55,29 +55,29 @@ public final class GameUtils {
         if (expectError) {
             //try to start the game and expect an error with error message
             given()
-                    .headers(user.headers())
-                    .body(request).
-                    when()
-                    .post("/games/play/champion").
-                    then()
-                    .statusCode(greaterThanOrEqualTo(400))
-                    .body("message", notNullValue());
-            return;
-        }
-
-        given()
                 .headers(user.headers())
                 .body(request).
                 when()
                 .post("/games/play/champion").
                 then()
-                .statusCode(200);
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return;
+        }
+
+        given()
+            .headers(user.headers())
+            .body(request).
+            when()
+            .post("/games/play/champion").
+            then()
+            .statusCode(200);
 
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
             .untilAsserted(() -> {
-                    //check if game update message is received
-                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
+                //check if game update message is received
+                assertFalse(publicGameWebSocket.getMessages().isEmpty());
             });
 
         //get update players
@@ -101,9 +101,9 @@ public final class GameUtils {
                                  StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+            .untilAsserted(
+                () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
@@ -154,46 +154,46 @@ public final class GameUtils {
                                 StompFrameHandlerGame privateGameWebSocket) {
         //wait for the next pick request players highlight message
         await()
-                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+            .untilAsserted(
+                () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
         if (expectError) {
             //try to start the game and expect an error with error message
             given()
-                    .headers(user.headers())
-                    .body(request).
-                    when()
-                    .post("/games/play/skills").
-                    then()
-                    .statusCode(greaterThanOrEqualTo(400))
-                    .body("message", notNullValue());
-            return;
-        }
-
-        given()
                 .headers(user.headers())
                 .body(request).
                 when()
                 .post("/games/play/skills").
                 then()
-                .statusCode(200);
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return;
+        }
+
+        given()
+            .headers(user.headers())
+            .body(request).
+            when()
+            .post("/games/play/skills").
+            then()
+            .statusCode(200);
 
         await()
-                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
-                .untilAsserted(() -> {
-                    //check if websocket message is received
-                    assertFalse(privateGameWebSocket.getMessages().isEmpty());
-                });
+            .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+            .untilAsserted(() -> {
+                //check if websocket message is received
+                assertFalse(privateGameWebSocket.getMessages().isEmpty());
+            });
     }
 
     public static void endTurn(TestUser user, int lobbyId, boolean expectError, boolean hasToCleanTable,
                                boolean hasToDiscardCards, StompFrameHandlerGame privateGameWebSocket) {
         await()
-                .atMost(10, SECONDS)
-                .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
+            .atMost(10, SECONDS)
+            .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
 
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
@@ -201,25 +201,25 @@ public final class GameUtils {
         if (expectError) {
             //try to start the game and expect an error with error message
             given()
-                    .headers(user.headers())
-                    .body(new LobbyIdRequest(lobbyId)).
-                    when()
-                    .post("/games/play/end").
-                    then()
-                    .statusCode(greaterThanOrEqualTo(400))
-                    .body("message", notNullValue());
-            return;
-        }
-
-        given()
                 .headers(user.headers())
                 .body(new LobbyIdRequest(lobbyId)).
                 when()
                 .post("/games/play/end").
                 then()
-                .statusCode(200);
+                .statusCode(greaterThanOrEqualTo(400))
+                .body("message", notNullValue());
+            return;
+        }
 
-        if(hasToCleanTable) {
+        given()
+            .headers(user.headers())
+            .body(new LobbyIdRequest(lobbyId)).
+            when()
+            .post("/games/play/end").
+            then()
+            .statusCode(200);
+
+        if (hasToCleanTable) {
             await()
                 .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
                 .untilAsserted(() -> {
@@ -237,45 +237,50 @@ public final class GameUtils {
         }
         if (hasToDiscardCards) {
             await()
-                    .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
-                    .untilAsserted(() -> {
-                        //check if game update message is received
-                        assertFalse(privateGameWebSocket.getMessages().isEmpty());
-                    });
+                .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
+                .untilAsserted(() -> {
+                    //check if game update message is received
+                    assertFalse(privateGameWebSocket.getMessages().isEmpty());
+                });
             GameMessage message = privateGameWebSocket.getMessages().peek();
-            assertEquals(message.messageType(), GameMessageType.HIGHLIGHT, "Received wrong message type: " + message.messageType());
+            assertEquals(message.messageType(), GameMessageType.HIGHLIGHT,
+                "Received wrong message type: " + message.messageType());
         }
     }
 
 
-    public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
+    public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target,
+                                        StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of(target));
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
-    public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets, StompFrameHandlerGame privateGameWebSocket) {
+    public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets,
+                                            StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), targets);
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of());
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
-    public static void playMultipleCards(TestUser user, int lobbyId, List<Integer> cardIds, StompFrameHandlerGame privateGameWebSocket) {
+    public static void playMultipleCards(TestUser user, int lobbyId, List<Integer> cardIds,
+                                         StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardIds, List.of());
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
-    public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
+    public static void confirm(TestUser user, int lobbyId, StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(), List.of());
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
-    public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId, StompFrameHandlerGame privateGameWebSocket) {
+    public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId,
+                                   StompFrameHandlerGame privateGameWebSocket) {
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardId, List.of());
-        GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
+        playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
 

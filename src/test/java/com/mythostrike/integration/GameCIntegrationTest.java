@@ -44,13 +44,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @Slf4j
-class GameIntegrationTest3 {
+class GameCIntegrationTest {
+    public static final int I_BOT = 4;
     private static final Integer PORT = 8080;
     private static final int I_UNO = 0;
     private static final int I_DOS = 1;
     private static final int I_TRES = 2;
     private static final int I_CUATRO = 3;
-    public static final int I_BOT = 4;
     private final List<TestUser> users = new ArrayList<>();
     private StompSession session;
 
@@ -102,8 +102,8 @@ class GameIntegrationTest3 {
         //subscribe to the public game Web Socket
         StompFrameHandlerGame publicGameWebSocket = new StompFrameHandlerGame();
         //wait for update game message and remove it from the queue
-        session.subscribe(String.format("/games/%d", lobbyId) , publicGameWebSocket);
-        try{
+        session.subscribe(String.format("/games/%d", lobbyId), publicGameWebSocket);
+        try {
             sleep(500);
         } catch (InterruptedException e) {
             log.debug("Interrupted while sleeping");
@@ -115,7 +115,8 @@ class GameIntegrationTest3 {
         List<StompFrameHandlerGame> privateGameWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateGameWebSockets.add(new StompFrameHandlerGame());
-            session.subscribe(String.format("/games/%d/%s",  lobbyId, users.get(i).username()), privateGameWebSockets.get(i));
+            session.subscribe(String.format("/games/%d/%s", lobbyId, users.get(i).username()),
+                privateGameWebSockets.get(i));
         }
 
         round1(lobbyId, privateGameWebSockets);
@@ -132,7 +133,7 @@ class GameIntegrationTest3 {
 
         //subscribe to the lobby
         SimpleStompFrameHandler<LobbyMessage> publicLobbyWebSocket = new SimpleStompFrameHandler<>(LobbyMessage.class);
-        session.subscribe(String.format("/lobbies/%d", lobbyId) , publicLobbyWebSocket);
+        session.subscribe(String.format("/lobbies/%d", lobbyId), publicLobbyWebSocket);
         await()
             .atMost(1, SECONDS)
             .untilAsserted(() -> assertFalse(publicLobbyWebSocket.getMessages().isEmpty()));
@@ -141,14 +142,15 @@ class GameIntegrationTest3 {
         List<SimpleStompFrameHandler<ChampionSelectionMessage>> privateLobbyWebSockets = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             privateLobbyWebSockets.add(new SimpleStompFrameHandler<>(ChampionSelectionMessage.class));
-            session.subscribe(String.format("/lobbies/%d/%s",  lobbyId, users.get(i).username()), privateLobbyWebSockets.get(i));
+            session.subscribe(String.format("/lobbies/%d/%s", lobbyId, users.get(i).username()),
+                privateLobbyWebSockets.get(i));
         }
 
         //change the random seed of the lobby
         LobbyUtils.setRandomSeed(lobbyId, 9527);
 
 
-        expected = LobbyUtils.changeMode(users.get(I_UNO), expected, 5 , false, publicLobbyWebSocket);
+        expected = LobbyUtils.changeMode(users.get(I_UNO), expected, 5, false, publicLobbyWebSocket);
         //join the lobby
         expected = LobbyUtils.joinLobby(users.get(I_DOS), expected, false, publicLobbyWebSocket);
 
@@ -156,8 +158,7 @@ class GameIntegrationTest3 {
 
         expected = LobbyUtils.joinLobby(users.get(I_CUATRO), expected, false, publicLobbyWebSocket);
 
-        expected = LobbyUtils.addBot(users.get(I_UNO), expected, false,  publicLobbyWebSocket);
-
+        expected = LobbyUtils.addBot(users.get(I_UNO), expected, false, publicLobbyWebSocket);
 
 
         //start the game
@@ -205,7 +206,7 @@ class GameIntegrationTest3 {
         await()
             .atMost(20, SECONDS)
             .untilAsserted(
-                () -> assertTrue( privateGameWebSocketList.get(I_UNO).containsType(GameMessageType.HIGHLIGHT) )
+                () -> assertTrue(privateGameWebSocketList.get(I_UNO).containsType(GameMessageType.HIGHLIGHT))
             );
 
         //vulcanic

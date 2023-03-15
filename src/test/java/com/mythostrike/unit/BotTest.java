@@ -32,15 +32,14 @@ import static org.mockito.Mockito.when;
 
 public class BotTest {
 
+    private final String TEST_BOT_NAME = "PlaceHolderBot";
+    private final Random RANDOM_SEED = new Random(50);
     @Mock
     private GameManager gameManager;
     @Mock
     private GameController gameController;
     private Bot placholderBot;
     private Bot randomBot;
-
-    private final String TEST_BOT_NAME = "PlaceHolderBot";
-    private final Random RANDOM_SEED = new Random(50);
 
     @BeforeEach
     public void setUp() {
