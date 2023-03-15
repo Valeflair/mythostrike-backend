@@ -2,6 +2,7 @@ package com.mythostrike.model.game.management;
 
 import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.controller.GameController;
+import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.controller.message.game.PlayerGameResult;
 import com.mythostrike.controller.message.lobby.ChampionMessage;
@@ -108,7 +109,7 @@ public class GameManager {
         return playerNames;
     }
 
-    public List<Player> convertUserNameToPlayers(@NotNull List<String> playerNames) {
+    private List<Player> convertUserNameToPlayers(@NotNull List<String> playerNames) {
         List<Player> players = new ArrayList<>();
         for (String name : playerNames) {
             players.add(game.getAllPlayers().stream().filter(player -> player.getUsername().equals(name)).findFirst()
@@ -277,7 +278,7 @@ public class GameManager {
         proceed();
     }
 
-    public void proceed() {
+    private void proceed() {
         proceeding = true;
 
         while (proceeding) {
@@ -378,7 +379,7 @@ public class GameManager {
         //If all clients are connected, then the methode cardDistribution() is called.
     }
 
-    private boolean isTargetSelectionValid(int index, List<PlayerCondition> playerConditions, List<String> targets) {
+    private static boolean isTargetSelectionValid(int index, List<PlayerCondition> playerConditions, List<String> targets) {
         Set<String> allowedPlayers;
         if (playerConditions.size() > index) {
             allowedPlayers
@@ -397,17 +398,22 @@ public class GameManager {
         if (lastPickRequest == null || !lastPickRequest.getPlayer().equals(player)) {
             throw new IllegalArgumentException("Player is not allowed to select cards");
         }
+        HighlightMessage highlightMessage = lastPickRequest.getHighlightMessage();
 
         //check if the player selected the valid cards
-        if (!new HashSet<>(lastPickRequest.getHighlightMessage().cardIds()).containsAll(cardIds)) {
+        if (!highlightMessage.cardCount().contains(cardIds.size())) {
+            throw new IllegalArgumentException("Not allowed number of cards selected");
+        }
+        if (!new HashSet<>(highlightMessage.cardIds()).containsAll(cardIds)) {
             throw new IllegalArgumentException("Player selected not allowed cards");
         }
 
         lastPickRequest.setSelectedCards(cards);
 
+        //check if the player selected the valid targets
         if (cards.size() == 1) {
-            int index = lastPickRequest.getHighlightMessage().cardIds().indexOf(cardIds.get(0));
-            if (!isTargetSelectionValid(index, lastPickRequest.getHighlightMessage().cardPlayerConditions(), targets)) {
+            int index = highlightMessage.cardIds().indexOf(cardIds.get(0));
+            if (!isTargetSelectionValid(index, highlightMessage.cardPlayerConditions(), targets)) {
                 throw new IllegalArgumentException("Selected targets is not allowed for this card");
             }
 
@@ -427,27 +433,39 @@ public class GameManager {
     public void selectSkill(String playerName, int skillId, List<String> targets) {
         Player player = getPlayerByName(playerName);
         List<Player> targetPlayers = convertUserNameToPlayers(targets);
-        lastPickRequest.setSelectedPlayers(targetPlayers);
+
+        if (lastPickRequest == null || !lastPickRequest.getPlayer().equals(player)) {
+            throw new IllegalArgumentException("Player is not allowed to select cards");
+        }
+        HighlightMessage highlightMessage = lastPickRequest.getHighlightMessage();
+
+        //no skill selected
         if (skillId == NO_SKILL_SELECTED) {
+            if (!highlightMessage.skillCount().contains(0)) {
+                throw new IllegalArgumentException("You have to select a skill");
+            }
             lastPickRequest.setClickedCancel(true);
-            proceed();
+            submitRunnable(this::proceed);
             return;
         }
 
-        List<Integer> skillIds = lastPickRequest.getHighlightMessage().skillIds();
-        if (skillId < 0 || !skillIds.contains(skillId)) {
+        //check if the player selected a valid skill
+        List<Integer> skillIds = highlightMessage.skillIds();
+        if (skillId < 0 || highlightMessage.skillCount().contains(1) || !skillIds.contains(skillId) ) {
             throw new IllegalArgumentException("There is no skill with this id " + skillId);
         }
         int skillIndex = skillIds.indexOf(skillId);
 
+
         //check if the player selected the valid players
-        if (!isTargetSelectionValid(skillIndex, lastPickRequest.getHighlightMessage().cardPlayerConditions(),
-            targets)) {
+        if (!isTargetSelectionValid(skillIndex, highlightMessage.cardPlayerConditions(), targets)) {
             throw new IllegalArgumentException("You don't have the selected skill");
         }
 
+        lastPickRequest.setSelectedPlayers(targetPlayers);
+
         lastPickRequest.setClickedCancel(true);
-        if (lastPickRequest.getHighlightMessage().activateEndTurn()) {
+        if (highlightMessage.activateEndTurn()) {
             for (ActiveSkill skill : player.getChampion().getActiveSkills()) {
                 if (skill.getId() == skillId) {
                     lastPickRequest.setClickedCancel(false);
@@ -466,14 +484,6 @@ public class GameManager {
         }
 
         submitRunnable(this::proceed);
-    }
-
-    public void cancelRequest(String playerName) {
-        Player player = getPlayerByName(playerName);
-        if (lastPickRequest != null && lastPickRequest.getPlayer().equals(player)) {
-            lastPickRequest.setClickedCancel(true);
-            proceed();
-        }
     }
 
     public Player getPlayerByName(String playerName) {
