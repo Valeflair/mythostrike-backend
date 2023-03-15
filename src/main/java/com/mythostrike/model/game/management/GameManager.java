@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.management;
 
+import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.controller.message.game.PlayerResult;
@@ -56,7 +57,7 @@ public class GameManager {
     private static final int CARD_COUNT_START_UP = 4;
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final int NO_SKILL_SELECTED = -1;
-    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = 100;
+    public static final int SLEEP_BEFORE_CARD_DISTRIBUTION = MythostrikeBackendApplication.TEST_MODE ? 0 : 100;
     @Getter
     private final Game game;
     @Getter
