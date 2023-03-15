@@ -20,7 +20,7 @@ public class Vengeance extends ActiveSkill {
 
     public static final String NAME = "Vengeance";
     public static final String DESCRIPTION =
-        "Once per turn, you can drop a weapon or lose 1 Health, pick a player and deal 1 Damage to him";
+        "Once per turn you can drop a Weapon or sacrifice 1 HP to attack a player";
     private PickRequest pickRequest;
 
     public Vengeance() {
@@ -53,8 +53,8 @@ public class Vengeance extends ActiveSkill {
         List<Card> cards = player.getHandCards().getCards();
         List<PlayerCondition> playerConditions = new ArrayList<>();
 
-        PlayerCondition playerCondition =
-            new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(0));
+        PlayerCondition playerCondition
+            = new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(0));
         List<Integer> cardCounts = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             playerConditions.add(playerCondition);
@@ -84,11 +84,11 @@ public class Vengeance extends ActiveSkill {
         Player player = playerHandle.getPlayer();
         GameManager gameManager = playerHandle.getGameManager();
 
-        CardMoveHandle moveOut =
-            new CardMoveHandle(gameManager, "drop to get synergy order", player, null, player.getHandCards(),
+        CardMoveHandle moveOut
+            = new CardMoveHandle(gameManager, "drop to get vengace", player, null, player.getHandCards(),
                 gameManager.getGame().getTablePile(), pickRequest.getSelectedCards());
         gameManager.getCardManager().moveCard(moveOut);
-        CardDrawHandle drawHandle = new CardDrawHandle(gameManager, "draw to get synergy order", player,
+        CardDrawHandle drawHandle = new CardDrawHandle(gameManager, "draw to get vengance", player,
             pickRequest.getSelectedCards().size(), gameManager.getGame().getDrawPile());
         gameManager.getCardManager().drawCard(drawHandle);
         player.setTemporaryImmunity(NAME, true);

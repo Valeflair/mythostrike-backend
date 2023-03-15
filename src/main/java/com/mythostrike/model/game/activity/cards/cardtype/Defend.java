@@ -10,8 +10,8 @@ import com.mythostrike.model.game.player.Player;
 import java.util.List;
 
 public class Defend extends Card {
-    public static final String NAME = Defend.class.getSimpleName();
-    public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
+    public static final String NAME = "Defend";
+    public static final String DESCRIPTION = "Can be used to defend yourself. Can't be used actively.";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
     private CardUseHandle handle;

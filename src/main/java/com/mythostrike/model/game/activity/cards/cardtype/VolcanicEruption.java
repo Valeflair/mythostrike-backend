@@ -27,8 +27,9 @@ import java.util.List;
  */
 public class VolcanicEruption extends Card {
 
-    public static final String NAME = VolcanicEruption.class.getSimpleName();
-    public static final String DESCRIPTION = "use it and every other player has to play an \"Defend\" or get 1 damage.";
+    public static final String NAME = "Volcanic Eruption";
+    public static final String DESCRIPTION = "A nearby Vulcano is breaking out. "
+        + "Every other player has to play an \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.SKILL_CARD;
     public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
 

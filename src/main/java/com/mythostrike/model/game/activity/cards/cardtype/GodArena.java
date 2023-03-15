@@ -27,8 +27,9 @@ import java.util.List;
  */
 public class GodArena extends Card {
 
-    public static final String NAME = GodArena.class.getSimpleName();
-    public static final String DESCRIPTION = "use it and every other player has to play an \"Attack\" or get 1 damage.";
+    public static final String NAME = "God Arena";
+    public static final String DESCRIPTION = "A God Arena is called out. "
+        + "Every other player has to play an \"Attack\" or get 1 damage.";
     public static final CardType TYPE = CardType.SKILL_CARD;
     public static final CardFilter ATTACK_FILTER = new CardFilter(Attack.NAME);
 
@@ -108,7 +109,7 @@ public class GodArena extends Card {
             gameManager.getCardManager().moveCard(cardMoveHandle);
         } else {
             DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),
-                "volcanic eruption damaged", player, opponent, 1,
+                "volcanic eruption damage", player, opponent, 1,
                 DamageType.NORMAL);
             gameManager.getPlayerManager().applyDamage(damageHandle);
         }
@@ -138,7 +139,7 @@ public class GodArena extends Card {
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)
             .cardCount(List.of(0, 1))
-            .reason("you are under God Arena! drop a attack card or take 1 damage")
+            .reason("A God Arena was called, you have to play an \"Attack\" card or get 1 damage.")
             .build();
         pickRequest = new PickRequest(opponent, gameManager, highlightMessage);
         gameManager.queueActivity(pickRequest);

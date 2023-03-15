@@ -66,11 +66,11 @@ public abstract class Card extends Activity {
             cardMoveHandle = new CardMoveHandle(gameManager, "plays card out", cardUseHandle.getPlayer(), null,
                 cardUseHandle.getPlayer().getHandCards(), gameManager.getGame().getTablePile(), List.of(this));
         }
-        gameManager.output(String.format("%s plays %s out", cardMoveHandle.getPlayer().getUsername(), this));
+        gameManager.output(String.format("%s plays %s out.", cardMoveHandle.getPlayer().getUsername(), this));
         if (cardUseHandle.getOpponents() != null && !cardUseHandle.getOpponents().isEmpty()
             && (cardUseHandle.getOpponents().size() != 1
             || !cardUseHandle.getOpponents().contains(cardUseHandle.getPlayer()))) {
-            gameManager.output(String.format("targets are %s",
+            gameManager.output(String.format("Targets are %s",
                 cardUseHandle.getOpponents().stream()
                     .map(Player::getUsername)
                     .collect(Collectors.joining(", "))));

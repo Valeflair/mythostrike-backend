@@ -11,7 +11,7 @@ import com.mythostrike.model.game.player.Player;
 public class DarkIllusion extends PassiveSkill {
 
     public static final String NAME = "Dark Illusion";
-    public static final String DESCRIPTION = "You can play black card as defend";
+    public static final String DESCRIPTION = "You can play black cards as Defend cards.";
     CardFilterHandle cardFilterHandle;
 
     public DarkIllusion() {

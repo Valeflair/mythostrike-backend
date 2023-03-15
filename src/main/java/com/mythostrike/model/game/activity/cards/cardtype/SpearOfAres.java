@@ -11,9 +11,8 @@ import com.mythostrike.model.game.player.Player;
 
 public class SpearOfAres extends WeaponCard {
     public static final String NAME = "Spear of Ares";
-    public static final String DESCRIPTION =
-        "use to equip this weapon, if your attack is the last card you have in your hand, " +
-            "then this attack can target up to 3 players";
+    public static final String DESCRIPTION = "Use this card to equip this Weapon. When the Weapon is equipped "
+        + "and your last card is an Attack card, you can target up to 3 players.";
     public static final CardType TYPE = CardType.WEAPON;
 
     private final PassiveSkill skill;

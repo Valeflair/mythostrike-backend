@@ -74,10 +74,9 @@ public class CardFilter {
         List<Card> result = new ArrayList<>();
         for (Card card : cards) {
             String name = card.getName();
-            if (includeList.isEmpty() || includeList.contains(name) || includeSymbols.contains(card.getSymbol())) {
-                if (excludeList.isEmpty() || !excludeList.contains(name)) {
-                    result.add(card);
-                }
+            if ( (includeList.contains(name) || includeSymbols.contains(card.getSymbol()) )
+                && (excludeList.isEmpty() || !excludeList.contains(name))) {
+                result.add(card);
             }
         }
         return result;

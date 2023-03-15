@@ -14,8 +14,8 @@ import java.util.List;
 public class SpearOfAresSkill extends PassiveSkill {
 
     public static final String NAME = "Spear of Ares Skill";
-    public static final String DESCRIPTION = "if your attack is the last card you have in your hand, " +
-        "then this attack can target up to 3 players";
+    public static final String DESCRIPTION = "If an Attack card is your last Handcard, "
+        + "then this Attack can target up to 3 players";
 
     private PickRequest pickRequest;
 

@@ -11,7 +11,7 @@ import com.mythostrike.model.game.player.Player;
 public class InfinityDance extends PassiveSkill {
 
     public static final String NAME = InfinityDance.class.getSimpleName();
-    public static final String DESCRIPTION = "you draw 1 card whenever you plays a skill card";
+    public static final String DESCRIPTION = "You draw 1 card whenever you play a Skill card.";
 
     private CardUseHandle cardUseHandle;
 

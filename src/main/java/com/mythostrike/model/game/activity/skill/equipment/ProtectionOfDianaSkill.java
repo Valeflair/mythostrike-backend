@@ -8,8 +8,8 @@ import com.mythostrike.model.game.player.Player;
 
 public class ProtectionOfDianaSkill extends PassiveSkill {
 
-    public static final String NAME = "Spear of Mars Skill";
-    public static final String DESCRIPTION = "if your attack is avoided by a defend, you can attack again";
+    public static final String NAME = "Protection of Diana Skill";
+    public static final String DESCRIPTION = "you can't be attacked by red attacks";
 
     private AttackHandle attackHandle;
 
@@ -37,8 +37,7 @@ public class ProtectionOfDianaSkill extends PassiveSkill {
 
     @Override
     public void activate() {
-        attackHandle.getGameManager().output("attack avoided, because it it's a black attack against" +
-            "Protection of Diana");
+        attackHandle.getGameManager().output("Attack avoided because it it's a red attack against Protection of Diana");
         this.attackHandle.setPrevented(true);
     }
 

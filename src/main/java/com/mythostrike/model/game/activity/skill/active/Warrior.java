@@ -21,8 +21,8 @@ import java.util.List;
 
 public class Warrior extends ActiveSkill {
 
-    public static final String NAME = Warrior.class.getSimpleName();
-    public static final String DESCRIPTION = "you can play defense as attack if you want";
+    public static final String NAME = "Warrior";
+    public static final String DESCRIPTION = "You can play a Defend card as an Attack card.";
     private static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
     private final Attack attack;
     private PickRequest pickRequest;
@@ -35,10 +35,9 @@ public class Warrior extends ActiveSkill {
     @Override
     public boolean checkCondition(PlayerHandle playerHandle) {
         boolean value = attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
-            "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false))
-            && playerHandle.getGameManager().getCardManager()
-            .filterCard(playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER,
-                playerHandle.getPlayer()).size() > 0;
+            "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false));
+        value = value && !playerHandle.getGameManager().getCardManager().filterCard(
+            playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER, playerHandle.getPlayer()).isEmpty();
 
         if (value) {
             this.playerHandle = playerHandle;
@@ -53,8 +52,8 @@ public class Warrior extends ActiveSkill {
         GameManager gameManager = playerHandle.getGameManager();
 
         List<Player> targets = new ArrayList<>();
-        List<Card> cards =
-            gameManager.getCardManager().filterCard(player.getHandCards().getCards(), DEFEND_FILTER, player);
+        List<Card> cards
+            = gameManager.getCardManager().filterCard(player.getHandCards().getCards(), DEFEND_FILTER, player);
         List<PlayerCondition> playerConditions = new ArrayList<>();
 
         for (Player target : playerHandle.getGameManager().getGame().getOtherPlayers(player)) {
@@ -63,8 +62,8 @@ public class Warrior extends ActiveSkill {
             }
         }
 
-        PlayerCondition playerCondition =
-            new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
+        PlayerCondition playerCondition
+            = new PlayerCondition(GameManager.convertPlayersToUsername(targets), List.of(1));
 
         for (Card card : cards) {
             playerConditions.add(playerCondition);

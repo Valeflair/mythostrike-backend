@@ -10,8 +10,8 @@ import com.mythostrike.model.game.player.Player;
 public class DeadlyCrusher extends PassiveSkill {
 
     public static final String NAME = "Deadly Crusher";
-    public static final String DESCRIPTION =
-        "If you don’t have any weapons and armory, you can use “Attack” without limit";
+    public static final String DESCRIPTION
+        = "If you don’t have any Weapons and Armor, you can use “Attack” without limits";
 
     private CardAskHandle cardAskHandle;
 
