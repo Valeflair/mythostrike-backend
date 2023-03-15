@@ -44,7 +44,6 @@ public final class GameUtils {
      */
     public static void selectChampion(TestUser user, SelectChampionRequest request, String selectedChampionName,
                                       boolean expectError, StompFrameHandlerGame publicGameWebSocket) {
-        //TODO: add wait before every Request
         //clear all messages from the frame handler
         publicGameWebSocket.getMessages().clear();
 
@@ -95,6 +94,11 @@ public final class GameUtils {
 
     public static void playCards(TestUser user, PlayCardsRequest request, boolean expectError,
                                  StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
@@ -131,7 +135,7 @@ public final class GameUtils {
                 assertFalse(privateGameWebSocket.getMessages().isEmpty());
             });
 
-        GameMessage message = privateGameWebSocket.getMessages().peek();
+        GameMessage message = privateGameWebSocket.getMessages().remove();
         assertEquals(GameMessageType.CARD_MOVE, message.messageType());
         CardMoveMessage cardMoveMessage = (CardMoveMessage) message.payload();
 
@@ -141,9 +145,14 @@ public final class GameUtils {
     }
 
     public static void useSkill(TestUser user, UseSkillRequest request, boolean expectError,
-                                StompFrameHandlerGame publicGameWebSocket) {
+                                StompFrameHandlerGame privateGameWebSocket) {
+        //wait for the next pick request players highlight message
+        await()
+                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
+                .untilAsserted(
+                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
         //clear all messages from the frame handler
-        publicGameWebSocket.getMessages().clear();
+        privateGameWebSocket.getMessages().clear();
 
         if (expectError) {
             //try to start the game and expect an error with error message
@@ -170,7 +179,7 @@ public final class GameUtils {
                 .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
                 .untilAsserted(() -> {
                     //check if websocket message is received
-                    assertFalse(publicGameWebSocket.getMessages().isEmpty());
+                    assertFalse(privateGameWebSocket.getMessages().isEmpty());
                 });
     }
 
@@ -234,68 +243,31 @@ public final class GameUtils {
 
 
     public static void playCardOnTarget(TestUser user, int lobbyId, int cardId, String target, StompFrameHandlerGame privateGameWebSocket) {
-
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of(target));
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playCardOnTargetList(TestUser user, int lobbyId, int cardId, List<String> targets, StompFrameHandlerGame privateGameWebSocket) {
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), targets);
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playCard(TestUser user, int lobbyId, int cardId, StompFrameHandlerGame privateGameWebSocket) {
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(cardId), List.of());
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void playMultipleCards(TestUser user, int lobbyId, List<Integer> cardIds, StompFrameHandlerGame privateGameWebSocket) {
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardIds, List.of());
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void confirm(TestUser user, int lobbyId,StompFrameHandlerGame privateGameWebSocket) {
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, List.of(), List.of());
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
 
     public static void discardCard(TestUser user, int lobbyId, List<Integer> cardId, StompFrameHandlerGame privateGameWebSocket) {
-        //wait for the next pick request players highlight message
-        await()
-                .atMost(WAIT_FOR_HIGHLIGHT_MESSAGE, SECONDS)
-                .untilAsserted(
-                        () -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
-
         PlayCardsRequest playCardsRequest = new PlayCardsRequest(lobbyId, cardId, List.of());
         GameUtils.playCards(user, playCardsRequest, false, privateGameWebSocket);
     }
