@@ -3,7 +3,7 @@ package com.mythostrike.model.game.management;
 import com.mythostrike.MythostrikeBackendApplication;
 import com.mythostrike.controller.GameController;
 import com.mythostrike.controller.message.game.PlayerCondition;
-import com.mythostrike.controller.message.game.PlayerResult;
+import com.mythostrike.controller.message.game.PlayerGameResult;
 import com.mythostrike.controller.message.lobby.ChampionMessage;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
 import com.mythostrike.model.exception.IllegalInputException;
@@ -164,10 +164,10 @@ public class GameManager {
             throw new IllegalInputException("Player " + username + " is not the current player");
         }
         if (currentActivity.getFirst() == null) {
-            return;
+            throw new IllegalInputException("no Current Activity to run");
         }
         if (!phase.equals(Phase.ACTIVE_TURN)) {
-            return;
+            throw new IllegalInputException("not in an active turn");
         }
 
         List<String> removeList = List.of(PickRequest.NAME, PlayCard.NAME, PickCardToPLay.NAME, ActiveTurn.NAME);
@@ -339,14 +339,14 @@ public class GameManager {
         gameController.updateGame(this.lobbyId);
 
         //if somebody won, the game is over and the winner gets the rewards
-        List<PlayerResult> results = new ArrayList<>();
+        List<PlayerGameResult> results = new ArrayList<>();
         for (Player winner : winners) {
             winner.addWinRewards();
-            results.add(new PlayerResult(winner, true));
+            results.add(new PlayerGameResult(winner, true));
         }
         for (Player loser : losers) {
             loser.deductLoosePenalty();
-            results.add(new PlayerResult(loser, false));
+            results.add(new PlayerGameResult(loser, false));
         }
         gameController.gameEnd(lobbyId, results);
         //stop game

@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 @Slf4j
 /**
  * This Bot selects random cards or skills. It tries to not select 0 cards or skills if there are other possibilities
@@ -22,12 +20,6 @@ public class RandomBot extends Bot {
 
     @Override
     public void selectChampionFrom(ChampionSelectionMessage message) {
-        try {
-            sleep(DELAY_BEFORE_ACTION);
-        } catch (InterruptedException e) {
-            //ignore
-            log.warn("Interrupted while waiting for action delay");
-        }
         int index = gameManager.getRandom().nextInt(message.champions().size());
         Champion champion = ChampionList.getChampionList().getChampion(message.champions().get(index).id());
         gameManager.selectChampion(getUsername(), champion);

@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 @Slf4j
 /**
  * This Bot tries to end its turn immediatly. If not possible it selects random cards.
@@ -22,12 +20,6 @@ public class PlaceholderBot extends Bot {
 
     @Override
     public void selectChampionFrom(ChampionSelectionMessage message) {
-        try {
-            sleep(DELAY_BEFORE_ACTION);
-        } catch (InterruptedException e) {
-            //ignore
-            log.warn("Interrupted while waiting for action delay");
-        }
         Champion champion = ChampionList.getChampionList().getChampion(message.champions().get(0).id());
         gameManager.selectChampion(getUsername(), champion);
     }

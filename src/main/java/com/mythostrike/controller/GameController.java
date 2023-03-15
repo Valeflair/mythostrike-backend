@@ -9,7 +9,7 @@ import com.mythostrike.controller.message.game.HighlightMessage;
 import com.mythostrike.controller.message.game.LogMessage;
 import com.mythostrike.controller.message.game.PlayCardsRequest;
 import com.mythostrike.controller.message.game.PlayerData;
-import com.mythostrike.controller.message.game.PlayerResult;
+import com.mythostrike.controller.message.game.PlayerGameResult;
 import com.mythostrike.controller.message.game.SelectChampionRequest;
 import com.mythostrike.controller.message.game.UseSkillRequest;
 import com.mythostrike.controller.message.lobby.ChampionSelectionMessage;
@@ -230,7 +230,7 @@ public class GameController {
             new GameMessage(GameMessageType.LOG, new LogMessage(message)), "logMessage");
     }
 
-    public void gameEnd(int lobbyId, List<PlayerResult> results) {
+    public void gameEnd(int lobbyId, List<PlayerGameResult> results) {
         String path = String.format("/games/%d", lobbyId);
 
         //remove game from lobby list
