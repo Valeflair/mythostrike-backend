@@ -24,12 +24,11 @@ public class Warrior extends ActiveSkill {
     public static final String NAME = Warrior.class.getSimpleName();
     public static final String DESCRIPTION = "you can play defense as attack if you want";
     private static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
-    private final Attack attack;
+    private Attack attack;
     private PickRequest pickRequest;
 
     public Warrior() {
         super(NAME, DESCRIPTION);
-        attack = new Attack(-1, CardSymbol.NO_SYMBOL, -1);
     }
 
     @Override
@@ -90,6 +89,7 @@ public class Warrior extends ActiveSkill {
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
             return;
         }
+        attack = new Attack(-1, pickRequest.getSelectedCards().get(0).getSymbol(), pickRequest.getSelectedCards().get(0).getPoint());
         attack.getCardUseHandle().setOpponents(pickRequest.getSelectedPlayers());
         attack.setTargets(pickRequest.getSelectedPlayers());
         attack.setPickRequest(pickRequest);
