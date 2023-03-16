@@ -6,7 +6,6 @@ import com.mythostrike.controller.message.game.PlayerCondition;
 import com.mythostrike.model.game.activity.ActiveSkill;
 import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
-import com.mythostrike.model.game.activity.cards.CardSymbol;
 import com.mythostrike.model.game.activity.cards.cardtype.Attack;
 import com.mythostrike.model.game.activity.cards.cardtype.Defend;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -33,16 +32,27 @@ public class Warrior extends ActiveSkill {
 
     @Override
     public boolean checkCondition(PlayerHandle playerHandle) {
-        boolean value = attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
-            "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), false));
-        value = value && !playerHandle.getGameManager().getCardManager().filterCard(
-            playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER, playerHandle.getPlayer()).isEmpty();
+        List<Card> defendCards = playerHandle.getGameManager().getCardManager()
+            .filterCard(playerHandle.getPlayer().getHandCards().getCards(), DEFEND_FILTER, playerHandle.getPlayer());
 
-        if (value) {
+        boolean canActivate = false;
+        Attack tempAttack;
+        if (!defendCards.isEmpty()) {
+            for (Card defendCard : defendCards) {
+                tempAttack = new Attack(-1, defendCard.getSymbol(), defendCard.getPoint());
+                if (tempAttack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), tempAttack,
+                    "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), true))) {
+                    canActivate = true;
+                    break;
+                }
+            }
+        }
+
+        if (canActivate) {
             this.playerHandle = playerHandle;
             this.playerCondition = new PlayerCondition();
         }
-        return value;
+        return canActivate;
     }
 
     @Override
@@ -88,7 +98,12 @@ public class Warrior extends ActiveSkill {
         if (pickRequest.getSelectedCards() == null || pickRequest.getSelectedCards().isEmpty()) {
             return;
         }
-        attack = new Attack(-1, pickRequest.getSelectedCards().get(0).getSymbol(), pickRequest.getSelectedCards().get(0).getPoint());
+        //initilize pseudo attack card
+        attack = new Attack(-1, pickRequest.getSelectedCards().get(0).getSymbol(),
+            pickRequest.getSelectedCards().get(0).getPoint());
+        attack.checkCondition(new CardUseHandle(playerHandle.getGameManager(), attack,
+            "check if card is playable", playerHandle.getPlayer(), playerHandle.getPlayer(), true));
+
         attack.getCardUseHandle().setOpponents(pickRequest.getSelectedPlayers());
         attack.setTargets(pickRequest.getSelectedPlayers());
         attack.setPickRequest(pickRequest);
