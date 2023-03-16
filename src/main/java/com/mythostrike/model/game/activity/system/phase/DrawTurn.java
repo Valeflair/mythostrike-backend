@@ -7,7 +7,7 @@ import com.mythostrike.model.game.player.Player;
 
 public class DrawTurn extends Activity {
     public static final String NAME = DrawTurn.class.getSimpleName();
-    public static final String DESCRIPTION = "Turn to draw";
+    public static final String DESCRIPTION = "Draw turn";
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;

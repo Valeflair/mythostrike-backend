@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Drought extends Card {
     public static final String NAME = "Drought";
-    public static final String DESCRIPTION = "pick a player as target, put drought under his delayed effect," +
-        "at his judge turn he must judge, by not judging a Spade he will skip his Draw Turn";
+    public static final String DESCRIPTION = "The target Player has to judge a card at the start of his turn. "
+        + "If the card is Spade this card has no effect, otherwise he will skip his Draw Turn";
     public static final CardType TYPE = CardType.SKILL_CARD;
 
 
@@ -59,7 +59,7 @@ public class Drought extends Card {
     public void use() {
         Card judge = gameManager.getCardManager().judge();
         if (judge.getSymbol().equals(CardSymbol.SPADE)) {
-            String reason = "lucky, drought doesnt effect";
+            String reason = "Lucky, you judged a spade. Drought has no effect.";
             //from is always the opponent player because Nightmare and Drought are initily played from the opponent
             Player from = pickRequest.getSelectedPlayers().get(0);
             Player to = null;

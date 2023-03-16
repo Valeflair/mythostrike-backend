@@ -7,8 +7,8 @@ import com.mythostrike.model.game.player.Player;
 
 public class SongOfLullaby extends PassiveSkill {
 
-    public static final String NAME = SongOfLullaby.class.getSimpleName();
-    public static final String DESCRIPTION = "you can't get target by Nightmare";
+    public static final String NAME = "Song of Lullaby";
+    public static final String DESCRIPTION = "You can't get targeted by Nightmare";
 
 
     public SongOfLullaby() {

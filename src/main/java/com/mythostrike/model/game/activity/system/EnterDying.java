@@ -19,12 +19,12 @@ import java.util.List;
  * this class will do the job, that if player is about to die:
  * 1.ask all the players (including the dying player),
  * 2.create a list with player, and ask player1 if he want to use 1 heal for the player dying
- * 3.check if player plays, if true then heal and check if dying player has hp > 0, else back to step 2
+ * 3.check if player plays, if true then heal and check if dying player has HP > 0, else back to step 2
  * 4.if player1 don't want to play heal, go to the next player to the list
- * 5.this end if list is empty (no more player to ask), player die or dying player has hp > 0, survive
+ * 5.this end if list is empty (no more player to ask), player die or dying player has HP > 0, survive
  */
 public class EnterDying extends Activity {
-    public static final String NAME = EnterDying.class.getSimpleName();
+    public static final String NAME = "Enter Dying";
     public static final String DESCRIPTION = "if player is about to die";
     public static final CardFilter FILTER = new CardFilter("Heal");
 
@@ -59,11 +59,11 @@ public class EnterDying extends Activity {
             Player healer = pickRequest.getPlayer();
             if (pickRequest.getSelectedCards() != null && !pickRequest.getSelectedCards().isEmpty()) {
                 DamageHandle damageHandle = new DamageHandle(gameManager, null,
-                    "use heal to heal hp", healer, player,
+                    "use heal to heal HP", healer, player,
                     -1, DamageType.HEAL);
                 gameManager.getPlayerManager().applyDamage(damageHandle);
                 CardMoveHandle cardMoveHandle = new CardMoveHandle(gameManager,
-                    "use heal to heal hp", healer, null,
+                    "use heal to heal HP", healer, null,
                     healer.getHandCards(), gameManager.getGame().getTablePile(), pickRequest.getSelectedCards());
                 gameManager.getCardManager().moveCard(cardMoveHandle);
             } else {

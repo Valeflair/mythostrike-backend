@@ -69,12 +69,12 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" + "allPlayers=" + allPlayers +
-                ", mode=" + mode +
-                ", allCards=" + allCards +
-                ", drawPile=" + drawPile +
-                ", discardPile=" + discardPile +
-                ", tablePile=" + tablePile +
-                '}';
+        return "Game{" + "allPlayers=" + allPlayers
+            +   ", mode=" + mode
+            +    ", allCards=" + allCards
+            +   ", drawPile=" + drawPile
+            +   ", discardPile=" + discardPile
+            +   ", tablePile=" + tablePile
+            +   '}';
     }
 }

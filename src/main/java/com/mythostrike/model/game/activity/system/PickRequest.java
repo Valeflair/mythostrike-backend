@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class PickRequest extends Activity {
     public static final String NAME = PickRequest.class.getSimpleName();
-    public static final String DESCRIPTION = "you have to pick a card";
+    public static final String DESCRIPTION = "Pick a card.";
     public static final int CARD_COUNT_TURN_START = 2;
     private final GameManager gameManager;
     private final Player player;

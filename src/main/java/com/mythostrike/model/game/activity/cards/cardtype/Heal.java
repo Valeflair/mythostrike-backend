@@ -11,8 +11,8 @@ import com.mythostrike.model.game.activity.events.handle.DamageType;
 public class Heal extends Card {
 
     public static final String NAME = "Heal";
-    public static final String DESCRIPTION = "use in active turn to heal you self 1 hp, or use when someone is dying,"
-        + " heal him 1 hp";
+    public static final String DESCRIPTION = "Use to heal 1 HP. You can play it in your active turn to heal yourself,"
+        + " or to save a player from death when he's dying.";
     public static final CardType TYPE = CardType.BASIC_CARD;
 
 
@@ -35,7 +35,7 @@ public class Heal extends Card {
     @Override
     public void activate() {
         DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), this,
-            "use heal to heal hp", cardUseHandle.getPlayer(), cardUseHandle.getPlayer(),
+            "use heal to heal HP", cardUseHandle.getPlayer(), cardUseHandle.getPlayer(),
             -1, DamageType.HEAL);
         cardUseHandle.getGameManager().getPlayerManager().applyDamage(damageHandle);
         playOut();

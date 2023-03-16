@@ -11,7 +11,8 @@ import com.mythostrike.model.game.player.Player;
 
 public class ProtectionOfDiana extends ArmorCard {
     public static final String NAME = "Protection of Diana";
-    public static final String DESCRIPTION = "use to equip this armor, you are immune to the Red Attack";
+    public static final String DESCRIPTION = "Use this card to equip this armor. When the armor is equipped, "
+        + "you are immune to the all red Attack cards.";
     public static final CardType TYPE = CardType.ARMOR;
 
     private final PassiveSkill skill;

@@ -6,7 +6,6 @@ import com.mythostrike.model.game.activity.cards.Card;
 import com.mythostrike.model.game.activity.cards.CardFilter;
 import com.mythostrike.model.game.activity.cards.CardPile;
 import com.mythostrike.model.game.activity.cards.CardSpace;
-import com.mythostrike.model.game.activity.cards.CardSpaceType;
 import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardFilterHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
@@ -16,9 +15,7 @@ import com.mythostrike.model.game.activity.events.type.EventTypeFilter;
 import com.mythostrike.model.game.player.Player;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -28,9 +25,6 @@ public class CardManager {
 
     public static final int JUDGE_PAUSE_ON_TABLE_PILE = MythostrikeBackendApplication.TEST_MODE ? 0 : 1000;
     public static final int CARD_MOVE_PAUSE_AFTER_MOVEMENT = MythostrikeBackendApplication.TEST_MODE ? 0 : 1000;
-
-    private static final Set<CardSpaceType> PRIVAT_CARD_SPACES
-        = new HashSet<>(Set.of(CardSpaceType.HAND_CARDS, CardSpaceType.DRAW_PILE));
     private final GameManager gameManager;
 
     public CardManager(GameManager gameManager) {

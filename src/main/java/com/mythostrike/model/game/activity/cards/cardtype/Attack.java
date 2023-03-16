@@ -28,8 +28,8 @@ import java.util.List;
  * Attack card, player can choose a target to attack
  */
 public class Attack extends Card {
-    public static final String NAME = Attack.class.getSimpleName();
-    public static final String DESCRIPTION = "pick a player as target, he has to play an \"Defend\" or get 1 damage.";
+    public static final String NAME = "Attack";
+    public static final String DESCRIPTION = "Pick a target to attack. Target has to play a \"Defend\" or get 1 damage.";
     public static final CardType TYPE = CardType.BASIC_CARD;
     public static final CardFilter ATTACK_FILTER = new CardFilter(NAME);
     public static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
@@ -90,7 +90,7 @@ public class Attack extends Card {
             playOut();
             gameManager.queueActivity(this);
             attacksPlayer(targets.get(0));
-            gameManager.output(String.format("player %s uses attack! target: %s", player.getUsername(),
+            gameManager.output(String.format("Player %s uses attack on target: %s.", player.getUsername(),
                 targets.get(0).getUsername()));
             end = false;
         } else {
@@ -121,10 +121,10 @@ public class Attack extends Card {
                 gameManager.getCardManager().moveCard(cardMoveHandle);
                 attackHandle.setPrevented(true);
             }
-            gameManager.output(String.format("%s avoided the attack", targets.get(0).getUsername()));
+            gameManager.output(String.format("%s avoided the attack.", targets.get(0).getUsername()));
             gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_MISSED, attackHandle);
         } else {
-            gameManager.output(String.format("attack hits %s", player.getUsername()));
+            gameManager.output(String.format("Attack hits %s.", player.getUsername()));
             attackHandle.setPrevented(false);
             gameManager.getEventManager().triggerEvent(EventTypeAttack.ATTACK_HIT, attackHandle);
             DamageHandle damageHandle = new DamageHandle(cardUseHandle.getGameManager(), cardUseHandle.getCard(),

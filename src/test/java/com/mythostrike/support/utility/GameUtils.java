@@ -102,6 +102,19 @@ public final class GameUtils {
 
     public static void requestPlayCards(TestUser user, PlayCardsRequest request, boolean expectError,
                                         StompFrameHandlerGame privateGameWebSocket) {
+        if (expectError) {
+            //try to start the game and expect an error with error message
+            given()
+                    .headers(user.headers())
+                    .body(request).
+                    when()
+                    .post("/games/play/cards").
+                    then()
+                    .statusCode(greaterThanOrEqualTo(400))
+                    .body("message", notNullValue());
+            return;
+        }
+
         //wait for the next pick request players highlight message
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -110,18 +123,7 @@ public final class GameUtils {
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
-        if (expectError) {
-            //try to start the game and expect an error with error message
-            given()
-                .headers(user.headers())
-                .body(request).
-                when()
-                .post("/games/play/cards").
-                then()
-                .statusCode(greaterThanOrEqualTo(400))
-                .body("message", notNullValue());
-            return;
-        }
+
 
         given()
             .headers(user.headers())
@@ -153,8 +155,21 @@ public final class GameUtils {
         assertEquals(user.username(), cardMoveMessage.source());
     }
 
-    private static void requestUseSkill(TestUser user, UseSkillRequest request, boolean expectError,
-                                        StompFrameHandlerGame privateGameWebSocket) {
+    public static void requestUseSkill(TestUser user, UseSkillRequest request, boolean expectError,
+                                       StompFrameHandlerGame privateGameWebSocket) {
+        if (expectError) {
+            //try to start the game and expect an error with error message
+            given()
+                    .headers(user.headers())
+                    .body(request).
+                    when()
+                    .post("/games/play/skills").
+                    then()
+                    .statusCode(greaterThanOrEqualTo(400))
+                    .body("message", notNullValue());
+            return;
+        }
+
         //wait for the next pick request players highlight message
         await()
             .atMost(WAIT_FOR_WEBSOCKET, SECONDS)
@@ -163,18 +178,7 @@ public final class GameUtils {
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
-        if (expectError) {
-            //try to start the game and expect an error with error message
-            given()
-                .headers(user.headers())
-                .body(request).
-                when()
-                .post("/games/play/skills").
-                then()
-                .statusCode(greaterThanOrEqualTo(400))
-                .body("message", notNullValue());
-            return;
-        }
+
 
         given()
             .headers(user.headers())
@@ -196,6 +200,19 @@ public final class GameUtils {
 
     public static void endTurn(TestUser user, int lobbyId, boolean expectError, boolean hasToCleanTable,
                                boolean hasToDiscardCards, StompFrameHandlerGame privateGameWebSocket) {
+        if (expectError) {
+            //try to start the game and expect an error with error message
+            given()
+                    .headers(user.headers())
+                    .body(new LobbyIdRequest(lobbyId)).
+                    when()
+                    .post("/games/play/end").
+                    then()
+                    .statusCode(greaterThanOrEqualTo(400))
+                    .body("message", notNullValue());
+            return;
+        }
+
         await()
             .atMost(10, SECONDS)
             .untilAsserted(() -> assertTrue(privateGameWebSocket.containsType(GameMessageType.HIGHLIGHT)));
@@ -203,18 +220,7 @@ public final class GameUtils {
         //clear all messages from the frame handler
         privateGameWebSocket.getMessages().clear();
 
-        if (expectError) {
-            //try to start the game and expect an error with error message
-            given()
-                .headers(user.headers())
-                .body(new LobbyIdRequest(lobbyId)).
-                when()
-                .post("/games/play/end").
-                then()
-                .statusCode(greaterThanOrEqualTo(400))
-                .body("message", notNullValue());
-            return;
-        }
+
 
         given()
             .headers(user.headers())

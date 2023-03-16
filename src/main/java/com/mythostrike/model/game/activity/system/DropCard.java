@@ -11,8 +11,8 @@ import java.util.List;
 
 @Getter
 public class DropCard extends Activity {
-    public static final String NAME = DropCard.class.getSimpleName();
-    public static final String DESCRIPTION = "Drop a card";
+    public static final String NAME = "Drop Card";
+    public static final String DESCRIPTION = "Drop a card.";
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
@@ -30,7 +30,7 @@ public class DropCard extends Activity {
     public void use() {
         Player player = gameManager.getGame().getCurrentPlayer();
         List<Card> cards = pickRequest.getSelectedCards();
-        if (cards == null || cards.size() == 0) {
+        if (cards == null || cards.isEmpty()) {
             return;
         }
         gameManager.getCardManager().throwCard(player, cards, player.getHandCards());

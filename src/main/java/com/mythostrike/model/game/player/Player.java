@@ -221,15 +221,15 @@ public abstract class Player {
 
     @Override
     public String toString() {
-        return "Player{" + "username='" + username + '\'' +
-                ", handCards=" + handCards +
-                ", equipment=" + equipment +
-                ", delayedEffect=" + delayedEffect +
-                ", champion=" + champion +
-                ", currentHp=" + currentHp +
-                ", maxHp=" + maxHp +
-                ", identity=" + identity +
-                ", isAlive=" + isAlive +
-                '}';
+        return "Player{" + "username='" + username + '\''
+            +   ", handCards=" + handCards
+            +   ", equipment=" + equipment
+            +   ", delayedEffect=" + delayedEffect
+            +   ", champion=" + champion
+            +   ", currentHp=" + currentHp
+            +   ", maxHp=" + maxHp
+            +   ", identity=" + identity
+            +   ", isAlive=" + isAlive
+            +   '}';
     }
 }

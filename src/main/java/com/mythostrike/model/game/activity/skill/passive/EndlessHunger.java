@@ -12,7 +12,7 @@ import com.mythostrike.model.game.player.Player;
 public class EndlessHunger extends PassiveSkill {
 
     public static final String NAME = "Endless Hunger";
-    public static final String DESCRIPTION = "You can't get heal, your Heal count as Defend";
+    public static final String DESCRIPTION = "You can't be healed. You can play your Heal cards as Defend cards.";
 
     private CardFilterHandle cardFilterHandle;
 

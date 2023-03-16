@@ -20,7 +20,8 @@ import static java.lang.Thread.sleep;
 public class VisionOfNight extends PassiveSkill {
 
     public static final String NAME = "Vision of Night";
-    public static final String DESCRIPTION = "You can judge 2 cards at turn start, and get those black cards";
+    public static final String DESCRIPTION = "You judge 2 cards at the beginning of your turn. "
+        + "If you judge black cards, you can keep them. The other cards are discarded.";
     PhaseHandle phaseHandle;
 
     public VisionOfNight() {

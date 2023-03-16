@@ -14,9 +14,9 @@ import java.util.List;
 
 public class HeartOfTerraSkill extends PassiveSkill {
 
-    public static final String NAME = "Heart Of TerraSkill Skill";
-    public static final String DESCRIPTION = "it can absorb the first damage you get," +
-        " then throw this armor away";
+    public static final String NAME = "Heart Of Terra Skill";
+    public static final String DESCRIPTION = "It can absorb the first damage you get. "
+        + "After that, it will be thrown away.";
     private final Card armor;
     private DamageHandle damageHandle;
 
@@ -49,7 +49,7 @@ public class HeartOfTerraSkill extends PassiveSkill {
         GameManager gameManager = damageHandle.getGameManager();
         Player player = damageHandle.getTo();
 
-        gameManager.output("Heart of Terra absorbed the damage for %s, and threw armor away"
+        gameManager.output("Heart of Terra absorbed the damage for %s and will be thrown away."
             .formatted(player.getUsername()));
 
 

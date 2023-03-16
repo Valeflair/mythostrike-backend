@@ -21,7 +21,7 @@ public class CardUseHandle extends EventHandle {
     public CardUseHandle(GameManager gameManager, Card card, String reason, Player player, List<Player> opponents,
                          boolean isHandCard) {
         super(gameManager, reason, player);
-        this.opponents = opponents;
+        this.opponents = new ArrayList<>(opponents);
         this.card = card;
     }
 

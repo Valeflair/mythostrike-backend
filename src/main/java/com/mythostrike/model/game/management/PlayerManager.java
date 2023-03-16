@@ -39,7 +39,7 @@ public class PlayerManager {
                     eventManager.triggerEvent(EventTypeDamage.DAMAGE_INFLICTED, damageHandle);
                     eventManager.triggerEvent(EventTypeDamage.BEFORE_DAMAGE_DONE, damageHandle);
                     eventManager.triggerEvent(EventTypeDamage.DAMAGE_DONE, damageHandle);
-                    //reduce hp
+                    //reduce HP
                     damageHandle.getTo().decreaseCurrentHp(damageHandle.getDamage());
 
                     //output message

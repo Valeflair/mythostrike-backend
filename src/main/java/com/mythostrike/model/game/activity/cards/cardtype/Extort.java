@@ -15,7 +15,7 @@ import java.util.List;
 public class Extort extends Card {
 
     public static final String NAME = "Extort";
-    public static final String DESCRIPTION = "pick a player as target, get a random card from him";
+    public static final String DESCRIPTION = "Draw 1 random card from target player's handcards.";
     public static final CardType TYPE = CardType.SKILL_CARD;
 
 

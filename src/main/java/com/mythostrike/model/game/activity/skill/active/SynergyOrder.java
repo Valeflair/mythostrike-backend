@@ -19,8 +19,7 @@ import java.util.List;
 public class SynergyOrder extends ActiveSkill {
 
     public static final String NAME = "Synergy Order";
-    public static final String DESCRIPTION =
-        "once per turn, you can drop X cards and draw X cards (X is the number you want)";
+    public static final String DESCRIPTION = "Once per turn you can drop cards to draw the same amount of new cards.";
     private static final CardFilter DEFEND_FILTER = new CardFilter(Defend.NAME);
     private PickRequest pickRequest;
 
@@ -67,7 +66,7 @@ public class SynergyOrder extends ActiveSkill {
             .cardCount(cardCounts)
             //for each defend need an individual playerCondition, but they are identical
             .cardPlayerConditions(playerConditions)
-            .reason("choose cards to drop and draw same amount of cards")
+            .reason("Choose cards to drop to draw new cards.")
             .build();
         pickRequest = new PickRequest(player, gameManager, highlightMessage);
         gameManager.queueActivity(this);

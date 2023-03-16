@@ -202,8 +202,8 @@ public class Lobby {
         if (numberPlayers > newMode.maxPlayer()) {
             return false;
         }
-        updateLobbyStatus();
         this.mode = newMode;
+        updateLobbyStatus();
 
         //update seats
         //if we have too many seats, move players from the seats that are not in the new mode to empty seats in front
