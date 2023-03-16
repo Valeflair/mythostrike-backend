@@ -10,7 +10,6 @@ import com.mythostrike.model.game.player.ChampionList;
 import com.mythostrike.support.SimpleStompFrameHandler;
 import com.mythostrike.support.StompFrameHandlerGame;
 import com.mythostrike.support.TestUser;
-import com.mythostrike.support.utility.GameUtils;
 import com.mythostrike.support.utility.LobbyUtils;
 import com.mythostrike.support.utility.UserUtils;
 import io.restassured.RestAssured;
@@ -129,10 +128,10 @@ class GameAIntegrationTest {
                     privateGameWebSockets.get(i));
         }
 
-        round1Kratos(lobbyId, privateGameWebSockets);
-        round2Achilles(lobbyId, privateGameWebSockets);
-        round3Hestia(lobbyId, privateGameWebSockets);
-        round4Terpisore(lobbyId, privateGameWebSockets);
+        round1(lobbyId, privateGameWebSockets);
+        round2(lobbyId, privateGameWebSockets);
+        round3(lobbyId, privateGameWebSockets);
+        round4(lobbyId, privateGameWebSockets);
 
 
     }
@@ -203,7 +202,7 @@ class GameAIntegrationTest {
     }
 
 
-    private void round1Kratos(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+    private void round1(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
         startRound(lobbyId, privateGameWebSocketList.get(I_KRATOS), roundCounter++);
 
         //play extort error incorrect card ids
@@ -253,7 +252,7 @@ class GameAIntegrationTest {
 
     }
 
-    private void round2Achilles(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+    private void round2(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
         startRound(lobbyId, privateGameWebSocketList.get(I_ACHILLES), roundCounter++);
 
         //play drought error incorrect  target he picks himself
@@ -277,7 +276,7 @@ class GameAIntegrationTest {
         endTurn(users.get(I_ACHILLES), lobbyId, false, true, false, privateGameWebSocketList.get(I_ACHILLES));
     }
 
-    private void round3Hestia(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+    private void round3(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
         startRound(lobbyId, privateGameWebSocketList.get(I_HESTIA), roundCounter++);
 
         //play equip Spear of Mars
@@ -329,7 +328,7 @@ class GameAIntegrationTest {
         endTurn(users.get(I_HESTIA), lobbyId, false, true, false, privateGameWebSocketList.get(I_HESTIA));
     }
 
-    private void round4Terpisore(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
+    private void round4(int lobbyId, List<StompFrameHandlerGame> privateGameWebSocketList) {
         startRound(lobbyId, privateGameWebSocketList.get(I_TERPISORE), roundCounter++);
 
         //play Attack on Achilles
