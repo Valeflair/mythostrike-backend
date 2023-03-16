@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Nightmare extends Card {
     public static final String NAME = "Nightmare";
-    public static final String DESCRIPTION = "pick a player as target, put nightmare under his delayed effect," +
-        "at his judge turn he must judge, by not judging a heart he will skip his active turn";
+    public static final String DESCRIPTION = "The target Player has to judge a card at the start of his turn. "
+        + "If the card is Heart this card has no effect, otherwise he will skip his Active Turn";
     public static final CardType TYPE = CardType.SKILL_CARD;
 
 
@@ -64,7 +64,7 @@ public class Nightmare extends Card {
     public void use() {
         Card judge = gameManager.getCardManager().judge();
         if (judge.getSymbol().equals(CardSymbol.HEART)) {
-            String reason = "lucky, nightmare doesnt effect";
+            String reason = "Lucky, you judged heart. Nightmare has no effect.";
             //from is always the opponent player because Nightmare and Drought are initily played from the opponent
             Player from = pickRequest.getSelectedPlayers().get(0);
             Player to = null;

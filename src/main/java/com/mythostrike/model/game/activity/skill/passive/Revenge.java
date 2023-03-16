@@ -17,8 +17,9 @@ import java.util.List;
 
 public class Revenge extends PassiveSkill {
     public static final String NAME = Revenge.class.getSimpleName();
-    public static final String DESCRIPTION = "when you get damage, judge, if it's red, the damage dealer drops 1 card,"
-        + " if it's black, the damage dealer get 1  damage by you";
+    public static final String DESCRIPTION = "When you get damaged you can judge a card. "
+        + "If it's red, the damage dealer looses 1 card. If it's black, you will revenge yourself "
+        + "and deal 1 damage to the attacker.";
     private DamageHandle damageHandle;
 
     private PickRequest pickRequest;
@@ -49,7 +50,7 @@ public class Revenge extends PassiveSkill {
         Player player = damageHandle.getTo();
         GameManager gameManager = damageHandle.getGameManager();
         HighlightMessage highlightMessage = HighlightMessage.builder()
-            .reason("you can click skill \"revenge\" to activate it")
+            .reason("Confirm to activate skill \"Revenge\".")
             .skillIds(List.of(id))
             .skillCount(List.of(0, 1))
             .skillPlayerConditions(List.of())
@@ -67,7 +68,7 @@ public class Revenge extends PassiveSkill {
         }
         GameManager gameManager = damageHandle.getGameManager();
         Card card = gameManager.getCardManager().judge();
-        gameManager.output("revenge activated! judge result: " + card.getSymbol());
+        gameManager.output("Revenge was activated! Judge result: " + card.getSymbol());
         if (card.isRed()) {
             if (damageHandle.getPlayer().getHandCards().getCards().isEmpty()) {
                 return;

@@ -9,7 +9,7 @@ import com.mythostrike.model.game.player.Player;
 public class Unhealable extends PassiveSkill {
 
     public static final String NAME = "Unhealable";
-    public static final String DESCRIPTION = "You can't get heal";
+    public static final String DESCRIPTION = "You can't be healed.";
 
     DamageHandle damageHandle;
 

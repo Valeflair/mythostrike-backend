@@ -12,8 +12,8 @@ import com.mythostrike.model.game.player.Player;
 public class SpearOfMars extends WeaponCard {
 
     public static final String NAME = "Spear of Mars";
-    public static final String DESCRIPTION =
-        "use to equip this weapon, if your attack is avoided by a defend, you can attack again";
+    public static final String DESCRIPTION = "Use this card to equip this Weapon. When the Weapon is equipped "
+        + "and your Attack is avoided, you can attack again.";
     public static final CardType TYPE = CardType.WEAPON;
 
     private final PassiveSkill skill;

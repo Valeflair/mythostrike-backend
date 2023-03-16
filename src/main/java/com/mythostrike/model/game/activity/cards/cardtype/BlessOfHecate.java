@@ -10,7 +10,7 @@ import com.mythostrike.model.game.player.Player;
 
 public class BlessOfHecate extends Card {
     public static final String NAME = "Bless of Hecate";
-    public static final String DESCRIPTION = "Draw 2 cards instantly";
+    public static final String DESCRIPTION = "Draw 2 cards instantly.";
     public static final CardType TYPE = CardType.SKILL_CARD;
 
 

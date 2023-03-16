@@ -11,8 +11,8 @@ import com.mythostrike.model.game.player.Player;
 
 public class HeartOfTerra extends ArmorCard {
     public static final String NAME = "Heart of Terra";
-    public static final String DESCRIPTION = "use to equip this armor, it can absorb the first damage you get," +
-        " then throw this armor away";
+    public static final String DESCRIPTION = "Use this card to equip this armor. When the armor is equipped, "
+        + "you are immune to the first damage to your HP. The armor is destroyed after the first damage.";
     public static final CardType TYPE = CardType.ARMOR;
 
     private final PassiveSkill skill;

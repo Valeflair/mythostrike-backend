@@ -10,7 +10,7 @@ import com.mythostrike.model.game.player.Player;
 public class SpearOfMarsSkill extends PassiveSkill {
 
     public static final String NAME = "Spear of Mars Skill";
-    public static final String DESCRIPTION = "if your attack is avoided by a defend, you can attack again";
+    public static final String DESCRIPTION = "If your Attack is avoided by a defend, you can attack again";
 
     private AttackHandle attackHandle;
 

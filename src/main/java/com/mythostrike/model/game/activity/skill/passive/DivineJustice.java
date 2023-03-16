@@ -11,9 +11,9 @@ import com.mythostrike.model.game.player.Player;
 
 public class DivineJustice extends PassiveSkill {
 
-    public static final String NAME = DivineJustice.class.getSimpleName();
-    public static final String DESCRIPTION = "when you attack a player, you can judge, if it's red, your attack " +
-        "can't be avoided by defend ";
+    public static final String NAME = "Divine Justice";
+    public static final String DESCRIPTION = "When you attack a player, you judge a card, if it's red, your attack "
+        + "can't be avoided by defend.";
     private AttackHandle attackHandle;
 
     private PickRequest pickRequest;
@@ -46,8 +46,8 @@ public class DivineJustice extends PassiveSkill {
         gameManager.output("%s activated! judge result: ".formatted(NAME) + card.getSymbol());
         if (card.isRed()) {
             attackHandle.getDefendAskHandle().setAmount(999);
-            attackHandle.getDefendAskHandle().setReason("you get attacked, cause he activated divine justice" +
-                " and the judge result is red, so you can't avoid the attack");
+            attackHandle.getDefendAskHandle().setReason(String.format("You got attacked by %s. "
+                + "He activated Divine Justice so you can't defend.", attackHandle.getPlayer().getUsername()));
         }
 
     }
