@@ -94,7 +94,7 @@ public class EventManager {
     }
 
 
-    public void addToMap(List<PassiveEffect> list, PassiveSkill passiveSkill, Player player, boolean permanent) {
+    private void addToMap(List<PassiveEffect> list, PassiveSkill passiveSkill, Player player, boolean permanent) {
         Optional<PassiveEffect> optionalEffect = list.stream()
             .filter(effect -> effect.getSkill().equals(passiveSkill))
             .findFirst();
@@ -268,6 +268,4 @@ public class EventManager {
             }
         });
     }
-
-
 }

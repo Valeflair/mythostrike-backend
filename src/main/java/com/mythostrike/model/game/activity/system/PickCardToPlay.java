@@ -18,17 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class PickCardToPLay extends Activity {
-    public static final String NAME = PickCardToPLay.class.getSimpleName();
-    public static final String DESCRIPTION = "pick card to play or skill to invoke," +
-        " or end turn if no card/skill can/want be played";
+public class PickCardToPlay extends Activity {
+    public static final String NAME = "Pick Card to play";
+    public static final String DESCRIPTION = "Pick a card to play, skill to invoke, or end your turn.";
     public static final int CARD_COUNT_TURN_START = 2;
 
     private final GameManager gameManager;
     private List<Card> selectedCards;
     private List<Player> selectedPlayers;
 
-    public PickCardToPLay(GameManager gameManager) {
+    public PickCardToPlay(GameManager gameManager) {
         super(NAME, DESCRIPTION);
         this.gameManager = gameManager;
     }
@@ -60,6 +59,8 @@ public class PickCardToPLay extends Activity {
                 skillPlayerConditions.add(skill.getPlayerCondition());
             }
         }
+
+        //TODO: message depending on state
 
         HighlightMessage highlightMessage = HighlightMessage.builder()
             .cardIds(cardIds)

@@ -6,13 +6,14 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 public class PassiveEffect {
     private PassiveSkill skill;
-    private List<Player> temporaryPlayerList = new ArrayList<Player>();
-    private List<Player> permanentPlayerList = new ArrayList<Player>();
+    private List<Player> temporaryPlayerList = new ArrayList<>();
+    private List<Player> permanentPlayerList = new ArrayList<>();
 
     public PassiveEffect(PassiveSkill skill) {
         this.skill = skill;
@@ -49,6 +50,11 @@ public class PassiveEffect {
     @Override
     public boolean equals(Object object) {
         return object != null && object instanceof PassiveEffect other && skill.equals(other.getSkill());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skill, temporaryPlayerList, permanentPlayerList);
     }
 }
 

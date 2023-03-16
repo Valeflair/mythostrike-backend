@@ -19,7 +19,7 @@ import com.mythostrike.model.game.activity.events.handle.CardDrawHandle;
 import com.mythostrike.model.game.activity.events.handle.CardMoveHandle;
 import com.mythostrike.model.game.activity.system.CheckDying;
 import com.mythostrike.model.game.activity.system.NextPhase;
-import com.mythostrike.model.game.activity.system.PickCardToPLay;
+import com.mythostrike.model.game.activity.system.PickCardToPlay;
 import com.mythostrike.model.game.activity.system.PickRequest;
 import com.mythostrike.model.game.activity.system.PlayCard;
 import com.mythostrike.model.game.activity.system.phase.ActiveTurn;
@@ -171,7 +171,7 @@ public class GameManager {
             throw new IllegalInputException("not in an active turn");
         }
 
-        List<String> removeList = List.of(PickRequest.NAME, PlayCard.NAME, PickCardToPLay.NAME, ActiveTurn.NAME);
+        List<String> removeList = List.of(PickRequest.NAME, PlayCard.NAME, PickCardToPlay.NAME, ActiveTurn.NAME);
         for (String name : removeList) {
             if (currentActivity.isEmpty()) {
                 break;

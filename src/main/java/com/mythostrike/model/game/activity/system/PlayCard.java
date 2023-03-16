@@ -23,7 +23,7 @@ public class PlayCard extends Activity {
 
     @Override
     public void use() {
-        gameManager.getCurrentActivity().addFirst(new PickCardToPLay(gameManager));
+        gameManager.getCurrentActivity().addFirst(new PickCardToPlay(gameManager));
         if (pickRequest.isClickedCancel()) {
             return;
         }

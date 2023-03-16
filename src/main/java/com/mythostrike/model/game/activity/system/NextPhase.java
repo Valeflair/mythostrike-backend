@@ -27,8 +27,8 @@ import static java.lang.Thread.sleep;
 @Getter
 public class NextPhase extends SystemAction {
 
-    public static final String NAME = NextPhase.class.getSimpleName();
-    public static final String DESCRIPTION = "goto Next Phase and put next Player if Phase end";
+    public static final String NAME = "Next Phase";
+    public static final String DESCRIPTION = "Goto next phase and change player if phase ends.";
     public static final int DELAY_BEFORE_SWITCH_PLAYER = MythostrikeBackendApplication.TEST_MODE ? 0 : 500;
 
     public NextPhase(GameManager gameManager) {
@@ -50,8 +50,8 @@ public class NextPhase extends SystemAction {
 
         //Nightmare and Drought
 
-        Optional<Card> firstDroughtCard =
-            gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+        Optional<Card> firstDroughtCard
+            = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
                 .filter(card -> card.getName().equals(Drought.NAME))
                 .findFirst();
 
@@ -66,8 +66,8 @@ public class NextPhase extends SystemAction {
         }
 
 
-        Optional<Card> firstNightmareCard =
-            gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
+        Optional<Card> firstNightmareCard
+            = gameManager.getGame().getCurrentPlayer().getDelayedEffect().getCards().stream()
                 .filter(card -> card.getName().equals(Nightmare.NAME))
                 .findFirst();
 
@@ -95,15 +95,13 @@ public class NextPhase extends SystemAction {
             gameManager.getGameController().updateGame(gameManager.getLobbyId());
 
         }
-        PhaseHandle afterPhaseHandle = new PhaseHandle(gameManager, "switching phase", gameManager.getGame()
-            .getCurrentPlayer(), after);
         switch (after) {
             case ROUND_START -> gameManager.queueActivity(new RoundStartTurn(gameManager));
             case DELAYED_EFFECT -> gameManager.queueActivity(new DelayedEffectTurn(gameManager));
             case DRAW -> gameManager.queueActivity(new DrawTurn(gameManager));
             case ACTIVE_TURN -> gameManager.queueActivity(new ActiveTurn(gameManager));
             case DISCARD -> gameManager.queueActivity(new DropTurn(gameManager));
-            default -> {
+            default ->  {
             }
         }
 

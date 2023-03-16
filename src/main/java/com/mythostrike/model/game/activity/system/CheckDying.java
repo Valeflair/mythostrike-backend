@@ -1,5 +1,6 @@
 package com.mythostrike.model.game.activity.system;
 
+import com.mythostrike.model.game.activity.Activity;
 import com.mythostrike.model.game.activity.PassiveSkill;
 import com.mythostrike.model.game.activity.events.handle.DamageHandle;
 import com.mythostrike.model.game.activity.events.type.EventTypeDamage;
@@ -27,7 +28,7 @@ public class CheckDying extends PassiveSkill {
 
     @Override
     public void activate() {
-        EnterDying enterDying = new EnterDying(damageHandle.getTo(), damageHandle.getGameManager());
+        Activity enterDying = new EnterDying(damageHandle.getTo(), damageHandle.getGameManager());
         enterDying.activate();
     }
 
